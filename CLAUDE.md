@@ -49,6 +49,7 @@ Docs map:
 | File | Holds |
 |---|---|
 | `docs/research_questions.md` | Research questions (preliminary) |
+| `docs/research_gaps.md` | Candidate research gap, contribution and RQs derived from existing literature |
 | `docs/methodology.md` | Guiding principles, open methodological questions |
 | `docs/literature_review.md` | Literature notes |
 | `docs/datasets.md` | Narrative overview of datasets used |

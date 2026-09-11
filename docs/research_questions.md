@@ -4,6 +4,11 @@
 > understanding of the problem at the start of the thesis. They are
 > expected to be refined once the citizen science and satellite
 > datasets have been explored and the relevant literature reviewed.
+>
+> See [`research_gaps.md`](research_gaps.md) for a set of candidate,
+> more specific research questions (RQ1–RQ5) derived from a first
+> pass at directly relevant literature, and for how they relate to —
+> and still need to be reconciled with — the questions below.
 
 ## Main Research Question
 
