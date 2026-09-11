@@ -11,12 +11,14 @@ and Earth Observation Foundation Models.
 
 ## Research Question
 
-Can Earth Observation Foundation Models improve the mapping of
-invasive alien plants when combined with citizen science observations
-and satellite imagery?
+How robust and data-efficient are Earth Observation foundation models
+for invasive plant mapping when trained with citizen-science reference
+data?
 
 See [`docs/research_questions.md`](docs/research_questions.md) for the
-full (preliminary) set of research questions.
+full set of primary research questions, and
+[`docs/research_gaps.md`](docs/research_gaps.md) for how they follow
+from the existing literature.
 
 ## Research Workflow
 

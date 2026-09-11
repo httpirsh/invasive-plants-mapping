@@ -13,22 +13,29 @@ new evidence is found:
 
 ```text
 problem
-→ research questions
 → literature review
+→ research gap
+→ research questions
 → understand citizen science data
 → understand satellite data
 → define prediction task
 → construct modelling dataset
 → define validation strategy
-→ establish baseline
-→ investigate foundation models
-→ design experiments
-→ evaluate models
-→ generate maps
-→ analyse errors
-→ answer research questions
+→ conventional EO baseline
+→ EO foundation-model approach
+→ RQ1: compare representations
+→ RQ2: reduce amount of citizen-science reference data
+→ RQ3: investigate spatial sampling bias
+→ RQ4: investigate temporal mismatch
+→ spatial/generalization evaluation
+→ error analysis
+→ final mapping
 → conclusions
 ```
+
+See [`research_gaps.md`](research_gaps.md) for the research gap
+analysis and [`research_questions.md`](research_questions.md) for the
+current research questions (RQ1–RQ4).
 
 ## Problem and Task Definition
 

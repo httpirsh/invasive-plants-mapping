@@ -1,19 +1,21 @@
 # Research Gap
 
-> **Status: candidate / preliminary.** This document positions the
-> thesis relative to a small set of directly relevant papers found so
-> far. It is **not** a systematic literature review. Claims of the
-> form "this appears underexplored" reflect the current reading list
-> only and must be revisited once a fuller literature review and
-> supervisor discussion have taken place — see
-> [Open Questions](#open-questions).
+> **Status: candidate gap analysis; the research questions below are
+> now PRIMARY.** This document positions the thesis relative to a
+> small set of directly relevant papers found so far. It is **not** a
+> systematic literature review. Claims of the form "this appears
+> underexplored" reflect the current reading list only and must be
+> revisited once a fuller literature review and supervisor discussion
+> have taken place — see [Open Questions](#open-questions).
 >
-> Related: [`research_questions.md`](research_questions.md) (current
-> preliminary research questions) and
-> [`methodology.md`](methodology.md) (guiding methodological
-> principles). The research questions proposed here are **candidates**
-> and still need to be reconciled with the existing questions in
-> `research_questions.md`.
+> Related: [`research_questions.md`](research_questions.md) (canonical
+> statement of the thesis's primary research questions, adopted
+> 2026-09-11, replacing an earlier, more general data/representation/
+> performance/generalization framing that is now discarded — not kept
+> as an alternative) and [`methodology.md`](methodology.md) (guiding
+> methodological principles). The gap analysis, candidate
+> contribution, and candidate experiments below remain preliminary;
+> the research questions themselves are primary, not candidates.
 
 ## Existing Research
 
@@ -148,6 +150,10 @@ A more precise candidate framing:
 > plant mapping when the available citizen-science reference data are
 > sparse, spatially biased, and temporally misaligned?
 
+This framing was subsequently adopted, in a more compact form, as the
+thesis's Main Research Question — see
+[`research_questions.md`](research_questions.md#main-research-question).
+
 We found limited evidence, in the papers reviewed so far, that this
 specific combination has been studied together and evaluated in a
 controlled way. This is a **potential research gap**, not a confirmed
@@ -173,37 +179,77 @@ baseline.
 
 ## Research Questions
 
-> **Status: candidate.** These are proposed based on the gap analysis
-> above and still need to be reconciled with the existing questions in
-> [`research_questions.md`](research_questions.md) (see
-> [Open Questions](#open-questions)) — they should not be treated as
-> replacing that document yet.
+> **Status: primary**, adopted 2026-09-11. The canonical statement
+> lives in [`research_questions.md`](research_questions.md); they are
+> repeated here together with an explicit derivation from the
+> literature above, so the gap → RQ logic is traceable in one place.
 
-### RQ1
+### RQ1 — Foundation models vs. conventional approaches
 
-Do EO foundation-model representations improve invasive plant mapping
-compared with conventional spectral-temporal satellite features?
+Do Earth Observation foundation-model representations improve
+invasive plant mapping compared with conventional spectral-temporal
+satellite features?
 
-### RQ2
+**Why this follows from the literature:** Ball et al. (2026) show
+foundation-model embeddings outperforming conventional Sentinel-1/-2
+features for tree species mapping; Mouta et al. (2021) (and the
+unverified Galicia/Iberia line) establish a credible conventional
+satellite + ML precedent specifically for invasive plants. RQ1 asks
+whether the foundation-model advantage seen for tree species also
+holds for invasive plants evaluated against a comparably strong
+conventional baseline, using citizen-science reference data — a
+comparison we found no evidence of in the papers reviewed so far.
 
-How does model performance change as the amount of citizen-science
+### RQ2 — Data efficiency
+
+How does the performance of EO foundation models compare with
+conventional approaches as the amount of available citizen-science
 reference data decreases?
 
-### RQ3
+**Why this follows from the literature:** Ball et al. (2026)
+demonstrate label efficiency for foundation-model embeddings, but
+with reference data that is presumably more systematic than
+citizen-science records. Gillespie et al. (2024) and Dimson et al.
+(2023) show citizen-science plant/invasive-species data exists at
+scale but with different sparsity and quality characteristics than
+curated forestry labels. RQ2 tests whether the label-efficiency
+advantage transfers to citizen-science reference data specifically.
+
+### RQ3 — Spatial sampling bias
 
 How does spatial sampling bias in citizen-science observations affect
-invasive plant mapping performance and geographic generalization?
+invasive plant mapping using conventional satellite representations
+and EO foundation-model representations?
 
-### RQ4
+**Why this follows from the literature:** Dimson et al. (2023)
+establish that citizen-science invasive-plant observations are
+spatially biased (toward roads/trails, accessible locations, and
+disturbed vegetation). No paper reviewed so far tests whether this
+bias affects conventional and foundation-model representations
+differently — RQ3 targets that specific comparison.
+
+### RQ4 — Temporal mismatch
 
 How does temporal mismatch between citizen-science observations and
-satellite observations affect model performance?
+satellite imagery affect invasive plant mapping performance, and does
+the effect differ between conventional and foundation-model
+representations?
 
-### RQ5 (optional)
+**Why this follows from the literature:** Ball et al. (2026)
+specifically flag temporal alignment between reference data and
+imagery as a potential bottleneck for foundation-model performance.
+Citizen-science observations (Gillespie et al. 2024; Dimson et al.
+2023) are opportunistic and not temporally coordinated with satellite
+acquisitions, unlike more controlled reference datasets. RQ4 tests
+this bottleneck directly and asks whether conventional and
+foundation-model representations are affected equally.
+
+### Optional / secondary idea (not one of the four primary RQs)
 
 Can model uncertainty and/or observation density identify locations
 where additional citizen-science observations would provide the
-greatest value?
+greatest value? Kept as a possible extension if time allows; not part
+of the primary research questions above.
 
 ## Candidate Experiments
 
@@ -212,7 +258,7 @@ greatest value?
 > are open and depend on literature review and data availability (see
 > [`methodology.md`](methodology.md)).
 
-### Baseline
+### Baseline (feeds RQ1)
 
 ```text
 citizen science observations → labels / reference data
@@ -223,7 +269,7 @@ Sentinel-1 / Sentinel-2      → conventional spectral-temporal features
 Candidate models (exact choice open): Random Forest, XGBoost, Logistic
 Regression.
 
-### Foundation-model experiment
+### Foundation-model experiment (feeds RQ1)
 
 ```text
 citizen science observations → labels / reference data
@@ -236,14 +282,14 @@ satellite EO                 → TESSERA / AlphaEarth / another
 The exact foundation model must remain open until literature and data
 availability are evaluated.
 
-### Label-efficiency experiment
+### Label-efficiency experiment (RQ2)
 
 Train models on progressively smaller subsets of citizen-science
 observations (example levels, not final: 100%, 50%, 25%, 10%, 5%, 1%)
 and compare conventional EO features vs. EO foundation-model
 embeddings across these levels.
 
-### Sampling-bias experiment
+### Sampling-bias experiment (RQ3)
 
 Compare training-data construction strategies, e.g.:
 
@@ -255,14 +301,28 @@ Measure effects on performance, spatial generalization, and geographic
 transfer. Do not assume bias correction will improve performance —
 this is a question, not an expected result.
 
-### Temporal-mismatch experiment
+**Grounding the bias, not just thinning at random:** Dimson et al.
+(2023) document *specific* bias axes for citizen-science invasive-plant
+observations — proximity to roads/trails, general accessibility, and
+disturbed vegetation. Where possible, strategies 2–3 above (and any
+additional "biased vs. corrected" comparison) should be constructed
+using those same axes (e.g. distance-to-road/trail, accessibility
+layers) rather than arbitrary spatial thinning or density-only
+resampling — this keeps the manipulated conditions ecologically
+realistic and traceable to a documented bias mechanism instead of an
+artificial one. This requires auxiliary covariates (e.g. road/trail
+or accessibility layers) — see
+[`datasets.md`](datasets.md#auxiliary--external-data), currently
+undecided.
+
+### Temporal-mismatch experiment (RQ4)
 
 Compare temporal relationships between observations and satellite
 imagery (example ranges, not final: same year, ±1, ±2, ±3 years),
 constrained to ranges actually supported by the dataset and ecological
 context.
 
-### Spatial-generalization experiment
+### Spatial-generalization experiment (cross-cutting, supports evaluation of RQ1–RQ4)
 
 Avoid relying exclusively on random train/test splits. Investigate
 spatial blocking, Group K-Fold, and geographically separated test
@@ -276,7 +336,8 @@ for invasive plant mapping, but their advantage may become limited by
 the quality, quantity, spatial distribution, and temporal alignment of
 citizen-science reference data.**
 
-This is a **hypothesis**, not an expected or claimed result. It is
+This is a **hypothesis**, not an expected or claimed result — do
+**not** assume that foundation models will perform better. It is
 motivated by Ball et al. (2026), who suggest that reference-data
 quality and temporal alignment can become the main bottleneck for
 foundation-model-based species mapping even where labels are
@@ -286,38 +347,70 @@ foundation models better?" toward:
 > Under what reference-data conditions are foundation models actually
 > useful for invasive plant mapping?
 
+## Scope and Feasibility
+
+> **Status: candidate prioritization, not a decision.** Added because
+> RQ1–RQ4 were adopted before the actual citizen-science and satellite
+> datasets were explored (`docs/datasets.md` still lists both sources
+> as "not yet decided"). This section exists so feasibility is checked
+> deliberately rather than discovered mid-experiment.
+
+**Blocking feasibility check (do before finalizing RQ2/RQ4
+experimental design):** once real citizen-science data is obtained,
+compute basic descriptive stats — total observation count, spatial
+extent/clustering, and temporal range/spread — before committing to
+specific label-efficiency percentages (RQ2) or temporal-mismatch
+windows (RQ4). If the dataset is small or clustered in one or two
+years, the example levels/ranges in the experiments above (e.g. 1%
+subsets, ±3-year windows) may not be meaningful and should be revised
+to what the data actually supports, rather than kept as originally
+sketched.
+
+**Candidate prioritization if the thesis timeline is constrained:**
+RQ1 (baseline vs. foundation model) is the prerequisite for the other
+three and should be treated as the core deliverable. RQ2 and RQ3 are
+next in priority since they are directly grounded in a specific,
+verified literature gap (Ball et al. 2026 for label efficiency;
+Dimson et al. 2023 for spatial bias). RQ4 (temporal mismatch) is the
+most exploratory of the four — it depends most heavily on the
+citizen-science dataset actually having usable multi-year spread — and
+is the first candidate to reduce to a lighter secondary analysis, or
+drop, if time runs short. This ordering is a suggestion to revisit
+after the feasibility check above and after supervisor discussion, not
+a fixed decision.
+
 ## Open Questions
 
-- This document is based on six papers found so far, not a systematic
-  literature review. The "potential gap" claim needs revisiting once a
-  broader search is done (e.g. across Web of Science/Scopus/Google
+- This document is based on five verified papers found so far (plus
+  one unverified placeholder — the Galicia/Iberia line above), not a
+  systematic literature review. The "potential gap" claim needs
+  revisiting once a broader search is done (e.g. across Web of Science/Scopus/Google
   Scholar for combinations of "foundation model" + "citizen science" +
   "invasive species"/"biological invasion").
 - The "recent Sentinel-1/Sentinel-2 + Galicia/Northern Iberia Acacia"
   reference has no identified citation yet — find and add the actual
   paper(s) to `literature_review.md`, or remove the claim if none is
   found.
-- How do RQ1–RQ5 here relate to the existing RQ1–RQ4 in
-  `research_questions.md`? They currently overlap but are framed
-  differently (data-integration/representation/performance/
-  generalization vs. foundation-model/label-efficiency/bias/temporal-
-  mismatch). Needs a decision on whether to merge, replace, or keep
-  both framings, ideally after supervisor discussion.
-- Whether RQ5 (uncertainty/observation-density-guided sampling) is in
-  scope at all for the thesis timeline, given it is explicitly optional
-  and adds an active-learning-like component.
+- **Resolved 2026-09-11:** the RQs above are now the thesis's primary
+  research questions, replacing the earlier data-integration/
+  representation/performance/generalization framing in
+  `research_questions.md`. That earlier framing is discarded, not
+  kept as an alternative.
+- Whether the optional/secondary uncertainty- or
+  observation-density-guided sampling idea (see
+  [Research Questions](#research-questions)) is in scope at all for
+  the thesis timeline, given it adds an active-learning-like
+  component beyond the four primary RQs.
 - Exact EO foundation model(s) to use (TESSERA, AlphaEarth, or other)
   — depends on data availability, licensing, and further literature
   review.
 - Exact conventional baseline model and feature set — depends on the
   dataset once explored (see `datasets.md` and `data/README.md`).
-- Exact label-efficiency percentages and temporal-mismatch ranges —
-  depend on the actual size and temporal spread of the citizen-science
-  dataset once explored.
-- Whether the citizen-science dataset available for this thesis
-  actually has enough observations, spatial spread, and temporal
-  spread to support all five candidate experiments, or whether some
-  must be scoped down or dropped.
+- Exact label-efficiency percentages, sampling-bias covariates, and
+  temporal-mismatch ranges, and whether all four RQs can be run at
+  full depth or some must be scoped down — see
+  [Scope and Feasibility](#scope-and-feasibility) for the blocking
+  feasibility check and candidate prioritization.
 - Whether "invasive plant(s)" in scope means one species, several
   species, or a species-agnostic invasive/non-invasive framing —
   affects how directly Cardoso et al. (2024) and Mouta et al. (2021)

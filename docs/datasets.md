@@ -62,7 +62,7 @@ Candidates under consideration, per
   (2026).
 - Other EO foundation models — not ruled out; "another justified EO
   foundation model" is explicitly left open in
-  [`research_gaps.md`](research_gaps.md#foundation-model-experiment).
+  [`research_gaps.md`](research_gaps.md#foundation-model-experiment-feeds-rq1).
 
 Open questions:
 
@@ -91,3 +91,15 @@ shapefiles, land-cover products, and other auxiliary data
 (e.g. administrative boundaries, existing land-cover maps) that may be
 needed for sample construction or evaluation. No specific product has
 been selected.
+
+One candidate need, not yet confirmed: the RQ3 sampling-bias
+experiment (see
+[`research_gaps.md`](research_gaps.md#sampling-bias-experiment-rq3))
+proposes grounding synthetic spatial-bias manipulation in the specific
+bias axes Dimson et al. (2023) documented for citizen-science
+invasive-plant data — roads/trails, general accessibility, and
+disturbed vegetation — rather than arbitrary thinning. This would
+require road/trail network and/or accessibility layers (e.g. from
+OpenStreetMap or a national roads dataset) as auxiliary data. Whether
+this is pursued depends on data availability and the feasibility check
+in `research_gaps.md`.
