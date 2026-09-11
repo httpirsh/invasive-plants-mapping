@@ -1,0 +1,10 @@
+[project]
+name = "invasive-plants-mapping"
+version = "0.1.0"
+description = "Mapping invasive alien plants through the combination of citizen science, Earth Observation Foundation Models, and satellite imagery."
+readme = "README.md"
+requires-python = ">=3.10"
+
+# Dependencies are tracked in requirements.txt for now; this file holds
+# project metadata and will take over dependency management if/when the
+# project grows into an installable package (e.g. reusable code under src/).

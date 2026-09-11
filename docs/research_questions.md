@@ -1,5 +1,10 @@
 # Research Questions
 
+> **Status: preliminary.** These questions reflect the current
+> understanding of the problem at the start of the thesis. They are
+> expected to be refined once the citizen science and satellite
+> datasets have been explored and the relevant literature reviewed.
+
 ## Main Research Question
 
 Can Earth Observation Foundation Models improve the mapping of
