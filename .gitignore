@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+.venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data (raw/processed data usually not versioned)
+data/*
+!data/.gitkeep
+
+# Results
+results/*
+!results/.gitkeep
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Environment
+.env
