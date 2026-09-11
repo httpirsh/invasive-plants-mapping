@@ -122,6 +122,18 @@ pip install -r requirements.txt
 
 Project metadata is also declared in `pyproject.toml`.
 
+Notebook outputs are stripped from what gets committed to Git (so
+plots/data results don't end up in version control or bloat the
+repo). After cloning, run once:
+
+```bash
+pipx install nbstripout   # or: pip install --user nbstripout
+nbstripout --install
+```
+
+This only affects what Git stores — your local notebooks keep their
+outputs when you save them in Jupyter.
+
 ## For AI Assistants
 
 See [`CLAUDE.md`](CLAUDE.md) for the conventions used in this
