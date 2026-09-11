@@ -2,17 +2,17 @@
 
 ```
 data/
-├── raw/          ← dados originais, tal como obtidos
-├── interim/      ← dados depois de tratamentos intermédios
-└── processed/    ← dados finais utilizados pelos modelos
+├── raw/          ← original, unmodified data
+├── interim/      ← data after intermediate processing
+└── processed/    ← final data used by the models
 ```
 
-Os dados em `raw/`, `interim/` e `processed/` não são versionados (ver `.gitignore`).
-Este ficheiro documenta a proveniência de cada dataset utilizado.
+Data in `raw/`, `interim/` and `processed/` is not version-controlled (see `.gitignore`).
+This file documents the provenance of each dataset used.
 
 ## Datasets
 
-### Dataset: <nome>
+### Dataset: <name>
 
 - **Source:**
 - **URL:**
