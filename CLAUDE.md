@@ -75,6 +75,11 @@ occur — do not create `.py` files just to look more "professional".
 Name notebooks by what they do (e.g. `02_data_quality.ipynb`), never
 `test.ipynb` / `final.ipynb` / `analysis2.ipynb`.
 
+Notebook outputs are stripped from what Git stores (via `nbstripout`,
+configured in `.gitattributes`) — local outputs in Jupyter are
+unaffected, but a fresh clone needs `nbstripout --install` run once to
+activate the filter, and outputs won't be present in committed history.
+
 ## Reproducibility
 
 For any real experiment, record: dataset/version used, preprocessing
@@ -94,6 +99,9 @@ evaluated, on which data, and under which validation strategy.
   that a change is "ready for a commit".
 - Always show the commit title after committing, and show the
   commit message again before pushing.
+- Commit titles must never reveal AI/assistant tooling or meta-files
+  (e.g. don't write "add CLAUDE.md" — describe the substance of the
+  change instead, such as "add project conventions").
 
 ## Current Stage
 
