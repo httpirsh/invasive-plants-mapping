@@ -54,15 +54,11 @@ Related open questions: [Data Quality and Bias](methodology.md#data-quality-and-
 
 ## Scientific Framing
 
-This is a **hypothesis to investigate, not an assumed result**: do not
-assume foundation models will outperform conventional approaches.
-
-The possible scientific insight is that foundation models may reduce
-the need for sophisticated satellite feature engineering, while the
-main bottleneck shifts to the quantity, quality, spatial distribution,
-and temporal alignment of citizen-science reference data — i.e. the
-thesis investigates *under what reference-data conditions* EO
-foundation models are actually useful for invasive plant mapping, not
-only whether they are better in general. See
-[`research_gaps.md`](research_gaps.md#main-hypothesis) for the full
-motivation.
+This is a **hypothesis to investigate, not an assumed result** — do
+not assume foundation models will outperform conventional approaches.
+See [`research_gaps.md`](research_gaps.md#main-hypothesis) for the
+full motivation: foundation models may reduce the need for feature
+engineering while the bottleneck shifts to citizen-science
+reference-data quality, quantity, spatial distribution, and temporal
+alignment — i.e. the thesis asks *under what conditions* foundation
+models are useful, not only whether they are better in general.
