@@ -122,6 +122,12 @@ pip install -r requirements.txt
 
 Project metadata is also declared in `pyproject.toml`.
 
+## For AI Assistants
+
+See [`CLAUDE.md`](CLAUDE.md) for the conventions used in this
+repository (data handling, commit rules, notebook conventions, current
+research stage).
+
 ## Status
 
 This project is at an early stage. The structure above is intentionally
