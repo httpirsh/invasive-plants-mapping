@@ -196,3 +196,30 @@ cross-validation as the original (pre-verification) research-gap notes
 sketched — that specific combination remains a general characterization
 of the field's direction, not a claim tied to one verified Galicia
 paper.
+
+## Weak Supervision for Segmentation from Point Labels
+
+### Rivier et al. (2023/2024)
+
+Efficient Semantic Segmentation for Aerial Imagery Using Query Points
+and Superpixel Supervision. arXiv:2309.05490v2 [cs.CV].
+
+Weakly-supervised semantic segmentation method: trains segmentation
+models from sparse point-level labels (as few as 50 points per image)
+instead of dense masks, using superpixel propagation (DAL-HERS
+algorithm) and a "weighted masked loss" that only penalizes labeled
+pixels. Tested on LandCoverAI (Poland aerial orthophotos, 25–50
+cm/pixel, four land-cover classes: Buildings, Woodland, Water, Road).
+Reports mIoU 75.64% with DeepLabV3 (ResNet50/101 backbones),
+competitive with fully-supervised training.
+
+Relevance: **not** about EO foundation models, citizen science, or
+invasive plants — unlike the other papers in this review, this one was
+flagged for its methodological technique rather than its domain.
+iNaturalist observations are themselves sparse point labels, so this
+is a candidate reference **if** the task formulation (see
+[`methodology.md`](methodology.md#problem-and-task-definition), still
+an open question) moves toward segmentation/spatial mapping built from
+point observations rather than point-level classification. Not yet
+tied to a specific research question — a methodological lead, not a
+decision.
