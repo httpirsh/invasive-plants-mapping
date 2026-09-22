@@ -292,6 +292,55 @@ percentages (RQ2) or temporal-mismatch windows (RQ4). If the dataset
 is small or clustered in one or two years, the example levels/ranges
 above may not be meaningful and should be revised.
 
+**Reference-year / temporal-window discussion (2026-09-22):** a
+partial answer to the blocking feasibility check above, using the
+iNaturalist *Acacia*/Coimbra-district pilot (see
+[`data/README.md`](../data/README.md); 7,943 observations — a pilot
+for access validation, not a species/region decision).
+
+Two candidate sources are single-year products regardless of anything
+else chosen: OrtoSat and COS are both fixed at 2023. If either is
+used, part of the pipeline is pinned to 2023 no matter what's decided
+for the rest — making 2023 a natural (not inevitable) anchor to
+propose, rather than an arbitrary pick.
+
+On the pilot data, observation coverage around a 2023 anchor:
+
+- exact year (2023): 3.4%
+- ±1 year (2022–2024): 30.7%
+- ±2 years (2021–2025): 80.3%
+- ±3 years (2020–2026): 93.3%
+
+TESSERA separately covers 2017–2025; 95.3% of pilot observations fall
+within that window under nearest-available-year matching instead of a
+fixed 2023 anchor. The observation-date distribution is uneven — 43%
+of all pilot records are from 2021 alone, most likely an iNaturalist
+adoption artifact rather than an ecological signal — so a fixed window
+and nearest-year matching would not select the same, or an evenly
+distributed, subset of observations.
+
+Three candidate strategies, none yet chosen:
+
+1. **Fixed window around 2023** (e.g. ±2 years) — one consistent
+   dataset for RQ1–RQ3, simplest to report, but discards ~20% of pilot
+   observations and still spans up to 4 years of mismatch within the
+   window itself.
+2. **Nearest-available-year matching per observation** — minimizes
+   each observation's individual mismatch and retains ~95% of the
+   data, at the cost of every observation being matched to a different
+   reference year (less uniform to report as a single baseline).
+3. **Treat the window itself as the RQ4 manipulated variable** — do
+   not fix it for the mismatch experiment; construct multiple dataset
+   versions at different mismatch levels and compare, per the
+   [temporal-mismatch experiment](#temporal-mismatch-experiment-rq4)
+   above. Applies to RQ4 only — RQ1–RQ3 still need one fixed default
+   in the meantime.
+
+**Open question, for supervisor discussion:** which of these (or
+another) should be the RQ1–RQ3 default, and does the answer change
+once the actual species/region — not just this Coimbra/*Acacia*
+pilot — is decided?
+
 **Candidate prioritization if the timeline is constrained:** RQ1 is
 the prerequisite for the other three and the core deliverable. RQ2 and
 RQ3 are next, each grounded in a specific verified paper (Ball et al.
