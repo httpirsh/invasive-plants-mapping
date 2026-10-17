@@ -29,8 +29,8 @@ interpretation of RQ3.
 
 **Proposal: target-group background** — use iNaturalist observations
 of other plant species as pseudo-absences. Standard technique in
-species distribution modelling (Phillips et al. 2009, Ecological
-Applications — to add to `literature.md`). [added]
+species distribution modelling (Phillips et al. 2009, see
+`literature.md`). [added]
 
 **Arguments to present.**
 - Same observers, same platform, same accessible places as the
@@ -106,12 +106,12 @@ year.
 - **Disturbance filter:** remove observations (presences and
   background) inside ICNF burned areas between observation year and
   2023.
-  - Framing [added]: *Acacia* is fire-adapted — in Portugal fire
-    tends to stimulate germination of *A. dealbata* and
-    *A. longifolia*, so burned stands often regrow denser. The reason
-    to remove them is that the 2023 pixel no longer matches the label
-    (burned ground, young regrowth), not that the species is gone.
-    Needs a source in `literature.md`.
+  - Framing [added]: *Acacia* is fire-adapted — in central Portugal,
+    burning promoted *A. dealbata* seed germination and stands
+    persisted (Riveiro et al. 2025, see `literature.md`). The reason
+    to remove burned observations is that the 2023 pixel no longer
+    matches the label (burned ground, young regrowth), not that the
+    species is gone.
   - [ ] Fixed pre-processing step, or part of the RQ2 filter ("which
     observations are removed and why")?
 - **Window sensitivity analysis:** re-run RQ1 with ±1/±2/±3 and check

@@ -105,6 +105,38 @@ Islands, Galicia; Random Forest beat the other algorithms. Specific
 area-change figures (2016–2024) are **unverified** — the publisher
 page blocks automated access.
 
+### Presence-only modelling
+
+**Phillips et al. (2009).** Sample selection bias and presence-only
+distribution models: implications for background and pseudo-absence
+data. *Ecological Applications*, 19(1), 181–197.
+DOI: [10.1890/07-2153.1](https://doi.org/10.1890/07-2153.1)
+
+Background data are usually drawn at random, but occurrence records
+are biased toward accessible areas, which gives inaccurate models.
+Proposes **target-group background**: use all occurrences of a group
+of species recorded by similar methods as background, since they
+share the same bias. Across 226 species, target-group background
+improved average performance for every modelling method tested,
+with the largest gains where the presence records were most biased.
+Basis for the absence proposal in
+[`research_questions.md`](research_questions.md#absence-generation-proposed).
+
+### *Acacia* fire ecology
+
+**Riveiro et al. (2025).** Effectiveness of slash and burn treatments
+in controlling *Acacia dealbata* Link invasion. *Biological
+Invasions*, 27, 125.
+DOI: [10.1007/s10530-025-03567-8](https://doi.org/10.1007/s10530-025-03567-8)
+
+Eight experimental blocks across central Portugal, monitored for
+three years. Burning promoted *A. dealbata* seed germination;
+slashing stimulated resprouting. Even combined slash-and-burn left at
+least 6.5 stems/m² (0 in controls). Relevance: burned *Acacia* stands
+are not gone, so the disturbance filter removes observations because
+the 2023 pixel no longer matches the label, not because the species
+is absent.
+
 ### Weak supervision from point labels
 
 **Rivier et al. (2023/2024).** Efficient Semantic Segmentation for
