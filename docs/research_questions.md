@@ -10,6 +10,12 @@
 > percentages, spatial/temporal splits) remains open — see
 > [`methodology.md`](methodology.md) and
 > [`research_gaps.md`](research_gaps.md#candidate-experiments).
+>
+> **Supervisor review (2026-10-17):** RQ1–RQ3 confirmed, with the
+> wording refinements below. **RQ4 (temporal mismatch) is deferred
+> from the current scope** — not discarded as wrong, but postponed
+> given the timeline; see [Deferred Question](#deferred-question) and
+> [`research_gaps.md`](research_gaps.md#scope-and-feasibility).
 
 ## Main Research Question
 
@@ -21,34 +27,65 @@ data?
 
 ### RQ1 — Foundation models vs. conventional approaches
 
-Do Earth Observation foundation-model representations improve
-invasive plant mapping compared with conventional spectral-temporal
-satellite features?
+To what extent do Earth Observation foundation-model representations
+improve invasive plant mapping compared with conventional
+spectral-temporal satellite features?
 
 Related open questions: [Baseline Philosophy](methodology.md#baseline-philosophy), [Foundation Model Philosophy](methodology.md#foundation-model-philosophy), [Evaluation Principles](methodology.md#evaluation-principles).
+
+> *Supervisor wording (2026-10-17): "Até que ponto os foundation
+> models melhoram as abordagens mais tradicionais?" — an
+> extent/degree framing rather than yes/no; confirmed, no change in
+> substance.*
 
 ### RQ2 — Data efficiency
 
 How does the performance of EO foundation models compare with
 conventional approaches as the amount of available citizen-science
-reference data decreases?
+reference data decreases, when that reduction is induced through a
+distribution-improving filter rather than uniform random sampling?
 
 Related open questions: [Dataset Construction](methodology.md#dataset-construction), [Foundation Model Philosophy](methodology.md#foundation-model-philosophy).
+
+> **Supervisor refinement (2026-10-17):** apply a filter — acknowledged
+> to have its own limitations — within an area with several
+> observations, and examine *which* observations it removes and *why*,
+> instead of discarding at random. The exact filter/criterion is not
+> yet specified — see
+> [`research_gaps.md`](research_gaps.md#label-efficiency-experiment-rq2).
 
 ### RQ3 — Spatial sampling bias
 
 How does spatial sampling bias in citizen-science observations affect
-invasive plant mapping using conventional satellite representations
-and EO foundation-model representations?
+invasive plant mapping performance, using conventional satellite
+representations and EO foundation-model representations, when
+evaluated across geographically distinct regions?
 
 Related open questions: [Data Quality and Bias](methodology.md#data-quality-and-bias), [Validation Strategy](methodology.md#validation-strategy), [Ablation and Generalization](methodology.md#ablation-and-generalization).
 
-### RQ4 — Temporal mismatch
+> **Supervisor confirmation (2026-10-17):** the comparison should be
+> made geographically, consistent with the existing
+> [spatial-generalization experiment](research_gaps.md#spatial-generalization-experiment-cross-cutting-supports-evaluation-of-rq1rq4).
+
+## Deferred Question
+
+### RQ4 — Temporal mismatch (deferred, 2026-10-17)
 
 How does temporal mismatch between citizen-science observations and
 satellite imagery affect invasive plant mapping performance, and does
 the effect differ between conventional and foundation-model
 representations?
+
+**Status: deferred, not discarded.** Following supervisor discussion,
+this question is out of the current scope given the timeline — it was
+already flagged in
+[`research_gaps.md`](research_gaps.md#scope-and-feasibility) as the
+most exploratory of the four and the first candidate to drop if time
+ran short. The supervisor independently confirmed it would be
+difficult and that most reviewed papers do not address it, reinforcing
+rather than undermining the gap argued in
+[`research_gaps.md`](research_gaps.md#potential-gap). May be revisited
+if time allows.
 
 Related open questions: [Data Quality and Bias](methodology.md#data-quality-and-bias), [Dataset Construction](methodology.md#dataset-construction), [Validation Strategy](methodology.md#validation-strategy).
 
@@ -59,6 +96,8 @@ not assume foundation models will outperform conventional approaches.
 See [`research_gaps.md`](research_gaps.md#main-hypothesis) for the
 full motivation: foundation models may reduce the need for feature
 engineering while the bottleneck shifts to citizen-science
-reference-data quality, quantity, spatial distribution, and temporal
-alignment — i.e. the thesis asks *under what conditions* foundation
-models are useful, not only whether they are better in general.
+reference-data quality, quantity, and spatial distribution — i.e. the
+thesis asks *under what conditions* foundation models are useful, not
+only whether they are better in general. (Temporal alignment remains
+part of this motivation in principle, but is not pursued as RQ4 for
+now — see [Deferred Question](#deferred-question).)

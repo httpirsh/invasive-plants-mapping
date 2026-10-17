@@ -170,7 +170,7 @@ and EO foundation-model representations?
 affects conventional and foundation-model representations
 differently — not tested in the literature reviewed.
 
-### RQ4 — Temporal mismatch
+### RQ4 — Temporal mismatch (deferred, 2026-10-17)
 
 How does temporal mismatch between citizen-science observations and
 satellite imagery affect invasive plant mapping performance, and does
@@ -181,6 +181,13 @@ representations?
 empirically demonstrated (9–15% weighted-F1 decline across years,
 fact 6) against citizen science's inherently opportunistic timing
 (fact 1), and whether it affects both representation types equally.
+
+**Status: deferred, not discarded.** Following supervisor discussion
+(2026-10-17), this question is out of the current scope given the
+timeline — see [Scope and Feasibility](#scope-and-feasibility). The
+supervisor independently confirmed it would be difficult and that most
+reviewed papers do not address it — this reinforces, rather than
+undermines, the gap argued above. May be revisited if time allows.
 
 ### Optional / secondary idea (not one of the four primary RQs)
 
@@ -225,6 +232,15 @@ Train on progressively smaller subsets of citizen-science observations
 conventional EO features vs. EO foundation-model embeddings across
 levels.
 
+**Supervisor refinement (2026-10-17):** rather than (or alongside)
+uniform random percentage levels, apply a distribution-improving
+filter to a densely-observed area — the filter is acknowledged to have
+its own limitations — and examine which observations get removed and
+why, instead of discarding at random. This ties the data-reduction
+axis to spatial distribution rather than treating RQ2 and RQ3 as fully
+independent. The exact filter/criterion is not yet specified — open
+question for a follow-up supervisor discussion.
+
 ### Sampling-bias experiment (RQ3)
 
 Compare training-data construction strategies: (1) original
@@ -245,11 +261,24 @@ whether the same axes dominate in this thesis's (not yet decided)
 region should be checked against the actual data, not assumed by
 default.
 
-### Temporal-mismatch experiment (RQ4)
+**Supervisor confirmation (2026-10-17):** compare performance across
+geographically distinct areas — consistent with the
+spatial-generalization experiment below, now confirmed as the intended
+comparison method for RQ3.
+
+### Temporal-mismatch experiment (RQ4) — deferred, 2026-10-17
 
 Compare temporal relationships between observations and satellite
 imagery (example ranges, not final: same year, ±1, ±2, ±3 years),
 constrained to ranges actually supported by the dataset.
+
+**Deferred, not discarded**, following supervisor discussion — see
+[RQ4](#rq4--temporal-mismatch-deferred-2026-10-17) above. The
+reference-year/temporal-window discussion in
+[Scope and Feasibility](#scope-and-feasibility) still applies to
+RQ1–RQ3's dataset construction regardless — the deferral is of RQ4 as
+a dedicated mismatch *experiment*, not of needing a temporal-matching
+rule at all.
 
 ### Spatial-generalization experiment (cross-cutting, supports evaluation of RQ1–RQ4)
 
@@ -332,22 +361,26 @@ Three candidate strategies, none yet chosen:
 3. **Treat the window itself as the RQ4 manipulated variable** — do
    not fix it for the mismatch experiment; construct multiple dataset
    versions at different mismatch levels and compare, per the
-   [temporal-mismatch experiment](#temporal-mismatch-experiment-rq4)
-   above. Applies to RQ4 only — RQ1–RQ3 still need one fixed default
-   in the meantime.
+   [temporal-mismatch experiment](#temporal-mismatch-experiment-rq4--deferred-2026-10-17)
+   above. **No longer applicable for now** — RQ4 is deferred (see
+   below), so RQ1–RQ3 need a fixed default regardless, via option 1 or
+   2.
 
-**Open question, for supervisor discussion:** which of these (or
-another) should be the RQ1–RQ3 default, and does the answer change
-once the actual species/region — not just this Coimbra/*Acacia*
-pilot — is decided?
+**Open question, for supervisor discussion:** which of options 1–2
+should be the RQ1–RQ3 default, and does the answer change once the
+actual species/region — not just this Coimbra/*Acacia* pilot — is
+decided?
 
-**Candidate prioritization if the timeline is constrained:** RQ1 is
-the prerequisite for the other three and the core deliverable. RQ2 and
-RQ3 are next, each grounded in a specific verified paper (Ball et al.
-2026; Dimson et al. 2023 respectively). RQ4 is the most exploratory —
-most dependent on the dataset having usable multi-year spread — and
-the first candidate to lighten or drop if time runs short. Revisit
-after the feasibility check and supervisor discussion.
+**Resolved 2026-10-17 — RQ4 deferred:** following supervisor
+discussion, RQ4 is deferred from the current scope (see
+[RQ4](#rq4--temporal-mismatch-deferred-2026-10-17) above), not dropped
+on quality grounds — the supervisor independently confirmed it would
+be difficult and under-addressed in the literature, matching the gap
+argument. **Prioritization for the remaining scope:** RQ1 is the
+prerequisite for RQ2–RQ3 and the core deliverable; RQ2 and RQ3 follow,
+each grounded in a specific verified paper (Ball et al. 2026; Dimson
+et al. 2023 respectively). RQ4 may be revisited if time allows once
+RQ1–RQ3 are established.
 
 ## Open Questions
 
@@ -385,3 +418,15 @@ after the feasibility check and supervisor discussion.
 - Whether "invasive plant(s)" means one species, several species, or a
   species-agnostic framing — affects how directly Cardoso et al.
   (2024) and Mouta et al. (2021) serve as precedents.
+- **Resolved 2026-10-17:** supervisor reviewed RQ1–RQ4. RQ1 and RQ3
+  confirmed with wording refinements (RQ1 as an "extent" framing; RQ3
+  made explicit about comparing across geographically distinct
+  regions). RQ2 refined: reduce data via a distribution-improving
+  filter with known limitations, applied to a densely-observed area,
+  rather than uniform random percentages alone — exact filter still
+  open, see [Label-efficiency experiment](#label-efficiency-experiment-rq2).
+  **RQ4 (temporal mismatch) deferred from the current scope** —
+  postponed given the timeline, not discarded as wrong; may be
+  revisited if time allows. See
+  [RQ4](#rq4--temporal-mismatch-deferred-2026-10-17) and the updated
+  [Scope and Feasibility](#scope-and-feasibility) prioritization.
