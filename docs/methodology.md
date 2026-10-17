@@ -34,8 +34,7 @@ problem
 
 See [`research_gaps.md`](research_gaps.md) for the research gap
 analysis and [`research_questions.md`](research_questions.md) for the
-current research questions (RQ1–RQ3; an earlier RQ4 on temporal
-mismatch was eliminated on 2026-10-17 — see `research_gaps.md`).
+current research questions (RQ1–RQ3).
 
 ## Problem and Task Definition
 

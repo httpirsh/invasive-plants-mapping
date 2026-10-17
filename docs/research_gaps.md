@@ -169,16 +169,7 @@ and EO foundation-model representations?
 affects conventional and foundation-model representations
 differently — not tested in the literature reviewed.
 
-> **RQ4 (temporal mismatch) eliminated, 2026-10-17.** Previously
-> listed here and deferred as of the same date; now removed from
-> scope entirely at the student's request, along with the dedicated
-> temporal-mismatch investigation (reference-year/window analysis,
-> candidate mismatch experiment) that supported it. Ball et al.
-> (2026)'s temporal-degradation finding (fact 6) remains in
-> [Existing Research](#eo-foundation-models-and-species-mapping) as a
-> literature fact; it no longer motivates an active RQ in this thesis.
-
-### Optional / secondary idea (not one of the four primary RQs)
+### Optional / secondary idea (not one of the primary RQs)
 
 Can model uncertainty and/or observation density identify locations
 where additional citizen-science observations would provide the
@@ -296,22 +287,16 @@ percentages (RQ2). If the dataset is small or clustered in one or two
 years, the example levels above may not be meaningful and should be
 revised.
 
-A dataset construction note independent of RQ4: TESSERA is a
-single-year-per-tile product, and OrtoSat/COS are both fixed at 2023,
-so *some* rule for pairing an observation with a satellite year is
-still needed for RQ1–RQ3 regardless. This is now treated as a plain
-implementation detail (e.g. nearest-available-year matching), not a
-research question — the dedicated reference-year/temporal-mismatch
-investigation that used to be here was removed along with RQ4 (see
-below).
+A dataset construction note: TESSERA is a single-year-per-tile
+product, and OrtoSat/COS are both fixed at 2023, so observations must
+be paired with a satellite year. This is handled as a controlled
+design choice (single reference year, fixed observation window), not
+a research question — see
+[`research_questions.md`](research_questions.md#temporal-design-proposed).
 
-**Resolved 2026-10-17 — RQ4 eliminated:** following the student's
-decision, RQ4 (temporal mismatch) and the dedicated investigation that
-supported it are removed from the thesis entirely — not deferred, as
-recorded earlier the same day. **Prioritization for the remaining
-scope:** RQ1 is the prerequisite for RQ2–RQ3 and the core deliverable;
-RQ2 and RQ3 follow, each grounded in a specific verified paper (Ball
-et al. 2026; Dimson et al. 2023 respectively).
+**Prioritization:** RQ1 is the prerequisite for RQ2–RQ3 and the core
+deliverable; RQ2 and RQ3 follow, each grounded in a specific verified
+paper (Ball et al. 2026; Dimson et al. 2023 respectively).
 
 ## Open Questions
 
@@ -349,15 +334,10 @@ et al. 2026; Dimson et al. 2023 respectively).
 - Whether "invasive plant(s)" means one species, several species, or a
   species-agnostic framing — affects how directly Cardoso et al.
   (2024) and Mouta et al. (2021) serve as precedents.
-- **Resolved 2026-10-17:** supervisor reviewed RQ1–RQ4. RQ1 and RQ3
+- **Resolved 2026-10-17:** supervisor reviewed the research questions. RQ1 and RQ3
   confirmed with wording refinements (RQ1 as an "extent" framing; RQ3
   made explicit about comparing across geographically distinct
   regions). RQ2 refined: reduce data via a distribution-improving
   filter with known limitations, applied to a densely-observed area,
   rather than uniform random percentages alone — exact filter still
   open, see [Label-efficiency experiment](#label-efficiency-experiment-rq2).
-  RQ4 was deferred initially, then **eliminated from scope entirely**
-  the same day at the student's request, along with the dedicated
-  temporal-mismatch investigation (reference-year/window analysis,
-  candidate mismatch experiment) — see
-  [Scope and Feasibility](#scope-and-feasibility).
