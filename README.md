@@ -65,8 +65,7 @@ invasive-plants-mapping/
 ├── src/                      # Reusable code, extracted from notebooks once stable
 ├── experiments/              # Experiment configurations and runs
 ├── results/                  # Figures, tables, maps and trained models produced by the work
-├── docs/                     # Research questions, literature review, methodology, notes
-└── thesis/                   # Thesis manuscript, mirroring the chapters of the written thesis
+└── docs/                     # Research questions, literature review, methodology, notes
 ```
 
 ### `data/`
@@ -107,12 +106,6 @@ models. See [`results/README.md`](results/README.md).
 
 Research questions, literature review, dataset documentation,
 methodology notes, experiment notes and meeting notes.
-
-### `thesis/`
-
-The thesis manuscript itself, organized by chapter so that the
-repository tells the same story as the written thesis. See
-[`thesis/README.md`](thesis/README.md).
 
 ## Setup
 

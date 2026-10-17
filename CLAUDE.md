@@ -42,7 +42,6 @@ in [`README.md`](README.md); each major folder also has its own short
 - `experiments/` — experiment configs and runs
 - `results/` — generated outputs (figures, tables, maps, models)
 - `docs/` — research questions, methodology, literature, meeting notes
-- `thesis/` — the manuscript, mirroring the thesis chapters
 
 Docs map:
 
