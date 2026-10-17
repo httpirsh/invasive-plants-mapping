@@ -16,6 +16,8 @@ numbering is not a strict pipeline that must be re-run end to end.
 | `07_experiments/` | Controlled comparisons between baseline, foundation-model and fusion approaches |
 | `08_final_analysis/` | Compare experiments, generate final predictions/maps, error analysis |
 
+Folders are created when a stage starts.
+
 Code that becomes reusable or stable enough to be shared across
 notebooks should be moved into `src/`, not duplicated between
 notebooks.

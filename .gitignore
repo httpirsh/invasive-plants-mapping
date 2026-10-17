@@ -20,9 +20,8 @@ data/external/**
 !data/processed/**/
 !data/external/**/
 
-# Results: generated outputs are not versioned; structure is kept
+# Results: generated outputs are not versioned
 results/**
-!results/**/
 !results/README.md
 
 # Keep directory placeholders everywhere

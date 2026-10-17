@@ -24,7 +24,8 @@ per pixel.
 - Random splits alone are not acceptable: nearby observations make
   train and test sets too similar.
 - Candidates: spatial blocking, grouped K-fold, geographically
-  separated test regions.
+  separated test regions (needed for RQ3), with attention to spatial
+  leakage and autocorrelation.
 - Open: an independent validation reference not drawn from the same
   citizen-science source (candidates: COS 2023, OrtoSat). Without it,
   biased training data evaluated on equally biased test data hides

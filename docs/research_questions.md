@@ -78,6 +78,8 @@ invasive plant mapping performance, using conventional satellite
 representations and EO foundation-model representations, when
 evaluated across geographically distinct regions?
 
+- Evaluated with geographically separated test regions (see
+  [Validation](methodology.md#validation)).
 - A single reference year keeps observation year from correlating
   with geography, so spatial effects are not confounded with time.
 - The absence strategy affects the bias being measured: a
@@ -196,29 +198,13 @@ observations after 2023 are stronger evidence of 2023 presence than
 earlier ones, which may since have been burned or cleared. Note that
 2026 is incomplete.
 
-### Spatial Evaluation
+## Other Open Points
 
-Do not rely only on random train/test splits. Use spatial blocking,
-grouped K-fold and/or geographically separated test regions, with
-attention to spatial leakage and autocorrelation. This is how RQ3's
-"across geographically distinct regions" is evaluated.
+Besides those marked above:
 
-## Possible Extension
-
-Can model uncertainty and/or observation density identify where new
-citizen-science observations would add the most value? Only if time
-allows.
-
-## Open Points
-
-- Target-group background as the absence strategy, and its rules
-  (target group, buffer, class ratio).
-- 2023 as reference year and ±2 years as the default window.
-- Symmetric (2021–2025) vs. asymmetric (e.g. 2021–2026) window.
-- Disturbance filter: fixed pre-processing step or part of the RQ2
-  filter?
-- How to handle the 2021 peak if it is spatially concentrated.
-- Which foundation model(s): TESSERA, AlphaEarth, other.
 - Species scope: genus *Acacia* (proposed — three Iberian precedents
   exist), one species, or several.
-- RQ2 reduction levels and filter; RQ3 bias covariates.
+- Disturbance filter: fixed pre-processing step or part of the RQ2
+  filter?
+- Foundation model, baseline and metrics — see
+  [`methodology.md`](methodology.md).
