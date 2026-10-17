@@ -3,8 +3,8 @@
 Configuration and organization for the controlled experiments that
 compare modelling approaches. The exact experiments will be defined
 once the baseline and foundation-model pipelines exist; see
-[`docs/experiments.md`](../docs/experiments.md) for the running
-design notes.
+[`docs/research_questions.md`](../docs/research_questions.md) for the
+candidate experiment per research question.
 
 | Folder | Purpose |
 |---|---|

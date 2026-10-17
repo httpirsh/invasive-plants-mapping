@@ -16,9 +16,9 @@ for invasive plant mapping when trained with citizen-science reference
 data?
 
 See [`docs/research_questions.md`](docs/research_questions.md) for the
-full set of primary research questions, and
-[`docs/research_gaps.md`](docs/research_gaps.md) for how they follow
-from the existing literature.
+full set of research questions, and
+[`docs/literature.md`](docs/literature.md) for how they follow from
+the existing literature.
 
 ## Research Workflow
 
@@ -65,7 +65,7 @@ invasive-plants-mapping/
 ├── src/                      # Reusable code, extracted from notebooks once stable
 ├── experiments/              # Experiment configurations and runs
 ├── results/                  # Figures, tables, maps and trained models produced by the work
-└── docs/                     # Research questions, literature review, methodology, notes
+└── docs/                     # Research questions, literature, open methodological questions
 ```
 
 ### `data/`
@@ -104,8 +104,8 @@ models. See [`results/README.md`](results/README.md).
 
 ### `docs/`
 
-Research questions, literature review, dataset documentation,
-methodology notes, experiment notes and meeting notes.
+Research questions and design, literature, and open methodological
+questions.
 
 ## Setup
 

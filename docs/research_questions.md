@@ -5,10 +5,10 @@
 | Main question, RQ1–RQ3 | Adopted |
 | Prediction task | Adopted |
 | Absence generation, temporal design | Proposed |
+| Experiments per RQ | Candidate sketches |
 
-Models, foundation-model choice, data percentages and spatial splits
-are still open — see [`methodology.md`](methodology.md) and
-[`research_gaps.md`](research_gaps.md#candidate-experiments).
+How these questions follow from the literature: [`literature.md`](literature.md).
+Methodological questions still open: [`methodology.md`](methodology.md).
 
 ## Main Question
 
@@ -16,7 +16,15 @@ How robust and data-efficient are Earth Observation foundation models
 for invasive plant mapping when trained with citizen-science reference
 data?
 
+**Hypothesis** (to test, not assume): EO foundation models may give
+more data-efficient representations, but their advantage may be
+limited by the quality, quantity and spatial distribution of
+citizen-science data. The thesis asks *under what conditions* they are
+useful, not only whether they are better.
+
 ## Secondary Questions
+
+RQ1 is the prerequisite and core deliverable; RQ2 and RQ3 build on it.
 
 ### RQ1 — Foundation models vs. conventional approaches
 
@@ -27,8 +35,18 @@ spectral-temporal satellite features?
 - A question of degree, not yes/no.
 - All representations come from the same reference year, so only the
   representation changes between compared models.
+- **Grounded in:** Ball et al. (2026) found embeddings beat
+  conventional features for tree species; not yet tested for invasive
+  plants with citizen-science labels.
 
-Related: [Baseline Philosophy](methodology.md#baseline-philosophy), [Foundation Model Philosophy](methodology.md#foundation-model-philosophy), [Evaluation Principles](methodology.md#evaluation-principles).
+Experiment — same labels and classifier, two representations:
+
+```text
+Baseline:          Sentinel-2 spectral-temporal features → ML classifier
+Foundation model:  TESSERA / AlphaEarth / other embedding → ML classifier
+```
+
+Candidate classifiers: Random Forest, XGBoost, Logistic Regression.
 
 ### RQ2 — Data efficiency
 
@@ -37,16 +55,21 @@ conventional approaches as the amount of available citizen-science
 reference data decreases, when that reduction is induced through a
 distribution-improving filter rather than uniform random sampling?
 
-- The filter is applied in an area with many observations, reporting
-  *which* observations it removes and *why*. The filter itself is not yet
-  specified — see
-  [`research_gaps.md`](research_gaps.md#label-efficiency-experiment-rq2).
+- The filter (not yet specified, with its own limitations) is applied
+  in an area with many observations, reporting *which* observations
+  it removes and *why*.
 - Reduction is applied within the fixed observation window.
 - The disturbance filter (see [Temporal Design](#temporal-design-proposed))
   is a candidate component, since it removes observations for a
   documented reason.
+- **Grounded in:** Ball et al. (2026) reached near-optimal accuracy
+  with ~5% of labels, but with curated forest-inventory labels, not
+  citizen science.
 
-Related: [Dataset Construction](methodology.md#dataset-construction), [Foundation Model Philosophy](methodology.md#foundation-model-philosophy).
+Experiment — train on progressively smaller subsets (example levels:
+100%, 50%, 25%, 10%, 5%, 1%) and compare both representations at each
+level. Fix the levels only after checking the real observation count
+and spread.
 
 ### RQ3 — Spatial sampling bias
 
@@ -55,8 +78,6 @@ invasive plant mapping performance, using conventional satellite
 representations and EO foundation-model representations, when
 evaluated across geographically distinct regions?
 
-- The comparison is geographic, as in the
-  [spatial-generalization experiment](research_gaps.md#spatial-generalization-experiment-cross-cutting-supports-evaluation-of-rq1rq3).
 - A single reference year keeps observation year from correlating
   with geography, so spatial effects are not confounded with time.
 - The absence strategy affects the bias being measured: a
@@ -65,8 +86,17 @@ evaluated across geographically distinct regions?
   target-group vs. random background is a candidate experiment.
 - The 2021 peak must be checked spatially: a local campaign or a few
   very active observers would itself be an instance of sampling bias.
+- **Grounded in:** Dimson et al. (2023) showed iNaturalist
+  invasive-plant records are biased toward roads, trails and disturbed
+  areas; whether this affects the two representations differently is
+  untested.
 
-Related: [Data Quality and Bias](methodology.md#data-quality-and-bias), [Validation Strategy](methodology.md#validation-strategy), [Ablation and Generalization](methodology.md#ablation-and-generalization).
+Experiment — compare training sets: (1) original observations,
+(2) spatially thinned, (3) density-aware sampling. Build (2)–(3) from
+documented bias axes (distance to roads/trails, accessibility), which
+needs road/accessibility layers (e.g. OpenStreetMap). Check whether
+these axes hold in the study area rather than assuming them. Do not
+assume bias correction improves performance.
 
 ## Shared Design (RQ1–RQ3)
 
@@ -166,6 +196,19 @@ observations after 2023 are stronger evidence of 2023 presence than
 earlier ones, which may since have been burned or cleared. Note that
 2026 is incomplete.
 
+### Spatial Evaluation
+
+Do not rely only on random train/test splits. Use spatial blocking,
+grouped K-fold and/or geographically separated test regions, with
+attention to spatial leakage and autocorrelation. This is how RQ3's
+"across geographically distinct regions" is evaluated.
+
+## Possible Extension
+
+Can model uncertainty and/or observation density identify where new
+citizen-science observations would add the most value? Only if time
+allows.
+
 ## Open Points
 
 - Target-group background as the absence strategy, and its rules
@@ -175,13 +218,7 @@ earlier ones, which may since have been burned or cleared. Note that
 - Disturbance filter: fixed pre-processing step or part of the RQ2
   filter?
 - How to handle the 2021 peak if it is spatially concentrated.
-
-## Scientific Framing
-
-A **hypothesis to investigate, not an assumed result** — foundation
-models are not assumed to outperform conventional approaches. They
-may reduce feature engineering while the bottleneck shifts to the
-quality, quantity and spatial distribution of citizen-science data;
-the thesis asks *under what conditions* they are useful. Temporal
-alignment is controlled rather than studied. See
-[`research_gaps.md`](research_gaps.md#main-hypothesis).
+- Which foundation model(s): TESSERA, AlphaEarth, other.
+- Species scope: genus *Acacia* (proposed — three Iberian precedents
+  exist), one species, or several.
+- RQ2 reduction levels and filter; RQ3 bias covariates.

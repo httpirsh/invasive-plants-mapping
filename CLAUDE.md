@@ -12,8 +12,8 @@ imagery.*
 Act as a thoughtful research assistant, not just a code generator.
 The methodology is **not fixed** and must emerge from the literature,
 the available data, and exploratory analysis — see
-`docs/research_questions.md` (preliminary) and `docs/methodology.md`
-(guiding principles and open questions) for the current thinking.
+`docs/research_questions.md` (questions and design) and
+`docs/methodology.md` (open questions) for the current thinking.
 
 ## Core Principle: Do Not Invent Research Decisions
 
@@ -41,20 +41,16 @@ in [`README.md`](README.md); each major folder also has its own short
 - `src/` — reusable modules, extracted from notebooks once stable
 - `experiments/` — experiment configs and runs
 - `results/` — generated outputs (figures, tables, maps, models)
-- `docs/` — research questions, methodology, literature, meeting notes
+- `docs/` — research questions, literature, open methodological questions
 
 Docs map:
 
 | File | Holds |
 |---|---|
-| `docs/research_questions.md` | Research questions (primary, adopted 2026-09-11) |
-| `docs/research_gaps.md` | Research gap and literature grounding for the primary RQs |
-| `docs/methodology.md` | Guiding principles, open methodological questions |
-| `docs/literature_review.md` | Literature notes |
-| `docs/datasets.md` | Narrative overview of datasets used |
-| `docs/experiments.md` | Experiment design notes |
-| `docs/meeting_notes/` | Supervisor meeting notes |
-| `data/README.md` | Per-dataset provenance (source, URL, license, coverage...) |
+| `docs/research_questions.md` | Research questions, experiments per RQ, shared design decisions |
+| `docs/literature.md` | Paper notes, what has been done, the gap and contribution |
+| `docs/methodology.md` | Methodological questions still open |
+| `data/README.md` | Per-dataset provenance and sources not yet obtained |
 
 ## Data Handling
 
