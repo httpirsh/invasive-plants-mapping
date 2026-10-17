@@ -74,8 +74,7 @@ outperforming common species distribution modelling baselines (AUC
 Relevance: establishes that citizen science + remote sensing + deep
 learning for plant species mapping already exists at large scale.
 Does not use EO foundation-model representations or specifically
-examine invasive species or reference-data sparsity/bias/temporal
-mismatch.
+examine invasive species or reference-data sparsity/bias.
 
 ## Citizen Science + Invasive Plants + Deep Learning
 

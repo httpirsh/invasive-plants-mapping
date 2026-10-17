@@ -26,7 +26,6 @@ problem
 → RQ1: compare representations
 → RQ2: reduce amount of citizen-science reference data
 → RQ3: investigate spatial sampling bias
-→ RQ4: investigate temporal mismatch
 → spatial/generalization evaluation
 → error analysis
 → final mapping
@@ -35,7 +34,8 @@ problem
 
 See [`research_gaps.md`](research_gaps.md) for the research gap
 analysis and [`research_questions.md`](research_questions.md) for the
-current research questions (RQ1–RQ4).
+current research questions (RQ1–RQ3; an earlier RQ4 on temporal
+mismatch was eliminated on 2026-10-17 — see `research_gaps.md`).
 
 ## Problem and Task Definition
 

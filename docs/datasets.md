@@ -48,8 +48,8 @@ Open questions:
 - Does the thesis use a single platform or an aggregation (e.g. via
   GBIF)?
 - What is the actual size, spatial spread, and temporal spread of the
-  available records? This directly constrains the label-efficiency,
-  sampling-bias, and temporal-mismatch experiments proposed in
+  available records? This directly constrains the label-efficiency and
+  sampling-bias experiments proposed in
   [`research_gaps.md`](research_gaps.md).
 
 ## Satellite / Earth Observation Data

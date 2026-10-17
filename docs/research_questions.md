@@ -12,10 +12,13 @@
 > [`research_gaps.md`](research_gaps.md#candidate-experiments).
 >
 > **Supervisor review (2026-10-17):** RQ1–RQ3 confirmed, with the
-> wording refinements below. **RQ4 (temporal mismatch) is deferred
-> from the current scope** — not discarded as wrong, but postponed
-> given the timeline; see [Deferred Question](#deferred-question) and
-> [`research_gaps.md`](research_gaps.md#scope-and-feasibility).
+> wording refinements below.
+>
+> **RQ4 (temporal mismatch) eliminated (2026-10-17).** Not deferred —
+> removed from scope entirely, along with the dedicated
+> temporal-mismatch investigation (reference-year/window analysis,
+> candidate mismatch experiment) that supported it. See
+> [`research_gaps.md`](research_gaps.md) for what was removed.
 
 ## Main Research Question
 
@@ -67,28 +70,6 @@ Related open questions: [Data Quality and Bias](methodology.md#data-quality-and-
 > made geographically, consistent with the existing
 > [spatial-generalization experiment](research_gaps.md#spatial-generalization-experiment-cross-cutting-supports-evaluation-of-rq1rq4).
 
-## Deferred Question
-
-### RQ4 — Temporal mismatch (deferred, 2026-10-17)
-
-How does temporal mismatch between citizen-science observations and
-satellite imagery affect invasive plant mapping performance, and does
-the effect differ between conventional and foundation-model
-representations?
-
-**Status: deferred, not discarded.** Following supervisor discussion,
-this question is out of the current scope given the timeline — it was
-already flagged in
-[`research_gaps.md`](research_gaps.md#scope-and-feasibility) as the
-most exploratory of the four and the first candidate to drop if time
-ran short. The supervisor independently confirmed it would be
-difficult and that most reviewed papers do not address it, reinforcing
-rather than undermining the gap argued in
-[`research_gaps.md`](research_gaps.md#potential-gap). May be revisited
-if time allows.
-
-Related open questions: [Data Quality and Bias](methodology.md#data-quality-and-bias), [Dataset Construction](methodology.md#dataset-construction), [Validation Strategy](methodology.md#validation-strategy).
-
 ## Scientific Framing
 
 This is a **hypothesis to investigate, not an assumed result** — do
@@ -98,6 +79,4 @@ full motivation: foundation models may reduce the need for feature
 engineering while the bottleneck shifts to citizen-science
 reference-data quality, quantity, and spatial distribution — i.e. the
 thesis asks *under what conditions* foundation models are useful, not
-only whether they are better in general. (Temporal alignment remains
-part of this motivation in principle, but is not pursued as RQ4 for
-now — see [Deferred Question](#deferred-question).)
+only whether they are better in general.

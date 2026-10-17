@@ -104,8 +104,8 @@ observing that citizen-science data are spatially biased.
 
 Each ingredient above has prior work; their intersection — EO
 foundation models + invasive plant mapping + citizen-science reference
-data, with explicit evaluation of sparsity, spatial bias, and temporal
-mismatch — **appears underexplored** (pending a fuller search, see
+data, with explicit evaluation of sparsity and spatial bias — **appears
+underexplored** (pending a fuller search, see
 [Open Questions](#open-questions)). This gap was refined into the
 thesis's Main Research Question — see
 [`research_questions.md`](research_questions.md#main-research-question).
@@ -126,9 +126,8 @@ Observation foundation models and citizen science.**
 This is **not** "apply TESSERA/AlphaEarth to invasive plants." The
 candidate contribution is a controlled investigation of how EO
 foundation-model representations behave under realistic
-citizen-science reference-data limitations (sparsity, spatial bias,
-temporal mismatch), relative to a conventional satellite-feature
-baseline.
+citizen-science reference-data limitations (sparsity, spatial bias),
+relative to a conventional satellite-feature baseline.
 
 ## Research Questions
 
@@ -170,24 +169,14 @@ and EO foundation-model representations?
 affects conventional and foundation-model representations
 differently — not tested in the literature reviewed.
 
-### RQ4 — Temporal mismatch (deferred, 2026-10-17)
-
-How does temporal mismatch between citizen-science observations and
-satellite imagery affect invasive plant mapping performance, and does
-the effect differ between conventional and foundation-model
-representations?
-
-**Grounds:** tests the temporal-degradation effect Ball et al. (2026)
-empirically demonstrated (9–15% weighted-F1 decline across years,
-fact 6) against citizen science's inherently opportunistic timing
-(fact 1), and whether it affects both representation types equally.
-
-**Status: deferred, not discarded.** Following supervisor discussion
-(2026-10-17), this question is out of the current scope given the
-timeline — see [Scope and Feasibility](#scope-and-feasibility). The
-supervisor independently confirmed it would be difficult and that most
-reviewed papers do not address it — this reinforces, rather than
-undermines, the gap argued above. May be revisited if time allows.
+> **RQ4 (temporal mismatch) eliminated, 2026-10-17.** Previously
+> listed here and deferred as of the same date; now removed from
+> scope entirely at the student's request, along with the dedicated
+> temporal-mismatch investigation (reference-year/window analysis,
+> candidate mismatch experiment) that supported it. Ball et al.
+> (2026)'s temporal-degradation finding (fact 6) remains in
+> [Existing Research](#eo-foundation-models-and-species-mapping) as a
+> literature fact; it no longer motivates an active RQ in this thesis.
 
 ### Optional / secondary idea (not one of the four primary RQs)
 
@@ -266,21 +255,7 @@ geographically distinct areas — consistent with the
 spatial-generalization experiment below, now confirmed as the intended
 comparison method for RQ3.
 
-### Temporal-mismatch experiment (RQ4) — deferred, 2026-10-17
-
-Compare temporal relationships between observations and satellite
-imagery (example ranges, not final: same year, ±1, ±2, ±3 years),
-constrained to ranges actually supported by the dataset.
-
-**Deferred, not discarded**, following supervisor discussion — see
-[RQ4](#rq4--temporal-mismatch-deferred-2026-10-17) above. The
-reference-year/temporal-window discussion in
-[Scope and Feasibility](#scope-and-feasibility) still applies to
-RQ1–RQ3's dataset construction regardless — the deferral is of RQ4 as
-a dedicated mismatch *experiment*, not of needing a temporal-matching
-rule at all.
-
-### Spatial-generalization experiment (cross-cutting, supports evaluation of RQ1–RQ4)
+### Spatial-generalization experiment (cross-cutting, supports evaluation of RQ1–RQ3)
 
 Avoid relying exclusively on random train/test splits. Investigate
 spatial blocking, Group K-Fold, and geographically separated test
@@ -291,17 +266,17 @@ autocorrelation, and geographic generalization.
 
 **EO foundation models may provide more data-efficient representations
 for invasive plant mapping, but their advantage may become limited by
-the quality, quantity, spatial distribution, and temporal alignment of
-citizen-science reference data.**
+the quality, quantity, and spatial distribution of citizen-science
+reference data.**
 
 This is a **hypothesis**, not an expected or claimed result — do
 **not** assume foundation models will perform better. It is motivated
-by Ball et al. (2026) (fact 6), who empirically observe temporal
-performance degradation (9–15% weighted-F1 decline across years) even
-where labels are relatively systematic (curated forest inventories,
-not citizen science) — suggesting reference-data quality and temporal
-alignment can become the main bottleneck. This reframes the central
-question from "are foundation models better?" toward:
+by Ball et al. (2026) (fact 6), who reach near-optimal accuracy with
+only ~5% of training labels but for curated forest-inventory labels,
+not citizen-science data — suggesting the label-efficiency advantage
+may not transfer as cleanly to noisier, unevenly distributed
+citizen-science reference data. This reframes the central question
+from "are foundation models better?" toward:
 
 > Under what reference-data conditions are foundation models actually
 > useful for invasive plant mapping?
@@ -309,78 +284,34 @@ question from "are foundation models better?" toward:
 ## Scope and Feasibility
 
 > **Status: candidate prioritization, not a decision.** Added because
-> RQ1–RQ4 were adopted before the actual datasets were explored
+> RQ1–RQ3 were adopted before the actual datasets were explored
 > (`datasets.md` still lists both citizen-science and satellite
 > sources as "not yet decided").
 
-**Blocking feasibility check (before finalizing RQ2/RQ4 experimental
+**Blocking feasibility check (before finalizing RQ2 experimental
 design):** once real citizen-science data is obtained, compute basic
 descriptive stats — observation count, spatial extent/clustering,
 temporal range/spread — before committing to specific label-efficiency
-percentages (RQ2) or temporal-mismatch windows (RQ4). If the dataset
-is small or clustered in one or two years, the example levels/ranges
-above may not be meaningful and should be revised.
+percentages (RQ2). If the dataset is small or clustered in one or two
+years, the example levels above may not be meaningful and should be
+revised.
 
-**Reference-year / temporal-window discussion (2026-09-22):** a
-partial answer to the blocking feasibility check above, using the
-iNaturalist *Acacia*/Coimbra-district pilot (see
-[`data/README.md`](../data/README.md); 7,943 observations — a pilot
-for access validation, not a species/region decision).
+A dataset construction note independent of RQ4: TESSERA is a
+single-year-per-tile product, and OrtoSat/COS are both fixed at 2023,
+so *some* rule for pairing an observation with a satellite year is
+still needed for RQ1–RQ3 regardless. This is now treated as a plain
+implementation detail (e.g. nearest-available-year matching), not a
+research question — the dedicated reference-year/temporal-mismatch
+investigation that used to be here was removed along with RQ4 (see
+below).
 
-Two candidate sources are single-year products regardless of anything
-else chosen: OrtoSat and COS are both fixed at 2023. If either is
-used, part of the pipeline is pinned to 2023 no matter what's decided
-for the rest — making 2023 a natural (not inevitable) anchor to
-propose, rather than an arbitrary pick.
-
-On the pilot data, observation coverage around a 2023 anchor:
-
-- exact year (2023): 3.4%
-- ±1 year (2022–2024): 30.7%
-- ±2 years (2021–2025): 80.3%
-- ±3 years (2020–2026): 93.3%
-
-TESSERA separately covers 2017–2025; 95.3% of pilot observations fall
-within that window under nearest-available-year matching instead of a
-fixed 2023 anchor. The observation-date distribution is uneven — 43%
-of all pilot records are from 2021 alone, most likely an iNaturalist
-adoption artifact rather than an ecological signal — so a fixed window
-and nearest-year matching would not select the same, or an evenly
-distributed, subset of observations.
-
-Three candidate strategies, none yet chosen:
-
-1. **Fixed window around 2023** (e.g. ±2 years) — one consistent
-   dataset for RQ1–RQ3, simplest to report, but discards ~20% of pilot
-   observations and still spans up to 4 years of mismatch within the
-   window itself.
-2. **Nearest-available-year matching per observation** — minimizes
-   each observation's individual mismatch and retains ~95% of the
-   data, at the cost of every observation being matched to a different
-   reference year (less uniform to report as a single baseline).
-3. **Treat the window itself as the RQ4 manipulated variable** — do
-   not fix it for the mismatch experiment; construct multiple dataset
-   versions at different mismatch levels and compare, per the
-   [temporal-mismatch experiment](#temporal-mismatch-experiment-rq4--deferred-2026-10-17)
-   above. **No longer applicable for now** — RQ4 is deferred (see
-   below), so RQ1–RQ3 need a fixed default regardless, via option 1 or
-   2.
-
-**Open question, for supervisor discussion:** which of options 1–2
-should be the RQ1–RQ3 default, and does the answer change once the
-actual species/region — not just this Coimbra/*Acacia* pilot — is
-decided?
-
-**Resolved 2026-10-17 — RQ4 deferred:** following supervisor
-discussion, RQ4 is deferred from the current scope (see
-[RQ4](#rq4--temporal-mismatch-deferred-2026-10-17) above), not dropped
-on quality grounds — the supervisor independently confirmed it would
-be difficult and under-addressed in the literature, matching the gap
-argument. **Prioritization for the remaining scope:** RQ1 is the
-prerequisite for RQ2–RQ3 and the core deliverable; RQ2 and RQ3 follow,
-each grounded in a specific verified paper (Ball et al. 2026; Dimson
-et al. 2023 respectively). RQ4 may be revisited if time allows once
-RQ1–RQ3 are established.
+**Resolved 2026-10-17 — RQ4 eliminated:** following the student's
+decision, RQ4 (temporal mismatch) and the dedicated investigation that
+supported it are removed from the thesis entirely — not deferred, as
+recorded earlier the same day. **Prioritization for the remaining
+scope:** RQ1 is the prerequisite for RQ2–RQ3 and the core deliverable;
+RQ2 and RQ3 follow, each grounded in a specific verified paper (Ball
+et al. 2026; Dimson et al. 2023 respectively).
 
 ## Open Questions
 
@@ -412,9 +343,9 @@ RQ1–RQ3 are established.
   on data availability, licensing, and further literature review.
 - Exact conventional baseline model and feature set — depends on the
   dataset once explored (see `datasets.md`, `data/README.md`).
-- Exact label-efficiency percentages, sampling-bias covariates, and
-  temporal-mismatch ranges, and whether all four RQs run at full
-  depth — see [Scope and Feasibility](#scope-and-feasibility).
+- Exact label-efficiency percentages and sampling-bias covariates, and
+  whether all three remaining RQs run at full depth — see
+  [Scope and Feasibility](#scope-and-feasibility).
 - Whether "invasive plant(s)" means one species, several species, or a
   species-agnostic framing — affects how directly Cardoso et al.
   (2024) and Mouta et al. (2021) serve as precedents.
@@ -425,8 +356,8 @@ RQ1–RQ3 are established.
   filter with known limitations, applied to a densely-observed area,
   rather than uniform random percentages alone — exact filter still
   open, see [Label-efficiency experiment](#label-efficiency-experiment-rq2).
-  **RQ4 (temporal mismatch) deferred from the current scope** —
-  postponed given the timeline, not discarded as wrong; may be
-  revisited if time allows. See
-  [RQ4](#rq4--temporal-mismatch-deferred-2026-10-17) and the updated
-  [Scope and Feasibility](#scope-and-feasibility) prioritization.
+  RQ4 was deferred initially, then **eliminated from scope entirely**
+  the same day at the student's request, along with the dedicated
+  temporal-mismatch investigation (reference-year/window analysis,
+  candidate mismatch experiment) — see
+  [Scope and Feasibility](#scope-and-feasibility).
