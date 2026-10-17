@@ -2,9 +2,9 @@
 
 | Item | Status |
 |---|---|
-| Main question, RQ1–RQ3 | Adopted 2026-09-11; confirmed by supervisor 2026-10-17 |
-| Prediction task | Adopted 2026-10-17 |
-| Absence generation, temporal design | Proposed 2026-10-17, pending supervisor approval |
+| Main question, RQ1–RQ3 | Adopted |
+| Prediction task | Adopted |
+| Absence generation, temporal design | Proposed |
 
 Models, foundation-model choice, data percentages and spatial splits
 are still open — see [`methodology.md`](methodology.md) and
@@ -24,9 +24,7 @@ To what extent do Earth Observation foundation-model representations
 improve invasive plant mapping compared with conventional
 spectral-temporal satellite features?
 
-- Supervisor framing: *"Até que ponto os foundation models melhoram
-  as abordagens mais tradicionais?"* — a question of degree, not
-  yes/no.
+- A question of degree, not yes/no.
 - All representations come from the same reference year, so only the
   representation changes between compared models.
 
@@ -39,9 +37,8 @@ conventional approaches as the amount of available citizen-science
 reference data decreases, when that reduction is induced through a
 distribution-improving filter rather than uniform random sampling?
 
-- Supervisor refinement: apply a filter (with acknowledged
-  limitations) in an area with many observations, and report *which*
-  observations it removes and *why*. The filter itself is not yet
+- The filter is applied in an area with many observations, reporting
+  *which* observations it removes and *why*. The filter itself is not yet
   specified — see
   [`research_gaps.md`](research_gaps.md#label-efficiency-experiment-rq2).
 - Reduction is applied within the fixed observation window.
@@ -58,7 +55,7 @@ invasive plant mapping performance, using conventional satellite
 representations and EO foundation-model representations, when
 evaluated across geographically distinct regions?
 
-- Supervisor confirmation: the comparison is geographic, as in the
+- The comparison is geographic, as in the
   [spatial-generalization experiment](research_gaps.md#spatial-generalization-experiment-cross-cutting-supports-evaluation-of-rq1rq3).
 - A single reference year keeps observation year from correlating
   with geography, so spatial effects are not confounded with time.
@@ -169,7 +166,7 @@ observations after 2023 are stronger evidence of 2023 presence than
 earlier ones, which may since have been burned or cleared. Note that
 2026 is incomplete.
 
-## Open Points for Supervisor
+## Open Points
 
 - Target-group background as the absence strategy, and its rules
   (target group, buffer, class ratio).

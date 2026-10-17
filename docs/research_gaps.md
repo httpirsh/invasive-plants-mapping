@@ -5,7 +5,7 @@
 > directly relevant papers found so far — **not** a systematic
 > literature review. Claims of the form "appears underexplored"
 > reflect the current reading list only and must be revisited after a
-> fuller search and supervisor discussion — see
+> fuller search — see
 > [Open Questions](#open-questions).
 >
 > Related: [`research_questions.md`](research_questions.md) (canonical
@@ -212,14 +212,12 @@ Train on progressively smaller subsets of citizen-science observations
 conventional EO features vs. EO foundation-model embeddings across
 levels.
 
-**Supervisor refinement (2026-10-17):** rather than (or alongside)
-uniform random percentage levels, apply a distribution-improving
-filter to a densely-observed area — the filter is acknowledged to have
-its own limitations — and examine which observations get removed and
-why, instead of discarding at random. This ties the data-reduction
-axis to spatial distribution rather than treating RQ2 and RQ3 as fully
-independent. The exact filter/criterion is not yet specified — open
-question for a follow-up supervisor discussion.
+**Filter-based reduction:** rather than (or alongside) uniform random
+percentage levels, apply a distribution-improving filter (with its own
+limitations) to a densely-observed area and examine which observations
+get removed and why. This ties the data-reduction axis to spatial
+distribution rather than treating RQ2 and RQ3 as fully independent.
+The exact filter/criterion is not yet specified.
 
 ### Sampling-bias experiment (RQ3)
 
@@ -241,10 +239,8 @@ whether the same axes dominate in this thesis's (not yet decided)
 region should be checked against the actual data, not assumed by
 default.
 
-**Supervisor confirmation (2026-10-17):** compare performance across
-geographically distinct areas — consistent with the
-spatial-generalization experiment below, now confirmed as the intended
-comparison method for RQ3.
+**Comparison method:** compare performance across geographically
+distinct areas, using the spatial-generalization experiment below.
 
 ### Spatial-generalization experiment (cross-cutting, supports evaluation of RQ1–RQ3)
 
@@ -329,15 +325,8 @@ paper (Ball et al. 2026; Dimson et al. 2023 respectively).
 - Exact conventional baseline model and feature set — depends on the
   dataset once explored (see `datasets.md`, `data/README.md`).
 - Exact label-efficiency percentages and sampling-bias covariates, and
-  whether all three remaining RQs run at full depth — see
+  whether all three RQs run at full depth — see
   [Scope and Feasibility](#scope-and-feasibility).
 - Whether "invasive plant(s)" means one species, several species, or a
   species-agnostic framing — affects how directly Cardoso et al.
   (2024) and Mouta et al. (2021) serve as precedents.
-- **Resolved 2026-10-17:** supervisor reviewed the research questions. RQ1 and RQ3
-  confirmed with wording refinements (RQ1 as an "extent" framing; RQ3
-  made explicit about comparing across geographically distinct
-  regions). RQ2 refined: reduce data via a distribution-improving
-  filter with known limitations, applied to a densely-observed area,
-  rather than uniform random percentages alone — exact filter still
-  open, see [Label-efficiency experiment](#label-efficiency-experiment-rq2).
