@@ -1,189 +1,244 @@
-# Next Supervisor Meeting — Agenda
+# Reunião com o Orientador — Outubro 2026
 
-> Prepared 2026-10-17. Goal: get decisions, not just discussion. Each
-> item comes with a recommendation; the supervisor approves, adjusts
-> or rejects it. Items are ordered by how much of the pipeline they
-> condition. Points marked [added] came from checking the agenda
-> against the pilot data and docs.
+> Preparada a 2026-10-17. Reunião de 30 minutos: quatro pontos, por
+> ordem de importância. Cada um explica o problema, traz uma proposta
+> e termina com o que há a decidir. O resto fica para o fim, só se
+> sobrar tempo.
 
-## 0. Key finding to open with [added]
+| # | Ponto | Tempo |
+|---|---|---|
+| 1 | O piloto é um só observador (contexto) | 3 min |
+| 2 | Ausências | 10 min |
+| 3 | Ano de referência e janela | 7 min |
+| 4 | Desenho da RQ2 | 7 min |
+| — | Se sobrar tempo | 3 min |
 
-The pilot is dominated by a single observer:
+**Ponto de partida:** o piloto são as observações de *Acacia* do
+iNaturalist no distrito de Coimbra (7 943 registos, 1992–2026). A
+ideia é treinar um classificador que, a partir da imagem de satélite
+(Sentinel-2 ou embeddings de um modelo de fundação como o TESSERA),
+diga se cada píxel de 10 m tem *Acacia*.
 
-| Records | Share from top observer |
-|---|---|
-| All | 83.2% |
-| 2021 (3,405 records) | 98.1% |
-| 2019–2022 | 91–98% per year |
-| 2023 / 2025 | 35% / 31% |
-| Inside 2021–2025 window | 85.5% |
+## 1. Abertura: o piloto é um só observador
 
-The 2021 peak is one observer, not an iNaturalist-adoption effect or a
-bioblitz. This affects items 1, 3 and 4 below.
+> "Antes de tudo: quase todos os dados de *Acacia* em Coimbra vêm de
+> uma única pessoa. Isso condiciona quase todas as decisões de hoje."
 
-## 1. Absence generation (most consequential decision)
+**O que encontrei:**
+- Um único observador fez 83% de todos os registos, e 85% dos
+  registos dentro da janela proposta (2021–2025, ver ponto 3).
+- O pico de 2021 (43% de todos os registos estão nesse ano) é essa
+  pessoa: fez 98% dos registos de 2021. Não é o efeito de mais gente
+  a usar o iNaturalist, nem um bioblitz.
+- Nos anos recentes pesa menos: 35% em 2023 e 31% em 2025.
 
-**Context.** iNaturalist is presence-only. How pseudo-absences are
-generated conditions dataset construction, evaluation, and the
-interpretation of RQ3.
+**Porque importa:** o modelo aprende a partir dos sítios por onde esta
+pessoa passou. Se ela percorre sobretudo certos caminhos ou zonas, o
+mapa final pode refletir o seu percurso e não a distribuição real da
+*Acacia*. Isto é exatamente o enviesamento espacial que a RQ3 estuda.
 
-**Proposal: target-group background** — use iNaturalist observations
-of other plant species as pseudo-absences. Standard technique in
-species distribution modelling (Phillips et al. 2009, see
-`literature.md`). [added]
+**Decidir:**
+- [ ] O que fazer com este observador?
+  - Manter os dados todos como estão.
+  - Reduzir o seu peso, p. ex. limitar o número de registos por
+    célula da grelha.
+  - Usá-lo explicitamente na RQ3 como caso real de enviesamento.
 
-**Arguments to present.**
-- Same observers, same platform, same accessible places as the
-  *Acacia* presences → shares their spatial bias, so the model learns
-  *Acacia* vs. other vegetation rather than "visited vs. unvisited
-  places".
-- Random background lets the model learn accessibility (roads, urban
-  edges) instead of the species.
-- Caveat to raise openly: because it corrects part of the spatial
-  bias, the absence strategy interacts with RQ3.
-- Caveat [added]: the method assumes presences and background come
-  from the same sampling process. Here 85% of presences come from one
-  observer, while "other plants" come from the whole community — the
-  footprints may not match. Check what this observer recorded besides
-  *Acacia*.
-- Caveat [added]: pseudo-absences are not true absences, so metrics
-  against them measure separation from background, not real accuracy
-  (see item 2).
+## 2. Ausências — a decisão com mais consequências
 
-**Questions.**
-- [ ] Approve target-group background?
-- [ ] Which plants form the target group: all vascular plants, or a
-  restricted group (e.g. woody species)?
-- [ ] Restrict the background to the dominant observer's own
-  non-*Acacia* records, or use the whole community? [added]
-- [ ] Exclusion buffer around *Acacia* observations (10 m pixels: an
-  understorey plant may sit under *Acacia* canopy) — what distance?
-- [ ] Presence:background ratio — 1:1, or higher with class weighting?
-- [ ] Compare target-group vs. random background as part of RQ3?
+> "O iNaturalist só diz onde a *Acacia* foi vista, nunca onde não
+> está. Para treinar um classificador preciso de exemplos negativos.
+> Proponho usar observações de outras plantas."
 
-## 2. Independent validation reference [added]
+**O problema:** um classificador binário precisa de exemplos
+positivos (*Acacia*) e negativos (não-*Acacia*). O iNaturalist só tem
+positivos. Os negativos têm de ser construídos — chamam-se
+pseudo-ausências ou "fundo".
 
-If training and test data both come from the same biased
-citizen-science source, the bias stays hidden — exactly what RQ3 is
-about.
+**As duas opções:**
+- **Fundo aleatório:** pontos espalhados ao acaso pela área de estudo.
+  É simples, mas as presenças concentram-se em sítios acessíveis
+  (estradas, trilhos, periferias), e o fundo não. O modelo pode
+  aprender "sítio acessível vs. sítio remoto" em vez de "*Acacia* vs.
+  outra vegetação".
+- **Fundo de grupo-alvo (proposta):** usar observações iNaturalist de
+  outras plantas como negativos. Vêm dos mesmos observadores e dos
+  mesmos sítios acessíveis, por isso têm o mesmo enviesamento que as
+  presenças. A única diferença que sobra é a espécie, e é isso que o
+  modelo tem de aprender. É a técnica proposta por Phillips et al.
+  (2009), que melhorou os modelos em 226 espécies.
 
-- [ ] Which independent reference: COS 2023, OrtoSat (if access is
-  possible), other?
+**O que já verifiquei:**
+- Descarreguei as observações de outras plantas em 2021–2025: há
+  6 333 presenças e 77 301 pontos de fundo (cerca de 12 por presença).
+- Removi registos com coordenadas ofuscadas: o iNaturalist desloca
+  de propósito a localização de alguns registos (por privacidade ou
+  espécies sensíveis), com erros de quilómetros, o que os torna
+  inúteis a 10 m. Foram 43 presenças e 8 242 pontos de fundo.
+- O método só funciona se presenças e fundo vierem do mesmo processo
+  de amostragem. Como 85% das presenças são de uma pessoa, verifiquei
+  se ela também regista outras plantas. Regista: 33 065 registos, 43%
+  do fundo. E em 97% das quadrículas de 1 km onde registou *Acacia*,
+  também registou outras plantas. Ou seja, o fundo cobre os mesmos
+  sítios que as presenças.
+- Mas o contrário não é verdade: só 26% das quadrículas com fundo têm
+  *Acacia*. O fundo cobre muito mais território, sobretudo o dos
+  outros observadores.
 
-## 3. Temporal reference design
+**Ressalvas a assumir:**
+- Pseudo-ausências não são ausências reais: um ponto de outra planta
+  pode ter *Acacia* ao lado. As métricas medem quão bem o modelo
+  separa *Acacia* do fundo, não a exatidão no terreno (ver validação independente, no fim).
+- Como o grupo-alvo corrige parte do enviesamento, a escolha do fundo
+  muda o que a RQ3 mede. Os resultados têm de dizer sempre qual fundo
+  foi usado.
 
-**Context.** With temporal mismatch out of scope, time must be held
-constant for RQ1–RQ3. OrtoSat is 2023 only and COS 2023 is the most
-recent COS edition, which already pins part of the pipeline to that
-year.
+**Decidir:**
+- [ ] Aprovar o fundo de grupo-alvo?
+- [ ] Fundo de toda a comunidade, ou só os registos de outras plantas
+  do observador dominante (mesma pegada, mas menos dados)?
 
-**Proposal.**
-- Single reference year: **2023** for Sentinel-2, TESSERA and
-  COS/OrtoSat.
-- Observation window: **2023 ± 2 years (2021–2025)**, retaining
-  ~80% of pilot observations. Applies to presences *and* background.
+Detalhes que proponho decidir eu e reportar depois: grupo-alvo (todas
+as plantas vasculares ou só lenhosas), buffer de exclusão à volta das
+*Acacia*, rácio presenças:fundo, e comparar grupo-alvo vs. aleatório
+na RQ3.
 
-**Arguments to present.**
-- ±1 year keeps only 30.7%: it drops 2021, which holds 43% of all
-  records. ±2 is the first window that does not discard most of the
-  data.
-- Say openly [added]: 85.5% of the records kept by ±2 are from one
-  observer, so the window mainly preserves that observer's data.
-- *Acacia* is persistent, so presence within ±2 years is a good proxy
-  for presence in 2023, unless disturbed.
-- Alternative rejected: nearest-year matching per observation (mixes
-  years between presences and absences/test data → possible shortcut;
-  correlates year with geography → confounds RQ3).
+## 3. Ano de referência e janela temporal
 
-**Questions.**
-- [ ] Approve 2023 + ±2 years?
-- [ ] Symmetric (2021–2025) or asymmetric (e.g. 2021–2026)?
-  Argument for asymmetric: a 2025 observation is stronger evidence of
-  presence in 2023 than a 2021 one.
+> "Proponho fixar o tempo: todas as imagens de 2023, e só observações
+> de 2021 a 2025."
 
-## 4. Safeguards for the temporal window
+**O problema:** as imagens de satélite e os embeddings são de um ano
+concreto, mas as observações vão de 1992 a 2026. Se misturar anos, o
+modelo pode aprender diferenças entre anos em vez da *Acacia*. A
+análise do desfasamento temporal ficou fora do âmbito, por isso o
+tempo tem de ser mantido constante.
 
-- **Disturbance filter:** remove observations (presences and
-  background) inside ICNF burned areas between observation year and
-  2023.
-  - Framing [added]: *Acacia* is fire-adapted — in central Portugal,
-    burning promoted *A. dealbata* seed germination and stands
-    persisted (Riveiro et al. 2025, see `literature.md`). The reason
-    to remove burned observations is that the 2023 pixel no longer
-    matches the label (burned ground, young regrowth), not that the
-    species is gone.
-  - [ ] Fixed pre-processing step, or part of the RQ2 filter ("which
-    observations are removed and why")?
-- **Window sensitivity analysis:** re-run RQ1 with ±1/±2/±3 and check
-  whether the model ranking holds.
-  - Design fix [added]: ±1 keeps only 31% of the data, so a ranking
-    change could come from less data (RQ2), not from the window.
-    Subsample ±2 and ±3 to the ±1 sample size so only the window
-    changes.
-  - [ ] Agree that this is a robustness check, not a study of
-    temporal mismatch?
+**Proposta:**
+1. **Ano de referência 2023** para tudo: Sentinel-2, TESSERA e
+   COS/OrtoSat.
+2. **Janela de observação 2021–2025** (2023 ± 2 anos), aplicada às
+   presenças e ao fundo.
 
-## 5. The 2021 peak
+**Porquê 2023:** o OrtoSat só existe para 2023 e a COS 2023 é a
+edição mais recente.
 
-- Already checked [added]: 98.1% of 2021 records come from one
-  observer (see item 0).
-  - [ ] Keep as is, thin per observer, or use it explicitly as the
-    bias case in RQ3?
+*Se perguntar "porque não um ano mais recente?":* 2 184 presenças
+(34,5%) estão em áreas que arderam em 2025 (≈70 600 ha). Com 2023 o
+píxel ainda mostra a vegetação observada; com 2025 (ou TESSERA 2025)
+um terço dos rótulos cairia em solo queimado.
 
-## 6. RQ2 filter (still undefined)
+**Porquê ±2 anos:**
 
-- Bring 1–2 candidate filters (e.g. spatial thinning: at most one
-  observation per cell / minimum distance; quality: research grade,
-  coordinate uncertainty threshold).
-  - [ ] Which criterion to start with?
+| Janela | Anos | Dados mantidos |
+|---|---|---|
+| só 2023 | 2023 | 3% |
+| ±1 | 2022–2024 | 31% |
+| ±2 | 2021–2025 | 80% |
+| ±3 | 2020–2026 | 93% |
 
-## 7. Second region for RQ3 [added]
+- ±1 perde 2021, onde está quase metade dos dados. ±2 é a primeira
+  janela que mantém a maior parte.
+- A *Acacia* é persistente: forma povoamentos que duram anos. Uma
+  observação de 2021 ou 2025 indica que estava lá em 2023, salvo
+  perturbação.
+- Dizer abertamente: na prática, a janela serve sobretudo para manter
+  os dados do observador dominante.
 
-RQ3 compares across geographically distinct regions; the pilot is one
-region dominated by one observer.
+**Salvaguarda:** remover observações em áreas ardidas (ICNF) entre o
+ano da observação e 2023, porque aí o píxel de 2023 já não mostra o
+que foi observado. Testei: remove só 2 presenças e 33 pontos de fundo.
 
-- [ ] Which second region?
+**Alternativa rejeitada:** associar cada observação à imagem do seu
+próprio ano. Parece mais exato, mas as presenças ficariam com anos
+misturados enquanto o fundo e o teste ficam noutro, e o modelo pode
+aprender o ano em vez da espécie. Além disso, como cada zona foi
+visitada em anos diferentes, o ano ficaria ligado à geografia, o que
+confunde a RQ3.
 
-## 8. Study area and species scope [added]
+**Decidir:**
+- [ ] Aprovar 2023 com janela 2021–2025?
+- [ ] Janela simétrica, ou assimétrica (p. ex. 2021–2026)?
+  - A favor: um registo de 2025 é evidência mais forte de presença em
+    2023 do que um de 2021, que pode ter sido cortado ou ardido
+    depois.
+  - Contra: depois dos fogos de 2025, um registo de 2025–2026 pode ser
+    regeneração jovem, que não se parece com o povoamento de 2023. E
+    2026 ainda está incompleto.
 
-- The iNaturalist and TESSERA pilots use different Coimbra boundaries
-  (district vs. municipality).
-- [ ] Which study-area boundary?
-- [ ] Genus *Acacia*, or a single species?
+## 4. Desenho da RQ2 (eficiência de dados)
 
-## 9. Prediction task (confirm)
+> "A RQ2 não tira dados ao modelo final. É uma simulação: treino com
+> cada vez menos dados para ver que representação aguenta melhor a
+> escassez. Proponho fazê-la com subamostragem aleatória e deixar o
+> filtro como comparação extra."
 
-**Adopted:** pixel-level binary classification trained on points
-(10 m pixel at each observation), applied to every pixel of the study
-area → complete map.
+**O que a RQ2 faz:** treino os dois modelos (Sentinel-2 e TESSERA) com
+100%, 50%, 25%, 10%, 5% e 1% dos dados e comparo como o desempenho cai.
+O mapa final continua a usar todos os dados. Ter poucos dados de
+ciência cidadã não é um argumento contra a RQ2, é a motivação dela:
+se o modelo de fundação aguentar com poucos dados, serve para regiões
+e espécies com poucas observações.
 
-- Segmentation rejected (needs dense masks; citizen science gives
-  points).
-- Grid cells kept as a secondary step: aggregation of pixel
-  predictions for evaluation and SDM-style comparison.
+**O problema da formulação atual:** a RQ2 adotada pede que a redução
+seja feita por um filtro que melhore a distribuição, e não ao acaso.
+Nenhum candidato serve bem para isso:
+- **Áreas ardidas:** com fogos até 2023 remove só 2 presenças; com
+  todos até 2025 remove 34,5%, mas os fogos de 2025 são posteriores às
+  imagens e a razão para remover é fraca.
+- **Qualidade (*research grade*):** reduz, mas não melhora a
+  distribuição espacial.
+- **Rarefação espacial:** é o filtro que melhora a distribuição, mas
+  já está na experiência da RQ3.
 
-**Questions.**
-- [ ] Confirm the task definition.
-- [ ] Grid-cell size for the aggregation step?
+**Proposta:**
+1. **Experiência principal: curva de aprendizagem com subamostragem
+   aleatória.** Subconjuntos encaixados (cada nível contém o
+   seguinte), repetidos com várias sementes e avaliados com validação
+   espacial. É o desenho habitual; Ball et al. (2026) também treinaram
+   com frações dos dados (com ≈5% chegaram perto do máximo).
+2. **Comparação extra:** ao mesmo tamanho, um subconjunto filtrado dá
+   melhor resultado do que um aleatório?
+3. **O filtro de fogo fica como pré-processamento fixo** (ponto 3), não
+   como filtro da RQ2.
 
-## 10. Confirm what is already fixed
+**Decidir:**
+- [ ] Reformular a RQ2 para subamostragem aleatória como experiência
+  principal, com o filtro como comparação?
+- [ ] Se sim, que filtro para a comparação: qualidade, ou outro?
+- [ ] Quantas repetições por nível?
 
-- RQ1–RQ3 as in `research_questions.md`; temporal mismatch out of
-  scope.
-- Temporal alignment is *controlled*, not *studied*, in the current
-  scope — check that the supervisor agrees with this framing in the
-  thesis text.
+## Se sobrar tempo
 
-## Bring to the meeting
+Uma pergunta por tema; a explicação completa fica para a próxima
+reunião.
 
-- Map of *Acacia* presences vs. candidate target-group background
-  (shows whether the two share the same spatial footprint).
-- Same map split by the dominant observer vs. everyone else. [added]
-- Counts: *Acacia* observations vs. other-plant observations in the
-  window (determines feasible class ratios).
-- Table: share of observations per window (exact / ±1 / ±2 / ±3).
-- Histogram of observations per year (shows the 2021 peak), split by
-  dominant observer vs. others. [added]
-- Map of 2021 observations vs. other years.
-- Overlay of observations with burned areas, with the number of
-  points that would be removed.
+- **Validação independente:** se treino e teste vêm do mesmo
+  iNaturalist enviesado, o enviesamento fica escondido. Candidatos: a
+  classe "Florestas de acácias" da COS 2023 (só povoamentos ≥ 1 ha) e
+  o OrtoSat 2023 (30 cm, acesso restrito).
+  - [ ] Que referência usar? Sabe como pedir acesso ao OrtoSat?
+- **Área e espécies:** começo por Coimbra; os pilotos usam distrito
+  (iNaturalist) e concelho (TESSERA). Na janela: *A. dealbata* 4 145,
+  *A. melanoxylon* 1 611, *A. longifolia* 417.
+  - [ ] Distrito ou concelho? Género *Acacia* ou uma só espécie?
+- **Teste de sensibilidade da janela:** repetir a RQ1 com ±1, ±2 e ±3
+  (com o mesmo número de observações) e ver se a ordenação dos modelos
+  se mantém.
+  - [ ] É uma verificação de robustez, não um estudo do desfasamento
+    temporal. Concorda?
+- **Tarefa de previsão (já adotada):** classificação binária por
+  píxel, treinada nos pontos e aplicada a toda a área.
+  - [ ] Confirmar.
+
+## Material para mostrar
+
+- `notebooks/02_citizen_science/acacia_coimbra_pilot_exploration.ipynb`:
+  observações por ano (pico de 2021), mapa e densidade, concentração
+  por observador (ponto 1).
+- `notebooks/04_data_integration/background_and_disturbance_checks.ipynb`,
+  figuras em `results/figures/meeting_2026-10/`:
+  - `presences_vs_background.png`: presenças vs. fundo, observador
+    dominante vs. restantes (ponto 2).
+  - `burned_areas_overlay.png`: presenças e áreas ardidas 2021–2025
+    (ponto 3).

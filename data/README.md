@@ -88,6 +88,41 @@ obtained.
 - **Possible uses:** land-cover context for error analysis, absence
   checks, independent validation.
 
+### iNaturalist other plants, 2021–2025 (Coimbra pilot)
+
+Candidate target-group background (proposal, see
+`docs/research_questions.md`).
+
+- **Source:** iNaturalist API (`api.inaturalist.org/v1/observations`)
+- **Access date:** 2026-10-17
+- **Query filters:** `place_id=8422` (Coimbra district), `taxon_id=47126`
+  (Plantae), `without_taxon_id=47452` (excluding *Acacia*),
+  `d1=2021-01-01`, `d2=2025-12-31`, all quality grades.
+- **License:** mixed, per observation (`license_code` column).
+- **Result:** 85,543 observations; 8,242 have obscured coordinates
+  (user or taxon geoprivacy), listed in
+  `raw/citizen_science/inaturalist_plantae_no_acacia_coimbra_2021_2025_obscured_ids.csv`
+  and excluded in analysis.
+- **File:** `raw/citizen_science/inaturalist_plantae_no_acacia_coimbra_2021_2025.csv`
+- **Preprocessing:** none — one row per observation, same columns as
+  the *Acacia* pilot. Downloaded by
+  `notebooks/04_data_integration/background_and_disturbance_checks.ipynb`.
+
+### ICNF burned areas, 2021–2025
+
+- **Source:** ICNF, "Áreas ardidas (desde 1975)", via dados.gov.pt
+- **URL:** https://dados.gov.pt/datasets/areas-ardidas-desde-1975 ; WFS
+  https://si.icnf.pt/wfs/areas_ardidas (layers `BDG:ardida_<year>`)
+- **Access date:** 2026-10-17
+- **Spatial coverage:** continental Portugal (full layers, not clipped).
+- **Temporal coverage:** 2021–2025, one layer per year; each fire has
+  a start date (`DH_Inicio`).
+- **License:** not specified on dados.gov.pt — check before
+  redistribution.
+- **Format:** GeoJSON, EPSG:3763.
+- **File:** `external/auxiliary/icnf_burned_areas/ardida_<year>.geojson`
+- **Preprocessing:** none. Downloaded by the same notebook.
+
 ## Not Yet Obtained
 
 | Source | Use | Status |
@@ -95,8 +130,6 @@ obtained.
 | **Sentinel-2** (and possibly Sentinel-1), 10 m, open | Conventional baseline (RQ1–RQ3); precedent: Mouta et al. (2021) | Needs Copernicus Data Space or Google Earth Engine account |
 | **OrtoSat 30 cm** (Pleiades-Neo, RGB+NIR, continental Portugal, Apr–Oct 2023, CC BY 4.0) | Possible validation reference | Full resolution restricted to public-administration entities; only WMS confirmed public. University access unconfirmed |
 | **AlphaEarth embeddings** | Second foundation model (RQ1) | Access terms unconfirmed |
-| **iNaturalist other plants** (same area/window) | Target-group background (absences) | Not downloaded |
-| **ICNF burned areas** | Disturbance filter | Not downloaded |
 | **Roads/trails, accessibility** (e.g. OpenStreetMap) | RQ3 bias covariates | Not downloaded |
 | **CAOP administrative boundaries** | Study-area clipping | Not downloaded (bounding boxes used) |
 | **A second, distinct region** | RQ3 geographic comparison | Not chosen |
