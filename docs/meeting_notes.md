@@ -44,6 +44,10 @@ mapa final pode refletir o seu percurso e não a distribuição real da
     célula da grelha.
   - Usá-lo explicitamente na RQ3 como caso real de enviesamento.
 
+**Mostrar:** [notebook 02](../notebooks/02_citizen_science/acacia_coimbra_pilot_exploration.ipynb)
+— observações por ano (pico de 2021), mapa e concentração por
+observador.
+
 ## 2. Ausências — a decisão com mais consequências
 
 > "O iNaturalist só diz onde a *Acacia* foi vista, nunca onde não
@@ -102,6 +106,9 @@ Detalhes que proponho decidir eu e reportar depois: grupo-alvo (todas
 as plantas vasculares ou só lenhosas), buffer de exclusão à volta das
 *Acacia*, rácio presenças:fundo, e comparar grupo-alvo vs. aleatório
 na RQ3.
+
+**Mostrar:** [presences_vs_background.png](../results/figures/meeting_2026-10/presences_vs_background.png)
+— presenças vs. fundo, observador dominante vs. restantes.
 
 ## 3. Ano de referência e janela temporal
 
@@ -165,6 +172,9 @@ confunde a RQ3.
   - Contra: depois dos fogos de 2025, um registo de 2025–2026 pode ser
     regeneração jovem, que não se parece com o povoamento de 2023. E
     2026 ainda está incompleto.
+
+**Mostrar (só se perguntar pelo ano):** [burned_areas_overlay.png](../results/figures/meeting_2026-10/burned_areas_overlay.png)
+— presenças e áreas ardidas 2021–2025.
 
 ## 4. Desenho da RQ2 (eficiência de dados)
 
@@ -231,14 +241,8 @@ reunião.
   píxel, treinada nos pontos e aplicada a toda a área.
   - [ ] Confirmar.
 
-## Material para mostrar
+---
 
-- `notebooks/02_citizen_science/acacia_coimbra_pilot_exploration.ipynb`:
-  observações por ano (pico de 2021), mapa e densidade, concentração
-  por observador (ponto 1).
-- `notebooks/04_data_integration/background_and_disturbance_checks.ipynb`,
-  figuras em `results/figures/meeting_2026-10/`:
-  - `presences_vs_background.png`: presenças vs. fundo, observador
-    dominante vs. restantes (ponto 2).
-  - `burned_areas_overlay.png`: presenças e áreas ardidas 2021–2025
-    (ponto 3).
+As figuras estão em `results/`, que não vai para o Git: os links só
+funcionam localmente. Para as regenerar, correr
+[notebook 04](../notebooks/04_data_integration/background_and_disturbance_checks.ipynb).
