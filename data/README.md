@@ -27,10 +27,8 @@ obtained.
 
 ## Obtained (pilot downloads)
 
-> Pulled to validate access, not a final choice of region, species or
-> source. The iNaturalist and TESSERA pilots use **different Coimbra
-> boundaries** (district vs. municipality) — to reconcile before any
-> real experiment.
+> All cover the Coimbra district (iNaturalist place 8422) or a larger
+> area.
 
 ### iNaturalist *Acacia* observations (Coimbra pilot)
 
@@ -53,25 +51,24 @@ obtained.
   coordinates, positional accuracy, quality grade, place guess,
   license, observer, URI).
 
-### TESSERA embeddings (Coimbra pilot)
+### TESSERA embeddings 2023 (RQ1 pilot points)
 
-- **Source:** GeoTessera (`geotessera` package / data.source.coop/tessera)
-- **URL:** https://geotessera.org ; data at
-  https://data.source.coop/tessera/tessera
-- **Access date:** 2026-09-22
-- **Spatial coverage:** bbox lon -8.5917 to -8.3129, lat 40.0989 to
-  40.3520 — the **Coimbra municipality** (OSM relation 5379538). 12
-  tiles on the 0.1° (~11 km) grid.
-- **Temporal coverage:** 2024 only (one annual composite of
-  Sentinel-1/2). The proposed design needs 2023.
+- **Source:** GeoTessera v1.1 Zarr store, read with `geotessera`
+  0.11.0 (`GeoTesseraZarr.sample_points`), without downloading tiles.
+- **Access date:** 2026-10-20
+- **Spatial coverage:** only the labelled pixels of the RQ1 pilot
+  (iNaturalist, expert polygons and COS negatives in Coimbra district),
+  ~29 000 pixels.
+- **Temporal coverage:** 2023.
 - **License:** MIT.
-- **Format:** quantized `npy` (128-channel embeddings + per-tile scale
-  factors + landmask GeoTIFFs), ~1.5 GB. GeoTIFF format would be
-  ~5.5 GB.
-- **File:** `raw/satellite/tessera_coimbra_pilot/`
-  (`global_0.1_degree_representation/2024/grid_<lon>_<lat>/`)
-- **Preprocessing:** none — `geotessera download --bbox ... --year 2024 --format npy`.
-  Dequantization is a downstream step.
+- **File:** `processed/embeddings/tessera_v1.1_2023_rq1_pilot/`, one
+  `block_<x>_<y>.npz` per 10 km UTM 29N block (`px`, `py` = pixel
+  centre in EPSG:32629; `emb` = 128 dequantized values, NaN where no
+  embedding).
+- **Preprocessing:** points snapped to the centre of their 10 m pixel
+  on the TESSERA grid before reading. Made by an RQ1 pilot notebook
+  removed on 2026-10-20 (experiments paused until the exploratory
+  analysis is done); kept because reading them takes ~2 h.
 
 ### COS 2023 (Carta de Uso e Ocupação do Solo, Série 2)
 
@@ -84,11 +81,23 @@ obtained.
 - **License:** CC BY 4.0.
 - **Format:** vector GeoPackage, 93 classes, minimum mapping unit
   1 ha, scale 1:25,000.
-- **File:** `raw/satellite/cos/COS2023v1-S2-gpkg.zip` (857 MB, not
-  unzipped).
+- **File:** `raw/satellite/cos/COS2023v1-S2-gpkg.zip` (857 MB), read
+  by the notebooks. An unzipped copy with the DGT layer style, for
+  QGIS, is in `interim/spatial/COS2023v1-S2.gpkg` (1.5 GB).
 - **Preprocessing:** none.
 - **Possible uses:** land-cover context for error analysis, absence
   checks, independent validation.
+
+### QGIS overview (derived)
+
+- **File:** `interim/spatial/qgis_overview.gpkg`, made 2026-10-20 to
+  look at the data in QGIS; not used by any notebook.
+- **Layers (EPSG:3763):** `distrito_coimbra` (iNaturalist place 8422),
+  `inat_acacia` and `inat_outras_plantas` (the cleaned files in
+  `interim/citizen_science/`), `especialistas_poligonos` (both expert
+  files, multipolygons split, with `origem`, `area_m2`,
+  `no_distrito`), `areas_ardidas` (ICNF 1975–2025 burned areas that
+  intersect the district).
 
 ### iNaturalist other plants, all years (Coimbra pilot)
 

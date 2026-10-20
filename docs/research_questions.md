@@ -9,7 +9,7 @@
 | Reference-data pipeline (proposal objective 1) | Proposed |
 | Temporal design: all iNaturalist observations treated as 2023 | Adopted 2026-10-21 |
 | Other plants as classes (multiclass) | Adopted direction 2026-10-21; details open |
-| Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; year and independence to confirm |
+| Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; reference year to confirm |
 | Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal) |
 | Species scope | Open |
 | Experiments per RQ | Candidate sketches |
@@ -162,10 +162,20 @@ Upper bound:       best representation   + expert reference labels → classifie
     and built-up areas and are not used. Negatives for the expert
     model come from another source (open; e.g. COS 2023 non-*Acacia*
     vegetation classes).
+  - **Labels independent of citizen science:** collected by the
+    experts in the field or by visual interpretation, not taken from
+    iNaturalist (supervisor, to confirm in writing).
+  - **Locations overlap with citizen science (design constraint):**
+    all 70 iNaturalist presences inside a polygon, and 96% of the 582
+    within 50 m, are the dominant observer's. Experts and that observer
+    visited the same places. Consequences: tested on these polygons,
+    the citizen-science model would be evaluated where it was trained
+    (inflated score), so training and test must be split by spatial
+    blocks (15 blocks of 10 km); as the upper bound, both models learn
+    from nearly the same areas, so only the label source changes, but
+    both inherit the same spatial bias.
   - **Open:** reference year (no date field); imagery used for the
-    visual interpretation; and independence from iNaturalist — 582
-    iNaturalist presences lie within 50 m of a polygon, 96% of them
-    from the dominant observer.
+    visual interpretation; how the sites were chosen.
 
 ### RQ2 — Data efficiency
 
@@ -386,6 +396,21 @@ other plants (36 080 records, 33%), in 96.7% of the 1 km cells where
 they recorded *Acacia*. Other plants cover much more territory: only
 26.6% of other-plant cells contain *Acacia*.
 
+**Expert model, same formulation (proposed, 2026-10-20):** in RQ1 the
+expert model is also multiclass. Its negatives (random points in COS
+2023 vegetated classes) are labelled by the COS class they fall in
+(e.g. eucalyptus forest, pine forest, other forest, agriculture,
+shrubland; rare classes merged), not as a single "not *Acacia*"
+class. Reasons: RQ1 compares label sources, so the task formulation
+must be the same in both arms; a COS polygon (minimum mapping unit
+1 ha) says what land cover is mapped there, not that no *Acacia* is
+present, the same argument as for other plants; and the confusion
+matrix shows what *A. dealbata* is confused with. Both arms are
+scored by P(*A. dealbata*) on the same test points, so the class sets
+need not match. A binary version (*A. dealbata* vs. the rest) is run
+as a sensitivity check in both arms. Grounded in Ball et al. (2026),
+as above; no other source checked for this choice.
+
 Open:
 
 - Class groups: by genus or growth form (e.g. eucalyptus, pines,
@@ -483,8 +508,8 @@ presences, or a cross-platform test for RQ3.
 
 Besides those marked above:
 
-- Study area: district (observations) vs. municipality (TESSERA tiles
-  downloaded so far).
+- Study area: the Coimbra district for now (all data cover it);
+  other regions later (needed for RQ3).
 - Independent validation: COS 2023 *Acacia* class and/or a sample
   checked on OrtoSat 2023; must not overlap spatially with the expert
   reference polygons used for training (RQ1).

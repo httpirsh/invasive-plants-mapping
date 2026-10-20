@@ -24,9 +24,12 @@
 - **Dados de especialistas** (os polígonos de *A. dealbata* que me
   enviou): no distrito há 1 849 polígonos, em 15 quadrículas de 10 km.
   - [ ] De que ano são? Que imagens se usaram na interpretação visual?
-  - [ ] São independentes do iNaturalist? 582 presenças do iNaturalist
-    estão a menos de 50 m de um polígono, e 96% delas são da pessoa que
-    fez 83% das observações.
+  - [ ] Os locais foram escolhidos a partir de observações do
+    iNaturalist, ou a pessoa com mais observações em Coimbra faz parte
+    da equipa? As 70 presenças do iNaturalist dentro de polígonos, e
+    96% das 582 a menos de 50 m, são dessa pessoa. Os rótulos são
+    independentes (a equipa foi ao terreno), mas os locais coincidem,
+    e isso conta na separação entre treino e teste.
   - [ ] Os círculos pequenos (≈5 m de raio) são pontos de campo e as
     manchas maiores são interpretação visual?
 
@@ -56,7 +59,7 @@ nas das outras pessoas e noutras zonas.
   outras opções na RQ3 (proposta), ou limitar já o número por
   quadrícula?
 
-**Mostrar:** [notebook 02](../notebooks/02_citizen_science/acacia_coimbra_pilot_exploration.ipynb)
+**Mostrar:** [notebook 02](../notebooks/02_citizen_science/acacia_observations_exploration.ipynb)
 — observações por ano, mapa e peso de cada observador.
 
 ## 3. Para informar

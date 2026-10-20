@@ -77,3 +77,37 @@ perguntas de investigação.
 
 Uma entrada por decisão: data, o que decidi, porquê, e onde está
 (notebook, figura ou doc).
+
+### Multiclasse também no modelo de especialistas
+
+*2026-10-20, proposta minha (a confirmar com o orientador).*
+
+**O que decidi:** na RQ1, os dois modelos são multiclasse. O de
+ciência cidadã já o era (outras plantas do iNaturalist como classes,
+decisão da reunião de 21 de outubro). No de especialistas, as ausências
+(pontos ao acaso na COS 2023, em classes de vegetação) ficam com a
+classe da COS onde caem (p. ex. eucaliptal, pinhal, outra floresta,
+agricultura, matos; as classes com poucos pontos juntam-se), em vez de
+uma única classe "não *Acacia*". Os dois são avaliados pela
+probabilidade de *A. dealbata* nos mesmos pontos de teste. A versão
+binária (*A. dealbata* vs. o resto) corre também, como verificação.
+
+**Porquê:**
+- A RQ1 compara a fonte dos rótulos (iNaturalist vs. especialistas).
+  Para a diferença vir só daí, a forma da tarefa tem de ser igual nos
+  dois modelos.
+- Um ponto num polígono de eucaliptal da COS (manchas de pelo menos
+  1 ha) diz o que está mapeado ali, não que não há *Acacia*: o mesmo
+  argumento das outras plantas.
+- A matriz de confusão mostra com que se confunde a *A. dealbata*
+  (análise de erros).
+- O binário pode dar o mesmo ou melhor com Random Forest. Se der o
+  mesmo, a escolha não importa e digo-o; se não, é um resultado.
+
+**Fundamentação:** Ball et al. (2026) classificaram espécies e grupos
+de espécies como classes, com embeddings. Não verifiquei outras fontes
+para esta escolha.
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#other-plants-as-classes-adopted-direction).
+Ainda não aplicado: as experiências ficam para depois da análise
+exploratória.
