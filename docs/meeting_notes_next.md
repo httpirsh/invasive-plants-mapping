@@ -21,8 +21,17 @@
   contam como "mais recentes", ou conta a distância a 2023?
   - [ ] Qual?
 
-Se não ficaram decididos a 21 de outubro: dados de especialistas e
-teste (ponto 4) e área de estudo, distrito ou concelho (ponto 5).
+- **Dados de especialistas** (os polígonos de *A. dealbata* que me
+  enviou): no distrito há 1 849 polígonos, em 15 quadrículas de 10 km.
+  - [ ] De que ano são? Que imagens se usaram na interpretação visual?
+  - [ ] São independentes do iNaturalist? 582 presenças do iNaturalist
+    estão a menos de 50 m de um polígono, e 96% delas são da pessoa que
+    fez 83% das observações.
+  - [ ] Os círculos pequenos (≈5 m de raio) são pontos de campo e as
+    manchas maiores são interpretação visual?
+
+Se não ficou decidido a 21 de outubro: área de estudo, distrito ou
+concelho (ponto 5).
 
 ## 2. A pessoa que fez a maioria das observações
 
@@ -80,3 +89,9 @@ foundation models. A novidade está na combinação e nos controlos.
   outra plataforma: mais presenças, ou um teste da RQ3 com
   observadores diferentes.
   - [ ] Vale a pena juntar? Conhece quem a gere?
+
+## Para a defesa
+
+Dizer que tenho noção de que as perguntas são ambiciosas e que estão
+ordenadas por prioridade. Frase e justificação em
+[`thesis/notes.md`](../thesis/notes.md#perguntas-ambiciosas).

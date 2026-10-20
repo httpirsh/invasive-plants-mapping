@@ -129,6 +129,30 @@ Other-plant classes (see `docs/research_questions.md`).
 - **File:** `external/auxiliary/icnf_burned_areas/ardida_<layer>.geojson`
 - **Preprocessing:** none. Downloaded by the same notebook.
 
+### *Acacia dealbata* expert reference polygons
+
+Expert reference data for the RQ1 upper bound (see
+`docs/research_questions.md`).
+
+- **Source:** sent by the supervisor by email. Collected by visual
+  interpretation and/or field work.
+- **Access date:** 2026-10-20
+- **Files:** `raw/expert_reference/TNE_17MAY2026_5.gpkg`
+  (Sentinel-2 tile TNE only, layer `tne`, 7 057 polygons) and
+  `raw/expert_reference/notTNE_18MAY2026_6.gpkg` (rest of
+  continental Portugal, 437 polygons).
+- **Attributes:** only `classifica`. Use `classifica = 1`
+  (*A. dealbata* present): 2 072 polygons in TNE, 398 elsewhere. Other
+  values are "not *A. dealbata*" but, per the sender, many lie on water
+  or built-up areas and are of little use.
+- **Spatial coverage:** continental Portugal, sparse; tile TNE covers
+  the Coimbra district (1 849 positive polygons in the district).
+- **Temporal coverage:** not stated (no date field) — to ask.
+- **License:** not stated; project data shared for the thesis — do not
+  redistribute.
+- **Format:** GeoPackage, EPSG:3763.
+- **Preprocessing:** none.
+
 ## Not Yet Obtained
 
 | Source | Use | Status |

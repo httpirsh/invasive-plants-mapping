@@ -9,6 +9,7 @@
 | Reference-data pipeline (proposal objective 1) | Proposed |
 | Temporal design: all iNaturalist observations treated as 2023 | Adopted 2026-10-21 |
 | Other plants as classes (multiclass) | Adopted direction 2026-10-21; details open |
+| Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; year and independence to confirm |
 | Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal) |
 | Species scope | Open |
 | Experiments per RQ | Candidate sketches |
@@ -83,6 +84,20 @@ useful, not only whether they are better.
 
 RQ1 is the prerequisite and core deliverable; RQ2 and RQ3 build on it.
 
+### Priority and scope
+
+The questions are deliberately ambitious; reaching RQ3 assumes ideal
+conditions. They are ordered by priority, and each stage is a complete
+result on its own:
+
+| Scenario | Delivers | Answers |
+|---|---|---|
+| RQ1 only | Reference-data pipeline + Sentinel-2 vs. TESSERA vs. expert upper bound | Proposal objectives 1 and 3, part of 2 — already a thesis |
+| RQ1 + RQ2 | The above + behaviour under data reduction | Objective 2 in full. Low extra cost: same pipeline, model and test set |
+| RQ1 + RQ2 + RQ3 | The above + amplify/mitigate under spatial bias | Transferability (work plan 4). Most expensive: needs distinct regions, road/trail layers and the observer experiments; most exposed to time |
+
+Scope is reassessed as experiments progress.
+
 ### RQ1 — Foundation models vs. conventional approaches
 
 To what extent do Earth Observation foundation-model representations
@@ -129,17 +144,28 @@ Upper bound:       best representation   + expert reference labels → classifie
   algorithms tested). Ball et al. (2026) also tested linear
   classifiers (weaker on embeddings) and a compact neural network
   (best on embeddings).
-- **Expert reference labels (open):** MAP.INVADER reference sites are
-  scheduled for June 2027 and its maps cover *A. dealbata* only, for
-  2026–2028 ([timeline](https://mapinvader.pt/timeline/)); nothing is
-  published yet. Candidate: the reference data behind [Soriano et al.
-  (2026, EARSeL)](https://mapinvader.pt/milestones-and-deliverables/), who mapped *A. dealbata* in central Portugal with
-  Sentinel imagery (year, coverage and access unknown — ask).
-  Fallback: points sampled from the COS 2023 "Florestas de acácias"
-  class. If COS is also the independent test set, training
-  and test points must come from separate spatial blocks. COS has a
-  1 ha minimum mapping unit, so it over-represents large, pure
-  stands; this must be stated.
+- **Expert reference labels (adopted):** *A. dealbata* polygons
+  collected by visual interpretation and/or field work, sent by the
+  supervisor (see `data/README.md`). In the Coimbra district: 1 849
+  polygons with `classifica = 1` (244 ha), all in Sentinel-2 tile TNE;
+  1 364 of all positives are ~5 m-radius circles (point-like), the
+  rest larger patches. 59% of the district polygons touch a COS 2023
+  "Florestas de acácias" polygon.
+  - **Species:** *A. dealbata* only, so the upper bound applies to the
+    species-level check (see [Species Scope](#species-scope-open)); the
+    citizen-science model compared with it must also be
+    *A. dealbata*.
+  - **Clustered:** the district polygons fall in 15 cells of 10 km,
+    so few independent spatial blocks are available to split training
+    and test.
+  - **Negatives:** the `classifica ≠ 1` polygons lie mostly on water
+    and built-up areas and are not used. Negatives for the expert
+    model come from another source (open; e.g. COS 2023 non-*Acacia*
+    vegetation classes).
+  - **Open:** reference year (no date field); imagery used for the
+    visual interpretation; and independence from iNaturalist — 582
+    iNaturalist presences lie within 50 m of a polygon, 96% of them
+    from the dominant observer.
 
 ### RQ2 — Data efficiency
 
@@ -459,7 +485,7 @@ Besides those marked above:
 
 - Study area: district (observations) vs. municipality (TESSERA tiles
   downloaded so far).
-- Independent validation: COS 2023 *Acacia* class and/or OrtoSat 2023
-  (restricted access); must not overlap spatially with
-  expert-reference training points (RQ1).
+- Independent validation: COS 2023 *Acacia* class and/or a sample
+  checked on OrtoSat 2023; must not overlap spatially with the expert
+  reference polygons used for training (RQ1).
 - Baseline features and metrics — see [`methodology.md`](methodology.md).
