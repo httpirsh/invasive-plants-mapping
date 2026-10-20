@@ -107,9 +107,14 @@ Upper bound:       best representation   + expert reference labels → classifie
 ```
 
 - Candidate classifiers: Random Forest, XGBoost, Logistic Regression.
-- **Expert reference labels (open):** MAP.INVADER reference data if
-  available; otherwise points sampled from the COS 2023 "Florestas de
-  acácias" class. If COS is also the independent test set, training
+- **Expert reference labels (open):** MAP.INVADER reference sites are
+  scheduled for June 2027 and its maps cover *A. dealbata* only, for
+  2026–2028 ([timeline](https://mapinvader.pt/timeline/)); nothing is
+  published yet. Candidate: the reference data behind Soriano et al.
+  (2026, EARSeL), who mapped *A. dealbata* in central Portugal with
+  Sentinel imagery (year, coverage and access unknown — ask).
+  Fallback: points sampled from the COS 2023 "Florestas de acácias"
+  class. If COS is also the independent test set, training
   and test points must come from separate spatial blocks. COS has a
   1 ha minimum mapping unit, so it over-represents large, pure
   stands; this must be stated.
