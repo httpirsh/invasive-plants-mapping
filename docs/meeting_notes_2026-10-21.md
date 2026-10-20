@@ -3,6 +3,23 @@
 > Só as decisões urgentes. O resto fica para a
 > [próxima reunião](meeting_notes_next.md).
 
+## Resultado da reunião
+
+- **RQ2:** sem a experiência ao acaso. Fica só o filtro, que passa a
+  dar mais peso às observações mais recentes (as mais antigas saem
+  primeiro), para além dos outros critérios.
+- **Anos:** usar todas as observações do iNaturalist (1992–2026) e
+  tratá-las como 2023. A janela 2021–2025 deixa de ser o desenho
+  principal.
+- **Outras plantas:** passam a ser classes próprias (modelo
+  multiclasse), e não ausências.
+- **Embeddings:** fixos, como proposto.
+- **Máscara de segmentação:** surgiu quando falei dos buffers.
+  Interpretação a confirmar: substituir o buffer pela mancha real de
+  *Acacia* à volta de cada observação.
+
+Os detalhes estão em [`research_questions.md`](research_questions.md).
+
 ## Perguntas de investigação
 
 **Pergunta principal:** quão robustos e eficientes em dados são os foundation models de observação da Terra para mapear plantas invasoras, quando treinados com dados de ciência cidadã?

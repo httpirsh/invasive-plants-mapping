@@ -5,12 +5,22 @@ A small set of directly relevant papers, **not** a systematic review.
 must be revisited after a broader search (see
 [Search Protocol](#search-protocol-planned)).
 
-Each paper has a status:
+No paper has been read in full yet. All summaries were written with
+help from abstracts, publisher pages and quick skims, and must be
+checked against the paper before citing details in the thesis. Each
+paper has a status:
 
-- **Read** — read in full; summary is my own.
-- **To read** — found on 2026-10-20 while checking novelty; summary
-  comes from the abstract or search snippets only. Verify before
-  citing details in the thesis.
+- **To read** — summary not yet confirmed by reading the paper.
+- **To find** — only seen in a reference list; the paper itself has
+  not been located.
+
+Suggested reading order (papers that support the most decisions in
+[`research_questions.md`](research_questions.md) and
+[`methodology.md`](methodology.md) first): Ball 2026, Phillips 2009,
+Dimson 2023, Riveiro 2025, Gillespie 2024, Karasiak 2022; then
+Domingo 2023, Mouta 2021, Eskandari 2025, Martins 2016; then Brown
+2025, Feng 2025; then Zhu 2026, Yang 2026, the old-growth preprint;
+then Rivier 2023/2024.
 
 ## Papers
 
@@ -43,7 +53,7 @@ primary reference for the chosen foundation model.
 data-efficient tree species mapping in temperate mountain forests.
 *Science of Remote Sensing*, 14, 100466.
 DOI: [10.1016/j.srs.2026.100466](https://doi.org/10.1016/j.srs.2026.100466)
-— *Read*
+— *To read*
 
 Compares TESSERA embeddings, AlphaEarth embeddings and conventional
 Sentinel-1 + Sentinel-2 features for 18 tree species/groups
@@ -66,7 +76,7 @@ reference data. Reference labels here are curated, not citizen
 science.
 
 Relevance beyond RQ1/RQ2: the cross-year degradation supports holding
-time constant ([Temporal Design](research_questions.md#temporal-design-proposed));
+time constant ([Temporal Design](research_questions.md#temporal-design-adopted));
 the label-impurity result is relevant to the label-purity step of the
 [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed).
 
@@ -124,7 +134,7 @@ Listed to show RQ1 alone is not novel; skim only.
 species changes from citizen science and remote sensing data.
 *PNAS*, 121(37), e2318296121.
 DOI: [10.1073/pnas.2318296121](https://doi.org/10.1073/pnas.2318296121)
-— *Read*
+— *To read*
 
 Deepbiosphere: 650,000+ research-grade (mostly iNaturalist)
 observations of 2,221 plant species, paired with remote sensing and
@@ -164,7 +174,7 @@ the group could publish in the same space.
 images support the detection of new invasion sites? A deep learning
 test case with *Cortaderia selloana*. *Ecological Informatics*, 81,
 102602. DOI: [10.1016/j.ecoinf.2024.102602](https://doi.org/10.1016/j.ecoinf.2024.102602)
-— *Read*
+— *To read*
 
 CNNs on ground-level citizen-science and social-media photos detect
 *Cortaderia selloana* in Portugal (>77% identification success) and
@@ -177,7 +187,7 @@ satellite EO.
 invasive plant surveys and improve estimates of suitable habitat.
 *Diversity and Distributions*.
 DOI: [10.1111/ddi.13749](https://doi.org/10.1111/ddi.13749)
-— *Read*
+— *To read*
 
 Hawaiʻi, four invasive species. iNaturalist records are biased toward
 roads/trails and disturbed vegetation; professional surveys toward
@@ -207,7 +217,7 @@ should capture.
 Classifier Fusion and Ecological Models to Map and Explain Landscape
 Invasion by an Alien Shrub. *Remote Sensing*, 13(16), 3287.
 DOI: [10.3390/rs13163287](https://doi.org/10.3390/rs13163287)
-— *Read*
+— *To read*
 
 Maps *Acacia longifolia* in a northern Portugal municipality with
 Sentinel-2 (10 m), a fusion of eight classifiers, and Random Forest
@@ -218,7 +228,7 @@ conventional baseline.
 Spectral Differences to Detect Invasive Alien *Acacia dealbata* Using
 Sentinel-2 Data in Southern Europe. *Remote Sensing*, 15(3), 722.
 DOI: [10.3390/rs15030722](https://doi.org/10.3390/rs15030722)
-— *Read*
+— *To read*
 
 Sentinel-2 time series and flowering-period spectral differences,
 with Random Forest feature selection, map *A. dealbata* in Arnoia
@@ -230,7 +240,7 @@ Acacia invasive species in protected areas of Spain using PlanetScope
 high-resolution satellite images and machine learning models in time
 series. *Forest Ecology and Management*, 586, 122696.
 DOI: [10.1016/j.foreco.2025.122696](https://doi.org/10.1016/j.foreco.2025.122696)
-— *Read*
+— *To read*
 
 PlanetScope time series + Random Forest map *Acacia* sp. in the Cíes
 Islands, Galicia; Random Forest beat the other algorithms. Specific
@@ -243,7 +253,7 @@ page blocks automated access.
 distribution models: implications for background and pseudo-absence
 data. *Ecological Applications*, 19(1), 181–197.
 DOI: [10.1890/07-2153.1](https://doi.org/10.1890/07-2153.1)
-— *Read*
+— *To read*
 
 Background data are usually drawn at random, but occurrence records
 are biased toward accessible areas, which gives inaccurate models.
@@ -252,8 +262,8 @@ of species recorded by similar methods as background, since they
 share the same bias. Across 226 species, target-group background
 improved average performance for every modelling method tested,
 with the largest gains where the presence records were most biased.
-Basis for the absence proposal in
-[`research_questions.md`](research_questions.md#absence-generation-proposed).
+Basis for using other plants as classes in
+[`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction).
 
 ### Spatial validation
 
@@ -274,7 +284,7 @@ cross-validation. Methodological reference for
 in controlling *Acacia dealbata* Link invasion. *Biological
 Invasions*, 27, 125.
 DOI: [10.1007/s10530-025-03567-8](https://doi.org/10.1007/s10530-025-03567-8)
-— *Read*
+— *To read*
 
 Eight experimental blocks across central Portugal, monitored for
 three years. Burning promoted *A. dealbata* seed germination;
@@ -282,21 +292,21 @@ slashing stimulated resprouting. Even combined slash-and-burn left at
 least 6.5 stems/m² (0 in controls). Relevance: burned *Acacia* stands
 are not gone, so the disturbance filter removes observations because
 the 2023 pixel no longer matches the label, not because the species
-is absent. Also the main argument against an asymmetric window after
-the 2025 fires: later observations may be regrowth.
+is absent. Also a caveat for post-2023 observations in burned areas:
+after the 2025 fires, later observations may be regrowth.
 
 ### Weak supervision from point labels
 
 **Rivier et al. (2023/2024).** Efficient Semantic Segmentation for
 Aerial Imagery Using Query Points and Superpixel Supervision.
-arXiv:2309.05490v2. — *Read*
+arXiv:2309.05490v2. — *To read*
 
 Trains segmentation from sparse point labels (as few as 50 per image)
 via superpixel propagation and a loss on labelled pixels only;
-mIoU 75.64% on LandCoverAI, close to full supervision. A method lead
-only: relevant if the task ever moves from point classification to
-segmentation (currently rejected, see
-[`research_questions.md`](research_questions.md#prediction-task-adopted)).
+mIoU 75.64% on LandCoverAI, close to full supervision. Candidate
+method for the *Acacia* patch mask that replaces a fixed exclusion
+buffer (see
+[`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction)).
 
 ## Data Sources Found in the Literature Search
 
@@ -360,9 +370,10 @@ Three specific questions not answered by any of the above:
 
 1. **Do foundation models amplify or mitigate citizen-science spatial
    bias** compared with conventional features? (RQ3)
-2. **Does it matter which observations are removed** — filter vs.
-   random at the same sample size? Existing label-efficiency work
-   uses random reduction only. (RQ2)
+2. **How do foundation models behave when citizen-science data are
+   reduced by a documented filter** (oldest observations first) rather
+   than at random? Existing label-efficiency work uses random
+   reduction only (Ball 2026). (RQ2)
 3. **How much is lost by training on citizen science instead of
    expert reference data**, with the same representation and test
    set? (RQ1)

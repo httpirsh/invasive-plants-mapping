@@ -3,16 +3,22 @@
 | Item | Status |
 |---|---|
 | Main question | Adopted |
-| RQ1–RQ3 | Proposed (to confirm with supervisor) |
-| Prediction task | Adopted |
+| RQ1, RQ3 | Proposed (to confirm with supervisor) |
+| RQ2 (recency-based filter, no random removal) | Adopted 2026-10-21 |
+| Prediction task | Adopted; segmentation mask open |
 | Reference-data pipeline (proposal objective 1) | Proposed |
-| Absence generation, temporal design | Proposed |
-| Frozen embeddings instead of fine-tuning | Proposed (deviation from proposal) |
+| Temporal design: all iNaturalist observations treated as 2023 | Adopted 2026-10-21 |
+| Other plants as classes (multiclass) | Adopted direction 2026-10-21; details open |
+| Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal) |
 | Species scope | Open |
 | Experiments per RQ | Candidate sketches |
 
 How these questions follow from the literature: [`literature.md`](literature.md).
 Methodological questions still open: [`methodology.md`](methodology.md).
+
+Each decision has a **Grounded in** note naming the work that already
+used it and from which the idea comes. Where no paper used it directly,
+the note names the work that motivates it.
 
 ## Fit with the Thesis Proposal
 
@@ -27,7 +33,7 @@ this document:
 | Obj. 1 / work plan 3 — transform point observations into usable EO reference data, accounting for uncertainty and quality | [Reference-Data Pipeline](#reference-data-pipeline-proposed): a measured methodological contribution, not just preprocessing |
 | Obj. 2 — use foundation models to compensate for limited, noisy citizen-science data | RQ1, RQ2 |
 | Obj. 3 — assess to what extent citizen science supports accurate, species-level mapping | RQ1 (comparison with expert reference data), [Species Scope](#species-scope-open) |
-| Work plan 4 — fine-tune foundation models; analyse accuracy, limitations, transferability | [Foundation Model Use](#foundation-model-use-proposed) (frozen embeddings, a justified deviation); RQ3 (transferability) |
+| Work plan 4 — fine-tune foundation models; analyse accuracy, limitations, transferability | [Foundation Model Use](#foundation-model-use-adopted) (frozen embeddings, a justified deviation); RQ3 (transferability) |
 
 ## Position in the Literature
 
@@ -57,7 +63,7 @@ Closest work:
 No work was found that combines **EO foundation models, invasive
 plants and citizen-science labels with explicit evaluation of bias**.
 The contribution therefore lies in the combination and in the
-experimental controls (matched-size comparison in RQ2,
+experimental controls (recency-based filter in RQ2,
 amplify-or-mitigate framing in RQ3, expert-reference comparison in
 RQ1), not in any single question.
 
@@ -93,10 +99,19 @@ using citizen science instead of expert data.
 - A question of degree, not yes/no.
 - All representations come from the same reference year, so only the
   representation changes between compared models.
-- **Grounded in:** Ball et al. (2026) found embeddings beat
-  conventional features for tree species with curated inventory
-  labels; not yet tested for invasive plants with citizen-science
-  labels.
+- **Grounded in:** the comparison design comes from Ball et al.
+  (2026), who compared TESSERA and AlphaEarth embeddings with
+  conventional Sentinel-1 + Sentinel-2 features on the same labels for
+  18 tree species (embeddings won; curated inventory labels). The
+  atoll ecosystem study (2026) used the same design with
+  AlphaEarth 2023 embeddings vs. Sentinel-2 bands and indices. Not
+  yet tested for invasive plants with citizen-science labels.
+- **Upper bound grounded in:** Dimson et al. (2023) built habitat
+  models separately from iNaturalist records and from professional
+  surveys of invasive plants and compared them; the idea of training
+  the same model on citizen-science vs. expert data comes from there.
+  They also found the two sources have opposite biases, so the expert
+  upper bound is biased differently, not bias-free.
 
 Experiment — same classifier, same test set:
 
@@ -106,7 +121,14 @@ Foundation model:  TESSERA embeddings    + citizen-science labels → classifier
 Upper bound:       best representation   + expert reference labels → classifier
 ```
 
-- Candidate classifiers: Random Forest, XGBoost, Logistic Regression.
+- Candidate classifiers: Random Forest, Logistic Regression, compact
+  neural network. **Grounded in:** Random Forest was used on
+  embeddings by Ball et al. (2026) and Yang et al. (2026), and for
+  *Acacia* with Sentinel-2 or PlanetScope by Mouta et al. (2021),
+  Domingo et al. (2023) and Eskandari et al. (2025, best of the
+  algorithms tested). Ball et al. (2026) also tested linear
+  classifiers (weaker on embeddings) and a compact neural network
+  (best on embeddings).
 - **Expert reference labels (open):** MAP.INVADER reference sites are
   scheduled for June 2027 and its maps cover *A. dealbata* only, for
   2026–2028 ([timeline](https://mapinvader.pt/timeline/)); nothing is
@@ -122,38 +144,47 @@ Upper bound:       best representation   + expert reference labels → classifie
 ### RQ2 — Data efficiency
 
 How does the performance of EO foundation models compare with
-conventional approaches as the amount of citizen-science reference
-data decreases, and does it matter *which* observations are removed —
-a distribution-improving filter versus random removal at the same
-sample size?
+conventional approaches as citizen-science reference data are reduced
+by a filter that keeps the most recent and most reliable observations?
 
 **Fit with the proposal:** answers objective 2 (*use foundation models
 to compensate for limited citizen-science data*).
 
-**Why this design:** a filter reduces quantity *and* changes the
-distribution at the same time, so on its own it cannot separate the
-two effects. No available filter both reduces data substantially and
-improves the spatial distribution. Random removal gives the learning
-curve; the filter at matched size isolates the effect of *which* data
-is removed. Random-removal learning curves exist in the literature;
-the matched-size comparison does not.
+**Why this design:** all observations are treated as 2023 (see
+[Temporal Design](#temporal-design-adopted)), so older observations
+are the most likely to no longer match the 2023 imagery (cleared,
+burned, built over). Removing them first reduces quantity in a
+documented, realistic way, and reports *which* observations are
+removed and *why*.
 
-- **Main test:** random, nested subsets (example levels: 100%, 50%,
-  25%, 10%, 5%, 1%), repeated with several seeds, evaluated on
-  spatially separated blocks. Fix levels after checking the real
-  observation count and spread.
-- **Comparison:** at each level, a filtered subset of the same size
-  vs. the random subset. The filter is applied in an area with many
-  observations, reporting *which* observations it removes and *why*
-  Filter choice open.
+- **Filter:** observations ordered by date, oldest removed first,
+  combined with the other candidate criteria (quality grade,
+  positional accuracy). Exact combination open.
+- **Levels:** keep the most recent N observations, for decreasing N.
+  By year alone the levels are coarse — keeping 2019 onwards retains
+  98.8% of presences, 2021 onwards 84.0%, 2023 onwards 29.1% (7 898
+  dated, non-obscured presences) — so levels are set by date, not
+  year. Fix levels after checking the real counts.
+- **Open:** whether observations after 2023 (2024–2026: 2 040
+  presences) count as "more recent", or whether recency is distance
+  to 2023.
+- **Limitation (to state):** without a random-removal baseline, each
+  level changes quantity *and* composition (age, observers, places)
+  at once; RQ2 measures their joint effect.
 - The final map always uses all data; RQ2 is a test, not a cleaning
   step.
 - The disturbance filter is a fixed preprocessing step (see
   [Reference-Data Pipeline](#reference-data-pipeline-proposed)), not
   the RQ2 filter.
-- **Grounded in:** Ball et al. (2026) reached near-optimal accuracy
-  with ~5% of labels, with curated forest-inventory labels, not
-  citizen science.
+- **Grounded in:** training with decreasing fractions of labels
+  comes from Ball et al. (2026), who reached near-optimal accuracy
+  with ~5% of training parcels (curated labels, random reduction).
+  Removing the oldest observations first is supported by their
+  cross-year result: performance dropped when imagery and labels came
+  from different years (weighted F1 −9% TESSERA, −15% AlphaEarth):
+  the older an observation, the larger its mismatch with the 2023
+  imagery. Ball et al. (2026) reduced labels at random; filtering by
+  recency is this thesis's own step, motivated by that result.
 
 ### RQ3 — Spatial sampling bias
 
@@ -183,19 +214,32 @@ Design notes:
   [Validation](methodology.md#validation)).
 - A single reference year keeps observation year from correlating
   with geography.
-- The absence strategy affects the bias being measured: a
-  target-group background shares the presences' bias and partly
-  corrects it. Results must state which background was used;
-  target-group vs. random background is a candidate experiment.
+- The negative classes affect the bias being measured: other-plant
+  classes share the presences' bias and partly correct it. Results
+  must state this; other-plant classes vs. random background is a
+  candidate experiment.
 - **Real bias case — the dominant observer.** One person made 83% of
   all observations (85% in 2021–2025; 98% of the 2021 peak). Candidate
   experiment: train with all observations vs. capped vs. without that
   observer, test on other observers' records and regions.
-- **Grounded in:** Dimson et al. (2023) showed iNaturalist
-  invasive-plant records are biased toward roads, trails and disturbed
-  areas; reviews report weaker spatial transfer for embeddings.
-  Whether bias affects the two representations differently is
-  untested.
+- **Grounded in:** the bias axes (roads, trails, disturbed areas)
+  come from Dimson et al. (2023), who found them in iNaturalist
+  invasive-plant records in Hawaiʻi. The amplify/mitigate question
+  comes from work reporting weaker spatial transfer of embeddings:
+  Zhu et al. (2026, review), Yang et al. (2026) and the old-growth
+  forest preprint (2026), where buffered spatial validation narrowed
+  the embedding advantage. Strong clustering of
+  citizen-science labels over TESSERA was also reported by the
+  Cambridge TESSERA group (work in progress). Whether bias affects
+  the two representations differently is untested.
+- Spatial thinning and capping the dominant observer are motivated by
+  the clustering reported by the Cambridge TESSERA group (labels
+  concentrated around reserves, canals and a zoo) and by Dimson et
+  al. (2023), whose biased iNaturalist records gave habitat models
+  that only partly overlapped those from professional surveys.
+  Phillips et al. (2009) found the largest gains from bias correction
+  where presences were most biased, which applies to a single
+  dominant observer.
 
 Experiment — compare training sets: (1) original observations,
 (2) spatially thinned, (3) dominant observer capped/removed. Build
@@ -207,14 +251,28 @@ assume bias correction improves performance.
 
 ### Prediction Task (adopted)
 
-**Pixel-level binary classification trained on points, applied
+**Pixel-level classification trained on points, applied
 wall-to-wall.** The classifier is trained on the 10 m pixel at each
 observation (Sentinel-2 features or foundation-model embedding), then
-applied to every pixel of the study area to produce a full map. No
-dense labels are needed.
+applied to every pixel of the study area. Classes are *Acacia* plus
+groups of other plants (see [Other Plants as
+Classes](#other-plants-as-classes-adopted-direction)); the *Acacia*
+map is the predicted *Acacia* probability per pixel.
 
-- **Semantic segmentation — rejected:** needs dense pixel masks;
-  citizen science only provides points.
+**Grounded in:** training per-pixel classifiers on citizen-science
+point observations over embeddings was done by Brown et al. (2025,
+iNaturalist research-grade observations at genus level)
+and by the Cambridge TESSERA group (GBIF occurrences as weak labels
+for habitats, work in progress). The task follows them.
+
+- **Segmentation mask (open, interpretation to confirm):** raised
+  when discussing exclusion buffers. Likely meaning: replace the fixed
+  buffer with a mask of the actual *Acacia* patch around each
+  observation. The task stays pixel classification; the mask changes
+  how labels and exclusions are built (see [Other Plants as
+  Classes](#other-plants-as-classes-adopted-direction)). Grounded in
+  Rivier et al. (2023/2024), who propagated sparse point labels to
+  superpixels.
 - **Grid-cell presence/absence — not the training unit:** pixel
   predictions may later be aggregated to cells for evaluation and
   comparison with SDM-style outputs.
@@ -226,25 +284,28 @@ iNaturalist points into labelled pixels are treated as a
 **methodological contribution**: each step is documented, counts are
 reported, and its effect is measured.
 
-| Step | Status | Notes |
-|---|---|---|
-| 1. Remove obscured coordinates | Done | 43 presences, 8 242 background removed |
-| 2. Positional accuracy | Open | Threshold on coordinate uncertainty relative to 10 m pixels; how to treat missing values |
-| 3. Quality grade | Open | Research grade only, or all? |
-| 4. Temporal window | Proposed | 2021–2025, see [Temporal Design](#temporal-design-proposed) |
-| 5. Disturbance filter | Proposed (fixed) | Burned between observation year and 2023: 2 presences, 33 background |
-| 6. Label purity | Open | Does the point represent an *Acacia*-dominated pixel? (e.g. isolated garden tree vs. stand). Check against COS/OrtoSat on a sample; at minimum report |
-| 7. Absence generation | Proposed | See [Absence Generation](#absence-generation-proposed) |
-| 8. Observer balancing | Open | Cap the dominant observer per cell? Linked to RQ3 |
+| Step | Status | Notes | Grounded in |
+|---|---|---|---|
+| 1. Remove obscured coordinates | Done | 43 presences, 9 903 other plants | iNaturalist geoprivacy randomises these coordinates (platform documentation); research-grade-only data in Gillespie et al. (2024) and Brown et al. (2025) also implies location-quality filtering |
+| 2. Positional accuracy | Open | Threshold on coordinate uncertainty relative to 10 m pixels; how to treat missing values | Ball et al. (2026): label impurity lowers accuracy, though embeddings tolerate moderate amounts; a point off by more than a pixel is an impure label |
+| 3. Quality grade | Open | Research grade only, or all? | Research-grade only was used by Gillespie et al. (2024) and Brown et al. (2025) |
+| 4. Temporal design | Adopted | All observations treated as 2023, see [Temporal Design](#temporal-design-adopted) | See that section |
+| 5. Disturbance filter | Proposed (fixed) | Burned between observation and 2023 (ICNF 1975–2025; fires before 2014 have the year only): 35 presences (0.4%), 2 880 other plants (2.6%) | Riveiro et al. (2025): burned *A. dealbata* stands regrow, so the burned pixel no longer matches the label though the species remains |
+| 6. Label purity | Open | Does the point represent an *Acacia*-dominated pixel? (e.g. isolated garden tree vs. stand). Check against COS/OrtoSat on a sample; at minimum report | Ball et al. (2026): embeddings robust to moderate label impurity; soft labels (species proportions) beat hard labels |
+| 7. Negative classes | Adopted direction | See [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | Phillips et al. (2009); see that section |
+| 8. Observer balancing | Open | Cap the dominant observer per cell? Linked to RQ3 | Motivated by observer clustering (Cambridge TESSERA group) and Phillips et al. (2009), see RQ3 |
 
 **Evaluation — cumulative ablation:** run the RQ1 setup after adding
 each step and report the change in performance. This shows which
-steps matter, turning preprocessing into a result.
+steps matter, turning preprocessing into a result. Grounded in Ball et
+al. (2026), who measured how label impurity and soft vs. hard labels
+change accuracy: the ablation applies the same idea to each data
+preparation step.
 
 Open: whether this stays a methodological contribution (own chapter
 and ablation) or becomes an explicit research question.
 
-### Foundation Model Use (proposed)
+### Foundation Model Use (adopted)
 
 **Frozen embeddings + light classifiers**, not fine-tuning. This is a
 deliberate deviation from the proposal's "fine-tune EO foundation
@@ -258,49 +319,76 @@ Reasons:
 - The same classifier on every representation isolates the effect of
   the representation (RQ1).
 
+**Grounded in:** frozen embeddings with light classifiers on top were
+used by Ball et al. (2026, TESSERA and AlphaEarth with Random Forest,
+linear models and a compact neural network), Yang et al. (2026, Random
+Forest on AlphaEarth) and Brown et al. (2025, embeddings
+used without re-training). The approach follows them.
+
 Possible extension, if time and weights allow: fine-tune TESSERA, or
 train a small MLP head on the embeddings, and compare with the frozen
 setup.
 
-### Absence Generation (proposed)
+### Other Plants as Classes (adopted direction)
 
-iNaturalist is presence-only, so pseudo-absences are needed. This is
-the most consequential open decision: it shapes dataset construction,
-evaluation, and the interpretation of RQ3.
+iNaturalist is presence-only. Observations of *other plant species*
+are used as **classes of their own**, not as absences: an observation
+of eucalyptus is a presence of eucalyptus, not evidence that no
+*Acacia* is there. The model becomes multiclass (*Acacia* + groups of
+other plants) and learns to separate *Acacia* from the vegetation it
+is confused with.
 
-**Proposal: target-group background** — iNaturalist observations of
-*other plant species* (Phillips et al., 2009). They share the
-observers, platform and places of the *Acacia* presences, so the
-model learns *Acacia* vs. other vegetation, not visited vs. unvisited
-places.
+Other plants share the observers, platform and places of the
+*Acacia* presences, so the model learns *Acacia* vs. other vegetation,
+not visited vs. unvisited places.
 
-Checked so far (2021–2025): 6 333 presences vs. 77 301 other-plant
-observations (~12:1). The dominant observer also records other plants
-(33 065 records, 43%), in 97% of the 1 km cells where they recorded
-*Acacia*. Other plants cover much more territory: only 26% of
-other-plant cells contain *Acacia*.
+**Grounded in:**
 
-**Comparison: random background** — points sampled uniformly over the
-study area. Simple, but with biased presences the model may learn
-accessibility (roads, urban edges) instead of the species.
+- Using other species recorded by the same observers comes from
+  Phillips et al. (2009), who used them as background (*target-group
+  background*); across 226 species it improved every modelling method
+  tested, most where presences were most biased.
+- Using them as classes rather than background follows multi-species
+  models trained on citizen science: Gillespie et al. (2024) trained
+  one model on 2,221 plant species from iNaturalist observations.
+- Grouping species into a few classes follows Ball et al. (2026), who
+  mapped 18 tree species *and groups* as classes.
 
-Rules to confirm:
+Checked (all years, non-obscured): 7 898 presences vs. 110 576
+other-plant observations (~14:1). The dominant observer also records
+other plants (36 080 records, 33%), in 96.7% of the 1 km cells where
+they recorded *Acacia*. Other plants cover much more territory: only
+26.6% of other-plant cells contain *Acacia*.
 
-- Same observation window and disturbance filter as the presences.
+Open:
+
+- Class groups: by genus or growth form (e.g. eucalyptus, pines,
+  oaks, other trees, shrubs, herbaceous); likely 5–10 groups.
+- Class imbalance (weighting or sampling).
+- Mixed pixels: a 10 m pixel may contain *Acacia* and another class.
+- **Patch mask instead of a fixed buffer (proposed, to confirm):**
+  delimit the *Acacia* patch around each observation and use it to
+  (1) exclude other-plant points inside the patch and (2) take all
+  patch pixels as *Acacia* training pixels, not only the observed one.
+  Candidate methods: region growing on TESSERA embedding similarity
+  from the observed pixel (with a maximum radius); superpixels on
+  Sentinel-2 or embeddings (as in Rivier et al., 2023/2024, who
+  propagated point labels to superpixels); COS 2023 "Florestas
+  de acácias" polygons where the point falls inside one (about 17% of
+  2021–2025 presences). Risks: the mask may spread into similar
+  non-*Acacia* vegetation (check a sample on OrtoSat), and large
+  patches give many more pixels than isolated trees (may need
+  balancing).
 - All observers' other plants, or only the dominant observer's?
-- Exclusion buffer around *Acacia* observations (distance open).
-- Fixed, reported presence:background ratio (open: 1:1, or higher
-  with class weighting).
-- Target group (open): all vascular plants, or a restricted group
-  such as woody species.
+- How *Acacia* metrics are reported against several classes.
 
-### Temporal Design (proposed)
+### Temporal Design (adopted)
 
 Time is **held constant, not studied**:
 
 1. **Reference year 2023** for all imagery and auxiliary products
    (Sentinel-2 features, TESSERA embeddings, COS/OrtoSat).
-2. **Observation window 2023 ± 2 years (2021–2025)**.
+2. **All iNaturalist observations (1992–2026) treated as 2023.**
 
 Data constraints:
 
@@ -309,61 +397,56 @@ Data constraints:
 | OrtoSat / COS | 2023 only |
 | TESSERA | One embedding per tile per year, 2017–2025 |
 | Sentinel-2 | Any date from 2015/2017 |
-| Citizen science (*Acacia*, Coimbra pilot) | 1992–2026; 43% of records from 2021, 98% of those from one observer (not an adoption artifact) |
+| Citizen science (*Acacia*, Coimbra pilot) | 1992–2026; 98.8% from 2019 onwards; 43% from 2021, 98% of those from one observer |
 
-Pilot observations retained per window:
+Assumption: *Acacia* stands persist for years, so an observation is
+evidence of presence in 2023 unless the site was disturbed. The risk
+grows with the age of the observation; the RQ2 filter removes the
+oldest first.
 
-| Window | Years | Retained |
-|---|---|---|
-| exact | 2023 | 3.4% |
-| ±1 | 2022–2024 | 30.7% |
-| ±2 | 2021–2025 | 80.3% |
-| ±3 | 2020–2026 | 93.3% |
-
-Why 2023 and not a later year: 2 184 presences (34.5%) lie in areas
+Why 2023 and not a later year: 2 299 presences (29.1%) lie in areas
 burned in 2025; 2023 imagery still shows the observed vegetation.
 
-Why ±2:
+Rejected: **nearest available year per observation** — the model
+could learn the year instead of *Acacia*, year would correlate with
+geography (confounding RQ3), and time becomes a hidden variable.
 
-- Any narrower window drops 2021, where most of the data is (mostly
-  from the dominant observer).
-- *Acacia* stands persist for years, so presence in 2021 or 2025 is
-  strong evidence of presence in 2023 unless disturbed.
-- Every model sees the same period, so differences come from
-  representation, data quantity or spatial distribution — not time.
+Safeguard: **disturbance filter**, step 5 of the
+[Reference-Data Pipeline](#reference-data-pipeline-proposed).
 
-Rejected:
+**Grounded in:**
 
-- **Nearest available year per observation:** the model could learn
-  the year instead of *Acacia*, year would correlate with geography
-  (confounding RQ3), and time becomes a hidden variable.
-- **Window as an experimental variable:** temporal mismatch is out of
-  scope.
-
-Safeguards:
-
-- **Disturbance filter:** step 5 of the
-  [Reference-Data Pipeline](#reference-data-pipeline-proposed).
-- **Window sensitivity check:** re-run RQ1 with ±1, ±2 and ±3 windows
-  (same number of observations) and check whether the ranking of
-  representations holds. Tests a design choice; an unstable ranking
-  would itself be a finding.
-
-Variant to discuss — **asymmetric window** (e.g. 2021–2026):
-observations after 2023 are stronger evidence of 2023 presence than
-earlier ones. Against: after the 2025 fires, a later observation may
-be regrowth that does not look like the 2023 stand; 2026 is
-incomplete.
+- A single reference year follows Ball et al. (2026), where
+  performance dropped when imagery and labels came from different
+  years (weighted F1 −9% TESSERA, −15% AlphaEarth). The atoll
+  ecosystem study (2026) also used a single year of
+  AlphaEarth embeddings (2023).
+- Persistence: Riveiro et al. (2025) found *A. dealbata* stands in
+  central Portugal persisted over three years even after slashing and
+  burning.
+- Treating observations from many years as one reference year
+  follows from the two points above (persistence, and the cost of
+  mixing years) and from Ball et al. (2026)'s conclusion that the
+  bottleneck is the availability of reference data: using all
+  observations keeps the most data at a fixed year. The RQ2 filter
+  then tests the cost of the oldest ones.
 
 ### Species Scope (open)
 
 The proposal asks for **species-level** mapping of a limited number of
-representative species. Observations 2021–2025: *A. dealbata* 4 145,
-*A. melanoxylon* 1 611, *A. longifolia* 417.
+representative species. Observations (all years, non-obscured):
+*A. dealbata* 5 241, *A. melanoxylon* 1 884, *A. longifolia* 512.
 
-Proposed: genus *Acacia* as the main target (more data; three Iberian
-precedents), plus *A. dealbata* alone as a species-level check, to
-answer the proposal directly.
+Proposed: genus *Acacia* as the main target (more data), plus
+*A. dealbata* alone as a species-level check, to answer the proposal
+directly.
+
+**Grounded in:** mapping the genus follows Eskandari et al. (2025),
+who mapped *Acacia* sp. in Galicia, and Brown et al. (2025, *to
+read*), who evaluated embeddings at genus level. The *A. dealbata*
+check follows Domingo et al. (2023, Galicia) and Martins et al. (2016,
+central-eastern Portugal), who mapped that species alone;
+Mouta et al. (2021) mapped *A. longifolia* alone.
 
 Additional data source: the University of Coimbra CFE citizen-science
 platform for invasive plants in Portugal (invasoras.pt, published on

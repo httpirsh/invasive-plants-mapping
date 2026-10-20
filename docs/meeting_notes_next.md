@@ -3,44 +3,31 @@
 > Pontos não urgentes. As perguntas de investigação e o contexto estão
 > na [reunião de 21 de outubro](meeting_notes_2026-10-21.md).
 
-## 1. Como fazer a RQ2
+## 1. Esclarecer o que ficou da reunião de 21 de outubro
 
-**O que a RQ2 faz:** treino os dois modelos (Sentinel-2 e TESSERA) com
-100%, 50%, 25%, 10%, 5% e 1% dos dados e vejo quanto pioram. É um
-teste: o mapa final usa sempre todos os dados. Ter poucos dados é a
-razão de a RQ2 existir: se o TESSERA funcionar com poucos dados, serve
-para sítios e espécies com poucas observações.
+- **Máscara de segmentação:** falou nela quando referi os buffers.
+  Percebi assim: em vez de um círculo fixo à volta de cada *Acacia*,
+  delimitar a mancha real (os píxeis vizinhos parecidos com o píxel
+  observado, até um raio máximo). A mancha serve para tirar as outras
+  plantas que caem dentro dela e para usar todos os seus píxeis como
+  *Acacia* no treino. A tarefa continua a ser classificação por píxel.
+  - [ ] É isto? Se sim, como delimitar a mancha: semelhança dos
+    embeddings, superpíxeis, ou polígonos da COS quando existem?
+- **Outras plantas como classes:** proponho 5–10 grupos (p. ex.
+  eucalipto, pinheiros, carvalhos, outras árvores, arbustos,
+  herbáceas).
+  - [ ] Concorda com esta divisão?
+- **Filtro da RQ2:** as observações de 2024–2026 (2 040 presenças)
+  contam como "mais recentes", ou conta a distância a 2023?
+  - [ ] Qual?
 
-**Porquê tirar ao acaso e comparar com um filtro:**
-- Um filtro reduz a quantidade e muda a distribuição ao mesmo tempo;
-  sozinho, não separa os dois efeitos.
-- Nenhum filtro serve bem sozinho:
-  - **Zonas ardidas:** com fogos até 2023 saem só 2 presenças; com
-    fogos até 2025 sai 34,5%, mas esses fogos são depois das imagens.
-  - **Só observações confirmadas** (*research grade*): reduz, mas não
-    melhora a distribuição pelo território.
-  - **Uma observação por quadrícula:** melhora a distribuição, mas já
-    está na RQ3.
-
-**Proposta:**
-1. **Teste principal: tirar dados ao acaso.** Cada nível mais pequeno
-   está dentro do maior; repito com vários sorteios e avalio em zonas
-   separadas das de treino. Ball et al. (2026) também treinaram com
-   partes dos dados (com cerca de 5% chegaram perto do melhor
-   resultado), mas com dados de inventário.
-2. **Comparação:** com a mesma quantidade de dados, um filtro dá
-   melhor resultado do que o acaso? É a parte que não existe na
-   literatura, e mostra que observações o filtro tira e porquê.
-
-**Decidir:**
-- [ ] Aprovar a RQ2?
-- [ ] Que filtro usar na comparação?
-- [ ] Quantas repetições por nível?
+Se não ficaram decididos a 21 de outubro: dados de especialistas e
+teste (ponto 4) e área de estudo, distrito ou concelho (ponto 5).
 
 ## 2. A pessoa que fez a maioria das observações
 
 **O que encontrei:**
-- Fez 83% de todas as observações, e 85% entre 2021 e 2025.
+- Fez 83% de todas as observações.
 - 2021 tem 43% de todas as observações, e 98% delas são dela. O pico
   de 2021 não vem de mais gente a usar o iNaturalist.
 - Nos anos recentes pesa menos: 35% em 2023 e 31% em 2025.
@@ -83,8 +70,8 @@ foundation models. A novidade está na combinação e nos controlos.
 
 ## 4. Outros pontos
 
-- **Espécies:** entre 2021 e 2025, *A. dealbata* 4 145,
-  *A. melanoxylon* 1 611, *A. longifolia* 417. A proposta pede
+- **Espécies:** em todos os anos, *A. dealbata* 5 241,
+  *A. melanoxylon* 1 884, *A. longifolia* 512. A proposta pede
   mapeamento ao nível da espécie. Proponho o género *Acacia* como alvo
   principal (mais dados) e a *A. dealbata* sozinha como verificação.
   - [ ] Concorda?
@@ -93,7 +80,3 @@ foundation models. A novidade está na combinação e nos controlos.
   outra plataforma: mais presenças, ou um teste da RQ3 com
   observadores diferentes.
   - [ ] Vale a pena juntar? Conhece quem a gere?
-- **Testar a escolha dos anos:** repetir a RQ1 com 2022–2024,
-  2021–2025 e 2020–2026 (com o mesmo número de observações) e ver se o
-  melhor modelo continua o mesmo.
-  - [ ] É só uma verificação, não um estudo do tempo. Concorda?

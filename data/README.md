@@ -88,39 +88,45 @@ obtained.
 - **Possible uses:** land-cover context for error analysis, absence
   checks, independent validation.
 
-### iNaturalist other plants, 2021–2025 (Coimbra pilot)
+### iNaturalist other plants, all years (Coimbra pilot)
 
-Candidate target-group background (proposal, see
-`docs/research_questions.md`).
+Other-plant classes (see `docs/research_questions.md`).
 
 - **Source:** iNaturalist API (`api.inaturalist.org/v1/observations`)
-- **Access date:** 2026-10-17
+- **Access date:** 2026-10-17 (2021–2025); 2026-10-20 (other ranges)
 - **Query filters:** `place_id=8422` (Coimbra district), `taxon_id=47126`
-  (Plantae), `without_taxon_id=47452` (excluding *Acacia*),
-  `d1=2021-01-01`, `d2=2025-12-31`, all quality grades.
+  (Plantae), `without_taxon_id=47452` (excluding *Acacia*), all
+  quality grades. Downloaded in three date ranges: `d2=2020-12-31`,
+  `d1=2021-01-01` + `d2=2025-12-31`, `d1=2026-01-01`.
+- **Temporal coverage:** 1976–2026 (observations without a date are
+  not returned by the date filters).
 - **License:** mixed, per observation (`license_code` column).
-- **Result:** 85,543 observations; 8,242 have obscured coordinates
-  (user or taxon geoprivacy), listed in
-  `raw/citizen_science/inaturalist_plantae_no_acacia_coimbra_2021_2025_obscured_ids.csv`
-  and excluded in analysis.
-- **File:** `raw/citizen_science/inaturalist_plantae_no_acacia_coimbra_2021_2025.csv`
+- **Result:** 120,479 observations (11,924 before 2021; 85,543 in
+  2021–2025; 23,012 in 2026); 9,903 have obscured coordinates (user
+  or taxon geoprivacy), listed in the matching `*_obscured_ids.csv`
+  files and excluded in analysis.
+- **Files:** `raw/citizen_science/inaturalist_plantae_no_acacia_coimbra_{before_2021,2021_2025,from_2026}.csv`
+  and `..._obscured_ids.csv` per range.
 - **Preprocessing:** none — one row per observation, same columns as
   the *Acacia* pilot. Downloaded by
   `notebooks/04_data_integration/background_and_disturbance_checks.ipynb`.
 
-### ICNF burned areas, 2021–2025
+### ICNF burned areas, 1975–2025
 
 - **Source:** ICNF, "Áreas ardidas (desde 1975)", via dados.gov.pt
 - **URL:** https://dados.gov.pt/datasets/areas-ardidas-desde-1975 ; WFS
-  https://si.icnf.pt/wfs/areas_ardidas (layers `BDG:ardida_<year>`)
-- **Access date:** 2026-10-17
+  https://si.icnf.pt/wfs/areas_ardidas
+- **Access date:** 2026-10-17 (2021–2025); 2026-10-20 (1975–2020)
 - **Spatial coverage:** continental Portugal (full layers, not clipped).
-- **Temporal coverage:** 2021–2025, one layer per year; each fire has
-  a start date (`DH_Inicio`).
+- **Temporal coverage:** 1975–2025. Grouped layers `BDG:ardida_1975_1989`,
+  `BDG:ardida_1990_1999`, `BDG:ardida_2000_2008`, then one layer per
+  year (`BDG:ardida_<year>`, 2009–2025). Every fire has a year (`Ano`);
+  most fires from 2014 also have a start date (`DH_Inicio`), older
+  ones do not.
 - **License:** not specified on dados.gov.pt — check before
   redistribution.
 - **Format:** GeoJSON, EPSG:3763.
-- **File:** `external/auxiliary/icnf_burned_areas/ardida_<year>.geojson`
+- **File:** `external/auxiliary/icnf_burned_areas/ardida_<layer>.geojson`
 - **Preprocessing:** none. Downloaded by the same notebook.
 
 ## Not Yet Obtained
