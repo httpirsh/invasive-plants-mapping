@@ -83,9 +83,11 @@ foundation models. A novidade está na combinação e nos controlos.
 ## 4. Outros pontos
 
 - **Espécies:** em todos os anos, *A. dealbata* 5 241,
-  *A. melanoxylon* 1 884, *A. longifolia* 512. A proposta pede
-  mapeamento ao nível da espécie. Proponho o género *Acacia* como alvo
-  principal (mais dados) e a *A. dealbata* sozinha como verificação.
+  *A. melanoxylon* 1 884, *A. longifolia* 512. Proponho só a
+  *A. dealbata*: os dados de especialistas só têm esta espécie, a
+  proposta pede mapeamento ao nível da espécie, e é 66% das
+  observações. As outras *Acacia* ficam fora do treino; mais tarde,
+  talvez como classe própria.
   - [ ] Concorda?
 - **Outra fonte de ciência cidadã:** a plataforma invasoras.pt do CFE
   da Universidade de Coimbra (publicada no GBIF). Outras pessoas,

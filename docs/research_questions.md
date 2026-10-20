@@ -11,7 +11,7 @@
 | Other plants as classes (multiclass) | Adopted direction 2026-10-21; details open |
 | Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; reference year to confirm |
 | Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal) |
-| Species scope | Open |
+| Species scope | Proposed (2026-10-20): *A. dealbata*, other *Acacia* left out |
 | Experiments per RQ | Candidate sketches |
 
 How these questions follow from the literature: [`literature.md`](literature.md).
@@ -33,7 +33,7 @@ this document:
 |---|---|
 | Obj. 1 / work plan 3 — transform point observations into usable EO reference data, accounting for uncertainty and quality | [Reference-Data Pipeline](#reference-data-pipeline-proposed): a measured methodological contribution, not just preprocessing |
 | Obj. 2 — use foundation models to compensate for limited, noisy citizen-science data | RQ1, RQ2 |
-| Obj. 3 — assess to what extent citizen science supports accurate, species-level mapping | RQ1 (comparison with expert reference data), [Species Scope](#species-scope-open) |
+| Obj. 3 — assess to what extent citizen science supports accurate, species-level mapping | RQ1 (comparison with expert reference data), [Species Scope](#species-scope-proposed) |
 | Work plan 4 — fine-tune foundation models; analyse accuracy, limitations, transferability | [Foundation Model Use](#foundation-model-use-adopted) (frozen embeddings, a justified deviation); RQ3 (transferability) |
 
 ## Position in the Literature
@@ -151,10 +151,8 @@ Upper bound:       best representation   + expert reference labels → classifie
   1 364 of all positives are ~5 m-radius circles (point-like), the
   rest larger patches. 59% of the district polygons touch a COS 2023
   "Florestas de acácias" polygon.
-  - **Species:** *A. dealbata* only, so the upper bound applies to the
-    species-level check (see [Species Scope](#species-scope-open)); the
-    citizen-science model compared with it must also be
-    *A. dealbata*.
+  - **Species:** *A. dealbata* only, the proposed target (see
+    [Species Scope](#species-scope-proposed)).
   - **Clustered:** the district polygons fall in 15 cells of 10 km,
     so few independent spatial blocks are available to split training
     and test.
@@ -482,22 +480,33 @@ Safeguard: **disturbance filter**, step 5 of the
   observations keeps the most data at a fixed year. The RQ2 filter
   then tests the cost of the oldest ones.
 
-### Species Scope (open)
+### Species Scope (proposed)
 
 The proposal asks for **species-level** mapping of a limited number of
 representative species. Observations (all years, non-obscured):
 *A. dealbata* 5 241, *A. melanoxylon* 1 884, *A. longifolia* 512.
 
-Proposed: genus *Acacia* as the main target (more data), plus
-*A. dealbata* alone as a species-level check, to answer the proposal
-directly.
+**Proposed (2026-10-20): *A. dealbata* as the target.** Other
+*Acacia* species are left out of training (not used as other-plant
+classes, since they are *Acacia*). Reasons:
 
-**Grounded in:** mapping the genus follows Eskandari et al. (2025),
-who mapped *Acacia* sp. in Galicia, and Brown et al. (2025, *to
-read*), who evaluated embeddings at genus level. The *A. dealbata*
-check follows Domingo et al. (2023, Galicia) and Martins et al. (2016,
-central-eastern Portugal), who mapped that species alone;
-Mouta et al. (2021) mapped *A. longifolia* alone.
+- The expert reference polygons cover *A. dealbata* only, so the RQ1
+  comparison is only fair for that species.
+- It answers the proposal's species-level objective directly.
+- It is most of the data (66% of *Acacia* observations).
+- The species differ from space: *A. dealbata* forms dense patches
+  with winter flowering; *A. melanoxylon* is a tree mixed into
+  forests; *A. longifolia* a coastal and dune shrub. One class would
+  mix different signals.
+
+Later options: *other Acacia* as a class of its own (does the model
+tell them apart?), or the genus as an extension.
+
+**Grounded in:** mapping *A. dealbata* alone follows Domingo et al.
+(2023, Galicia) and Martins et al. (2016, central-eastern Portugal);
+Mouta et al. (2021) mapped *A. longifolia* alone. The genus extension
+would follow Eskandari et al. (2025), who mapped *Acacia* sp. in
+Galicia.
 
 Additional data source: the University of Coimbra CFE citizen-science
 platform for invasive plants in Portugal (invasoras.pt, published on

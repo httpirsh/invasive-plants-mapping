@@ -78,6 +78,30 @@ perguntas de investigação.
 Uma entrada por decisão: data, o que decidi, porquê, e onde está
 (notebook, figura ou doc).
 
+### Só *Acacia dealbata*
+
+*2026-10-20, decisão minha (a confirmar com o orientador).*
+
+**O que decidi:** o alvo é a *A. dealbata*. As outras espécies de
+*Acacia* ficam fora do treino (opção A). Mais tarde posso testá-las
+como classe própria (opção B) ou mapear o género como extensão.
+
+**Porquê:**
+- Os dados de especialistas só têm *A. dealbata*: a comparação da
+  RQ1 só é justa para esta espécie.
+- A proposta pede mapeamento ao nível da espécie (objetivo 3).
+- É 66% das observações de *Acacia* (5 254 de 7 943).
+- As espécies vêem-se de forma diferente do satélite (manchas densas
+  com floração no inverno; árvore misturada na floresta; arbusto das
+  dunas).
+- Não entram como "outras plantas" porque são *Acacia* e confundiriam
+  o modelo.
+
+**Fundamentação:** Domingo et al. (2023) e Martins et al. (2016)
+mapearam a *A. dealbata* sozinha.
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#species-scope-proposed).
+
 ### Multiclasse também no modelo de especialistas
 
 *2026-10-20, proposta minha (a confirmar com o orientador).*

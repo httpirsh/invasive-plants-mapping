@@ -317,7 +317,7 @@ Not papers, but relevant:
   Coimbra (invasoras.pt), published on GBIF. Different platform and
   observer pool from iNaturalist: candidate extra presences or a
   cross-platform test for RQ3. See
-  [Species Scope](research_questions.md#species-scope-open).
+  [Species Scope](research_questions.md#species-scope-proposed).
 
 ## What Has Already Been Done
 
