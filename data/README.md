@@ -19,7 +19,9 @@ data/
     └── auxiliary/
 ```
 
-Data files are not version-controlled (see `.gitignore`); this file
+Data files are not version-controlled (see `.gitignore`), except the
+expert reference polygons in `raw/expert_reference/` (the repository
+is private; do not make it public while they are included). This file
 documents the provenance of each dataset and the candidates not yet
 obtained.
 
@@ -149,7 +151,7 @@ Expert reference data for the RQ1 upper bound (see
   the Coimbra district (1 849 positive polygons in the district).
 - **Temporal coverage:** not stated (no date field) — to ask.
 - **License:** not stated; project data shared for the thesis — do not
-  redistribute.
+  redistribute. Versioned in this private repository.
 - **Format:** GeoPackage, EPSG:3763.
 - **Preprocessing:** none.
 
