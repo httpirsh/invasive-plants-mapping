@@ -8,16 +8,23 @@ numbering is not a strict pipeline that must be re-run end to end.
 | Folder | Purpose |
 |---|---|
 | `01_problem_exploration/` | Understand the problem, review the state of the art, frame the research questions |
-| `02_citizen_science/` | Explore the citizen science dataset on its own (species, coordinates, dates, quality, bias) |
+| `02_citizen_science/` | Download, explore and clean the iNaturalist data: *Acacia* observations and other plants |
 | `03_expert_reference/` | Explore and clean the expert reference data (contents, geometry, origin, spread, COS classes) |
-| `03_satellite/` | Explore the satellite/Earth Observation data on its own (source, resolution, bands, cloud cover) |
-| `04_data_integration/` | Combine citizen science observations with satellite information into a labelled dataset |
-| `05_baseline/` | Simplest credible modelling approach using conventional features |
-| `06_foundation_models/` | Extract and explore Earth Observation Foundation Model representations |
-| `07_experiments/` | Controlled comparisons between baseline, foundation-model and fusion approaches |
-| `08_final_analysis/` | Compare experiments, generate final predictions/maps, error analysis |
+| `04_satellite/` | Explore the satellite/Earth Observation data on its own (source, resolution, bands, cloud cover) |
+| `05_data_integration/` | Combine the cleaned data with satellite information into a labelled dataset; all data together for QGIS |
+| `06_baseline/` | Simplest credible modelling approach using conventional features |
+| `07_foundation_models/` | Extract and explore Earth Observation Foundation Model representations |
+| `08_experiments/` | Controlled comparisons between baseline, foundation-model and fusion approaches |
+| `09_final_analysis/` | Compare experiments, generate final predictions/maps, error analysis |
 
-Folders are created when a stage starts.
+Folders are created when a stage starts. Within a folder, each
+dataset has one notebook: part 1 explores it (nothing changed), part 2
+cleans it and saves the result to `data/interim/`.
+
+Run order: `02_citizen_science/acacia_observations` →
+`02_citizen_science/other_plants_observations` →
+`03_expert_reference/expert_polygons` →
+`05_data_integration/qgis_overview`.
 
 Code that becomes reusable or stable enough to be shared across
 notebooks should be moved into `src/`, not duplicated between

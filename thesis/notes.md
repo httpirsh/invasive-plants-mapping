@@ -173,5 +173,5 @@ que está no próprio segmento (p. ex. uma árvore num jardim fica
   exatidão sairia inflacionada. Mas também tem de saber que um
   edifício não é acácia, por isso fica uma amostra.
 
-**Onde:** [`notebooks/03_expert_reference/expert_polygons_exploration.ipynb`](../notebooks/03_expert_reference/expert_polygons_exploration.ipynb)
+**Onde:** [`notebooks/03_expert_reference/expert_polygons.ipynb`](../notebooks/03_expert_reference/expert_polygons.ipynb)
 (secções 5–11).

@@ -174,7 +174,7 @@ Upper bound:       best representation   + expert reference labels → classifie
     (outlines touching themselves at a pixel corner, from the raster
     origin) repaired with `make_valid`, total area unchanged; overlaps
     negligible, no label conflicts. Output and steps in
-    `notebooks/03_expert_reference/expert_polygons_exploration.ipynb`.
+    `notebooks/03_expert_reference/expert_polygons.ipynb`.
   - **Year and method (supervisor, 2026-10-28):** 2023, from field
     visits and manual visual interpretation of OrtoSat 2023 (30 cm).
     The small (~75 m²) polygons probably come from a student's unsupervised

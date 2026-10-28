@@ -52,7 +52,7 @@ nas das outras pessoas e noutras zonas.
   outras opções na RQ3 (proposta), ou limitar já o número por
   quadrícula?
 
-**Mostrar:** [notebook 02](../notebooks/02_citizen_science/acacia_observations_exploration.ipynb)
+**Mostrar:** [notebook 02](../notebooks/02_citizen_science/acacia_observations.ipynb)
 — observações por ano, mapa e peso de cada observador.
 
 ## 3. Para informar

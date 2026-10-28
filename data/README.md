@@ -51,7 +51,10 @@ obtained.
 - **File:** `raw/citizen_science/inaturalist_acacia_coimbra_pilot.csv`
 - **Preprocessing:** none — one row per observation (id, date, taxon,
   coordinates, positional accuracy, quality grade, place guess,
-  license, observer, URI).
+  license, observer, URI). Downloaded by section 0 of
+  `notebooks/02_citizen_science/acacia_observations.ipynb`, which only
+  runs if the file is missing (the code was added to the repository
+  on 2026-10-28; a new download would return more observations).
 
 ### TESSERA embeddings 2023 (RQ1 pilot points)
 
@@ -92,14 +95,14 @@ obtained.
 
 ### QGIS overview (derived)
 
-- **File:** `interim/spatial/qgis_overview.gpkg`, made 2026-10-20 to
-  look at the data in QGIS; not used by any notebook.
+- **File:** `interim/spatial/qgis_overview.gpkg`, to look at all the
+  cleaned data together in QGIS; not read by any notebook.
+- **Made by:** `notebooks/05_data_integration/qgis_overview.ipynb`.
 - **Layers (EPSG:3763):** `distrito_coimbra` (iNaturalist place 8422),
   `inat_acacia` and `inat_outras_plantas` (the cleaned files in
-  `interim/citizen_science/`), `especialistas_poligonos` (both expert
-  files, multipolygons split, with `origem`, `area_m2`,
-  `no_distrito`), `areas_ardidas` (ICNF 1975–2025 burned areas that
-  intersect the district).
+  `interim/citizen_science/`), `especialistas_poligonos` (the cleaned
+  expert polygons, with `use`), `areas_ardidas` (ICNF 1975–2025
+  burned areas that intersect the district).
 
 ### iNaturalist other plants, all years (Coimbra pilot)
 
@@ -122,7 +125,7 @@ Other-plant classes (see `docs/research_questions.md`).
   and `..._obscured_ids.csv` per range.
 - **Preprocessing:** none — one row per observation, same columns as
   the *Acacia* pilot. Downloaded by
-  `notebooks/04_data_integration/background_and_disturbance_checks.ipynb`.
+  `notebooks/02_citizen_science/other_plants_observations.ipynb`.
 
 ### ICNF burned areas, 1975–2025
 
@@ -140,7 +143,8 @@ Other-plant classes (see `docs/research_questions.md`).
   redistribution.
 - **Format:** GeoJSON, EPSG:3763.
 - **File:** `external/auxiliary/icnf_burned_areas/ardida_<layer>.geojson`
-- **Preprocessing:** none. Downloaded by the same notebook.
+- **Preprocessing:** none. Downloaded by `src/burned_areas.py`, first
+  called from `notebooks/02_citizen_science/acacia_observations.ipynb`.
 
 ### *Acacia dealbata* expert reference polygons
 
@@ -168,11 +172,29 @@ Expert reference data for the RQ1 upper bound (see
 - **Format:** GeoPackage, EPSG:3763.
 - **Preprocessing:** none (cleaned copy below).
 
+### iNaturalist observations, cleaned (derived)
+
+- **Files:** `interim/citizen_science/inat_acacia_clean.csv` (7 898
+  *Acacia*) and `interim/citizen_science/inat_other_plants_clean.csv`
+  (110 576 other plants).
+- **Made by:** part 2 of
+  `notebooks/02_citizen_science/acacia_observations.ipynb` and
+  `notebooks/02_citizen_science/other_plants_observations.ipynb`.
+- **Steps:** dropped observations without a date and with obscured
+  coordinates; main observer anonymised (`observer` = "Observer A" /
+  "Others", no username kept); `burned` flag (fire between the
+  observation and 2023, ICNF) and `burned_same_year` (ambiguous
+  cases). Nothing else is filtered yet (species, quality, positional
+  accuracy are open).
+- **Columns:** `id`, `observed_on`, `year`, `taxon_id`, `taxon_name`,
+  `taxon_rank`, `latitude`, `longitude`, `positional_accuracy`,
+  `quality_grade`, `observer`, `burned`, `burned_same_year`.
+
 ### Expert reference polygons, cleaned (derived)
 
 - **File:** `interim/expert_reference/expert_polygons_clean.gpkg`,
   layer `expert_polygons_clean`, EPSG:3763, 7 483 polygons.
-- **Made by:** `notebooks/03_expert_reference/expert_polygons_exploration.ipynb`
+- **Made by:** `notebooks/03_expert_reference/expert_polygons.ipynb`
   (part 2), 2026-10-28.
 - **Steps:** dropped the 11 rows without `classifica`; repaired the
   531 invalid geometries with `make_valid`, keeping polygon parts only
