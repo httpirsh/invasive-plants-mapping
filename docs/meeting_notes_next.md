@@ -1,9 +1,9 @@
 # Próxima Reunião com o Orientador
 
-> Pontos não urgentes. As perguntas de investigação e o contexto estão
-> na [reunião de 21 de outubro](meeting_notes_2026-10-21.md).
+> Só as perguntas ainda sem resposta. As decisões já tomadas estão em
+> [`research_questions.md`](research_questions.md).
 
-## 1. Esclarecer o que ficou da reunião de 21 de outubro
+## 1. Esclarecer decisões
 
 - **Máscara de segmentação:** falou nela quando referi os buffers.
   Percebi assim: em vez de um círculo fixo à volta de cada *Acacia*,
@@ -21,26 +21,13 @@
   contam como "mais recentes", ou conta a distância a 2023?
   - [ ] Qual?
 
-- **Dados de especialistas** (os polígonos de *A. dealbata* que me
-  enviou): no distrito há 1 849 polígonos, em 15 quadrículas de 10 km.
-  - [x] De que ano são? Que imagens se usaram? **2023, idas ao campo
-    e análise visual manual do OrtoSat** (email de 2026-10-28).
-  - [x] O iNaturalist influenciou a recolha? **Não.** Os locais
-    coincidem na mesma (96% das 582 presenças a menos de 50 m são da
-    pessoa com mais observações), e isso conta na separação entre
-    treino e teste.
-  - [x] Os polígonos pequenos (~75 m², que eu tinha chamado "círculos")? **Provavelmente uma
-    segmentação não supervisionada feita por um estudante, com cada
-    segmento classificado como *A. dealbata* ou não.**
+- **Ausências nos dados de especialistas:**
   - [ ] Cruzei as 5 013 ausências (`classifica = 0`) com a COS 2023:
     44% estão em edifícios e indústria, só 3 em água, e 56% (2 823)
     em vegetação (pinhal, agricultura, outra floresta, eucaliptal,
     matos). Proponho usar as de vegetação como ausências e só uma
     amostra pequena das de edifícios, como classe própria.
     Concorda?
-
-Se não ficou decidido a 21 de outubro: área de estudo, distrito ou
-concelho (ponto 5).
 
 ## 2. A pessoa que fez a maioria das observações
 

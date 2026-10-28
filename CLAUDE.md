@@ -100,6 +100,26 @@ evaluated, on which data, and under which validation strategy.
   (e.g. don't write "add CLAUDE.md" — describe the substance of the
   change instead, such as "add project conventions").
 
+## Decision Log
+
+Every time a decision is taken in a session (by me, or agreed with
+the supervisor), record it **immediately** in `thesis/notes.md`, under
+"Decisões", in the same session — don't wait to be asked. The goal is
+that no reasoning behind a decision is ever lost.
+
+- Write in Portuguese, in my voice, following the existing entries:
+  heading, date and who decided (mine / supervisor / to confirm),
+  **O que decidi**, **Porquê**, **Fundamentação** (literature, only
+  real citations; say so if none was checked), **Onde** (notebook,
+  doc or figure).
+- Keep the status honest: a proposal stays "proposta (a confirmar
+  com o orientador)" until confirmed.
+- If a decision changes or replaces an earlier one, update that entry
+  (and say what changed and why) instead of adding a contradicting
+  one.
+- Also update the design docs (`docs/research_questions.md`, etc.)
+  where the decision applies.
+
 ## Current Stage
 
 Initial setup and exploration. Priorities, in order: understand the
