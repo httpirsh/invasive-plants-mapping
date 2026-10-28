@@ -135,3 +135,43 @@ para esta escolha.
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#other-plants-as-classes-adopted-direction).
 Ainda não aplicado: as experiências ficam para depois da análise
 exploratória.
+
+### Usar os dados de especialistas, com limpeza
+
+*2026-10-28, decisão minha depois de os ver no QGIS; o uso das
+ausências é proposta (a confirmar com o orientador).*
+
+**O que decidi:** os dados de especialistas são de confiança e vão ser
+usados. Limpeza: tirar as 11 linhas sem `classifica` e corrigir as 531
+geometrias inválidas. Ausências: as que caem em vegetação na COS 2023
+(2 823) ficam todas, com a classe da COS; das que caem em edifícios
+(2 187) fica só uma amostra pequena, como classe própria.
+
+**Como a COS foi usada:** quem diz se há *A. dealbata* é o rótulo do
+professor (`classifica`); a COS não decide isso. Para cada ausência
+vi a classe da COS 2023 num ponto dentro do polígono, só para saber
+que tipo de sítio é. Daí sai a coluna `use`: `presence`
+(`classifica = 1`), `absence_vegetation` (agricultura, florestas,
+matos), `absence_artificial` (edifícios, indústria, estradas) e
+`absence_other` (água, zonas húmidas, terreno nu). Nada foi apagado:
+a coluna só marca; quantas ausências de edifícios entram decide-se ao
+preparar os dados de treino.
+
+**Limitação:** a COS mapeia manchas de pelo menos 1 ha. Um segmento
+de 75 m² recebe a classe dominante desse hectare, que pode não ser o
+que está no próprio segmento (p. ex. uma árvore num jardim fica
+"artificial").
+
+**Porquê:**
+- Vistos no QGIS, os polígonos estão onde devem. São de 2023, feitos
+  no campo e sobre o OrtoSat (resposta do orientador, 2026-10-28).
+- A forma estranha vem da segmentação da imagem. As geometrias
+  inválidas são contornos que se tocam num canto de píxel; a correção
+  não muda a área.
+- Se as ausências fossem quase só edifícios, o modelo aprenderia
+  "árvore vs. edifício" e não "*A. dealbata* vs. outras plantas", e a
+  exatidão sairia inflacionada. Mas também tem de saber que um
+  edifício não é acácia, por isso fica uma amostra.
+
+**Onde:** [`notebooks/03_expert_reference/expert_polygons_exploration.ipynb`](../notebooks/03_expert_reference/expert_polygons_exploration.ipynb)
+(secções 5–11).

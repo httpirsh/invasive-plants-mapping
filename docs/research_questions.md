@@ -9,7 +9,7 @@
 | Reference-data pipeline (proposal objective 1) | Proposed |
 | Temporal design: all iNaturalist observations treated as 2023 | Adopted 2026-10-21 |
 | Other plants as classes (multiclass) | Adopted direction 2026-10-21; details open |
-| Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; reference year to confirm |
+| Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; year 2023 (confirmed 2026-10-28) |
 | Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal) |
 | Species scope | Proposed (2026-10-20): *A. dealbata*, other *Acacia* left out |
 | Experiments per RQ | Candidate sketches |
@@ -145,24 +145,44 @@ Upper bound:       best representation   + expert reference labels → classifie
   classifiers (weaker on embeddings) and a compact neural network
   (best on embeddings).
 - **Expert reference labels (adopted):** *A. dealbata* polygons
-  collected by visual interpretation and/or field work, sent by the
-  supervisor (see `data/README.md`). In the Coimbra district: 1 849
-  polygons with `classifica = 1` (244 ha), all in Sentinel-2 tile TNE;
-  1 364 of all positives are ~5 m-radius circles (point-like), the
-  rest larger patches. 59% of the district polygons touch a COS 2023
-  "Florestas de acácias" polygon.
+  sent by the supervisor (see `data/README.md`). In the Coimbra
+  district: 1 849 polygons with `classifica = 1` (244 ha), all in
+  Sentinel-2 tile TNE; 1 364 of all positives are small segments
+  (~75 m²), the rest larger patches. 54% of all positives fall in a
+  COS 2023 "Florestas de acácias" polygon, most of the rest in pine,
+  eucalyptus and other forest.
   - **Species:** *A. dealbata* only, the proposed target (see
     [Species Scope](#species-scope-proposed)).
   - **Clustered:** the district polygons fall in 15 cells of 10 km,
     so few independent spatial blocks are available to split training
     and test.
-  - **Negatives:** the `classifica ≠ 1` polygons lie mostly on water
-    and built-up areas and are not used. Negatives for the expert
-    model come from another source (open; e.g. COS 2023 non-*Acacia*
-    vegetation classes).
-  - **Labels independent of citizen science:** collected by the
-    experts in the field or by visual interpretation, not taken from
-    iNaturalist (supervisor, to confirm in writing).
+  - **Negatives (checked against COS 2023, 2026-10-28):** of the
+    5 013 `classifica = 0` polygons, 44% lie in artificial areas
+    (buildings, industry) and only 3 in water; the other 56% (2 823,
+    2 780 in the district) lie in vegetation: pine, agriculture,
+    other forest, COS acacia forest, eucalyptus, shrubland.
+    **Proposal:** use the vegetation ones as absences, labelled by
+    their COS class; keep only a small sample of the artificial ones,
+    as their own class, so the model also learns that buildings are
+    not *A. dealbata* without them dominating. Random points in COS
+    2023 vegetation classes only if more absences are needed. The COS
+    class is read at one point inside each polygon and only describes
+    the site; presence/absence comes from `classifica`. Limitation:
+    COS maps units of at least 1 ha, so a 75 m² segment gets the
+    dominant class of its surroundings.
+  - **Cleaning:** 11 unlabelled rows dropped; 531 invalid geometries
+    (outlines touching themselves at a pixel corner, from the raster
+    origin) repaired with `make_valid`, total area unchanged; overlaps
+    negligible, no label conflicts. Output and steps in
+    `notebooks/03_expert_reference/expert_polygons_exploration.ipynb`.
+  - **Year and method (supervisor, 2026-10-28):** 2023, from field
+    visits and manual visual interpretation of OrtoSat 2023 (30 cm).
+    The small (~75 m²) polygons probably come from a student's unsupervised
+    segmentation of the image, with each segment then labelled
+    *A. dealbata* or not. In the 14 cells of 1 km holding these
+    small positives there are also 4 256 small `classifica = 0` segments.
+  - **Labels independent of citizen science:** iNaturalist did not
+    influence the collection (supervisor, 2026-10-28).
   - **Locations overlap with citizen science (design constraint):**
     all 70 iNaturalist presences inside a polygon, and 96% of the 582
     within 50 m, are the dominant observer's. Experts and that observer
@@ -172,8 +192,7 @@ Upper bound:       best representation   + expert reference labels → classifie
     blocks (15 blocks of 10 km); as the upper bound, both models learn
     from nearly the same areas, so only the label source changes, but
     both inherit the same spatial bias.
-  - **Open:** reference year (no date field); imagery used for the
-    visual interpretation; how the sites were chosen.
+  - **Open:** how the sites were chosen.
 
 ### RQ2 — Data efficiency
 
@@ -395,8 +414,10 @@ they recorded *Acacia*. Other plants cover much more territory: only
 26.6% of other-plant cells contain *Acacia*.
 
 **Expert model, same formulation (proposed, 2026-10-20):** in RQ1 the
-expert model is also multiclass. Its negatives (random points in COS
-2023 vegetated classes) are labelled by the COS class they fall in
+expert model is also multiclass. Its negatives (the expert
+`classifica = 0` polygons in vegetation, topped up with random points
+in COS 2023 vegetated classes if needed) are labelled by the COS class
+they fall in
 (e.g. eucalyptus forest, pine forest, other forest, agriculture,
 shrubland; rare classes merged), not as a single "not *Acacia*"
 class. Reasons: RQ1 compares label sources, so the task formulation

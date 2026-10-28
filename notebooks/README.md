@@ -9,6 +9,7 @@ numbering is not a strict pipeline that must be re-run end to end.
 |---|---|
 | `01_problem_exploration/` | Understand the problem, review the state of the art, frame the research questions |
 | `02_citizen_science/` | Explore the citizen science dataset on its own (species, coordinates, dates, quality, bias) |
+| `03_expert_reference/` | Explore and clean the expert reference data (contents, geometry, origin, spread, COS classes) |
 | `03_satellite/` | Explore the satellite/Earth Observation data on its own (source, resolution, bands, cloud cover) |
 | `04_data_integration/` | Combine citizen science observations with satellite information into a labelled dataset |
 | `05_baseline/` | Simplest credible modelling approach using conventional features |

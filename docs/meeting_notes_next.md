@@ -23,15 +23,21 @@
 
 - **Dados de especialistas** (os polígonos de *A. dealbata* que me
   enviou): no distrito há 1 849 polígonos, em 15 quadrículas de 10 km.
-  - [ ] De que ano são? Que imagens se usaram na interpretação visual?
-  - [ ] Os locais foram escolhidos a partir de observações do
-    iNaturalist, ou a pessoa com mais observações em Coimbra faz parte
-    da equipa? As 70 presenças do iNaturalist dentro de polígonos, e
-    96% das 582 a menos de 50 m, são dessa pessoa. Os rótulos são
-    independentes (a equipa foi ao terreno), mas os locais coincidem,
-    e isso conta na separação entre treino e teste.
-  - [ ] Os círculos pequenos (≈5 m de raio) são pontos de campo e as
-    manchas maiores são interpretação visual?
+  - [x] De que ano são? Que imagens se usaram? **2023, idas ao campo
+    e análise visual manual do OrtoSat** (email de 2026-10-28).
+  - [x] O iNaturalist influenciou a recolha? **Não.** Os locais
+    coincidem na mesma (96% das 582 presenças a menos de 50 m são da
+    pessoa com mais observações), e isso conta na separação entre
+    treino e teste.
+  - [x] Os polígonos pequenos (~75 m², que eu tinha chamado "círculos")? **Provavelmente uma
+    segmentação não supervisionada feita por um estudante, com cada
+    segmento classificado como *A. dealbata* ou não.**
+  - [ ] Cruzei as 5 013 ausências (`classifica = 0`) com a COS 2023:
+    44% estão em edifícios e indústria, só 3 em água, e 56% (2 823)
+    em vegetação (pinhal, agricultura, outra floresta, eucaliptal,
+    matos). Proponho usar as de vegetação como ausências e só uma
+    amostra pequena das de edifícios, como classe própria.
+    Concorda?
 
 Se não ficou decidido a 21 de outubro: área de estudo, distrito ou
 concelho (ponto 5).
