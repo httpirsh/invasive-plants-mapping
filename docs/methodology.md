@@ -18,9 +18,11 @@ Check before modelling.
 - **Satellite:** cloud contamination, missing observations, alignment
   with observation locations.
 
-Open: whether to keep `casual`-grade records; how to handle records
-with unknown or coarse positional accuracy; whether to deduplicate
-per pixel.
+Decided (2026-10-29): research grade only, for presences and other
+plants. Positional accuracy (2026-10-29): known values above 30 m
+dropped, missing values kept and marked. Same pixel (2026-10-29):
+one presence per pixel; other plants in a presence's pixel dropped;
+other plants one per pixel and class after grouping (open).
 
 **Grounded in:** research-grade-only observations were used by
 Gillespie et al. (2024) and Brown et al. (2025). Positional accuracy

@@ -184,8 +184,9 @@ Upper bound:       best representation   + expert reference labels → classifie
   - **Labels independent of citizen science:** iNaturalist did not
     influence the collection (supervisor, 2026-10-28).
   - **Locations overlap with citizen science (design constraint):**
-    all 70 iNaturalist presences inside a polygon, and 96% of the 582
-    within 50 m, are the dominant observer's. Experts and that observer
+    all 22 cleaned iNaturalist *A. dealbata* presences inside a
+    polygon, and 93% of the 162 within 50 m, are the dominant
+    observer's. Experts and that observer
     visited the same places. Consequences: tested on these polygons,
     the citizen-science model would be evaluated where it was trained
     (inflated score), so training and test must be split by spatial
@@ -215,10 +216,10 @@ removed and *why*.
   positional accuracy). Exact combination open.
 - **Levels:** keep the most recent N observations, for decreasing N.
   By year alone the levels are coarse — keeping 2019 onwards retains
-  98.8% of presences, 2021 onwards 84.0%, 2023 onwards 29.1% (7 898
-  dated, non-obscured presences) — so levels are set by date, not
+  99.4% of presences, 2021 onwards 85.5%, 2023 onwards 36.6% (3 000
+  cleaned *A. dealbata* presences) — so levels are set by date, not
   year. Fix levels after checking the real counts.
-- **Open:** whether observations after 2023 (2024–2026: 2 040
+- **Open:** whether observations after 2023 (2024–2026: 1 009
   presences) count as "more recent", or whether recency is distance
   to 2023.
 - **Limitation (to state):** without a random-removal baseline, each
@@ -340,13 +341,14 @@ reported, and its effect is measured.
 | Step | Status | Notes | Grounded in |
 |---|---|---|---|
 | 1. Remove obscured coordinates | Done | 43 presences, 9 903 other plants | iNaturalist geoprivacy randomises these coordinates (platform documentation); research-grade-only data in Gillespie et al. (2024) and Brown et al. (2025) also implies location-quality filtering |
-| 2. Positional accuracy | Open | Threshold on coordinate uncertainty relative to 10 m pixels; how to treat missing values | Ball et al. (2026): label impurity lowers accuracy, though embeddings tolerate moderate amounts; a point off by more than a pixel is an impure label |
-| 3. Quality grade | Open | Research grade only, or all? | Research-grade only was used by Gillespie et al. (2024) and Brown et al. (2025) |
+| 2. Positional accuracy | Adopted (2026-10-29) | Drop known accuracy > 30 m (3 pixels); keep missing values, marked `accuracy_missing` (80% of presences, almost all Observer A's). Test: missing ones fall in COS acacia stands as often as the most precise (18.6% vs. 20.7%; random 2.3%); beyond 30 m the share drops to ~6.5% (other observers). Presences 3 441 → 3 276, other plants 60 630 → 48 125 | Ball et al. (2026): label impurity lowers accuracy, though embeddings tolerate moderate amounts; a point off by more than a pixel is an impure label |
+| 3. Quality grade | Adopted (2026-10-29) | Research grade only, on both sides: presences 5 242 → 3 441 (the `casual` ones are almost all without a photo, 1 670 of 1 679 per the iNaturalist API, 98% Observer A's); other plants 110 576 → 60 630 (17.6 per presence, footprint still matches: 94.5% of presence cells). Same rule on both sides so other plants keep the presences' recording process. Future work: sensitivity check with and without `casual`/`needs_id` | Research-grade only was used by Gillespie et al. (2024) and Brown et al. (2025); only research grade goes to GBIF |
 | 4. Temporal design | Adopted | All observations treated as 2023, see [Temporal Design](#temporal-design-adopted) | See that section |
-| 5. Disturbance filter | Proposed (fixed) | Burned between observation and 2023 (ICNF 1975–2025; fires before 2014 have the year only): 35 presences (0.4%), 2 880 other plants (2.6%) | Riveiro et al. (2025): burned *A. dealbata* stands regrow, so the burned pixel no longer matches the label though the species remains |
+| 5. Disturbance filter | Proposed (fixed) | Burned between observation and 2023 (ICNF 1975–2025; fires before 2014 have the year only): 6 *A. dealbata* presences (0.2%), 522 other plants (1.1%) | Riveiro et al. (2025): burned *A. dealbata* stands regrow, so the burned pixel no longer matches the label though the species remains |
 | 6. Label purity | Open | Does the point represent an *Acacia*-dominated pixel? (e.g. isolated garden tree vs. stand). Check against COS/OrtoSat on a sample; at minimum report | Ball et al. (2026): embeddings robust to moderate label impurity; soft labels (species proportions) beat hard labels |
 | 7. Negative classes | Adopted direction | See [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | Phillips et al. (2009); see that section |
-| 8. Observer balancing | Open | Cap the dominant observer per cell? Linked to RQ3 | Motivated by observer clustering (Cambridge TESSERA group) and Phillips et al. (2009), see RQ3 |
+| 8. Same pixel | Adopted (2026-10-29) | Pixel = 10 m cell in EPSG:32629. Presences: one per pixel, the closest in date to 2023 (3 276 → 3 000; 98% of repeats were Observer A's). Conflicts: other plants in the 443 pixels that also hold a presence are dropped, the presence stays (772 other plants), the one-pixel version of the segmentation mask. Other plants: one per pixel and class, after grouping into classes | Karasiak et al. (2022): repeated nearby samples inflate accuracy; same pixel = same training example |
+| 9. Observer balancing | Open | Cap the dominant observer per cell? Linked to RQ3 | Motivated by observer clustering (Cambridge TESSERA group) and Phillips et al. (2009), see RQ3 |
 
 **Evaluation — cumulative ablation:** run the RQ1 setup after adding
 each step and report the change in performance. This shows which
@@ -407,11 +409,12 @@ not visited vs. unvisited places.
 - Grouping species into a few classes follows Ball et al. (2026), who
   mapped 18 tree species *and groups* as classes.
 
-Checked (all years, non-obscured): 7 898 presences vs. 110 576
-other-plant observations (~14:1). The dominant observer also records
-other plants (36 080 records, 33%), in 96.7% of the 1 km cells where
-they recorded *Acacia*. Other plants cover much more territory: only
-26.6% of other-plant cells contain *Acacia*.
+Checked (all years, cleaned on both sides): 3 000 *A. dealbata*
+presences vs. 47 353 other-plant observations (~16:1). The dominant
+observer also records other plants (16 888 records, 36%), in 96.3% of
+the 1 km cells where they recorded *A. dealbata*. Other plants cover
+much more territory: only 18.6% of other-plant cells contain
+*A. dealbata*.
 
 **Expert model, same formulation (proposed, 2026-10-20):** in RQ1 the
 expert model is also multiclass. Its negatives (the expert
@@ -474,7 +477,7 @@ evidence of presence in 2023 unless the site was disturbed. The risk
 grows with the age of the observation; the RQ2 filter removes the
 oldest first.
 
-Why 2023 and not a later year: 2 299 presences (29.1%) lie in areas
+Why 2023 and not a later year: 728 *A. dealbata* presences (24.3%) lie in areas
 burned in 2025; 2023 imagery still shows the observed vegetation.
 
 Rejected: **nearest available year per observation** — the model

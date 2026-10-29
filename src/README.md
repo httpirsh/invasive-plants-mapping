@@ -8,3 +8,5 @@ Modules:
 - `burned_areas.py`: downloads the ICNF burned areas and applies the
   burned-between-observation-and-2023 rule (used by both
   citizen-science notebooks).
+- `grid.py`: 10 m pixel ids (EPSG:32629), to match observations to
+  the pixel the model sees.

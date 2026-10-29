@@ -99,7 +99,7 @@ obtained.
   cleaned data together in QGIS; not read by any notebook.
 - **Made by:** `notebooks/05_data_integration/qgis_overview.ipynb`.
 - **Layers (EPSG:3763):** `distrito_coimbra` (iNaturalist place 8422),
-  `inat_acacia` and `inat_outras_plantas` (the cleaned files in
+  `inat_dealbata` and `inat_outras_plantas` (the cleaned files in
   `interim/citizen_science/`), `especialistas_poligonos` (the cleaned
   expert polygons, with `use`), `areas_ardidas` (ICNF 1975–2025
   burned areas that intersect the district).
@@ -174,9 +174,9 @@ Expert reference data for the RQ1 upper bound (see
 
 ### iNaturalist observations, cleaned (derived)
 
-- **Files:** `interim/citizen_science/inat_acacia_clean.csv` (7 898
-  *Acacia*) and `interim/citizen_science/inat_other_plants_clean.csv`
-  (110 576 other plants).
+- **Files:** `interim/citizen_science/inat_dealbata_clean.csv` (3 000
+  *A. dealbata*) and `interim/citizen_science/inat_other_plants_clean.csv`
+  (47 353 other plants).
 - **Made by:** part 2 of
   `notebooks/02_citizen_science/acacia_observations.ipynb` and
   `notebooks/02_citizen_science/other_plants_observations.ipynb`.
@@ -184,11 +184,19 @@ Expert reference data for the RQ1 upper bound (see
   coordinates; main observer anonymised (`observer` = "Observer A" /
   "Others", no username kept); `burned` flag (fire between the
   observation and 2023, ICNF) and `burned_same_year` (ambiguous
-  cases). Nothing else is filtered yet (species, quality, positional
-  accuracy are open).
+  cases). *Acacia* file: only *A. dealbata* kept (species and
+  subspecies) (2026-10-29). Both files: only research grade
+  (2026-10-29). The other-plants download already excludes the whole
+  genus *Acacia*. Both files: positional accuracy above 30 m dropped;
+  missing values kept and marked (`accuracy_missing`) (2026-10-29).
+  Same 10 m pixel (`pixel`, EPSG:32629 grid, `src/grid.py`): one
+  presence per pixel, the closest in date to 2023 (`n_obs_in_pixel`
+  keeps how many there were); other plants in a presence's pixel
+  dropped (2026-10-29).
 - **Columns:** `id`, `observed_on`, `year`, `taxon_id`, `taxon_name`,
   `taxon_rank`, `latitude`, `longitude`, `positional_accuracy`,
-  `quality_grade`, `observer`, `burned`, `burned_same_year`.
+  `quality_grade`, `accuracy_missing`, `observer`, `pixel`,
+  `n_obs_in_pixel` (presences only), `burned`, `burned_same_year`.
 
 ### Expert reference polygons, cleaned (derived)
 

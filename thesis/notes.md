@@ -101,6 +101,12 @@ como classe própria (opção B) ou mapear o género como extensão.
 mapearam a *A. dealbata* sozinha.
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#species-scope-proposed).
+Aplicado a 2026-10-29 no passo 10 de
+[`acacia_observations.ipynb`](../notebooks/02_citizen_science/acacia_observations.ipynb):
+ficam 5 242 observações (5 240 da espécie e 2 da subespécie
+*A. dealbata dealbata*); saem 2 621 de outras espécies e 35
+identificadas só até ao género ou subgénero. O Observer A fez 90%
+delas (83% em todas as *Acacia*).
 
 ### Multiclasse também no modelo de especialistas
 
@@ -175,3 +181,163 @@ que está no próprio segmento (p. ex. uma árvore num jardim fica
 
 **Onde:** [`notebooks/03_expert_reference/expert_polygons.ipynb`](../notebooks/03_expert_reference/expert_polygons.ipynb)
 (secções 5–11).
+
+### Só observações *research*, nos dois lados
+
+*2026-10-29, decisão minha.*
+
+**O que decidi:** no modelo principal, as observações do iNaturalist
+são só as *research*, nas presenças e nas outras plantas.
+- Presenças de *A. dealbata*: saem as *casual* (1 678) e as
+  *needs_id* (123); das 5 242 ficam 3 441.
+- Outras plantas: saem 12 458 *casual* e 37 488 *needs_id*; das
+  110 576 ficam 60 630.
+
+*Atualizado no mesmo dia:* primeiro apliquei só às presenças; depois
+decidi aplicar também às outras plantas, para ser consistente (ver o
+último ponto do porquê).
+
+**Porquê:**
+- *Research* quer dizer que a identificação foi confirmada pela
+  comunidade (pelo menos duas pessoas concordam), com foto, data,
+  localização e organismo selvagem.
+- As nossas *casual* são quase todas observações **sem foto**: 1 670
+  das 1 679 do distrito (contagem na API do iNaturalist a
+  2026-10-29); só 8 estão marcadas como cultivadas. Ninguém consegue
+  confirmar a identificação.
+- 98% das *casual* são do Observer A, sobretudo de 2021. Ao tirá-las,
+  o peso do Observer A desce de 90% para 87%.
+- As *needs_id* têm foto, mas a identificação ainda não foi
+  confirmada.
+- Mesmo assim ficam 3 441 presenças, o que chega para treinar.
+- **A mesma regra nos dois lados:** as outras plantas só servem de
+  comparação se forem registadas pelo mesmo processo que as presenças
+  (fundo de grupo-alvo, Phillips et al., 2009). Se só as presenças
+  fossem *research*, as outras plantas ficavam com os registos sem
+  foto do Observer A e com plantas de jardim, e o modelo podia
+  aprender como as observações foram feitas em vez da planta.
+- Nas outras plantas ainda ficam 17,6 por presença, e continuam nos
+  mesmos sítios: 94,5% das quadrículas de 1 km com *A. dealbata* têm
+  outras plantas.
+- Contra: muitas *needs_id* estão identificadas até ao género, o que
+  chegaria para as agrupar em classes. Se faltarem dados numa classe,
+  recupero-as.
+
+**Trabalho futuro:** verificação de sensibilidade, treinando com e
+sem as *casual* e *needs_id* (nos dois lados ao mesmo tempo), para
+ver se os resultados mudam. Se não
+mudarem, a escolha não importa e digo-o; se mudarem, é um resultado.
+Recuperam-se do ficheiro original.
+
+**Fundamentação:** Gillespie et al. (2024) e Brown et al. (2025)
+usaram só observações *research*. Só as *research* são enviadas para
+o GBIF, por isso os estudos que usam o iNaturalist através do GBIF
+também ficam só com estas. Não encontrei um estudo que compare usar
+ou não as *casual* (pesquisa rápida, não exaustiva).
+
+**Onde:** passo 11 de
+[`acacia_observations.ipynb`](../notebooks/02_citizen_science/acacia_observations.ipynb)
+e passo 8 de
+[`other_plants_observations.ipynb`](../notebooks/02_citizen_science/other_plants_observations.ipynb);
+[`docs/research_questions.md`](../docs/research_questions.md) (tabela
+do pipeline, passo 3).
+
+### Precisão da localização: tirar acima de 30 m, manter as sem valor
+
+*2026-10-29, decisão minha (por recomendação, depois de um teste).*
+
+**O que decidi:** nos dois lados (presenças e outras plantas), saem
+as observações com `positional_accuracy` conhecida acima de 30 m (3
+píxeis). As que não têm valor ficam, marcadas com `accuracy_missing`.
+Presenças: 3 441 → 3 276. Outras plantas: 60 630 → 48 125.
+
+**Porquê:**
+- A `positional_accuracy` é o raio (m) do círculo onde está a planta.
+  Um píxel tem 10 m: com um raio grande, o ponto pode cair no píxel
+  errado (rótulo impuro).
+- 80% das presenças não têm valor, e quase todas são do Observer A
+  (90% das observações dessa pessoa, contra 11% dos outros). "Sem
+  valor" não quer dizer "mal localizada": é a forma como esta pessoa
+  regista. Tirá-las seria tirar o Observer A.
+- **Teste:** que parte de cada grupo cai num acacial da COS 2023 (se
+  fossem pontos ao acaso, 2,3%):
+
+  | Precisão | Presenças | % em acacial | % em acacial (só outros observadores) |
+  |---|---|---|---|
+  | ≤ 10 m | 429 | 20,7% | 10,5% |
+  | 10–30 m | 104 | 14,4% | 10,0% |
+  | 30–100 m | 91 | 6,6% | 6,7% |
+  | > 100 m | 74 | 10,8% | 6,3% |
+  | sem valor | 2 743 | 18,6% | 12,2% |
+
+  - As sem valor caem em acaciais quase tanto como as mais precisas:
+    ficam.
+  - Nos outros observadores, até 30 m dá o mesmo que ≤ 10 m; a partir
+    de 30 m desce para cerca de 6,5%, e 30–100 m comporta-se como
+    > 100 m. Por isso o limite é 30 m e não 100 m.
+- Eu estava inclinada para 100 m, para não perder dados de ciência
+  cidadã. Mas a diferença é pequena: com 30 m saem 165 presenças
+  (4,8%), com 100 m sairiam 74 (2,2%).
+- A mesma regra nas outras plantas, como na qualidade, para os dois
+  lados passarem pelos mesmos filtros.
+
+**Limitações:** é um teste indireto. A COS só mapeia manchas de
+acácia com pelo menos 1 ha (só 54% dos polígonos dos especialistas
+caem nelas), por isso compara grupos e não confirma cada ponto. Os
+grupos com valor são pequenos (74 a 429) e a ordem não é perfeita
+(> 100 m acima de 30–100 m).
+
+**Fundamentação:** Ball et al. (2026): rótulos impuros baixam a
+exatidão, embora os embeddings tolerem alguma impureza. O teste com a
+COS é meu; não verifiquei se outros estudos o usaram.
+
+**Onde:** passo 12 de
+[`acacia_observations.ipynb`](../notebooks/02_citizen_science/acacia_observations.ipynb)
+(teste e filtro) e passo 9 de
+[`other_plants_observations.ipynb`](../notebooks/02_citizen_science/other_plants_observations.ipynb);
+[`docs/research_questions.md`](../docs/research_questions.md) (tabela
+do pipeline, passo 2).
+
+### Uma observação por píxel; nos conflitos fica a presença
+
+*2026-10-29, decisão minha (o ponto dos conflitos é a versão mínima da
+máscara de segmentação, a confirmar com o orientador).*
+
+**O que decidi:**
+- **Presenças:** uma por píxel de 10 m (grelha UTM 29N, EPSG:32629).
+  Quando há várias, fica a mais próxima de 2023 (em empate, a mais
+  recente). 3 276 → 3 000.
+- **Conflitos:** nos 443 píxeis com uma *A. dealbata* e outras
+  plantas, saem as outras plantas (772) e fica a presença.
+- **Outras plantas repetidas:** ficam para depois de as agrupar em
+  classes; nessa altura, uma por píxel e por classe.
+
+**Porquê:**
+- O modelo vê píxeis, não pontos: duas observações no mesmo píxel têm
+  o mesmo embedding e são o mesmo exemplo repetido.
+- 98% das presenças repetidas eram do Observer A, quase todas do
+  mesmo ano (registos repetidos da mesma visita). Mantê-las dava ainda
+  mais peso aos sítios dessa pessoa, o que vai contra o que quero
+  controlar na RQ3.
+- Fica a mais próxima de 2023 porque todas as observações são tratadas
+  como 2023: é a que mais provavelmente corresponde à imagem.
+- Num conflito, o mesmo píxel diria "é acácia" e "não é acácia". No
+  terreno é normal (outras plantas por baixo ou ao lado). Fica a
+  presença porque é a planta que quero mapear e foi vista ali. Tirar
+  as duas seria mais "limpo", mas perdia 475 presenças (15%).
+- Nas outras plantas, as repetidas são sobretudo espécies diferentes
+  no mesmo sítio (até 54 num píxel): um píxel com um eucalipto e um
+  carvalho tem duas classes, e isso só se sabe depois de agrupar.
+
+**Fundamentação:** Karasiak et al. (2022): amostras repetidas e
+próximas inflacionam a exatidão. A ideia de tirar as outras plantas
+dentro da mancha de acácia vem do orientador (máscara de segmentação,
+reunião de 21 de outubro); aqui só ao nível de um píxel.
+
+**Onde:** passo 13 de
+[`acacia_observations.ipynb`](../notebooks/02_citizen_science/acacia_observations.ipynb)
+e passo 10 de
+[`other_plants_observations.ipynb`](../notebooks/02_citizen_science/other_plants_observations.ipynb);
+código da grelha em [`src/grid.py`](../src/grid.py);
+[`docs/research_questions.md`](../docs/research_questions.md) (tabela
+do pipeline, passo 8).

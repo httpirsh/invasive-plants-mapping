@@ -13,11 +13,13 @@
   *Acacia* no treino. A tarefa continua a ser classificação por píxel.
   - [ ] É isto? Se sim, como delimitar a mancha: semelhança dos
     embeddings, superpíxeis, ou polígonos da COS quando existem?
+    (Para já apliquei a versão de um píxel: as outras plantas no
+    mesmo píxel de uma *A. dealbata* saem, 772 em 443 píxeis.)
 - **Outras plantas como classes:** proponho 5–10 grupos (p. ex.
   eucalipto, pinheiros, carvalhos, outras árvores, arbustos,
   herbáceas).
   - [ ] Concorda com esta divisão?
-- **Filtro da RQ2:** as observações de 2024–2026 (2 040 presenças)
+- **Filtro da RQ2:** as observações de 2024–2026 (1 009 presenças de *A. dealbata*)
   contam como "mais recentes", ou conta a distância a 2023?
   - [ ] Qual?
 
