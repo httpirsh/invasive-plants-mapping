@@ -87,6 +87,9 @@ foundation models. A novidade está na combinação e nos controlos.
   outra plataforma: mais presenças, ou um teste da RQ3 com
   observadores diferentes.
   - [ ] Vale a pena juntar? Conhece quem a gere?
+- **Overleaf:** para ligar o documento da tese ao repositório (sincronização
+  com Git/GitHub) preciso do Overleaf Premium.
+  - [ ] A universidade dá acesso ao Premium?
 
 ## Para a defesa
 
