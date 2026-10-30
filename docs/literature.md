@@ -308,6 +308,49 @@ method for the *Acacia* patch mask that replaces a fixed exclusion
 buffer (see
 [`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction)).
 
+### Land cover classification and plant traits
+
+**Di Gregorio & Jansen (2000).** Land Cover Classification System
+(LCCS): Classification Concepts and User Manual. FAO, Rome. Appendix
+A read (fao.org/4/X0596E). — *Read (appendix)*
+
+The dominant life form is decided by the "uppermost canopy" layer;
+woody plants above 5 m are trees, below 5 m shrubs; sparse trees over
+a closed herbaceous layer (tree savannah) are not the dominant life
+form. Basis for keeping herbaceous iNaturalist observations only
+where herbs are the top layer, and for keeping the tallest group when
+several other plants share a pixel (see
+[`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction)).
+
+**Weigelt, König & Kreft (2020)**, *J. Biogeography* 47, 16–43;
+**Denelle, Weigelt & Kreft (2023)**, *Methods Ecol. Evol.* 14,
+2738–2748. GIFT, Global Inventory of Floras and Traits. — *Database
+used; papers not read in full*
+
+Growth form, climber, maximum height and aquatic traits for most
+vascular plants, through an API. Used to group the other plants into
+classes (see `data/README.md`).
+
+**EPPO (2024).** Pest risk analysis for *Hakea sericea* and *Hakea
+decurrens* subsp. *physocarpa*. — *Search summary only, to read*
+
+All sampled invasive *Hakea* populations in Portugal are *H.
+decurrens* subsp. *physocarpa*, long recorded as *H. sericea*. Basis
+for counting it as the *H. sericea* of the national invasive list.
+
+**Wolf et al. (2022).** Citizen science plant observations encode
+global trait patterns. *Nature Ecology & Evolution* 6, 1850–1859. —
+*Abstract only*
+
+Trait maps from iNaturalist observations agree with vegetation plots
+up to r = 0.69, best where observations are dense and in biomes *not
+dominated by trees*. Consistent with citizen science under-recording
+the canopy layer.
+
+**Searched, not found (2026-10-30):** no study handling understory
+citizen-science observations when using them to label satellite
+pixels. Possible methodological contribution (see Contribution).
+
 ## Data Sources Found in the Literature Search
 
 Not papers, but relevant:
@@ -392,7 +435,10 @@ Two parts:
 1. **Methodological:** a documented, evaluated pipeline that turns
    citizen-science points into satellite reference data (the
    proposal's first objective; see
-   [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed)).
+   [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed)). One step with no precedent found:
+   matching what citizen scientists photograph (often understory
+   plants) to what the satellite sees (the top layer), using plant
+   traits and land cover.
 2. **Empirical:** RQ1–RQ3 in
    [`research_questions.md`](research_questions.md).
 

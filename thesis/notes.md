@@ -309,8 +309,10 @@ máscara de segmentação, a confirmar com o orientador).*
   recente). 3 276 → 3 000.
 - **Conflitos:** nos 443 píxeis com uma *A. dealbata* e outras
   plantas, saem as outras plantas (772) e fica a presença.
-- **Outras plantas repetidas:** ficam para depois de as agrupar em
-  classes; nessa altura, uma por píxel e por classe.
+- **Outras plantas repetidas:** uma por píxel, decidido depois de as
+  agrupar em classes (ver a entrada seguinte). *Mudou a 2026-10-30:*
+  antes era "uma por píxel e por classe", mas isso deixava 771 píxeis
+  com dois rótulos diferentes.
 
 **Porquê:**
 - O modelo vê píxeis, não pontos: duas observações no mesmo píxel têm
@@ -341,3 +343,125 @@ e passo 10 de
 código da grelha em [`src/grid.py`](../src/grid.py);
 [`docs/research_questions.md`](../docs/research_questions.md) (tabela
 do pipeline, passo 8).
+
+### Outras plantas em 8 grupos; herbáceas só onde são a camada de cima
+
+*2026-10-30, proposta (deixei a escolha ao assistente; a confirmar com
+o orientador). Revista no mesmo dia: ver "O que mudou".*
+
+**O que decidi:**
+- **8 grupos:** aquáticas, eucalipto, pinheiros e outras coníferas,
+  carvalhos, outras invasoras de grande porte, outras árvores, matos e
+  arbustos, herbáceas. Cada observação recebe o primeiro grupo cuja
+  regra se aplica (por esta ordem):
+  - aquática no GIFT → aquáticas;
+  - género *Eucalyptus* → eucalipto;
+  - conífera (taxonomia do iNaturalist) e árvore no GIFT → pinheiros;
+  - género *Quercus* e árvore no GIFT → carvalhos;
+  - na lista nacional de invasoras e árvore, arbusto ou planta não
+    trepadeira com mais de 2 m → invasoras grandes;
+  - árvore no GIFT → outras árvores; arbusto → matos; o resto →
+    herbáceas.
+- **Musgos, hepáticas e algas saem** (323), pela taxonomia do
+  iNaturalist (não vasculares).
+- **Herbáceas só nas classes da COS 2023 onde a erva é o que se vê de
+  cima:** culturas temporárias, pastagens, montados, dunas e vegetação
+  esparsa, zonas húmidas, espaços verdes urbanos. Saem as que estão em
+  floresta, matos, edifícios e estradas, vinhas, pomares e olivais,
+  estufas e água: 29 644 → 5 967.
+- **Uma outra planta por píxel:** fica o grupo mais alto (árvores >
+  invasoras grandes > matos > herbáceas > aquáticas), depois a mais
+  próxima de 2023. 23 353 → 18 895.
+- Resultado: matos 8 145, herbáceas 4 218, invasoras grandes 2 958,
+  outras árvores 1 663, carvalhos 802, aquáticas 621, pinheiros 319,
+  eucalipto 169. Ficam 6,3 outras plantas por presença.
+
+**O que mudou (2026-10-30):**
+- Primeiro os grupos vinham de listas de géneros feitas à mão. Pedi
+  que se baseassem em fontes; passaram a vir do GIFT, da lista
+  nacional de invasoras e da taxonomia do iNaturalist. O GIFT
+  corrigiu erros das listas manuais (o alecrim e a *Euphorbia
+  characias* são arbustos, não herbáceas).
+- Primeiro as herbáceas ficavam só em "agricultura e pastagem" (todos
+  os códigos 2, 3 e 4 da COS). Perguntei se não bastava tirar as da
+  floresta. Não basta: as herbáceas em edifícios (3 523), matos
+  (2 361) e pomares e olivais (1 696) dariam píxeis que não são erva.
+  Mas a regra antiga também era estrita demais: tirava as das dunas,
+  zonas húmidas e jardins, onde a erva é o que se vê. E incluía
+  vinhas, pomares, olivais e estufas, que não são erva vista de cima.
+  A regra passou a ser por classe da COS, conforme o que cobre o
+  píxel.
+
+**Porquê:**
+- 1 549 espécies são demasiadas para classes; grupos por forma de
+  crescimento separam o que o satélite distingue (copa de árvore,
+  mato, erva, água).
+- Eucalipto e pinheiro ficam à parte porque são as florestas que
+  dominam o distrito. As invasoras grandes ficam à parte porque são as
+  plantas mais parecidas com a acácia. 23% das observações de
+  eucalipto caem em manchas de acácia da COS: crescem juntos, por isso
+  vai ser a confusão mais provável.
+- O satélite vê a camada de cima. As pessoas fotografam sobretudo
+  plantas pequenas (só 181 eucaliptos em 47 mil observações), e 43%
+  das herbáceas estavam debaixo de floresta. Com o rótulo "herbácea",
+  um píxel de eucaliptal ensinava o modelo errado; uma erva num
+  telhado ensinava que telhados são erva (o mesmo problema que o
+  orientador apontou nas ausências dos especialistas em edifícios).
+- Pela mesma razão, num píxel com um carvalho e um mato fica o
+  carvalho.
+
+**Fundamentação:**
+- *Regra da camada de cima:* o sistema de classificação de ocupação
+  do solo da FAO (LCCS) decide a forma de vida dominante pela camada
+  mais alta ("uppermost canopy"), separa árvores (>5 m) de arbustos
+  (<5 m), e diz que árvores esparsas sobre um estrato herbáceo
+  fechado não são a forma dominante (Di Gregorio & Jansen, 2000,
+  Apêndice A). É por isso que os montados ficam com as herbáceas.
+- *Formas de crescimento:* GIFT 3.2 (Weigelt et al., 2020; Denelle et
+  al., 2023): 92,7% das observações encontradas pela espécie, 5,9%
+  pelo género.
+- *Invasoras:* Lista Nacional de Espécies Invasoras, Anexo II do
+  Decreto-Lei n.º 92/2019 (só continente). A *Hakea decurrens* subsp.
+  *physocarpa* conta como a *H. sericea* da lista: a análise de risco
+  da EPPO (2024) concluiu que as populações invasoras de *Hakea*
+  amostradas em Portugal são deste táxon, registado durante décadas
+  como *H. sericea*.
+- *Agrupar espécies em classes:* Ball et al. (2026).
+- *Uma por píxel:* Karasiak et al. (2022), como na entrada anterior.
+- *Sub-bosque em ciência cidadã:* procurei estudos que tratem
+  observações de plantas de sub-bosque ao rotular píxeis de satélite e
+  não encontrei nenhum. O mais próximo, Gillespie et al. (2024), treina
+  com observações do iNaturalist sobre imagem aérea, mas não verifiquei
+  se filtram o sub-bosque. Wolf et al. (2022) viram que mapas de
+  traços feitos com o iNaturalist concordam pior em biomas dominados
+  por árvores (só li o resumo). Pode ser um contributo metodológico da
+  tese.
+
+**Limitações:**
+- O GIFT tem erros (diz que a *Hakea decurrens* é trepadeira; por isso
+  a regra das trepadeiras não se aplica a árvores e arbustos) e
+  classifica algumas espécies de forma diferente da forma local
+  (*Quercus coccifera* como árvore). *Smilax aspera* fica nas
+  herbáceas porque o GIFT a classifica como "other".
+- O limiar de 2 m para invasoras herbáceas grandes (*Cortaderia*,
+  *Arundo*, *Phytolacca*) e a tabela de sinónimos são escolhas minhas.
+- A lista de classes da COS onde a erva é a camada de cima é a minha
+  leitura dos nomes das classes, não uma regra publicada. A COS tem
+  unidade mínima de 1 ha: clareiras pequenas perdem-se.
+- Os matos também estão sobretudo debaixo de floresta (26% em pinhal,
+  21% em eucaliptal, só 13% em matos), mas ficam todos por agora.
+  Pergunta para o orientador.
+- Eucalipto (169) e pinheiros (319) são classes pequenas. Porquê:
+  são pouco fotografados (1% e 0,7% das observações de plantas) e o
+  filtro *research* tirou a maior parte (67% dos eucaliptos eram
+  *casual*, 81% delas do Observer A; hipótese não verificada: registos
+  sem foto, como nas acácias). Opções em aberto: recuperar as
+  *needs_id* identificadas ao género, juntar ou pesar no treino, ou
+  usar a COS para estas classes. Pergunta para o orientador.
+
+**Onde:** passos 11–13 de
+[`other_plants_observations.ipynb`](../notebooks/02_citizen_science/other_plants_observations.ipynb);
+[`docs/research_questions.md`](../docs/research_questions.md) (secção
+"Other Plants as Classes" e tabela do pipeline, passos 8 e 9);
+fontes em [`data/README.md`](../data/README.md) (GIFT e lista
+nacional de invasoras).

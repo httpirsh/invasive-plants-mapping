@@ -22,7 +22,10 @@ Decided (2026-10-29): research grade only, for presences and other
 plants. Positional accuracy (2026-10-29): known values above 30 m
 dropped, missing values kept and marked. Same pixel (2026-10-29):
 one presence per pixel; other plants in a presence's pixel dropped;
-other plants one per pixel and class after grouping (open).
+other plants one per pixel. Other-plant classes (2026-10-30, to
+confirm): 8 groups from GIFT growth forms and the national invasive
+list; herbaceous only in COS classes where herbs are the top layer;
+one other plant per pixel, the tallest group first.
 
 **Grounded in:** research-grade-only observations were used by
 Gillespie et al. (2024) and Brown et al. (2025). Positional accuracy

@@ -8,7 +8,7 @@
 | Prediction task | Adopted; segmentation mask open |
 | Reference-data pipeline (proposal objective 1) | Proposed |
 | Temporal design: all iNaturalist observations treated as 2023 | Adopted 2026-10-21 |
-| Other plants as classes (multiclass) | Adopted direction 2026-10-21; details open |
+| Other plants as classes (multiclass) | Adopted direction 2026-10-21; 8 groups proposed 2026-10-30 (to confirm) |
 | Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; year 2023 (confirmed 2026-10-28) |
 | Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal) |
 | Species scope | Proposed (2026-10-20): *A. dealbata*, other *Acacia* left out |
@@ -344,11 +344,12 @@ reported, and its effect is measured.
 | 2. Positional accuracy | Adopted (2026-10-29) | Drop known accuracy > 30 m (3 pixels); keep missing values, marked `accuracy_missing` (80% of presences, almost all Observer A's). Test: missing ones fall in COS acacia stands as often as the most precise (18.6% vs. 20.7%; random 2.3%); beyond 30 m the share drops to ~6.5% (other observers). Presences 3 441 → 3 276, other plants 60 630 → 48 125 | Ball et al. (2026): label impurity lowers accuracy, though embeddings tolerate moderate amounts; a point off by more than a pixel is an impure label |
 | 3. Quality grade | Adopted (2026-10-29) | Research grade only, on both sides: presences 5 242 → 3 441 (the `casual` ones are almost all without a photo, 1 670 of 1 679 per the iNaturalist API, 98% Observer A's); other plants 110 576 → 60 630 (17.6 per presence, footprint still matches: 94.5% of presence cells). Same rule on both sides so other plants keep the presences' recording process. Future work: sensitivity check with and without `casual`/`needs_id` | Research-grade only was used by Gillespie et al. (2024) and Brown et al. (2025); only research grade goes to GBIF |
 | 4. Temporal design | Adopted | All observations treated as 2023, see [Temporal Design](#temporal-design-adopted) | See that section |
-| 5. Disturbance filter | Proposed (fixed) | Burned between observation and 2023 (ICNF 1975–2025; fires before 2014 have the year only): 6 *A. dealbata* presences (0.2%), 522 other plants (1.1%) | Riveiro et al. (2025): burned *A. dealbata* stands regrow, so the burned pixel no longer matches the label though the species remains |
+| 5. Disturbance filter | Proposed (fixed) | Burned between observation and 2023 (ICNF 1975–2025; fires before 2014 have the year only): 6 *A. dealbata* presences (0.2%), 173 other plants (0.9%) | Riveiro et al. (2025): burned *A. dealbata* stands regrow, so the burned pixel no longer matches the label though the species remains |
 | 6. Label purity | Open | Does the point represent an *Acacia*-dominated pixel? (e.g. isolated garden tree vs. stand). Check against COS/OrtoSat on a sample; at minimum report | Ball et al. (2026): embeddings robust to moderate label impurity; soft labels (species proportions) beat hard labels |
 | 7. Negative classes | Adopted direction | See [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | Phillips et al. (2009); see that section |
-| 8. Same pixel | Adopted (2026-10-29) | Pixel = 10 m cell in EPSG:32629. Presences: one per pixel, the closest in date to 2023 (3 276 → 3 000; 98% of repeats were Observer A's). Conflicts: other plants in the 443 pixels that also hold a presence are dropped, the presence stays (772 other plants), the one-pixel version of the segmentation mask. Other plants: one per pixel and class, after grouping into classes | Karasiak et al. (2022): repeated nearby samples inflate accuracy; same pixel = same training example |
-| 9. Observer balancing | Open | Cap the dominant observer per cell? Linked to RQ3 | Motivated by observer clustering (Cambridge TESSERA group) and Phillips et al. (2009), see RQ3 |
+| 8. Same pixel | Adopted (2026-10-29) | Pixel = 10 m cell in EPSG:32629. Presences: one per pixel, the closest in date to 2023 (3 276 → 3 000; 98% of repeats were Observer A's). Conflicts: other plants in the 443 pixels that also hold a presence are dropped, the presence stays (772 other plants), the one-pixel version of the segmentation mask. Other plants (2026-10-30, to confirm): one per pixel, the tallest group first (trees > large invasives > shrubs > herbaceous > aquatic), then closest to 2023 (23 353 → 18 895; 917 pixels held more than one group). Replaces "one per pixel and class", which kept a pixel with two labels | Karasiak et al. (2022): repeated nearby samples inflate accuracy; same pixel = same training example |
+| 9. Other-plant classes | Proposed (2026-10-30, to confirm) | See [Other Plants as Classes](#other-plants-as-classes-adopted-direction): 8 groups from GIFT growth forms, the national invasive list and the iNaturalist taxonomy; non-vascular dropped (323); herbaceous kept only in COS classes where herbs are the top layer (29 644 → 5 967) | Growth forms and "uppermost canopy" rule: FAO LCCS (Di Gregorio & Jansen, 2000); traits: GIFT (Weigelt et al., 2020; Denelle et al., 2023); invasives: Decreto-Lei 92/2019, Annex II; *Hakea*: EPPO (2024); grouping: Ball et al. (2026) |
+| 10. Observer balancing | Open | Cap the dominant observer per cell? Linked to RQ3 | Motivated by observer clustering (Cambridge TESSERA group) and Phillips et al. (2009), see RQ3 |
 
 **Evaluation — cumulative ablation:** run the RQ1 setup after adding
 each step and report the change in performance. This shows which
@@ -409,8 +410,9 @@ not visited vs. unvisited places.
 - Grouping species into a few classes follows Ball et al. (2026), who
   mapped 18 tree species *and groups* as classes.
 
-Checked (all years, cleaned on both sides): 3 000 *A. dealbata*
-presences vs. 47 353 other-plant observations (~16:1). The dominant
+Checked (all years, cleaned on both sides, before grouping into
+classes): 3 000 *A. dealbata* presences vs. 47 353 other-plant
+observations (~16:1); after the class steps below, 18 895 (~6:1). The dominant
 observer also records other plants (16 888 records, 36%), in 96.3% of
 the 1 km cells where they recorded *A. dealbata*. Other plants cover
 much more territory: only 18.6% of other-plant cells contain
@@ -433,10 +435,37 @@ need not match. A binary version (*A. dealbata* vs. the rest) is run
 as a sensitivity check in both arms. Grounded in Ball et al. (2026),
 as above; no other source checked for this choice.
 
+**Class groups (proposed 2026-10-30, to confirm with the
+supervisor):** 8 groups: aquatic, eucalyptus, pines and other
+conifers, oaks, other large invasives, other trees, shrubs,
+herbaceous. They come from sources, not hand-made lists: growth form,
+aquatic and maximum height from GIFT 3.2 (Weigelt et al., 2020;
+Denelle et al., 2023; 92.7% of observations matched by species, 5.9%
+by genus); invasive = on the mainland list of Decreto-Lei 92/2019,
+Annex II (*Hakea decurrens* subsp. *physocarpa* counted as the listed
+*H. sericea*, after the EPPO risk analysis, 2024), and a tree, shrub
+or non-climbing plant taller than 2 m (my threshold); conifers and
+non-vascular plants from the iNaturalist taxonomy. Non-vascular
+plants are dropped (323). Two rules follow from the FAO LCCS
+"uppermost canopy" rule (Di Gregorio & Jansen, 2000): herbaceous
+observations are kept only in COS 2023 classes where herbs are the
+top layer (annual crops, pastures, *montado*, dunes and sparse
+vegetation, wetlands, urban green spaces; 29 644 → 5 967; 43% fell
+under forest and 12% on buildings), and where several other plants
+share a pixel the tallest group is kept. Final: shrubs 8 145,
+herbaceous 4 218, large invasives 2 958, other trees 1 663, oaks 802,
+aquatic 621, pines 319, eucalyptus 169. The main forest trees are
+rarely photographed. 23% of eucalyptus observations fall in COS
+acacia forest, so eucalyptus is the class most likely confused with
+*A. dealbata*. Shrubs are kept everywhere, though most lie under
+forest (open). No study was found that handles understory
+citizen-science observations when labelling satellite pixels: a
+possible methodological contribution.
+
 Open:
 
-- Class groups: by genus or growth form (e.g. eucalyptus, pines,
-  oaks, other trees, shrubs, herbaceous); likely 5–10 groups.
+- Shrubs under forest canopy: keep everywhere (current), or apply the
+  herbaceous rule?
 - Class imbalance (weighting or sampling).
 - Mixed pixels: a 10 m pixel may contain *Acacia* and another class.
 - **Patch mask instead of a fixed buffer (proposed, to confirm):**

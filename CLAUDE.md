@@ -30,6 +30,17 @@ When proposing an approach, label it clearly as one of:
 Do not silently turn a proposal into an established methodological
 decision.
 
+**Ground every decision in literature or sources.** Before proposing
+or applying a methodological decision (a filter, a threshold, a
+grouping, a rule), search for literature and data sources that support
+or contradict it, and base the proposal on what is found. Cite only
+what was actually read. The exception is something not yet done in
+the literature that could add value to the thesis: then say that no
+precedent was found and present it as a possible contribution, not as
+an established practice. If nothing relevant is found otherwise, say
+so explicitly and label the decision as my own reasoning, so the gap
+is visible.
+
 ## Repository Map
 
 The top-level structure and the purpose of each folder are documented
@@ -119,6 +130,10 @@ that no reasoning behind a decision is ever lost.
   one.
 - Also update the design docs (`docs/research_questions.md`, etc.)
   where the decision applies.
+- In the meeting notes, every decision put to the supervisor names
+  the literature or sources that support it (*Literatura:*), or says
+  that none was found (and, if so, whether it could be a
+  contribution).
 
 ## Current Stage
 

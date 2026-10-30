@@ -122,9 +122,43 @@ Other-plant classes (see `docs/research_questions.md`).
   or taxon geoprivacy), listed in the matching `*_obscured_ids.csv`
   files and excluded in analysis.
 - **Files:** `raw/citizen_science/inaturalist_plantae_no_acacia_coimbra_{before_2021,2021_2025,from_2026}.csv`
-  and `..._obscured_ids.csv` per range.
+  and `..._obscured_ids.csv` per range. Also
+  `raw/citizen_science/inaturalist_taxa_ancestry.csv`: the iNaturalist
+  ancestors (`ancestor_ids`) of each taxon in the cleaned file, from
+  `api.inaturalist.org/v1/taxa`, accessed 2026-10-30; used to drop
+  non-vascular plants.
 - **Preprocessing:** none — one row per observation, same columns as
   the *Acacia* pilot. Downloaded by
+  `notebooks/02_citizen_science/other_plants_observations.ipynb`.
+
+### GIFT plant traits (growth form, climber, height, aquatic)
+
+- **Source:** GIFT, Global Inventory of Floras and Traits, version 3.2
+  (2024-06-13), API `https://gift.uni-goettingen.de/api/extended/index3.2.php`
+- **Access date:** 2026-10-30
+- **References:** Weigelt, König & Kreft (2020), *J. Biogeography* 47,
+  16–43; Denelle, Weigelt & Kreft (2023), *Methods Ecol. Evol.* 14,
+  2738–2748. The GIFT site asks to cite the version used and the 2020
+  paper.
+- **License:** see GIFT terms; some contributors restrict access.
+- **Files:** `external/auxiliary/gift/gift_species.csv` (372 098
+  species: `work_ID`, `work_species`) and `gift_trait_<id>.csv` for
+  traits 1.2.1 (growth form: herb, shrub, tree, other), 1.4.1
+  (climber), 1.6.2 (maximum height, m), 1.7.1 (aquatic); columns
+  `work_ID`, `trait_value`, `agreement`.
+- **Preprocessing:** none. Downloaded and used in step 11 of
+  `notebooks/02_citizen_science/other_plants_observations.ipynb`.
+
+### National list of invasive species (Decreto-Lei 92/2019, Annex II)
+
+- **Source:** ICNF, "Lista Nacional de Espécies Invasoras" (Annex II
+  of Decreto-Lei n.º 92/2019, 10 July), PDF
+  https://www.icnf.pt/api/file/doc/cf455e5a84ab1d96
+- **Access date:** 2026-10-30
+- **File:** `external/auxiliary/icnf_invasive_list/lista_nacional_especies_invasoras_anexo_II_DL92_2019.pdf`
+- **Notes:** species marked "\*" are invasive only in Madeira and are
+  not used. 113 plant names for the mainland are read from the
+  "Plantas" section in step 11 of
   `notebooks/02_citizen_science/other_plants_observations.ipynb`.
 
 ### ICNF burned areas, 1975–2025
@@ -176,7 +210,7 @@ Expert reference data for the RQ1 upper bound (see
 
 - **Files:** `interim/citizen_science/inat_dealbata_clean.csv` (3 000
   *A. dealbata*) and `interim/citizen_science/inat_other_plants_clean.csv`
-  (47 353 other plants).
+  (18 895 other plants).
 - **Made by:** part 2 of
   `notebooks/02_citizen_science/acacia_observations.ipynb` and
   `notebooks/02_citizen_science/other_plants_observations.ipynb`.
@@ -192,11 +226,18 @@ Expert reference data for the RQ1 upper bound (see
   Same 10 m pixel (`pixel`, EPSG:32629 grid, `src/grid.py`): one
   presence per pixel, the closest in date to 2023 (`n_obs_in_pixel`
   keeps how many there were); other plants in a presence's pixel
-  dropped (2026-10-29).
+  dropped (2026-10-29). Other-plants file (2026-10-30, to confirm
+  with the supervisor): non-vascular plants dropped; species grouped
+  into 8 classes (`group`) from GIFT growth forms, the national
+  invasive list and the iNaturalist taxonomy; COS 2023 class added
+  (`cos2023`, level-4 code); herbaceous plants kept only in COS
+  classes where herbs are the top layer; one observation per pixel,
+  the tallest group first, then the closest in date to 2023.
 - **Columns:** `id`, `observed_on`, `year`, `taxon_id`, `taxon_name`,
   `taxon_rank`, `latitude`, `longitude`, `positional_accuracy`,
   `quality_grade`, `accuracy_missing`, `observer`, `pixel`,
-  `n_obs_in_pixel` (presences only), `burned`, `burned_same_year`.
+  `n_obs_in_pixel` (presences only), `group` and `cos2023` (other
+  plants only), `burned`, `burned_same_year`.
 
 ### Expert reference polygons, cleaned (derived)
 
