@@ -3,6 +3,37 @@
 > Só as perguntas ainda sem resposta. As decisões já tomadas estão em
 > [`research_questions.md`](research_questions.md).
 
+## 0. Introdução: o que fiz
+
+Explorei e limpei os três conjuntos de dados, um passo de cada vez,
+sem mexer nos ficheiros originais. Todas as observações são tratadas
+como 2023, o ano de referência das imagens.
+
+**Presenças de *A. dealbata* (iNaturalist):** 7 943 observações de
+*Acacia* → **3 000**. Fiquei só com a *A. dealbata*, só com as
+*research* (identificação confirmada), só com localização até 30 m,
+e só uma por píxel de 10 m. O observador principal está anonimizado
+("Observer A") e continua a ter 88% das presenças.
+
+**Outras plantas (iNaturalist):** 120 479 observações → **18 895**
+(6,3 por presença). Passaram pelos mesmos filtros das presenças, para
+o modelo não aprender a forma como foram registadas em vez da planta.
+Depois agrupei as espécies em 8 classes pela forma de crescimento,
+tirei as que estão no mesmo píxel de uma *A. dealbata*, e fiquei só
+com o que o satélite vê de cima (herbáceas fora da floresta, a planta
+mais alta em cada píxel).
+
+**Dados de especialistas:** 7 494 polígonos → **7 483**. Tirei os 11
+sem rótulo e corrigi as geometrias inválidas. No distrito ficam 1 849
+presenças, 2 780 ausências em vegetação e 2 187 em edifícios (vi a
+classe da COS 2023 de cada ausência). Proponho usar as de vegetação e
+só uma amostra das de edifícios.
+
+**Mostrar:** os notebooks em `notebooks/02_citizen_science/` e
+`notebooks/03_expert_reference/`. As decisões e a literatura de cada
+passo estão em [`thesis/notes.md`](../thesis/notes.md#decisões); as
+que ainda estão por confirmar vêm a seguir.
+
 ## 1. Esclarecer decisões
 
 - **Máscara de segmentação:** falou nela quando referi os buffers.
@@ -144,6 +175,32 @@ Cambridge, com dados GBIF para habitats (ainda em curso), e um
 trabalho em Michigan com invasoras e ciência cidadã, mas a 256 m e sem
 foundation models. A novidade está na combinação e nos controlos.
 
+### Apresentação da Lucie Radová (2026-10-30)
+
+Assisti à apresentação interna dela (Departamento de Matemática, CFE,
+orientada pela Cidália Fonte e pelo Diogo Duarte): recalibra um mapa
+de probabilidade de *A. dealbata* (Random Forest com Sentinel-2) com
+observações *research* do iNaturalist, na mesma zona (tile 29TNE).
+Não é artigo nem preprint, por isso só a uso como contexto.
+
+O que tirei para a minha tese:
+- **Localização:** a maior parte do desacordo entre pontos e mapa
+  vinha do desalinhamento GPS/píxel (mediana de 18% para 51% ao
+  aceitar uma vizinhança de 30–50 m). Apoia o filtro de 30 m e a
+  máscara de segmentação.
+- **O mesmo enviesamento:** um observador fez 85% dos registos de
+  *A. dealbata*, numa área maior (aqui, 83%). Se for a mesma pessoa,
+  é um apoio independente à RQ3. Os pontos também seguem estradas e
+  trilhos, como em Dimson et al. (2023).
+- **As mesmas fontes de controlo:** COS 2023 e OrtoSat 2023.
+- **Contraste:** ela propõe usar as outras plantas como "não-acácia"
+  (para descer a probabilidade). Eu faço o oposto: cada outra planta é
+  uma classe própria, porque uma observação de eucalipto não prova que
+  não há acácia ao lado (Phillips et al., 2009). Mostra que a minha
+  escolha não é a única possível.
+- [ ] Conhece o trabalho? Faz sentido falar com ela, para não
+  duplicarmos esforço?
+
 ## 4. Outros pontos
 
 - **Espécies:** em todos os anos, *A. dealbata* 5 241,
@@ -161,6 +218,24 @@ foundation models. A novidade está na combinação e nos controlos.
   observadores diferentes.
   - [ ] Vale a pena juntar? Conhece quem a gere?
   *Literatura:* nenhuma verificada; é uma fonte de dados.
+- **Buffer em ângulo (ideia de outra defesa):** a coordenada do
+  iNaturalist é onde estava o telemóvel, não a planta. Em vez de um
+  círculo, um setor na direção para onde a câmara apontava, com o
+  comprimento conforme o tipo de foto (grande plano: 1–2 m, cabe no
+  píxel; paisagem: a planta pode estar a dezenas de metros).
+  - A direção da câmara não é utilizável: a API não devolve metadados
+    das fotos (verifiquei), e o EXIF que o site mostra só se lê
+    raspando a página, que está protegida. Não confirmei se a direção
+    é guardada.
+  - Fica a parte exequível: classificar as fotos em grande plano ou
+    paisagem, e tirar as de paisagem (ou dar-lhes um raio maior).
+  - [ ] Percebi bem a ideia? Vale a pena classificar as fotos?
+  *Literatura:* d'Andrimont et al. (2021, arXiv:2112.09190) deslocaram
+  a posição de fotos de rua 30 m para o lado para onde a câmara
+  apontava antes de as ligar às parcelas agrícolas (a mesma ideia, mas
+  com fotos de estrada). Não encontrei estudos que corrijam a distância
+  entre a câmara e a planta em fotos de ciência cidadã: pode ser um
+  contributo.
 - **Overleaf:** para ligar o documento da tese ao repositório (sincronização
   com Git/GitHub) preciso do Overleaf Premium.
   - [ ] A universidade dá acesso ao Premium?
