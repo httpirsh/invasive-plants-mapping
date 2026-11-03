@@ -62,6 +62,8 @@ Docs map:
 | `docs/literature.md` | Paper notes, what has been done, the gap and contribution |
 | `docs/methodology.md` | Methodological questions still open |
 | `docs/meetings/` | One file per supervisor meeting, named by date (`YYYY-MM-DD.md`) |
+| `docs/todo.md` | Concrete next tasks, each with its source (meeting, decision); no explanations |
+| `docs/literature/` | Paper PDFs (local only, not versioned) |
 | `data/README.md` | Per-dataset provenance and sources not yet obtained |
 
 ## Data Handling

@@ -39,3 +39,6 @@ results/**
 
 # Thesis: zipped copy of the document (the sources are in thesis/document/)
 thesis/thesis-document.zip
+
+# Literature: paper PDFs are kept locally only (copyright); cite them in docs/literature.md
+docs/literature/*.pdf

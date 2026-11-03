@@ -22,7 +22,7 @@ invasive-plants-mapping/
 ├── src/           # Reusable code, extracted from notebooks once stable
 ├── experiments/   # Experiment configurations and runs
 ├── results/       # Generated figures, tables, maps and models (not versioned)
-└── docs/          # Research questions, literature, open methodological questions
+└── docs/          # Research questions, literature, open questions, meetings, to-do
 ```
 
 ## Setup
