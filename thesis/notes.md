@@ -188,6 +188,12 @@ binária (*A. dealbata* vs. o resto) corre também, como verificação.
 de espécies como classes, com embeddings. Não verifiquei outras fontes
 para esta escolha.
 
+*Atualizado a 2026-11-04:* os polígonos `classifica = 0` dos
+especialistas deixam de ser usados (decisão do orientador, ver "Usar
+os dados de especialistas"). As classes negativas do modelo de
+especialistas passam a vir só de pontos ao acaso na COS 2023; como
+escolhê-los está em aberto.
+
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#other-plants-as-classes-adopted-direction).
 Ainda não aplicado: as experiências ficam para depois da análise
 exploratória.
@@ -222,8 +228,8 @@ com observações dos mesmos observadores.
 
 ### Usar os dados de especialistas, com limpeza
 
-*2026-10-28, decisão minha depois de os ver no QGIS; o uso das
-ausências é proposta (a confirmar com o orientador).*
+*2026-10-28, decisão minha depois de os ver no QGIS. As ausências
+mudaram a 2026-11-04, por decisão do orientador: ver "O que mudou".*
 
 **O que decidi:** os dados de especialistas são de confiança e vão ser
 usados. Limpeza: tirar as 11 linhas sem `classifica` e corrigir as 531
@@ -257,8 +263,18 @@ que está no próprio segmento (p. ex. uma árvore num jardim fica
   exatidão sairia inflacionada. Mas também tem de saber que um
   edifício não é acácia, por isso fica uma amostra.
 
+**O que mudou (2026-11-04, decisão do orientador, por mensagem):**
+só conto os polígonos com `classifica = 1`. Os de `classifica = 0`
+são áreas de não acácia que não devem entrar no estudo; era por os
+estar a usar que apareciam ausências em edifícios. Deixa de haver
+ausências dos especialistas e a proposta da amostra de edifícios cai.
+Fica em aberto de onde vêm as classes negativas do modelo de
+especialistas: a opção que já estava prevista é pontos ao acaso nas
+classes de vegetação da COS 2023 (ver "Multiclasse também no modelo
+de especialistas").
+
 **Onde:** [`notebooks/03_expert_reference/expert_polygons.ipynb`](../notebooks/03_expert_reference/expert_polygons.ipynb)
-(secções 5–11).
+(secções 5–11). Ainda não atualizado para tirar os `classifica = 0`.
 
 ### Só observações *research*, nos dois lados
 
@@ -615,3 +631,30 @@ contributo.
 [`other_plants_observations.ipynb`](../notebooks/02_citizen_science/other_plants_observations.ipynb);
 [`docs/research_questions.md`](../docs/research_questions.md) (secção
 "Other Plants as Classes" e tabela do pipeline, passo 9).
+
+### Máscara de segmentação: sem a direção da câmara, uma regra para a vegetação mais próxima
+
+*2026-11-04, decisão do orientador (por mensagem); a regra concreta
+está por definir.*
+
+**O que decidi:** não sigo a ideia de usar a direção da câmara ou de
+separar fotos de grande plano e de paisagem. Em vez disso, defino uma
+regra para ligar cada observação à mancha de vegetação mais próxima,
+e experimento várias abordagens. É um ponto central da tese.
+
+**Porquê:**
+- O orientador acha que a ideia da câmara não vale a pena.
+- A coordenada do iNaturalist nem sempre cai em cima da planta; uma
+  regra que leva o ponto à vegetação mais próxima resolve o mesmo
+  problema de forma mais direta.
+- Por ser central, comparar várias regras pode ser um resultado da
+  tese.
+
+**Fundamentação:** o orientador indicou Rivier et al. (2024, IEEE
+ICIP; DOI 10.1109/ICIP51287.2024.10647646), que propaga rótulos de
+pontos a superpíxeis, e disse que há mais trabalhos do género. Só li
+o resumo; o PDF está em `docs/literature/`.
+A ideia da câmara veio da apresentação da Lucie Radová (2026-10-30).
+
+**Onde:** [`docs/meetings/2026-11-04.md`](../docs/meetings/2026-11-04.md)
+(resposta dos orientadores).

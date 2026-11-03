@@ -162,15 +162,12 @@ Upper bound:       best representation   + expert reference labels → classifie
     (buildings, industry) and only 3 in water; the other 56% (2 823,
     2 780 in the district) lie in vegetation: pine, agriculture,
     other forest, COS acacia forest, eucalyptus, shrubland.
-    **Proposal:** use the vegetation ones as absences, labelled by
-    their COS class; keep only a small sample of the artificial ones,
-    as their own class, so the model also learns that buildings are
-    not *A. dealbata* without them dominating. Random points in COS
-    2023 vegetation classes only if more absences are needed. The COS
-    class is read at one point inside each polygon and only describes
-    the site; presence/absence comes from `classifica`. Limitation:
-    COS maps units of at least 1 ha, so a 75 m² segment gets the
-    dominant class of its surroundings.
+    **Decision (supervisor, 2026-11-04):** use only `classifica = 1`;
+    the `classifica = 0` polygons are non-acacia areas that must not
+    be used in this study. This replaces the earlier proposal of using
+    the vegetation ones as absences plus a sample of the artificial
+    ones. Negatives for the expert model: open (random points in COS
+    2023 vegetation classes, as already foreseen).
   - **Cleaning:** 11 unlabelled rows dropped; 531 invalid geometries
     (outlines touching themselves at a pixel corner, from the raster
     origin) repaired with `make_valid`, total area unchanged; overlaps
@@ -420,10 +417,10 @@ much more territory: only 18.6% of other-plant cells contain
 *A. dealbata*.
 
 **Expert model, same formulation (proposed, 2026-10-20):** in RQ1 the
-expert model is also multiclass. Its negatives (the expert
-`classifica = 0` polygons in vegetation, topped up with random points
-in COS 2023 vegetated classes if needed) are labelled by the COS class
-they fall in
+expert model is also multiclass. Its negatives (random points in COS
+2023 vegetated classes; the expert `classifica = 0` polygons are not
+used, supervisor, 2026-11-04) are labelled by the COS class they fall
+in
 (e.g. eucalyptus forest, pine forest, other forest, agriculture,
 shrubland; rare classes merged), not as a single "not *Acacia*"
 class. Reasons: RQ1 compares label sources, so the task formulation
