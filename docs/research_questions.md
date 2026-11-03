@@ -3,7 +3,8 @@
 | Item | Status |
 |---|---|
 | Main question | Adopted |
-| RQ1, RQ3 | Proposed (to confirm with supervisor) |
+| RQ1 | Proposed (to confirm with supervisor) |
+| RQ3 | Adopted 2026-10-21 (approved by the supervisor) |
 | RQ2 (recency-based filter, no random removal) | Adopted 2026-10-21 |
 | Prediction task | Adopted; segmentation mask open |
 | Reference-data pipeline (proposal objective 1) | Proposed |
@@ -349,7 +350,7 @@ reported, and its effect is measured.
 | 7. Negative classes | Adopted direction | See [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | Phillips et al. (2009); see that section |
 | 8. Same pixel | Adopted (2026-10-29) | Pixel = 10 m cell in EPSG:32629. Presences: one per pixel, the closest in date to 2023 (3 276 → 3 000; 98% of repeats were Observer A's). Conflicts: other plants in the 443 pixels that also hold a presence are dropped, the presence stays (772 other plants), the one-pixel version of the segmentation mask. Other plants (2026-10-30, to confirm): one per pixel, the tallest group first (trees > large invasives > shrubs > herbaceous > aquatic), then closest to 2023 (23 353 → 18 895; 917 pixels held more than one group). Replaces "one per pixel and class", which kept a pixel with two labels | Karasiak et al. (2022): repeated nearby samples inflate accuracy; same pixel = same training example |
 | 9. Other-plant classes | Proposed (2026-10-30, to confirm) | See [Other Plants as Classes](#other-plants-as-classes-adopted-direction): 8 groups from GIFT growth forms, the national invasive list and the iNaturalist taxonomy; non-vascular dropped (323); herbaceous kept only in COS classes where herbs are the top layer (29 644 → 5 967) | Growth forms and "uppermost canopy" rule: FAO LCCS (Di Gregorio & Jansen, 2000); traits: GIFT (Weigelt et al., 2020; Denelle et al., 2023); invasives: Decreto-Lei 92/2019, Annex II; *Hakea*: EPPO (2024); grouping: Ball et al. (2026) |
-| 10. Observer balancing | Open | Cap the dominant observer per cell? Linked to RQ3 | Motivated by observer clustering (Cambridge TESSERA group) and Phillips et al. (2009), see RQ3 |
+| 10. Observer balancing | Adopted (2026-11-03) | Main model: all of Observer A's observations (88% of the 3 000 presences). Capping or removing them is not applied in preprocessing; it is the RQ3 experiment (all vs. capped vs. without), so the main model is its "all" baseline. Repeats from the same visit are already removed by step 8 | Motivated by observer clustering (Cambridge TESSERA group) and Phillips et al. (2009), see RQ3 |
 
 **Evaluation — cumulative ablation:** run the RQ1 setup after adding
 each step and report the change in performance. This shows which

@@ -11,8 +11,9 @@ como 2023, o ano de referência das imagens.
 
 **Presenças de *A. dealbata* (iNaturalist):** 7 943 observações de
 *Acacia* → **3 000**. Fiquei só com a *A. dealbata*, só com as
-*research* (identificação confirmada), só com localização até 30 m,
-e só uma por píxel de 10 m. O observador principal está anonimizado
+*research* (identificação confirmada), só com precisão da
+localização até 30 m (as sem valor ficam), e só uma por píxel de
+10 m. O observador principal está anonimizado
 ("Observer A") e continua a ter 88% das presenças.
 
 **Outras plantas (iNaturalist):** 120 479 observações → **18 895**
@@ -28,6 +29,41 @@ sem rótulo e corrigi as geometrias inválidas. No distrito ficam 1 849
 presenças, 2 780 ausências em vegetação e 2 187 em edifícios (vi a
 classe da COS 2023 de cada ausência). Proponho usar as de vegetação e
 só uma amostra das de edifícios.
+
+#### Se perguntar porquê
+
+**Presenças de *A. dealbata***
+
+| Passo | Porquê | Literatura |
+|---|---|---|
+| Tirar coordenadas escondidas (43) | com geoprivacidade, o iNaturalist move o ponto para um sítio ao acaso numa célula de vários km | regra do próprio iNaturalist; nenhum artigo |
+| Anonimizar o Observer A | a RQ3 precisa de separar esta pessoa, mas a tese não a pode nomear | — |
+| Só *A. dealbata* | os especialistas só têm esta espécie (a comparação da RQ1 só é justa assim); a proposta pede a espécie; é 66% das *Acacia*; as espécies vêem-se de forma diferente do satélite | Domingo et al. (2023) e Martins et al. (2016) mapearam a *A. dealbata* sozinha |
+| Só *research* | identificação confirmada por pelo menos duas pessoas; as *casual* são quase todas **sem foto** (1 670 de 1 679), e 98% são do Observer A; as *needs_id* ainda não estão confirmadas; ficam 3 441, chega para treinar | Gillespie et al. (2024) e Brown et al. (2025) usaram só *research*; só estas vão para o GBIF. Não encontrei estudo que compare com e sem as *casual* |
+| Precisão até 30 m, manter as sem valor | um raio grande põe o ponto no píxel errado (rótulo impuro); as sem valor são do Observer A e o teste com a COS mostra que estão bem localizadas (18,6% em acacial, contra 20,7% das ≤ 10 m e 2,3% ao acaso); acima de 30 m desce para ~6,5% | Ball et al. (2026): rótulos impuros baixam a exatidão. O teste com a COS é meu. A apresentação da Radová (não publicada) aponta no mesmo sentido |
+| Uma por píxel de 10 m | o modelo vê píxeis: duas observações no mesmo píxel são o mesmo exemplo; 98% das repetidas eram do Observer A (mesma visita); fica a mais próxima de 2023, o ano das imagens | Karasiak et al. (2022): amostras repetidas e próximas inflacionam a exatidão |
+| Marcar zonas ardidas (não tira nada) | se ardeu entre a observação e 2023, o píxel de 2023 já não mostra o que foi visto | Riveiro et al. (2025): a acácia não desaparece com o fogo, o problema é o píxel |
+
+**Outras plantas**
+
+| Passo | Porquê | Literatura |
+|---|---|---|
+| Como classes, não como "não-acácia" | uma observação de eucalipto prova que há eucalipto, não que não há acácia ao lado; dá matriz de confusão (decisão da reunião de 21 de outubro) | Phillips et al. (2009), *target-group background*; Ball et al. (2026), espécies e grupos como classes |
+| Os mesmos filtros das presenças | se só as presenças fossem *research*, as outras plantas ficavam com os registos sem foto e as plantas de jardim, e o modelo aprendia como as observações foram feitas em vez da planta | Phillips et al. (2009): o fundo tem de vir do mesmo processo de amostragem |
+| Tirar as que estão num píxel com *A. dealbata* (772) | o mesmo píxel diria "é acácia" e "não é acácia"; fica a presença porque é a planta a mapear | ideia da máscara de segmentação (sua, reunião de 21 de outubro), aqui só a um píxel; Karasiak et al. (2022) |
+| 8 grupos pela forma de crescimento | 1 549 espécies são demasiadas; árvore, mato, erva e água vêem-se diferente do satélite; eucalipto e pinheiro são as florestas dominantes; as invasoras grandes são as mais parecidas com a acácia | GIFT (Weigelt et al., 2020; Denelle et al., 2023); DL 92/2019, Anexo II; EPPO (2024) para a *Hakea*; FAO LCCS (Di Gregorio & Jansen, 2000) |
+| Herbáceas só onde a erva é a camada de cima | o satélite vê a copa: 43% das herbáceas estavam debaixo de floresta e 12% em edifícios, e ensinavam que copa ou telhado é erva | FAO LCCS (Di Gregorio & Jansen, 2000): a forma dominante é a da camada mais alta. A lista de classes da COS é a minha leitura |
+| A mais alta ganha no píxel | pela mesma razão: num píxel com carvalho e mato, de cima vê-se o carvalho | FAO LCCS; Karasiak et al. (2022) |
+
+**Dados de especialistas**
+
+| Passo | Porquê | Literatura |
+|---|---|---|
+| Usá-los | vistos no QGIS estão onde devem; são de 2023, feitos no campo e sobre o OrtoSat (a sua resposta de 28 de outubro) | — |
+| Tirar 11 sem rótulo, corrigir 531 geometrias | as inválidas são contornos que se tocam num canto de píxel (vêm da conversão de raster para vetor); a correção não muda a área | — |
+| Ausências: as de vegetação, e só uma amostra das de edifícios | com quase só edifícios, o modelo aprendia "árvore vs. edifício" e a exatidão saía inflacionada; mas tem de saber que um edifício não é acácia | nenhuma verificada; a classe da COS como rótulo segue Ball et al. (2026) |
+
+As que ainda não confirmou estão na secção 1.
 
 **Mostrar:** os notebooks em `notebooks/02_citizen_science/` e
 `notebooks/03_expert_reference/`. As decisões e a literatura de cada
@@ -113,6 +149,14 @@ que ainda estão por confirmar vêm a seguir.
   *Literatura:* Ball et al. (2026): o desempenho caiu quando imagem e
   rótulos eram de anos diferentes, o que apoia a distância a 2023;
   reduziram os rótulos ao acaso, não por data.
+  - Ideia extra: em vez de filtrar, dar mais peso às observações mais
+    próximas de 2023 (não às mais recentes: uma de 2026 está tão longe
+    da imagem como uma de 2020). Também baixava o peso do Observer A
+    (2021 tem 43% das observações, 98% dela). Não no modelo principal,
+    porque mexe na mesma variável da RQ2: só como verificação extra.
+  - [ ] Vale a pena?
+  *Literatura:* a mesma, Ball et al. (2026); não verifiquei estudos
+  que pesem amostras pela data.
 
 - **Ausências nos dados de especialistas:**
   - [ ] Cruzei as 5 013 ausências (`classifica = 0`) com a COS 2023:
@@ -125,39 +169,7 @@ que ainda estão por confirmar vêm a seguir.
     COS como rótulo segue a formulação multiclasse (Ball et al.,
     2026).
 
-## 2. A pessoa que fez a maioria das observações
-
-**O que encontrei:**
-- Fez 83% de todas as observações.
-- 2021 tem 43% de todas as observações, e 98% delas são dela. O pico
-  de 2021 não vem de mais gente a usar o iNaturalist.
-- Nos anos recentes pesa menos: 35% em 2023 e 31% em 2025.
-
-**Ligação à RQ3:** o modelo só aprende com os sítios por onde esta
-pessoa passou, por isso o mapa pode mostrar o percurso dela e não
-onde a *Acacia* está. É um caso real para a RQ3: os embeddings sabem
-onde há estradas e casas, por isso podem aprender esse percurso mais
-facilmente do que o Sentinel-2 (amplificar), ou separar melhor a
-*Acacia* do que está à volta (atenuar). Experiência: treinar com
-todas as observações, com as dela limitadas, e sem as dela, e testar
-nas das outras pessoas e noutras zonas.
-
-**Literatura:** Dimson et al. (2023) encontraram enviesamento para
-estradas e zonas perturbadas em registos de invasoras do iNaturalist;
-Phillips et al. (2009) para usar outras plantas dos mesmos
-observadores; Zhu et al. (2026) e Yang et al. (2026) para embeddings
-que generalizam pior para outras regiões.
-
-**Decidir:**
-- [ ] Aprovar a RQ3?
-- [ ] No modelo principal: usar todas as observações dela e testar as
-  outras opções na RQ3 (proposta), ou limitar já o número por
-  quadrícula?
-
-**Mostrar:** [notebook 02](../notebooks/02_citizen_science/acacia_observations.ipynb)
-— observações por ano, mapa e peso de cada observador.
-
-## 3. Para informar
+## 2. Para informar
 
 O objetivo 1 da proposta (transformar observações de ciência cidadã
 em dados de referência) fica coberto por um capítulo metodológico, com
@@ -201,23 +213,22 @@ O que tirei para a minha tese:
 - [ ] Conhece o trabalho? Faz sentido falar com ela, para não
   duplicarmos esforço?
 
-## 4. Outros pontos
+## 3. Outros pontos
 
-- **Espécies:** em todos os anos, *A. dealbata* 5 241,
-  *A. melanoxylon* 1 884, *A. longifolia* 512. Proponho só a
-  *A. dealbata*: os dados de especialistas só têm esta espécie, a
-  proposta pede mapeamento ao nível da espécie, e é 66% das
-  observações. As outras *Acacia* ficam fora do treino; mais tarde,
-  talvez como classe própria.
-  - [ ] Concorda?
-  *Literatura:* Domingo et al. (2023) e Martins et al. (2016)
-  mapearam a *A. dealbata* sozinha; Eskandari et al. (2025) o género.
-- **Outra fonte de ciência cidadã:** a plataforma invasoras.pt do CFE
-  da Universidade de Coimbra (publicada no GBIF). Outras pessoas,
-  outra plataforma: mais presenças, ou um teste da RQ3 com
-  observadores diferentes.
-  - [ ] Vale a pena juntar? Conhece quem a gere?
-  *Literatura:* nenhuma verificada; é uma fonte de dados.
+- **Se achar poucos dados: juntar a invasoras.pt.** Hoje ficam 3 000
+  presenças (só *research*). Se achar pouco, a melhor forma de
+  acrescentar é a plataforma invasoras.pt do CFE da Universidade de
+  Coimbra (publicada no GBIF): outras pessoas e outra plataforma, por
+  isso mais presenças sem aumentar o peso do Observer A, e ainda um
+  teste da RQ3 com observadores diferentes.
+  - Só em último caso: juntar as *casual* com menos peso no treino. São
+    quase todas sem foto (1 670 de 1 679) e 98% do Observer A, por isso
+    acrescentam mais do mesmo enviesamento; e teriam de entrar também
+    nas outras plantas, onde incluem plantas de jardim.
+  - [ ] Vale a pena juntar a invasoras.pt? Conhece quem a gere?
+  *Literatura:* nenhuma verificada para juntar fontes; é uma fonte de
+  dados. Não encontrei estudos que pesem observações do iNaturalist
+  pela qualidade (pesquisa rápida).
 - **Buffer em ângulo (ideia de outra defesa):** a coordenada do
   iNaturalist é onde estava o telemóvel, não a planta. Em vez de um
   círculo, um setor na direção para onde a câmara apontava, com o
@@ -239,9 +250,3 @@ O que tirei para a minha tese:
 - **Overleaf:** para ligar o documento da tese ao repositório (sincronização
   com Git/GitHub) preciso do Overleaf Premium.
   - [ ] A universidade dá acesso ao Premium?
-
-## Para a defesa
-
-Dizer que tenho noção de que as perguntas são ambiciosas e que estão
-ordenadas por prioridade. Frase e justificação em
-[`thesis/notes.md`](../thesis/notes.md#perguntas-ambiciosas).

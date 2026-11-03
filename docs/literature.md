@@ -168,6 +168,48 @@ heavy clustering around nature reserves, canals and a zoo.
 habitats, not invasive plants; no published results yet. Monitor:
 the group could publish in the same space.
 
+**Radová (2026, unpublished).** Can citizen science data improve
+*Acacia dealbata* maps from supervised satellite image classification?
+A post-classification approach. Internal presentation, Department of
+Mathematics, University of Coimbra, 2026-10-30 (CFE, advised by
+Cidália Fonte and Diogo Duarte). — *Unpublished; I only attended the
+talk, this is not a paper or preprint, and the summary below may not
+match whatever the final thesis says*
+
+Post-classification recalibration of an existing Sentinel-2 Random
+Forest *A. dealbata* probability map, using iNaturalist research-grade
+observations (Sentinel-2 tile 29TNE, Aveiro–Coimbra–Leiria — contains
+this thesis's Coimbra study area) as a correction signal, not as
+training data; retraining the classifier with citizen-science labels
+is listed as future work, not done. Points worth noting, with the
+unpublished caveat above:
+
+- Most apparent disagreement between points and map is attributed to
+  GPS/pixel misalignment rather than model error (median point
+  probability 18% → 51% once a 30–50 m neighbourhood is allowed
+  instead of the exact pixel) — consistent with this thesis's choice
+  to drop positional accuracy > 30 m (step 2 of the
+  [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed))
+  and with the open patch-mask question in
+  [Other Plants as Classes](research_questions.md#other-plants-as-classes-adopted-direction).
+- One observer made 85% of *A. dealbata* records — close to the
+  dominant-observer bias found independently in this thesis's own
+  pilot (83% overall, 85% in 2021–2025; see
+  [RQ3](research_questions.md#rq3--spatial-sampling-bias)), over a
+  larger area. If it is the same observer, that is independent
+  support that the bias is not an artefact of the smaller pilot.
+- Points cluster along roads/trails, consistent with the bias axes
+  from Dimson et al. (2023).
+- Uses COS 2023 and OrtoSat 2023 as independent checks, the same
+  sources used in this thesis's [Species Scope](research_questions.md#species-scope-proposed)
+  work.
+- **Contrast:** proposes using other-plant observations as negative
+  evidence against *Acacia* (to push probabilities down). This is the
+  opposite of the target-group-background choice made in
+  [Other Plants as Classes](research_questions.md#other-plants-as-classes-adopted-direction),
+  where other-plant observations are kept as their own positive
+  classes, not treated as absences.
+
 ### Citizen science + invasive plants + deep learning
 
 **Cardoso et al. (2024).** Can citizen science and social media

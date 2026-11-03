@@ -73,6 +73,56 @@ Ideia para a defesa: um diagrama do pipeline (observação no
 iNaturalist → píxel → embedding → classificador → mapa) antes das
 perguntas de investigação.
 
+### Outras plantas como classes, não como ausências
+
+*2026-10-30, para a defesa — caso perguntem porque não uso as outras
+plantas como "não é acácia".*
+
+> "O iNaturalist só regista presenças: nunca há um registo que diga
+> 'aqui não há acácia'. A tentação óbvia é usar uma observação de
+> outra planta, por exemplo eucalipto, para dizer 'aqui não há
+> acácia'. Não faço isso, porque essa observação só confirma que há
+> eucalipto naquele ponto — não que não haja acácia ao lado, ou no
+> mesmo píxel. Ninguém verificou isso. Em vez disso, cada observação
+> de outra planta vira a sua própria classe positiva ('isto é
+> eucalipto'), e o modelo passa a ser multiclasse. A separação entre
+> acácia e eucalipto surge de ensinar o modelo a reconhecer as duas
+> coisas, não de uma alegação de ausência que os dados não sustentam."
+
+Porque isto é diferente na prática de um "não-acácia" direto:
+- Um rótulo "não-acácia" afirma uma ausência que o dado não prova.
+- Um rótulo "eucalipto" afirma uma presença que o dado prova; a
+  acácia "perder" face ao eucalipto no classificador multiclasse é um
+  efeito colateral de aprender a distinguir vegetação, não uma
+  alegação direta sobre a acácia.
+- Dá matriz de confusão: sei com que a acácia se confunde (eucalipto,
+  pinheiro, mato...), não só se o modelo acerta ou erra.
+- Não penaliza píxeis mistos, onde a acácia pode genuinamente
+  coexistir com a planta observada, mas não fotografada.
+- Segue Phillips et al. (2009) — *target-group background*: usar
+  observações de outras espécies registadas pelo mesmo
+  processo/observadores como "fundo", porque partilham o mesmo viés
+  de acessibilidade das presenças de acácia, sem nunca alegar que a
+  espécie-alvo está confirmadamente ausente nesses pontos. A COS como
+  ausência dos especialistas segue a mesma lógica (ver "Multiclasse
+  também no modelo de especialistas" nas Decisões).
+
+**Contraste, se perguntarem se isto é mesmo relevante:** a colega
+Lucie Radová, numa apresentação interna que assisti em 2026-10-30
+(ainda não publicada, não é artigo nem preprint), propõe exatamente o
+oposto nos próximos passos do trabalho dela: usar observações de
+outras plantas para *descer* a probabilidade de acácia, ou seja, como
+"não-acácia" direto. É um bom contraste para mostrar que a escolha
+desta tese não é óbvia nem a única possível — ver a entrada completa,
+com a devida ressalva de que é só uma apresentação assistida, em
+[`docs/literature.md`](../docs/literature.md).
+
+**Onde:** fundamentação completa em
+[`docs/research_questions.md`](../docs/research_questions.md#other-plants-as-classes-adopted-direction)
+e nas entradas "Multiclasse também no modelo de especialistas" e
+"Outras plantas em 8 grupos; herbáceas só onde são a camada de cima"
+nas Decisões, abaixo.
+
 ## Decisões
 
 Uma entrada por decisão: data, o que decidi, porquê, e onde está
@@ -141,6 +191,34 @@ para esta escolha.
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#other-plants-as-classes-adopted-direction).
 Ainda não aplicado: as experiências ficam para depois da análise
 exploratória.
+
+### RQ3 aprovada
+
+*2026-10-21, decisão do orientador (na reunião).*
+
+**O que decidi:** a RQ3 (os embeddings amplificam ou atenuam o
+enviesamento espacial da ciência cidadã, comparados com o
+Sentinel-2?) fica nas perguntas da tese, a seguir à RQ1 e à RQ2.
+
+**Porquê:**
+- Há um caso real de enviesamento nos dados: uma pessoa fez 83% de
+  todas as observações de *Acacia* (88% das presenças de
+  *A. dealbata* depois da limpeza), e 98% do pico de 2021.
+- O modelo só aprende com os sítios por onde esta pessoa passou; os
+  embeddings podem aprender esse percurso mais facilmente
+  (amplificar) ou separar melhor a *Acacia* do que está à volta
+  (atenuar). Ainda ninguém testou isto.
+- É a pergunta mais cara (precisa de regiões diferentes e de camadas
+  de estradas e trilhos), por isso fica em último na prioridade (ver
+  "Perguntas ambiciosas" acima).
+
+**Fundamentação:** Dimson et al. (2023): registos de invasoras do
+iNaturalist enviesados para estradas e zonas perturbadas; Zhu et al.
+(2026) e Yang et al. (2026): embeddings que generalizam pior para
+outras regiões; Phillips et al. (2009) para corrigir o enviesamento
+com observações dos mesmos observadores.
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq3--spatial-sampling-bias).
 
 ### Usar os dados de especialistas, com limpeza
 
@@ -465,3 +543,32 @@ o orientador). Revista no mesmo dia: ver "O que mudou".*
 "Other Plants as Classes" e tabela do pipeline, passos 8 e 9);
 fontes em [`data/README.md`](../data/README.md) (GIFT e lista
 nacional de invasoras).
+
+### Observer A: todas as observações no modelo principal
+
+*2026-11-03, decisão minha.*
+
+**O que decidi:** no modelo principal ficam todas as observações do
+Observer A (88% das 3 000 presenças de *A. dealbata*). Não limito o
+número por quadrícula na preparação dos dados. Limitá-las ou tirá-las
+é a experiência da RQ3 (todas / limitadas / sem as dela), e o modelo
+principal é o caso "todas".
+
+**Porquê:**
+- Limitar o Observer A é precisamente o que a RQ3 testa. Se o fizesse
+  já no modelo principal, a RQ3 ficava sem o caso de comparação.
+- As observações repetidas da mesma visita já saíram no passo "uma
+  por píxel" (98% das repetidas eram dela).
+- Com 88% das presenças, limitar já cortava muitos dados antes de
+  saber se o enviesamento muda o resultado.
+- Não é uma pergunta para o orientador: a RQ3 já está aprovada, e
+  isto é a forma de a pôr em prática.
+
+**Fundamentação:** não verifiquei literatura para esta escolha
+concreta; é raciocínio meu, a partir do desenho da RQ3. A motivação
+para testar a limitação na RQ3 vem de Phillips et al. (2009) e do
+enviesamento descrito por Dimson et al. (2023).
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md)
+(tabela do pipeline, passo 10, e
+[RQ3](../docs/research_questions.md#rq3--spatial-sampling-bias)).
