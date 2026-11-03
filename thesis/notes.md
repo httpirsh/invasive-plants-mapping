@@ -632,15 +632,25 @@ contributo.
 [`docs/research_questions.md`](../docs/research_questions.md) (secção
 "Other Plants as Classes" e tabela do pipeline, passo 9).
 
-### Máscara de segmentação: sem a direção da câmara, uma regra para a vegetação mais próxima
+### Máscara de segmentação: sem a direção da câmara; testar várias abordagens
 
-*2026-11-04, decisão do orientador (por mensagem); a regra concreta
-está por definir.*
+*2026-11-04, decisão do orientador (por mensagem). A regra concreta
+está por definir por mim.*
 
-**O que decidi:** não sigo a ideia de usar a direção da câmara ou de
-separar fotos de grande plano e de paisagem. Em vez disso, defino uma
-regra para ligar cada observação à mancha de vegetação mais próxima,
-e experimento várias abordagens. É um ponto central da tese.
+**O que decidi:**
+- **Decidido (orientador):** não sigo a ideia de usar a direção da
+  câmara ou de separar fotos de grande plano e de paisagem ("acho que
+  não vale a pena").
+- **Decidido (orientador):** a máscara é um ponto central da tese, e
+  vou experimentar várias abordagens.
+- **Decidido (orientador):** definir uma regra para considerar a área
+  de vegetação mais próxima da observação. Escreveu-o como sugestão
+  ("se calhar…?"), mas o que o orientador diz fica como decidido.
+  Leio-a como duas coisas que podem ser testadas: (1) levar o ponto à vegetação mais próxima, quando a
+  coordenada (onde estava o telemóvel) cai numa estrada ou num
+  edifício; (2) estender o rótulo do ponto à mancha à volta, como no
+  artigo que indicou (superpíxeis). A segunda é a minha leitura, a
+  confirmar.
 
 **Porquê:**
 - O orientador acha que a ideia da câmara não vale a pena.

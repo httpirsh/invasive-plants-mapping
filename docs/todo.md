@@ -9,9 +9,15 @@
 
 - [ ] Perguntar aos orientadores porquê não usar os `classifica = 0`
   na avaliação ([reunião 2026-11-04](meetings/2026-11-04.md#resposta-dos-orientadores-por-mensagem))
-- [ ] Ler Rivier et al. (2024) ([reunião 2026-11-04](meetings/2026-11-04.md#resposta-dos-orientadores-por-mensagem))
-- [ ] Definir e testar regras para ligar cada observação à vegetação
-  mais próxima ([reunião 2026-11-04](meetings/2026-11-04.md#resposta-dos-orientadores-por-mensagem))
+- [ ] **Máscara de segmentação** (ponto central; [reunião 2026-11-04](meetings/2026-11-04.md#resposta-dos-orientadores-por-mensagem)):
+  - [ ] Ler Rivier et al. (2024) e procurar trabalhos do género
+  - [ ] Definir uma regra para a área de vegetação mais próxima de
+    cada observação
+  - [ ] Testar várias abordagens, por exemplo: levar o ponto à
+    vegetação mais próxima quando cai numa estrada ou edifício;
+    estender o rótulo à mancha à volta (superpíxeis, semelhança dos
+    embeddings, polígonos da COS)
+  - [ ] Comparar as abordagens (com e sem, na ablação)
 - [ ] Decidir se simplifico as classes para árvores e matos
   (sugestão, [reunião 2026-11-04](meetings/2026-11-04.md#resposta-dos-orientadores-por-mensagem))
 

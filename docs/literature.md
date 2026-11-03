@@ -344,7 +344,10 @@ Aerial Imagery Using Query Points and Superpixel Supervision.
 arXiv:2309.05490v2; published at IEEE ICIP 2024,
 DOI: [10.1109/ICIP51287.2024.10647646](https://doi.org/10.1109/ICIP51287.2024.10647646).
 PDF: [`literature/rivier_2024_superpixel_query_points.pdf`](literature/rivier_2024_superpixel_query_points.pdf).
-Recommended by the supervisor (2026-11-04) for the segmentation mask.
+Recommended by the supervisor (2026-11-04) for the segmentation mask:
+a rule linking each citizen-science point to the nearest vegetation
+area, with several approaches to compare (see
+[`research_questions.md`](research_questions.md#prediction-task-adopted)).
 — *To read (abstract only so far)*
 
 Trains segmentation from sparse point labels (as few as 50 per image)

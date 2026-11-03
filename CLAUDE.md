@@ -137,6 +137,29 @@ that no reasoning behind a decision is ever lost.
   that none was found (and, if so, whether it could be a
   contribution).
 
+### When I agree or the supervisor answers
+
+Whenever I agree with a decision, or the supervisor answers my
+questions, propagate it **automatically** in the same session, without
+waiting to be asked:
+
+- **`thesis/notes.md`:** add or update the decision entry (as above).
+- **`docs/todo.md`:** turn what follows from it into concrete tasks,
+  each linking to its source; tick or remove tasks it closes.
+- **The meeting file** (`docs/meetings/YYYY-MM-DD.md`): record the
+  answer next to the question and mark it as decided.
+- **Design docs** (`docs/research_questions.md`,
+  `docs/methodology.md`, `data/README.md`): update status and content
+  where it applies; remove the item from open questions once answered.
+- What the supervisor says counts as decided, even when phrased as a
+  suggestion ("se calhar…"); only explicit offers ("se quiser…") need
+  my choice, so ask about those.
+- **No redundancy:** the full reasoning lives only in
+  `thesis/notes.md`; the other files hold a short line and a link,
+  each in its own role (todo = tasks, meetings = what was said, design
+  docs = current state). Don't copy the same explanation into several
+  files.
+
 ## Current Stage
 
 Initial setup and exploration. Priorities, in order: understand the

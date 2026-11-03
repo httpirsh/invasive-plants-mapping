@@ -6,7 +6,7 @@
 | RQ1 | Proposed (to confirm with supervisor) |
 | RQ3 | Adopted 2026-10-21 (approved by the supervisor) |
 | RQ2 (recency-based filter, no random removal) | Adopted 2026-10-21 |
-| Prediction task | Adopted; segmentation mask open |
+| Prediction task | Adopted; segmentation mask: direction set 2026-11-04 (supervisor), rule to define |
 | Reference-data pipeline (proposal objective 1) | Proposed |
 | Temporal design: all iNaturalist observations treated as 2023 | Adopted 2026-10-21 |
 | Other plants as classes (multiclass) | Adopted direction 2026-10-21; 8 groups proposed 2026-10-30 (to confirm) |
@@ -317,14 +317,24 @@ iNaturalist research-grade observations at genus level)
 and by the Cambridge TESSERA group (GBIF occurrences as weak labels
 for habitats, work in progress). The task follows them.
 
-- **Segmentation mask (open, interpretation to confirm):** raised
-  when discussing exclusion buffers. Likely meaning: replace the fixed
-  buffer with a mask of the actual *Acacia* patch around each
-  observation. The task stays pixel classification; the mask changes
-  how labels and exclusions are built (see [Other Plants as
-  Classes](#other-plants-as-classes-adopted-direction)). Grounded in
-  Rivier et al. (2023/2024), who propagated sparse point labels to
-  superpixels.
+- **Segmentation mask (supervisor, 2026-11-04: central, try several
+  approaches; rule to define):** raised when discussing exclusion
+  buffers. Decided (supervisor): a rule to consider the nearest
+  vegetation area to each observation; the concrete rule is mine to
+  define. Read as two things to
+  test: (1) move the point to the nearest vegetation when the
+  coordinate (where the phone was) falls on a road or building;
+  (2) extend the point label to the patch around it, as in the paper
+  he recommended (the second is my reading, to confirm). The
+  supervisor sees this as a central point of the thesis and suggests
+  trying several approaches; comparing them can be a result.
+  The task stays pixel classification; the mask changes how labels
+  and exclusions are built (see [Other Plants as
+  Classes](#other-plants-as-classes-adopted-direction)). Using the
+  camera direction or close-up vs. landscape photos was dropped (not
+  worth it, supervisor). Recommended reading: Rivier et al. (2024,
+  ICIP), who propagated sparse point labels to superpixels, "and
+  similar works" (supervisor; not read yet beyond the abstract).
 - **Grid-cell presence/absence — not the training unit:** pixel
   predictions may later be aggregated to cells for evaluation and
   comparison with SDM-style outputs.
@@ -465,14 +475,15 @@ Open:
 
 - Class imbalance (weighting or sampling).
 - Mixed pixels: a 10 m pixel may contain *Acacia* and another class.
-- **Patch mask instead of a fixed buffer (proposed, to confirm):**
+- **Patch mask instead of a fixed buffer (direction confirmed by the
+  supervisor, 2026-11-04; methods to compare):**
   delimit the *Acacia* patch around each observation and use it to
   (1) exclude other-plant points inside the patch and (2) take all
   patch pixels as *Acacia* training pixels, not only the observed one.
   Candidate methods: region growing on TESSERA embedding similarity
   from the observed pixel (with a maximum radius); superpixels on
-  Sentinel-2 or embeddings (as in Rivier et al., 2023/2024, who
-  propagated point labels to superpixels); COS 2023 "Florestas
+  Sentinel-2 or embeddings (as in Rivier et al., 2024, recommended by
+  the supervisor, who propagated point labels to superpixels); COS 2023 "Florestas
   de acácias" polygons where the point falls inside one (about 17% of
   2021–2025 presences). Risks: the mask may spread into similar
   non-*Acacia* vegetation (check a sample on OrtoSat), and large
