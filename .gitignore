@@ -36,3 +36,6 @@ results/**
 
 # Environment
 .env
+
+# Thesis: zipped copy of the document (the sources are in thesis/document/)
+thesis/thesis-document.zip
