@@ -453,6 +453,11 @@ o orientador). Revista no mesmo dia: ver "O que mudou".*
 - Resultado: matos 8 145, herbáceas 4 218, invasoras grandes 2 958,
   outras árvores 1 663, carvalhos 802, aquáticas 621, pinheiros 319,
   eucalipto 169. Ficam 6,3 outras plantas por presença.
+  *Mudou a 2026-11-03:* os matos debaixo de floresta passaram a sair
+  (ver "Matos debaixo de floresta saem" abaixo). Ficam 13 554 (4,5 por
+  presença): herbáceas 4 229, invasoras grandes 2 958, matos 2 790,
+  outras árvores 1 663, carvalhos 802, aquáticas 624, pinheiros 319,
+  eucalipto 169.
 
 **O que mudou (2026-10-30):**
 - Primeiro os grupos vinham de listas de géneros feitas à mão. Pedi
@@ -527,8 +532,8 @@ o orientador). Revista no mesmo dia: ver "O que mudou".*
   leitura dos nomes das classes, não uma regra publicada. A COS tem
   unidade mínima de 1 ha: clareiras pequenas perdem-se.
 - Os matos também estão sobretudo debaixo de floresta (26% em pinhal,
-  21% em eucaliptal, só 13% em matos), mas ficam todos por agora.
-  Pergunta para o orientador.
+  21% em eucaliptal, só 13% em matos). *Resolvido a 2026-11-03:* saem
+  (ver a entrada abaixo).
 - Eucalipto (169) e pinheiros (319) são classes pequenas. Porquê:
   são pouco fotografados (1% e 0,7% das observações de plantas) e o
   filtro *research* tirou a maior parte (67% dos eucaliptos eram
@@ -572,3 +577,41 @@ enviesamento descrito por Dimson et al. (2023).
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md)
 (tabela do pipeline, passo 10, e
 [RQ3](../docs/research_questions.md#rq3--spatial-sampling-bias)).
+
+### Matos debaixo de floresta saem
+
+*2026-11-03, decisão minha (a confirmar com a ablação).*
+
+**O que decidi:** para começar, os matos que caem em floresta na COS
+2023 (código 5: pinhal, eucaliptal, outras florestas, acacial) saem,
+pela mesma regra das herbáceas. Vou testar com e sem esta regra na
+ablação; se tirá-los piorar o resultado, volto atrás.
+Saem 6 633 matos (pinhal 2 604, eucaliptal 2 087, outras florestas
+1 623, acacial 319). Os matos passam de 8 145 para 2 790, e as outras
+plantas de 18 895 para 13 554 (4,5 por presença, antes 6,3).
+
+**Porquê:**
+- O satélite vê a copa. Um mato fotografado debaixo de um pinhal dá
+  um píxel que, de cima, é pinhal; com o rótulo "matos", ensinava o
+  modelo que copa de pinheiro é mato.
+- Coerência: as herbáceas debaixo de floresta já saíam pela mesma
+  razão. Tirar umas e deixar os outros era difícil de defender.
+- Esses píxeis confundiam o modelo exatamente nas classes pinheiros
+  e eucalipto, e o eucalipto é a confusão mais provável com a acácia.
+- Contra: perde-se cerca de dois terços dos matos (6 633 de 10 114),
+  que eram a maior classe. E muitos
+  pinhais e eucaliptais têm copa aberta; com manchas da COS de pelo
+  menos 1 ha, alguns destes matos podiam ser mesmo o que se vê de
+  cima. É por isso que fica para testar na ablação.
+- Não é uma pergunta para o orientador, mas vou informá-lo.
+
+**Fundamentação:** a regra da camada mais alta da FAO LCCS (Di
+Gregorio & Jansen, 2000), como nas herbáceas. Não encontrei estudos
+que tirem observações de sub-bosque de ciência cidadã ao rotular
+píxeis de satélite (ver a entrada das 8 classes): pode ser um
+contributo.
+
+**Onde:** passo 12 de
+[`other_plants_observations.ipynb`](../notebooks/02_citizen_science/other_plants_observations.ipynb);
+[`docs/research_questions.md`](../docs/research_questions.md) (secção
+"Other Plants as Classes" e tabela do pipeline, passo 9).

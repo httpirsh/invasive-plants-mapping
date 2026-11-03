@@ -210,7 +210,7 @@ Expert reference data for the RQ1 upper bound (see
 
 - **Files:** `interim/citizen_science/inat_dealbata_clean.csv` (3 000
   *A. dealbata*) and `interim/citizen_science/inat_other_plants_clean.csv`
-  (18 895 other plants).
+  (13 554 other plants).
 - **Made by:** part 2 of
   `notebooks/02_citizen_science/acacia_observations.ipynb` and
   `notebooks/02_citizen_science/other_plants_observations.ipynb`.
