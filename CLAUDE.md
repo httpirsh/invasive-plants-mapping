@@ -61,7 +61,7 @@ Docs map:
 | `docs/research_questions.md` | Research questions, experiments per RQ, shared design decisions |
 | `docs/literature.md` | Paper notes, what has been done, the gap and contribution |
 | `docs/methodology.md` | Methodological questions still open |
-| `docs/meeting_notes.md` | Meeting notes and points to bring to meetings |
+| `docs/meetings/` | One file per supervisor meeting, named by date (`YYYY-MM-DD.md`) |
 | `data/README.md` | Per-dataset provenance and sources not yet obtained |
 
 ## Data Handling
