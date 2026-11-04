@@ -1,44 +1,14 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-venv/
-.venv/
-env/
-
-# Jupyter
-.ipynb_checkpoints/
-
-# Data: contents of raw/interim/processed/external are not versioned;
-# the directory structure is kept via .gitkeep
-data/raw/**
-data/interim/**
-data/processed/**
-data/external/**
-!data/raw/**/
-!data/interim/**/
-!data/processed/**/
-!data/external/**/
-# Expert reference polygons are versioned (repository is private)
-!data/raw/expert_reference/*.gpkg
-
-# Results: generated outputs are not versioned
-results/**
-!results/README.md
-
-# Keep directory placeholders everywhere
-!**/.gitkeep
-
-# OS / editor
-.DS_Store
-.vscode/
-.idea/
-
-# Environment
-.env
-
-# Thesis: zipped copy of the document (the sources are in thesis/document/)
-thesis/thesis-document.zip
-
-# Literature: paper PDFs are kept locally only (copyright); cite them in docs/literature.md
-docs/literature/*.pdf
+#Ficheiros resultantes da compilação do projeto
+**.aux
+**.bbl
+**.blg
+**.fdb_latexmk
+**.fls
+**.lof
+**.log
+**.lot
+**.out
+**.synctex.gz
+**.toc
+**.DS_Store
+**.lb
