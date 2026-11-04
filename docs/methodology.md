@@ -6,7 +6,8 @@ design) are in [`research_questions.md`](research_questions.md);
 dataset provenance is in [`data/README.md`](../data/README.md).
 
 **Grounded in** notes name the work that already used an option and
-from which the idea comes.
+from which the idea comes — the paper's actual finding is in
+[`literature.md`](literature.md), not repeated here.
 
 ## Data Quality
 
@@ -27,12 +28,9 @@ confirm): 8 groups from GIFT growth forms and the national invasive
 list; herbaceous only in COS classes where herbs are the top layer;
 one other plant per pixel, the tallest group first.
 
-**Grounded in:** research-grade-only observations were used by
-Gillespie et al. (2024) and Brown et al. (2025). Positional accuracy
-and per-pixel duplicates are motivated by Ball et al. (2026), where
-label impurity lowered accuracy, and by Karasiak et al. (2022), where
-nearby train and test samples inflated accuracy: duplicates in one
-pixel act the same way.
+**Grounded in:** Gillespie et al. (2024); Brown et al. (2025) (research
+grade); Ball et al. (2026) (label impurity); Karasiak et al. (2022)
+(nearby samples) — see `literature.md` for their findings.
 
 ## Validation
 
@@ -46,15 +44,10 @@ pixel act the same way.
   biased training data evaluated on equally biased test data hides
   the bias.
 
-**Grounded in:** Karasiak et al. (2022) showed with
-Sentinel-2 that non-spatial cross-validation overestimates accuracy,
-while spatial leave-one-out matches real map quality; the spatial
-validation requirement comes from there. The old-growth forest
-preprint (2026) showed buffered spatial validation narrows
-the embedding advantage over Sentinel features, so the validation
-choice can change the RQ1 result. Domingo et al. (2023) is a
-counter-example: high accuracy, but no spatial cross-validation
-confirmed.
+**Grounded in:** Karasiak et al. (2022) (spatial validation
+requirement); the old-growth forest preprint (2026) (validation choice
+can change the RQ1 result); Domingo et al. (2023) is a counter-example
+with no spatial cross-validation confirmed — see `literature.md`.
 
 ## Baseline
 
@@ -64,22 +57,27 @@ without foundation models?* Establish it early, but do not
 over-optimise it before the foundation-model pipeline exists.
 
 Open: feature set (bands, indices, seasonal composites); classifier
-(Random Forest, Logistic Regression, compact neural network). Ball et
-al. (2026) found a compact neural network beat Random Forest on
-embeddings.
+(Random Forest, Logistic Regression, compact neural network) —
+see Ball et al. (2026) in `literature.md`.
 
-**Grounded in:**
+Open (2026-11-03, raised by the supervisor, by message): the
+supervisor suggested the "baseline" classifier could be one-class
+(presence-only), as an alternative to building the training set
+manually (visual interpretation of OrtoSat) — his exact wording uses
+"treino" for both options, so this is about *training*, not
+evaluation (corrected after an earlier, wrong reading here). Not yet
+confirmed: whether "baseline" means the Sentinel-2 arm of RQ1 (the
+thesis's own term, as opposed to the TESSERA "foundation model" arm —
+see [RQ1](research_questions.md#rq1--foundation-models-vs-conventional-approaches)),
+a full replacement of the multiclass design
+already adopted for citizen-science and expert labels, or a separate
+third model. See [`thesis/notes.md`](../thesis/notes.md#baseline-do-modelo-de-ciência-cidadã-pode-ser-one-class-pergunta-sobre-os-classifica--0-sem-resposta-direta).
 
-- Sentinel-2 at 10 m for *Acacia*: Mouta et al. (2021, *A. longifolia*,
-  northern Portugal, fusion of eight classifiers) and Domingo et al.
-  (2023, *A. dealbata*, Galicia, time series with Random Forest).
-- Flowering-season features: Domingo et al. (2023) used
-  flowering-period spectral differences; Martins et al. (2016) got the best accuracy with flowering-season ASTER imagery.
-  Seasonal composites covering the winter flowering of *A. dealbata*
-  follow them.
-- Random Forest: Mouta et al. (2021), Domingo et al. (2023),
-  Eskandari et al. (2025, best of the algorithms tested) and Ball et
-  al. (2026).
+**Grounded in:** Sentinel-2 at 10 m for *Acacia* — Mouta et al. (2021);
+Domingo et al. (2023). Flowering-season features — Domingo et al.
+(2023); Martins et al. (2016). Random Forest — Mouta et al. (2021);
+Domingo et al. (2023); Eskandari et al. (2025); Ball et al. (2026).
+Findings: `literature.md`.
 
 ## Foundation Models
 
@@ -89,13 +87,9 @@ Open:
   unconfirmed), other.
 - Whether to also test fusion (embeddings + conventional features).
 
-**Grounded in:** TESSERA (Feng et al., 2025) and AlphaEarth
-(Brown et al., 2025) are the two models compared by Ball et
-al. (2026); TESSERA was also evaluated on tree species by its authors.
-Fusion is motivated by Ball et al. (2026), where the advantage of
-embeddings depended on the classifier (linear models on embeddings
-were weaker than neural networks on conventional composites), so the
-two representations may carry complementary information.
+**Grounded in:** TESSERA (Feng et al., 2025) and AlphaEarth (Brown et
+al., 2025) compared by Ball et al. (2026); fusion motivated by the
+same paper's classifier-dependent result — see `literature.md`.
 
 ## Evaluation
 

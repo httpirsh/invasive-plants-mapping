@@ -24,8 +24,7 @@ cleans it and saves the result to `data/interim/`.
 Run order: `02_citizen_science/acacia_observations` →
 `02_citizen_science/other_plants_observations` →
 `03_expert_reference/expert_polygons` →
+`04_satellite/tessera_embeddings` →
 `05_data_integration/qgis_overview`.
 
-Code that becomes reusable or stable enough to be shared across
-notebooks should be moved into `src/`, not duplicated between
-notebooks.
+When to move code into `src/` instead: [`src/README.md`](../src/README.md).

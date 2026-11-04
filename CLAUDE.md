@@ -41,54 +41,69 @@ an established practice. If nothing relevant is found otherwise, say
 so explicitly and label the decision as my own reasoning, so the gap
 is visible.
 
-## Repository Map
+## Repository Map and File Purposes
 
-The top-level structure and the purpose of each folder are documented
-in [`README.md`](README.md); each major folder also has its own short
-`README.md`. In short:
+Every file below has exactly **one** job. Before writing anything —
+an explanation, a number, a citation's finding, a task, a question —
+find its owning file in this table and put it only there. Everywhere
+else that fact is relevant, write a one-line pointer with a link
+instead of restating it. A repeated explanation anywhere in the repo
+is a bug to fix, not a convenience. This is the single reference for
+"where does this go" — don't re-derive it per file below.
 
-- `data/` — datasets (see Data Handling below)
-- `notebooks/` — primary environment for exploration/experimentation
-- `src/` — reusable modules, extracted from notebooks once stable
-- `experiments/` — experiment configs and runs
-- `results/` — generated outputs (figures, tables, maps, models)
-- `docs/` — research questions, literature, open methodological questions
+| File | Purpose | Holds | Never holds (link instead) |
+|---|---|---|---|
+| `README.md` | Human-facing project overview (for anyone opening the repo, not just me) | Research question (one line), project structure, setup steps | Design reasoning, decisions, tasks, literature — link to `docs/` |
+| `CLAUDE.md` (this file) | My own operating instructions | Conventions, workflow rules, this file-purpose table | Research content, decisions, tasks |
+| `docs/research_questions.md` | Current state of the RQs and shared cross-RQ design | Adopted/open status per item, the rule/spec itself, resulting counts needed to read the pipeline, bare citation names | Full reasoning or justifying numbers (→ `thesis/notes.md`), dataset provenance (→ `data/README.md`), a paper's findings beyond its name (→ `docs/literature.md`) |
+| `docs/methodology.md` | Current state of methodological questions not yet tied to one RQ | Same as above: short state + bare citations | Same exclusions as above |
+| `docs/literature.md` | The literature review | One summary per paper (what it found, how it's used), the gap, the contribution | Decision reasoning that isn't about the paper itself (→ `thesis/notes.md`) |
+| `docs/meetings/YYYY-MM-DD.md` | Chronological record of one supervisor meeting or message exchange | Questions asked and answers received, in the order they happened | Tasks that follow from an answer (→ `docs/todo.md` once settled), the full decision reasoning (→ `thesis/notes.md`) |
+| `docs/todo.md` | Confirmed, settled tasks only | Concrete tasks, each with its source | Open questions, ideas not yet settled — see "What goes in `docs/todo.md`" below |
+| `docs/literature/` | Paper PDFs | The files themselves | Notes (→ `docs/literature.md`) |
+| `data/README.md` | Dataset provenance and processing | Source, access date, license, coverage, preprocessing steps, resulting files/columns, for every dataset | Why a dataset or filter was chosen (→ `thesis/notes.md`), research design that uses the dataset (→ `docs/research_questions.md`) |
+| `thesis/notes.md` | Decision log and defense prep | Full reasoning behind every decision (**Decisões**), talking points for the defense (**Para dizer**) | Dataset provenance (→ `data/README.md`), the current adopted state on its own (→ `docs/research_questions.md`/`methodology.md`) |
+| `notebooks/README.md`, `src/README.md`, `experiments/README.md`, `results/README.md` | Local orientation for that folder | What the folder is for, naming/run-order conventions | Research content, decisions — these folders hold code/outputs, not explanations |
 
-Docs map:
+Three more rules that follow from this:
 
-| File | Holds |
-|---|---|
-| `docs/research_questions.md` | Research questions, experiments per RQ, shared design decisions |
-| `docs/literature.md` | Paper notes, what has been done, the gap and contribution |
-| `docs/methodology.md` | Methodological questions still open |
-| `docs/meetings/` | One file per supervisor meeting, named by date (`YYYY-MM-DD.md`) |
-| `docs/todo.md` | Concrete next tasks, each with its source (meeting, decision); no explanations |
-| `docs/literature/` | Paper PDFs (local only, not versioned) |
-| `data/README.md` | Per-dataset provenance and sources not yet obtained |
+- If the same fact would need to change in two files when something
+  changes, it is in the wrong place — move it to its one owning file
+  and replace the other copy with a link.
+- `README.md` and `CLAUDE.md` both describe the top-level structure
+  for different audiences (human vs. me); `README.md` is the source —
+  `CLAUDE.md` does not repeat the folder tree, only how I should use
+  each file in it.
+- **Exception — a `docs/meetings/YYYY-MM-DD.md` body is a dated
+  transcript, not a live reference.** Once written, its own walkthrough
+  of what was presented (e.g. a recap of the pipeline as it stood that
+  day) may legitimately restate facts that also live in
+  `thesis/notes.md` or the design docs — that is not a redundancy bug,
+  because "deduplicating" it later by replacing it with a link would
+  make the record silently change if the owning file changes
+  afterwards. Do not trim or re-link an existing meeting file's body
+  for this reason. This exception is for what is already written
+  there, not a license to also restate full reasoning when writing a
+  **new** meeting entry — still link out for anything beyond what was
+  actually said at that meeting.
 
 ## Data Handling
 
-- `raw/` = original, never modified. `interim/` = intermediate
-  processing. `processed/` = model-ready data. `external/` = auxiliary
-  third-party data.
-- Document every dataset's provenance in `data/README.md` (source,
-  URL, access date, license, spatial/temporal coverage, preprocessing).
+- `raw/` = original, never modified — the `raw/`/`interim/`/
+  `processed/`/`external/` split is documented in
+  [`data/README.md`](data/README.md).
 - Do not commit large raw datasets to Git unless explicitly required.
 
 ## Notebooks
 
-Notebooks are the primary environment for exploration, analysis, and
-experimentation. Extract code into `src/` only once it is reused
-across notebooks or stable enough that duplication would otherwise
-occur — do not create `.py` files just to look more "professional".
-
-Name notebooks by what they do (e.g. `02_data_quality.ipynb`), never
-`test.ipynb` / `final.ipynb` / `analysis2.ipynb`.
-
-Notebook outputs are stripped from what Git stores (via `nbstripout`,
-configured in `.gitattributes`) — local outputs in Jupyter are
-unaffected, but a fresh clone needs `nbstripout --install` run once to
-activate the filter, and outputs won't be present in committed history.
+Folder purpose and when to extract to `src/`:
+[`notebooks/README.md`](notebooks/README.md),
+[`src/README.md`](src/README.md). Notebook-output stripping setup:
+[`README.md`](README.md#setup). My own rule, not stated elsewhere:
+name notebooks by what they do (e.g. `02_data_quality.ipynb`), never
+`test.ipynb` / `final.ipynb` / `analysis2.ipynb`; don't create `.py`
+files in `src/` just to look more "professional" before code is
+actually reused.
 
 ## Reproducibility
 
@@ -120,6 +135,15 @@ the supervisor), record it **immediately** in `thesis/notes.md`, under
 "Decisões", in the same session — don't wait to be asked. The goal is
 that no reasoning behind a decision is ever lost.
 
+**A decision is only "taken" once I've accepted it or the supervisor
+has actually replied — not while we're still discussing, weighing
+options, or drafting something to send him.** Do not write to
+`docs/todo.md`, `docs/meetings/*.md`, or `thesis/notes.md` while we're
+still working something out in conversation (including iterating on
+the wording of a message to the supervisor). Keep drafts in the chat
+only, and write to these files only once I say it's closed/final, or
+once a real reply from the supervisor arrives.
+
 - Write in Portuguese, in my voice, following the existing entries:
   heading, date and who decided (mine / supervisor / to confirm),
   **O que decidi**, **Porquê**, **Fundamentação** (literature, only
@@ -130,12 +154,27 @@ that no reasoning behind a decision is ever lost.
 - If a decision changes or replaces an earlier one, update that entry
   (and say what changed and why) instead of adding a contradicting
   one.
-- Also update the design docs (`docs/research_questions.md`, etc.)
-  where the decision applies.
 - In the meeting notes, every decision put to the supervisor names
   the literature or sources that support it (*Literatura:*), or says
   that none was found (and, if so, whether it could be a
   contribution).
+
+### What goes in `docs/todo.md`
+
+`docs/todo.md` and `docs/meetings/*.md` must never mix up. A task
+belongs in `docs/todo.md` **only** if one of these is true:
+
+- I explicitly said to put it there, or
+- it is something we agreed in conversation is settled and needed —
+  not a question, a possibility, or something still being weighed.
+
+Anything else — a question for the supervisor, an idea raised but not
+settled, something "to ask" or "to consider" — stays only in
+`docs/meetings/*.md` (or in the chat, if it isn't even meeting-ready
+yet). Never put it in `docs/todo.md` "for now" or "just in case".
+Once it is answered or agreed, it becomes a `docs/todo.md` task via
+the propagation rule below — until then it does not belong there at
+all. Keep the file short: important, settled tasks only.
 
 ### When I agree or the supervisor answers
 
@@ -154,11 +193,9 @@ waiting to be asked:
 - What the supervisor says counts as decided, even when phrased as a
   suggestion ("se calhar…"); only explicit offers ("se quiser…") need
   my choice, so ask about those.
-- **No redundancy:** the full reasoning lives only in
-  `thesis/notes.md`; the other files hold a short line and a link,
-  each in its own role (todo = tasks, meetings = what was said, design
-  docs = current state). Don't copy the same explanation into several
-  files.
+- Follow "Repository Map and File Purposes" above when updating these
+  files — propagating a decision means short pointers in most files
+  and the full write-up in exactly one.
 
 ## Current Stage
 

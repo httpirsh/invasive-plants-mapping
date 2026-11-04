@@ -75,6 +75,78 @@ obtained.
   removed on 2026-10-20 (experiments paused until the exploratory
   analysis is done); kept because reading them takes ~2 h.
 
+### TESSERA embeddings — patch access (2026-11-03)
+
+- **Source:** same store as above, dataset variant `dclimate` (the
+  default for v1.1), but read with `GeoTesseraZarr.read_patch`
+  instead of `sample_points`: a small square patch around a point,
+  not just its one pixel — needed for the segmentation-mask region
+  growing (see
+  [`notebooks/04_satellite/tessera_embeddings.ipynb`](../notebooks/04_satellite/tessera_embeddings.ipynb)).
+  Reads directly over HTTPS from
+  `https://data.source.coop/tessera/tessera/zarr/v1.1-dclimate`, no
+  bulk download; a local byte-range cache is kept in
+  `raw/satellite/tessera_zarr_cache` (not committed).
+- **Note:** `GeoTessera` (the high-level class used by
+  `fetch_embedding`/`fetch_mosaic_for_region`) only serves the
+  `cambridge` NPY dataset, which has no coverage over Portugal — use
+  `GeoTesseraZarr` instead for this project.
+
+### TESSERA GeoTIFF tile, 2023 (grid template)
+
+- **Source:** same Zarr store (`v1.1-dclimate`), exported to GeoTIFF
+  with the `geotessera` CLI (`geotessera download --bbox
+  "-8.46,40.21,-8.44,40.29" --year 2023`), which for `--format tiff`
+  reads from the same Zarr/`GeoTesseraZarr` path as above (confirmed
+  with `--dry-run`), not the `cambridge`-only path.
+- **Access date:** 2026-11-03.
+- **Spatial coverage:** one narrow strip, 1.75 × 8.89 km (889 × 175
+  px at 10 m, EPSG:32629) — whatever the bbox above resolves to in
+  the Zarr store's tiling, not the full pilot extent above.
+- **Temporal coverage:** 2023.
+- **File:** `raw/satellite/tessera_tiles/coimbra_2023_geotiff/tessera_2023_utm29.tif`
+  (128 bands, float32).
+- **Use:** read only for its grid (`rioxarray` + `tess.odc.geobox`),
+  to resample Sentinel-2 onto the same pixels (see next entry) — not
+  used itself as embeddings here.
+
+### Sentinel-2 L2A, TESSERA grid, 2023
+
+- **Source:** AWS Earth Search STAC catalog
+  (`https://earth-search.aws.element84.com/v1`, `sentinel-2-l2a`
+  collection; Element84's COG mirror of the Copernicus L2A archive),
+  no account needed.
+- **Access date:** 2026-11-03.
+- **Spatial coverage:** MGRS tile `29TNE`, read only for the geobox of
+  the TESSERA tile above (1.75 × 8.89 km) via windowed/range reads
+  (`odc.stac.load(..., geobox=...)`) — no full-tile download.
+- **Temporal coverage:** 2023-01-01 to 2023-12-31, `eo:cloud_cover <
+  20%` → 61 scenes.
+- **Bands:** blue, green, red, nir, rededge1–3, nir08 (B8A), swir16,
+  swir22, scl. Coastal aerosol (B01), water vapour (B09), AOT, WVP,
+  visual (TCI) and thumbnail assets not downloaded.
+- **License:** Copernicus Sentinel data, free and open (EU Copernicus
+  licence).
+- **Files:** `raw/satellite/sentinel2/tessera_grid_2023/<scene_id>/<band>.tif`
+  (one GeoTIFF per band per scene), plus `manifest.csv` (scene id,
+  datetime, cloud cover) in the same folder.
+- **Preprocessing:** every band resampled onto the TESSERA tile's 10 m
+  grid (bilinear for reflectance, nearest for `scl`) — so, unlike the
+  rest of this project's `raw/` data, this is not byte-for-byte
+  original; done so Sentinel-2 and TESSERA embeddings are pixel-
+  aligned. No mosaicking, no cloud masking.
+- **Scope note:** this covers only the narrow test strip of the
+  TESSERA tile above, not the full Coimbra pilot extent (the
+  iNaturalist/expert-polygon area in the entries above) — a quick
+  pipeline check; widen the TESSERA tile/area once this is confirmed
+  to work for the actual modelling extent.
+- **No precedent found in the literature read so far for this exact
+  access route** (Earth Search STAC with windowed/geobox-aligned
+  reads); Sentinel-2 itself as the baseline sensor is grounded in
+  Mouta et al. (2021) and Domingo et al. (2023) (see
+  `docs/methodology.md`).
+- **Made by:** `notebooks/04_satellite/sentinel2_download.ipynb`.
+
 ### COS 2023 (Carta de Uso e Ocupação do Solo, Série 2)
 
 - **Source:** Direção-Geral do Território (DGT), via dados.gov.pt
@@ -252,24 +324,61 @@ Expert reference data for the RQ1 upper bound (see
 - **Columns:** `label` (`dealbata` / `not_dealbata`), `source` (`TNE`
   / `notTNE`), `area_m2`, `segment` (< 100 m²), `in_district`,
   `cos_code`, `cos_label`, `cos_group` (COS 2023 class at a point
-  inside the polygon), `use` (proposed: `presence`,
-  `absence_vegetation`, `absence_artificial`, `absence_other`).
+  inside the polygon), `use`. **Stale (2026-11-04):** `use` still has
+  the `absence_vegetation` / `absence_artificial` / `absence_other`
+  values from before the supervisor's decision to drop all
+  `classifica = 0` rows (see
+  [`thesis/notes.md`](../thesis/notes.md#usar-os-dados-de-especialistas-com-limpeza));
+  only `presence` (`classifica = 1`, `label = dealbata`) is actually
+  used now. Not yet updated in
+  `notebooks/03_expert_reference/expert_polygons.ipynb` (see
+  `docs/todo.md`).
 
 ## Not Yet Obtained
 
 | Source | Use | Status |
 |---|---|---|
-| **Sentinel-2** (and possibly Sentinel-1), 10 m, open | Conventional baseline (RQ1–RQ3); precedent: Mouta et al. (2021) | Needs Copernicus Data Space or Google Earth Engine account |
+| **Sentinel-2**, full pilot extent | Conventional baseline (RQ1–RQ3); precedent: Mouta et al. (2021) | Pilot obtained via AWS Earth Search STAC, no account needed, for a small test strip only (see "Sentinel-2 L2A, TESSERA grid, 2023" above) — extend to the full Coimbra pilot extent |
+| **Sentinel-1** | Possible second conventional sensor (RQ1–RQ3) | Not obtained |
 | **OrtoSat 30 cm** (Pleiades-Neo, RGB+NIR, continental Portugal, Apr–Oct 2023, CC BY 4.0) | Possible validation reference | Full resolution restricted to public-administration entities; only WMS confirmed public. University access unconfirmed |
 | **AlphaEarth embeddings** | Second foundation model (RQ1) | Access terms unconfirmed |
 | **Roads/trails, accessibility** (e.g. OpenStreetMap) | RQ3 bias covariates | Not downloaded |
 | **CAOP administrative boundaries** | Study-area clipping | Not downloaded (bounding boxes used) |
-| **A second, distinct region** | RQ3 geographic comparison | Not chosen |
+| **A second, distinct region** | RQ3 geographic comparison | Candidate found (2026-11-04), not chosen — see below |
 
 Scope (proposed, not decided): start with Coimbra as a pilot, extend
 to continental Portugal once the pipeline works. GBIF (which
 aggregates iNaturalist and other sources) is an alternative to the
 iNaturalist API.
+
+### Candidate second region for RQ3 (found, not chosen)
+
+Checked 2026-11-04, while the segmentation-mask work took priority in
+`docs/todo.md`: the 398 `classifica = 1` expert polygons outside tile
+TNE (`raw/expert_reference/notTNE_18MAY2026_6.gpkg`) are not spread
+evenly — DBSCAN (5 km radius, min. 5 polygons) on their centroids
+finds three clusters of 165 polygons total within ~15 km of each
+other, reverse-geocoded (Nominatim/OSM) to the Covilhã–Fundão area,
+Castelo Branco district (MGRS tile **29TPE**, adjacent to Coimbra's
+29TNE — confirmed via an Earth Search STAC point query). A quick
+iNaturalist bounding-box count (39.95–40.40°N, -7.60–-7.30°E, not yet
+cleaned the way the Coimbra pilot was) found **57 research-grade
+*A. dealbata* observations** there (Coimbra pilot has 3 000 after
+cleaning, so this is a much smaller pool) and >10 000 other-plant
+observations.
+
+This is a real, data-backed candidate — expert ground truth and some
+citizen-science presence both exist, in a different MGRS tile — but it
+is not a decision: the citizen-science pool is small, nothing has been
+cleaned or downloaded there the way the Coimbra data was, and RQ3's
+design ("train with all/capped/without the dominant observer, test on
+other observers' records and regions") assumed a test region with its
+own citizen-science records to hold out, which 57 observations may or
+may not support. Picking the actual second region is the supervisor's
+call (he supplied the expert data and knows this area), so this is
+raised as a question in
+[`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md)
+rather than decided here.
 
 ## Template
 

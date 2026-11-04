@@ -29,6 +29,12 @@ Porque esta ordem se defende:
 
 Cenários em [Priority and scope](../docs/research_questions.md#priority-and-scope).
 
+**Nota (2026-11-04, minha correção):** a tabela de estado em
+`research_questions.md` tinha a RQ1 como "proposed, to confirm", apesar
+de esta citação (da mesma reunião que aprovou a RQ3) já a aprovar como
+núcleo da tese. Corrigido para "Adopted 2026-10-21", consistente com a
+RQ2 e a RQ3.
+
 ### Introdução para um júri de informática
 
 *2026-10, sugestão do orientador.* O júri é de um departamento de
@@ -661,10 +667,154 @@ está por definir por mim.*
   tese.
 
 **Fundamentação:** o orientador indicou Rivier et al. (2024, IEEE
-ICIP; DOI 10.1109/ICIP51287.2024.10647646), que propaga rótulos de
-pontos a superpíxeis, e disse que há mais trabalhos do género. Só li
-o resumo; o PDF está em `docs/literature/`.
+ICIP), que propaga rótulos de pontos a superpíxeis, e disse que há
+mais trabalhos do género. Li o artigo completo (2026-11-03) e procurei
+mais trabalhos do género — resumos, números e a comparação com
+Gillespie et al. (2024) e Zhang et al. (2021) ficam só em
+[`docs/literature.md`](../docs/literature.md#weak-supervision-from-point-labels),
+para não duplicar. Conclusão relevante aqui: nenhum trabalho junta
+exatamente o nosso caso (poucos pontos de ciência cidadã, embeddings
+de foundation models congelados, regra de "vegetação mais próxima");
+a técnica em geral não é inédita, mas esta combinação concreta
+mantém-se como possível contributo, não prática já estabelecida.
+
 A ideia da câmara veio da apresentação da Lucie Radová (2026-10-30).
 
 **Onde:** [`docs/meetings/2026-11-04.md`](../docs/meetings/2026-11-04.md)
 (resposta dos orientadores).
+
+### Baseline do modelo de ciência cidadã pode ser one-class (pergunta sobre os `classifica = 0` sem resposta direta)
+
+*2026-11-03, resposta do orientador por mensagem, a seguimento da
+pergunta se os `classifica = 0` podiam servir só para avaliar o modelo
+de ciência cidadã.*
+
+**O que respondeu (texto exato):** "O objetivo é o de localizar
+*Acacia dealbata*. Para o classificador que vai utilizar como baseline
+pode apenas considerar uma classe; existem abordagens para tal. Ou
+então constrói o treino manualmente mas não me parece o mais eficiente
+pois requer interpretação visual, por exemplo, do OrtoSat. Se quiser
+também podemos falar brevemente esta semana." A palavra "treino"
+aparece nas duas opções que deu (one-class vs. construir o treino à
+mão): a resposta é sobre como **treinar** o classificador baseline sem
+ausências confirmadas, não sobre a avaliação que eu tinha perguntado.
+
+**Porquê perguntei:** para avaliar o modelo de ciência cidadã preciso
+de locais onde se sabe que não há acácia; os pontos ao acaso da COS
+não garantem isso (uma mancha de pinhal pode ter acácia lá dentro). Os
+polígonos `classifica = 0` dos especialistas pareciam o único dado com
+essa confirmação, mas já tinham sido excluídos do estudo (ver "Usar os
+dados de especialistas, com limpeza").
+
+**Em aberto (a resposta não resolve isto):**
+- Não diz se os `classifica = 0` são ou não fiáveis — responde a um
+  problema relacionado (como treinar sem ausências confirmadas), não à
+  pergunta que fiz (usá-los só na avaliação).
+- Não é claro o que é "o classificador baseline" aqui: pode ser (a) o
+  braço "baseline" da RQ1, já definido em
+  [`research_questions.md`](../docs/research_questions.md#rq1--foundation-models-vs-conventional-approaches)
+  como o classificador com features do Sentinel-2 (em oposição ao
+  "foundation model", com embeddings do TESSERA); ou (b) uma forma
+  geral de falar de "o classificador que vou treinar primeiro",
+  sem ligação a esse termo específico da tese.
+- Não é claro como se concilia com a decisão já tomada de usar os dois
+  modelos de RQ1 como multiclasse, com as outras plantas como classes
+  (ver "Multiclasse também no modelo de especialistas"): um classificador
+  one-class é uma tarefa diferente de um classificador multiclasse.
+  **Correção (2026-11-03):** eu tinha escrito aqui que isto era
+  "provavelmente sobre a avaliação, não sobre o treino" — está errado.
+  A resposta usa a palavra "treino" nas duas opções que dá (one-class
+  vs. construir o treino à mão), por isso é sobre o treino do
+  classificador baseline, não sobre a avaliação. Continua por
+  confirmar se isso significa abandonar o multiclasse nos dois modelos
+  principais, ou só no braço Sentinel-2/baseline da RQ1, ou ainda
+  construir um terceiro modelo one-class à parte dos dois já desenhados.
+- Que abordagem one-class concreta (p. ex. one-class SVM, Isolation
+  Forest, modelos de distribuição de espécies) ainda não foi escolhida
+  nem pesquisada.
+- Por decidir (minha escolha): se aceito falar com o orientador esta
+  semana, como ofereceu.
+
+**Fundamentação:** nenhuma referida pelo orientador. Fiz uma primeira
+pesquisa (só por resumos/snippets de motor de busca, nenhum artigo lido
+por inteiro — a confirmar antes de citar na tese):
+- **MaxEnt já está na bibliografia da tese, noutro papel:** Phillips,
+  Anderson & Schapire (2009) — já citado para o *target-group
+  background* (ver "Outras plantas como classes, não como ausências")
+  — é também o método de referência para modelação de distribuição de
+  espécies só com presenças (one-class/presence-only). Pode ser a
+  "abordagem" a que o orientador se referiu sem a nomear.
+- Li & Guo (2010), "A maximum entropy approach to one-class
+  classification of remote sensing imagery", *International Journal of
+  Remote Sensing* (doi: 10.1080/01431161003702245) — aplica MaxEnt como
+  classificador one-class a imagens de satélite, com melhor exatidão
+  que a one-class SVM.
+- Zhao & Zhong (2021), "One-Class Classification of Natural Vegetation
+  Using Remote Sensing: A Review", *Remote Sensing* 13(10):1892
+  (doi: 10.3390/rs13101892) — revisão dos métodos OCC para vegetação,
+  todos dispensam dados de ausência.
+- Skowronek, Asner & Feilhauer (2017), comparação de Maxent, SVM
+  enviesada (biased SVM) e BRT para duas invasoras com espectroscopia
+  aérea (não satélite): Maxent e BRT ligeiramente melhores que a SVM
+  enviesada.
+- Li et al. (2011, IEEE TGRS) — método fundador de PU learning
+  (positive-unlabeled) para classificação one-class em deteção remota.
+- Artigo de 2025 em *Remote Sensing* (doi: 10.3390/rs17061041) —
+  PU learning adversarial para mapear *Pedicularis kansuensis*
+  (invasora) com Jilin-1 e **Sentinel-2**: o caso mais próximo do meu
+  (invasora + Sentinel-2 + one-class/PU).
+- **Contraponto a considerar:** um estudo sobre *Solidago* (vara-de-
+  ouro) com Sentinel-2 multitemporal encontrou Random Forest sempre
+  melhor que One-Class SVM (1–15 pontos percentuais, F1 0,98 para o
+  RF) — não é garantido que one-class supere o multiclasse/binário já
+  em curso.
+
+Nenhum destes é sobre *Acacia* nem sobre dados de ciência cidadã; são
+pistas para ler, não conclusões. Antes de decidir, falta: ler os
+artigos (começar por Phillips et al. 2009, que já tenho, e o de 2025
+com Sentinel-2), e perceber se o orientador tinha um método específico
+em mente.
+
+**Onde:** [`docs/meetings/2026-11-04.md`](../docs/meetings/2026-11-04.md#pergunta-de-seguimento-sobre-classifica--0-para-avaliação-por-mensagem).
+
+### Sentinel-2 bruto: via Earth Search (AWS), sem conta, alinhado à grelha da TESSERA
+
+*2026-11-03, minha decisão. Fica só a versão final; ver abaixo as
+versões anteriores.*
+
+**O que decidi:** descarregar o Sentinel-2 L2A (ainda em falta em
+`data/README.md`) pelo catálogo STAC Earth Search da AWS
+(`sentinel-2-l2a`, sem conta nem autenticação), em vez do Copernicus
+Data Space ou do Google Earth Engine, as duas opções que o
+`data/README.md` já tinha como pendentes. Alinhado píxel a píxel à
+grelha da TESSERA (em vez de um bbox à mão), com leitura por janelas
+sem descarregar ficheiros inteiros. Resultado: só uma faixa estreita
+de teste, não a extensão toda do piloto. Especificação técnica
+completa (grelha, reamostragem, bandas, ficheiros):
+[`data/README.md`](../data/README.md#sentinel-2-l2a-tessera-grid-2023).
+
+*Revisto duas vezes no mesmo dia antes desta versão: primeiro tile
+completo com ficheiros originais; depois, por causa da largura de
+banda real (~0,5-1,2 MB/s, tile completo seria 10-16+ h), passei a
+recortar; por fim, para alinhar pixel a pixel com a TESSERA, passei a
+usar a grelha de um ficheiro GeoTIFF da TESSERA em vez de um bbox meu.*
+
+**Porquê:** o Sentinel-2 era o único dado "em falta" do baseline da
+RQ1 (ver `docs/methodology.md`, secção "Baseline"). Tile completo
+seria demasiado lento nesta ligação; recortar ao bbox dos dados
+rotulados ainda seria lento e não garantia alinhamento píxel a píxel
+com a TESSERA — usar a grelha da própria TESSERA resolve as duas
+coisas de vez. O teste ficou pequeno (uma faixa, não o distrito todo)
+porque o bbox pedido ao `geotessera download` calhou ser pequeno;
+fica para alargar depois de confirmar que o pipeline funciona.
+
+**Fundamentação:** a escolha do Sentinel-2 como sensor do baseline já
+estava fundamentada (Mouta et al. 2021, Domingo et al. 2023 — ver
+`docs/methodology.md`). Não encontrei (nem procurei a fundo) precedente
+na literatura especificamente para a via de acesso Earth
+Search/STAC/COG com leitura por janelas alinhada à grelha da TESSERA —
+é só uma escolha técnica de acesso, não uma decisão metodológica sobre
+o que o modelo usa.
+
+**Onde:** [`notebooks/04_satellite/sentinel2_download.ipynb`](../notebooks/04_satellite/sentinel2_download.ipynb),
+[`data/README.md`](../data/README.md#sentinel-2-l2a-tessera-grid-2023).

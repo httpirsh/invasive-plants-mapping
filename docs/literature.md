@@ -134,13 +134,28 @@ Listed to show RQ1 alone is not novel; skim only.
 species changes from citizen science and remote sensing data.
 *PNAS*, 121(37), e2318296121.
 DOI: [10.1073/pnas.2318296121](https://doi.org/10.1073/pnas.2318296121)
-— *To read*
+— *Read (full text)*
 
 Deepbiosphere: 650,000+ research-grade (mostly iNaturalist)
 observations of 2,221 plant species, paired with remote sensing and
 deep learning, in California only. Beats conventional SDM baselines
 (AUC 0.95 vs. 0.88). No EO foundation models, no focus on invasive
 species or data sparsity/bias.
+
+Each point is paired with one 256×256 m, 1 m/pixel NAIP image
+**centred on the point**, and the model predicts per-image species
+presence — not a per-pixel mask grown from the point. CALVEG
+vegetation-class maps appear only in a post-hoc case study, to
+validate predictions against an independent map (per-pixel label =
+the alliance with the largest area overlap), not to generate training
+labels from points. GPS handling: keep only points with coordinate
+uncertainty ≤120 m, drop near-duplicates within 150 m; no snapping or
+correction of the coordinate itself. **Not a precedent for the
+"nearest vegetation area" rule** (see
+[`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction)):
+the point→pixel-neighbourhood link here is a fixed 256 m window
+around the point, not a rule that moves or expands the label based on
+what is actually at that location.
 
 **Deepbiosphere for invasive plants, Michigan (2026).** Mapping
 distribution of invasive plant species and uncertainty using citizen
@@ -347,15 +362,42 @@ PDF: [`literature/rivier_2024_superpixel_query_points.pdf`](literature/rivier_20
 Recommended by the supervisor (2026-11-04) for the segmentation mask:
 a rule linking each citizen-science point to the nearest vegetation
 area, with several approaches to compare (see
-[`research_questions.md`](research_questions.md#prediction-task-adopted)).
-— *To read (abstract only so far)*
-
-Trains segmentation from sparse point labels (as few as 50 per image)
-via superpixel propagation and a loss on labelled pixels only;
-mIoU 75.64% on LandCoverAI, close to full supervision. Candidate
-method for the *Acacia* patch mask that replaces a fixed exclusion
-buffer (see
 [`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction)).
+— *Read (full text)*
+
+Trains a full segmentation network (DeepLabV3/U-Net/FCN, not a
+classifier on frozen embeddings) from sparse point labels (10-50 per
+512×512 image) via superpixel propagation: superpixels are generated
+with DAL-HERS (learned pixel affinities + hierarchical entropy-rate
+merging), each superpixel gets the majority class among the points
+that fall inside it, and superpixels with no point are left unlabelled
+(masked out of the loss). mIoU 75.64% on LandCoverAI (25-50 cm RGB
+aerial imagery, 4 classes), close to full supervision (83.99%).
+Ablation: more points per image always helps; more superpixels (i.e.
+smaller regions) hurts once past ~100-200 (best at 80-100, worse at
+200-300) — relevant here because our citizen-science points are a few
+per tile, not tens to fifty as in their setup, so coarser regions may
+suit us better. Differences from our setting to keep in mind: dense,
+evenly distributed point grids (not sparse opportunistic citizen
+science), RGB-only sub-metre imagery (not Sentinel-2/TESSERA), and an
+end-to-end trained segmentation backbone (not the frozen-embedding +
+light-classifier approach adopted here, see
+[Foundation Model Use](research_questions.md#foundation-model-use-adopted)).
+
+**Zhang, Tang, Corpetti & Zhao (2021).** WTS: A Weakly towards
+Strongly Supervised Learning Framework for Remote Sensing Land Cover
+Classification Using Segmentation Models. *Remote Sensing*, 13(3),
+394. DOI: [10.3390/rs13030394](https://doi.org/10.3390/rs13030394)
+— *Not read (full text blocked on MDPI, HAL and ResearchGate mirrors;
+characterisation below is from a search-engine summary only, not
+verified first-hand — do not cite its numbers)*
+
+Reportedly uses SVM-labelled high-confidence pixels as seeds, then
+seeded region growing plus a fully-connected CRF to iteratively grow
+the labelled set, validated on Sentinel-2 imagery. Potentially another
+candidate for the patch-mask rule (region growing from a point,
+analogous to growing from a TESSERA-embedding seed), but needs the
+actual text read before it can ground anything.
 
 ### Land cover classification and plant traits
 
