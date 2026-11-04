@@ -39,39 +39,55 @@ grade); Ball et al. (2026) (label impurity); Karasiak et al. (2022)
 - Candidates: spatial blocking, grouped K-fold, geographically
   separated test regions (needed for RQ3), with attention to spatial
   leakage and autocorrelation.
+- **Expert-polygon side needs a buffer, not just block holdout
+  (supervisor, 2026-11-05, recalled 2026-11-06 — see
+  [`thesis/notes.md`](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)):**
+  expert polygons are contiguous patches, so a validation pixel can
+  sit right next to a training pixel even within a kept 10 km block.
+  Buffer size given as "20/30"; **assumed to be 20–30 m (2026-11-06,
+  my decision, not confirmed by the supervisor)** — the empirical
+  variogram and Karasiak's own software both point to pixels
+  (200–300 m) instead, but this was not pursued further. Not yet
+  implemented in the actual train/test split.
 - Open: an independent validation reference not drawn from the same
   citizen-science source (candidates: COS 2023, OrtoSat). Without it,
   biased training data evaluated on equally biased test data hides
   the bias.
 
-**Grounded in:** Karasiak et al. (2022) (spatial validation
-requirement); the old-growth forest preprint (2026) (validation choice
-can change the RQ1 result); Domingo et al. (2023) is a counter-example
-with no spatial cross-validation confirmed — see `literature.md`.
+**Grounded in:** Karasiak et al. (2021/2022) and Le Rest et al. (2014)
+(buffer/spatial-leakage requirement, buffer = autocorrelation range,
+not fixed); Mahoney, Johnson & Silge (2023) (block/cluster holdout at
+least as robust as buffered leave-one-out); the old-growth forest
+preprint (2026) (validation choice can change the RQ1 result); Domingo
+et al. (2023) is a counter-example with no spatial cross-validation
+confirmed — see `literature.md`.
 
 ## Baseline
 
 The simplest credible approach: Sentinel-2 spectral-temporal features
-→ conventional classifier. It answers *how well can this be done
-without foundation models?* Establish it early, but do not
-over-optimise it before the foundation-model pipeline exists.
+→ conventional classifier, not multiclass — run as both true one-class
+and presence-vs-background in parallel (2026-11-06; see
+[RQ1](research_questions.md#rq1--foundation-models-vs-conventional-approaches)
+and [Other Plants as
+Background](research_questions.md#other-plants-as-classes-adopted-direction)).
+It answers *how well can this be done without foundation models?*
+Phase 1 uses TESSERA only; this Sentinel-2 arm is deferred (see
+[Foundation Model Use](research_questions.md#foundation-model-use-adopted)).
 
-Open: feature set (bands, indices, seasonal composites); classifier
-(Random Forest, Logistic Regression, compact neural network) —
-see Ball et al. (2026) in `literature.md`.
+**One-class method: one-class SVM (2026-11-06, my decision, by direct
+comparison, not Isolation Forest)** — see
+[`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb)
+and [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
+for the comparison and its caveats (citizen-science arm only so far,
+background not yet supervisor-confirmed).
 
-Open (2026-11-03, raised by the supervisor, by message): the
-supervisor suggested the "baseline" classifier could be one-class
-(presence-only), as an alternative to building the training set
-manually (visual interpretation of OrtoSat) — his exact wording uses
-"treino" for both options, so this is about *training*, not
-evaluation (corrected after an earlier, wrong reading here). Not yet
-confirmed: whether "baseline" means the Sentinel-2 arm of RQ1 (the
-thesis's own term, as opposed to the TESSERA "foundation model" arm —
-see [RQ1](research_questions.md#rq1--foundation-models-vs-conventional-approaches)),
-a full replacement of the multiclass design
-already adopted for citizen-science and expert labels, or a separate
-third model. See [`thesis/notes.md`](../thesis/notes.md#baseline-do-modelo-de-ciência-cidadã-pode-ser-one-class-pergunta-sobre-os-classifica--0-sem-resposta-direta).
+Open: feature set (bands, indices, seasonal composites) — see Ball et
+al. (2026) and `literature.md`. Also open: exact background design
+confirmation (a first version — uniform random points, 50 m buffer —
+was built to run the comparison above, not yet supervisor-confirmed as
+final), and whether it is shared across both label sources and every
+point of the effort-reduction curve — see
+[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
 
 **Grounded in:** Sentinel-2 at 10 m for *Acacia* — Mouta et al. (2021);
 Domingo et al. (2023). Flowering-season features — Domingo et al.

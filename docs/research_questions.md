@@ -3,15 +3,15 @@
 | Item | Status |
 |---|---|
 | Main question | Adopted |
-| RQ1 | Adopted 2026-10-21 (approved by the supervisor, as the thesis's core) |
+| RQ1 | Adopted 2026-10-21 (approved by the supervisor, as the thesis's core); redesigned 2026-11-05 (supervisor, in person) as an effort-reduction curve — see [RQ1](#rq1--foundation-models-vs-conventional-approaches) |
 | RQ3 | Adopted 2026-10-21 (approved by the supervisor) |
 | RQ2 (recency-based filter, no random removal) | Adopted 2026-10-21 |
 | Prediction task | Adopted; segmentation mask: direction set 2026-11-04 (supervisor), rule to define |
 | Reference-data pipeline (proposal objective 1) | Proposed |
 | Temporal design: all iNaturalist observations treated as 2023 | Adopted 2026-10-21 |
-| Other plants as classes (multiclass) | Adopted direction 2026-10-21; 8 groups proposed 2026-10-30 (to confirm) |
+| Other plants as classes (multiclass) | **Superseded 2026-11-05** (supervisor, in person): multiclass dropped for both models; other-plant groups reused as a single background pool instead — see [Other Plants as Background](#other-plants-as-classes-adopted-direction) |
 | Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; year 2023 (confirmed 2026-10-28) |
-| Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal) |
+| Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal); phase 1 uses TESSERA only, Sentinel-2 deferred (2026-11-05, supervisor) |
 | Species scope | Proposed (2026-10-20): *A. dealbata*, other *Acacia* left out |
 | Experiments per RQ | Candidate sketches |
 
@@ -77,33 +77,71 @@ Scope is reassessed as experiments progress.
 To what extent do Earth Observation foundation-model representations
 improve invasive plant mapping over conventional spectral-temporal
 satellite features when trained on citizen-science labels, and how
-much is lost compared with training on expert reference data?
+much performance is gained by progressively adding costlier expert
+reference data on top of it?
 
 **Fit with the proposal:** answers objective 3 (*to what extent
-citizen science supports accurate mapping*) and part of objective 2.
-Comparing representations shows how good foundation models are; the
-expert-reference model is the upper bound that shows what is lost by
-using citizen science instead of expert data.
+citizen science supports accurate mapping*) and objective 1 (*reduce
+dependency on costly reference data*). Comparing representations shows
+how good foundation models are; the effort-reduction curve shows how
+much expert data is actually needed, and where the balance between
+performance and field-collection effort lies.
 
 - A question of degree, not yes/no.
 - All representations come from the same reference year, so only the
   representation changes between compared models.
-- **Grounded in:** the comparison design follows Ball et al. (2026)
-  and the atoll ecosystem study (2026); not yet tested for invasive
-  plants with citizen-science labels. Findings: `literature.md`.
-- **Upper bound grounded in:** Dimson et al. (2023) — the idea of
-  training the same model on citizen-science vs. expert data comes
-  from there, including that the two sources have opposite biases, so
-  the expert upper bound is biased differently, not bias-free.
-  Finding: `literature.md`.
+- **Grounded in:** the representation comparison follows Ball et al.
+  (2026) and the atoll ecosystem study (2026); not yet tested for
+  invasive plants with citizen-science labels. Findings:
+  `literature.md`.
+- **Effort-reduction curve grounded in:** Dimson et al. (2023) — the
+  idea of training the same model on citizen-science vs. expert data
+  comes from there, including that the two sources have opposite
+  biases, so the expert end of the curve is biased differently, not
+  bias-free. Finding: `literature.md`. The curve design itself has no
+  literature precedent checked yet. Full decision and open points:
+  [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
 
-Experiment — same classifier, same test set:
+**Redesigned 2026-11-05 (supervisor, in person):** the fixed "upper
+bound" arm below is replaced by an effort-reduction curve. Multiclass
+is dropped for both models (see [Other Plants as
+Background](#other-plants-as-classes-adopted-direction)).
+
+**Method (2026-11-06, my decision, revised twice the same day):** run
+true one-class / novelty detection **and** presence-vs-background **in
+parallel from the start**, not staged — literature found so far does
+not guarantee one-class wins, and every presence-only evaluation
+method found still needs background data, which weakens the case for
+avoiding it by staging (see `thesis/notes.md` and
+[`literature.md`](literature.md#one-class--positive-unlabeled-classification)).
+**One-class algorithm: one-class SVM**, chosen 2026-11-06 over
+Isolation Forest by direct comparison on the citizen-science arm (see
+[`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb)
+and `thesis/notes.md`) — a first pass, not yet repeated for the expert
+arm or the full curve.
+**Curve mechanics:** mixing is additive — the citizen-science base
+stays fixed, expert presences are added on top, so total N grows with
+each level; total N is reported alongside the mixing percentage so
+volume effects stay visible. Exact mixing levels and the spatial-block
+holdout strategy across the curve are still open — see
+[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
+
+Experiment, run once per representation (TESSERA first; Sentinel-2
+deferred, see [Foundation Model Use](#foundation-model-use-adopted)),
+same classifier(s), same held-out test set:
 
 ```text
-Baseline:          Sentinel-2 features   + citizen-science labels → classifier
-Foundation model:  TESSERA embeddings    + citizen-science labels → classifier
-Upper bound:       best representation   + expert reference labels → classifier
+0 % expert:    citizen-science presences only                  → one-class AND presence-vs-background classifier
++X % expert:   citizen-science presences + a growing fraction
+               of expert presences (e.g. 10 %, 20 %, …)        → one-class AND presence-vs-background classifier
+100 % expert:  expert presences only                           → one-class AND presence-vs-background classifier
 ```
+
+A background/negative sample is needed now for both the
+presence-vs-background classifier and for evaluating the one-class
+classifier (no presence-only evaluation method found avoids background
+data entirely) — see `thesis/notes.md` for the background design
+(uniform random points, not COS-stratified), still not decided.
 
 - Candidate classifiers: Random Forest, Logistic Regression, compact
   neural network. **Grounded in:** Random Forest — Ball et al. (2026);
@@ -122,12 +160,18 @@ Upper bound:       best representation   + expert reference labels → classifie
   - **Clustered:** the district polygons fall in 15 cells of 10 km,
     so few independent spatial blocks are available to split training
     and test.
-  - **Negatives:** **decision (supervisor, 2026-11-04):** use only
+  - **Background:** **decision (supervisor, 2026-11-04):** use only
     `classifica = 1`; the `classifica = 0` polygons are non-acacia
     areas that must not be used in this study (why they were dropped:
     [`thesis/notes.md`](../thesis/notes.md#usar-os-dados-de-especialistas-com-limpeza)).
-    Negatives for the expert model: open (random points in COS 2023
-    vegetation classes, as already foreseen).
+    Needed now for the presence-vs-background arm and to evaluate the
+    one-class arm (both run in parallel, 2026-11-06). Not
+    COS-stratified points (supervisor, 2026-11-06 — COS maps coarse
+    patches, unreliable at pixel level); a first version (2 000
+    uniform random points, 50 m buffer around known presences) was
+    built 2026-11-06 to run the one-class comparison above, not yet
+    confirmed by the supervisor as the final, shared design —
+    [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
   - **Cleaning and year/method:** see the `data/README.md` entry
     linked above.
   - **Labels independent of citizen science:** iNaturalist did not
@@ -227,10 +271,15 @@ Design notes:
   [Validation](methodology.md#validation)).
 - A single reference year keeps observation year from correlating
   with geography.
-- The negative classes affect the bias being measured: other-plant
-  classes share the presences' bias and partly correct it. Results
-  must state this; other-plant classes vs. random background is a
-  candidate experiment.
+- The background affects the bias being measured: the other-plant
+  background pool shares the presences' bias and partly correct it.
+  Results must state this; other-plant background vs. random
+  background is a candidate experiment. **Note (2026-11-05):** this
+  candidate experiment assumed the other-plant *classes* design; with
+  multiclass dropped (see [Other Plants as
+  Background](#other-plants-as-classes-adopted-direction)), the pool
+  still exists as a background source, but this experiment needs
+  revisiting — not yet done.
 - **Real bias case — the dominant observer.** One person made 83% of
   all observations (85% in 2021–2025; 98% of the 2021 peak). Candidate
   experiment: train with all observations vs. capped vs. without that
@@ -277,8 +326,10 @@ findings in `literature.md`.
   test: (1) move the point to the nearest vegetation when the
   coordinate (where the phone was) falls on a road or building;
   (2) extend the point label to the patch around it, as in the paper
-  he recommended (the second is my reading, to confirm). The
-  supervisor sees this as a central point of the thesis and suggests
+  he recommended. Working on (2) for now (adopted, mine, still to
+  confirm explicitly with him — see
+  [`thesis/notes.md`](../thesis/notes.md#máscara-de-segmentação-sem-a-direção-da-câmara-testar-várias-abordagens)).
+  The supervisor sees this as a central point of the thesis and suggests
   trying several approaches; comparing them can be a result.
   The task stays pixel classification; the mask changes how labels
   and exclusions are built (see [Other Plants as
@@ -341,13 +392,36 @@ Possible extension, if time and weights allow: fine-tune TESSERA, or
 train a small MLP head on the embeddings, and compare with the frozen
 setup.
 
+**Phase 1: TESSERA only (decision, supervisor, 2026-11-05, in
+person).** The RQ1 effort-reduction curve (see
+[RQ1](#rq1--foundation-models-vs-conventional-approaches)) runs first
+with TESSERA embeddings; Sentinel-2 features are deferred to a later
+phase, repeating the same curve once the TESSERA results are in. No
+literature grounding checked for the phasing itself — it is a
+scheduling decision, not a methodological one.
+
 ### Other Plants as Classes (adopted direction)
 
+**Superseded 2026-11-05 (supervisor, in person):** the multiclass
+structure described below is dropped for both models. Other-plant
+observations are no longer separate classifier output classes; the
+group pipeline is kept to build a single **background pool**, needed
+now for the presence-vs-background arm and for evaluating the
+one-class arm, run in parallel (2026-11-06 — see
+[RQ1](#rq1--foundation-models-vs-conventional-approaches)). The
+*target-group background* grounding (Phillips et al., 2009, below)
+still applies. Full decision:
+[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
+The paragraphs below describe the original (now superseded) multiclass
+design; kept for the parts that still apply (the group pipeline, the
+counts, the grounding) rather than rewritten, to avoid losing that
+reasoning.
+
 iNaturalist is presence-only. Observations of *other plant species*
-are used as **classes of their own**, not as absences: an observation
+were used as **classes of their own**, not as absences: an observation
 of eucalyptus is a presence of eucalyptus, not evidence that no
-*Acacia* is there. The model becomes multiclass (*Acacia* + groups of
-other plants) and learns to separate *Acacia* from the vegetation it
+*Acacia* is there. The model was multiclass (*Acacia* + groups of
+other plants) and learned to separate *Acacia* from the vegetation it
 is confused with.
 
 Other plants share the observers, platform and places of the
@@ -369,25 +443,22 @@ the 1 km cells where they recorded *A. dealbata*. Other plants cover
 much more territory: only 18.6% of other-plant cells contain
 *A. dealbata*.
 
-**Expert model, same formulation (proposed, 2026-10-20):** in RQ1 the
-expert model is also multiclass. Its negatives (random points in COS
-2023 vegetated classes; the expert `classifica = 0` polygons are not
-used, supervisor, 2026-11-04) are labelled by the COS class they fall
-in
-(e.g. eucalyptus forest, pine forest, other forest, agriculture,
-shrubland; rare classes merged), not as a single "not *Acacia*"
-class. Reasons: RQ1 compares label sources, so the task formulation
-must be the same in both arms; a COS polygon (minimum mapping unit
-1 ha) says what land cover is mapped there, not that no *Acacia* is
-present, the same argument as for other plants; and the confusion
-matrix shows what *A. dealbata* is confused with. Both arms are
-scored by P(*A. dealbata*) on the same test points, so the class sets
-need not match. A binary version (*A. dealbata* vs. the rest) is run
-as a sensitivity check in both arms. Grounded in Ball et al. (2026),
-as above; no other source checked for this choice.
+**Expert model, same formulation (proposed, 2026-10-20; superseded
+2026-11-05):** in RQ1 the expert model was also planned as multiclass,
+with negatives labelled by the COS class they fall in instead of a
+single "not *Acacia*" class — superseded by the 2026-11-05 redesign
+above: both models are now presence-vs-background. The background for
+the expert arm is still planned as random points in COS 2023 vegetated
+classes (the expert `classifica = 0` polygons are not used, supervisor,
+2026-11-04), but as a single background pool, not per-class labels; a
+binary version was already the sensitivity check planned for the old
+design, so it is effectively what both arms now use directly. Grounded
+in Ball et al. (2026) for the original per-class idea; the background
+framing follows Phillips et al. (2009), as above.
 
-**Class groups (proposed 2026-10-30, to confirm with the
-supervisor):** 8 groups, from sources rather than hand-made lists:
+**Class groups (proposed 2026-10-30; kept 2026-11-05 as the pipeline
+that builds the background pool, not separate classifier classes):**
+8 groups, from sources rather than hand-made lists:
 aquatic, eucalyptus, pines and other conifers, oaks, other large
 invasives, other trees, shrubs, herbaceous. Non-vascular plants
 dropped; herbaceous and shrubs kept only where they are the top

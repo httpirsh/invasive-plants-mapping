@@ -62,7 +62,8 @@ is a bug to fix, not a convenience. This is the single reference for
 | `docs/todo.md` | Confirmed, settled tasks only | Concrete tasks, each with its source | Open questions, ideas not yet settled — see "What goes in `docs/todo.md`" below |
 | `docs/literature/` | Paper PDFs | The files themselves | Notes (→ `docs/literature.md`) |
 | `data/README.md` | Dataset provenance and processing | Source, access date, license, coverage, preprocessing steps, resulting files/columns, for every dataset | Why a dataset or filter was chosen (→ `thesis/notes.md`), research design that uses the dataset (→ `docs/research_questions.md`) |
-| `thesis/notes.md` | Decision log and defense prep | Full reasoning behind every decision (**Decisões**), talking points for the defense (**Para dizer**) | Dataset provenance (→ `data/README.md`), the current adopted state on its own (→ `docs/research_questions.md`/`methodology.md`) |
+| `thesis/notes.md` | Decision log and defense prep | Full reasoning behind every decision (**Decisões**), talking points for the defense (**Para dizer**), and each entry's **Na tese** manuscript-sync status (see "Thesis Manuscript Sync" below) | Dataset provenance (→ `data/README.md`), the current adopted state on its own (→ `docs/research_questions.md`/`methodology.md`) |
+| `thesis/document/` | The actual LaTeX manuscript (synced with Overleaf, see `README.md`) | Chapter prose and the bibliography | Decision reasoning (→ `thesis/notes.md`), task tracking (→ `docs/todo.md`) |
 | `notebooks/README.md`, `src/README.md`, `experiments/README.md`, `results/README.md` | Local orientation for that folder | What the folder is for, naming/run-order conventions | Research content, decisions — these folders hold code/outputs, not explanations |
 
 Three more rules that follow from this:
@@ -196,6 +197,29 @@ waiting to be asked:
 - Follow "Repository Map and File Purposes" above when updating these
   files — propagating a decision means short pointers in most files
   and the full write-up in exactly one.
+
+## Thesis Manuscript Sync
+
+Whenever text is added or changed in `thesis/document/` (a chapter,
+a section, the bibliography), in the same session go through
+`thesis/notes.md` (**Para dizer** and **Decisões**) and update each
+entry's **Na tese** status — add the line if it doesn't have one yet,
+update it if the manuscript changed what it says:
+
+- ✅ **Done/parcial** — name the file and section in
+  `thesis/document/` where it now appears, and say whether the full
+  reasoning/detail is still deferred to a later chapter.
+- ⏳ **Ainda não escrita** — name the chapter it belongs to and that
+  the chapter is still a stub (`\todo[inline]{}` placeholder).
+- ❌ **Superseded** — the decision was replaced by a later one and no
+  longer applies as written; point to the entry that replaced it.
+
+Re-scan the whole file rather than relying on memory of what was
+already tagged — a later chapter can make an earlier "✅" stale (e.g.
+if a design changed) or complete a previously "⏳" entry. Do not treat
+this as reason to rewrite the entry's own reasoning or delete it —
+`thesis/notes.md` stays the full decision log regardless of what has
+been written into the manuscript yet.
 
 ## Current Stage
 

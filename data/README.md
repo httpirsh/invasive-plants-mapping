@@ -75,6 +75,30 @@ obtained.
   removed on 2026-10-20 (experiments paused until the exploratory
   analysis is done); kept because reading them takes ~2 h.
 
+### TESSERA embeddings — RQ1 background pool (2026-11-06)
+
+- **Source:** same store as above (`GeoTesseraZarr.sample_points`).
+- **Access date:** 2026-11-06.
+- **Spatial coverage:** 2 000 points sampled uniformly at random within
+  the bounding box of the RQ1 pilot points above (507 905–607 985 mE,
+  4 419 545–4 485 285 mN, EPSG:32629), excluding a 50 m buffer around
+  every citizen-science and expert-polygon *A. dealbata* presence.
+- **Temporal coverage:** 2023.
+- **License:** MIT.
+- **File:** `processed/embeddings/tessera_v1.1_2023_rq1_background/background_points.npz`
+  (`x`, `y` = point coordinates in EPSG:32629; `lon`, `lat` = WGS84;
+  `emb` = 128 dequantized values; all 2 000 valid, no NaN rows).
+- **Preprocessing:** candidate points rejected if inside the 50 m
+  buffer (own choice, no literature value found for the exact radius —
+  see
+  [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)).
+  Not COS-stratified (ruled out 2026-11-06, supervisor). Made by
+  [`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb),
+  regenerated only if this file is missing.
+- **Status:** first version of the background pool meant to be shared
+  across the whole RQ1 effort-reduction curve; not yet confirmed by
+  the supervisor as final.
+
 ### TESSERA embeddings — patch access (2026-11-03)
 
 - **Source:** same store as above, dataset variant `dclimate` (the

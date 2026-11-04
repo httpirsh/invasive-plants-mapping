@@ -29,6 +29,11 @@ Porque esta ordem se defende:
 
 Cenários em [Priority and scope](../docs/research_questions.md#priority-and-scope).
 
+**Na tese:** ✅ Esta ordem de prioridade (RQ1 núcleo, RQ2 barato, RQ3
+mais exigente) já está em
+[`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
+(secção Research Questions).
+
 **Nota (2026-11-04, minha correção):** a tabela de estado em
 `research_questions.md` tinha a RQ1 como "proposed, to confirm", apesar
 de esta citação (da mesma reunião que aprovou a RQ3) já a aprovar como
@@ -78,6 +83,12 @@ conceitos base e os problemas que depois tento resolver.
 Ideia para a defesa: um diagrama do pipeline (observação no
 iNaturalist → píxel → embedding → classificador → mapa) antes das
 perguntas de investigação.
+
+**Na tese:** ✅ Os conceitos base e a tabela de problemas já estão em
+[`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
+(abertura do capítulo e secção Motivation), adaptados ao inglês e ao
+desenho atual (fundo em vez de classes, após "Multiclasse abandonado…"
+nas Decisões). O diagrama do pipeline ainda não foi feito.
 
 ### Outras plantas como classes, não como ausências
 
@@ -129,6 +140,11 @@ e nas entradas "Multiclasse também no modelo de especialistas" e
 "Outras plantas em 8 grupos; herbáceas só onde são a camada de cima"
 nas Decisões, abaixo.
 
+**Na tese:** ❌ Desenho substituído por "Multiclasse abandonado…"
+(Decisões, abaixo) — este argumento (outras plantas como classes, não
+ausências) já não se aplica tal como está escrito; se for reutilizado
+na defesa, tem de ser adaptado para o fundo partilhado.
+
 ## Decisões
 
 Uma entrada por decisão: data, o que decidi, porquê, e onde está
@@ -163,6 +179,10 @@ ficam 5 242 observações (5 240 da espécie e 2 da subespécie
 *A. dealbata dealbata*); saem 2 621 de outras espécies e 35
 identificadas só até ao género ou subgénero. O Observer A fez 90%
 delas (83% em todas as *Acacia*).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
+placeholder). A introdução já nomeia a *A. dealbata* como alvo, sem
+justificar o scope.
 
 ### Multiclasse também no modelo de especialistas
 
@@ -200,9 +220,18 @@ os dados de especialistas"). As classes negativas do modelo de
 especialistas passam a vir só de pontos ao acaso na COS 2023; como
 escolhê-los está em aberto.
 
+*Substituída a 2026-11-05 (reunião presencial, decisão do orientador):*
+o multiclasse é abandonado nos dois modelos — esta decisão fica
+histórica. Ver a entrada completa em "Multiclasse abandonado; RQ1
+passa a uma curva de redução de esforço (presença vs. fundo)", mais
+abaixo.
+
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#other-plants-as-classes-adopted-direction).
 Ainda não aplicado: as experiências ficam para depois da análise
 exploratória.
+
+**Na tese:** ❌ Decisão histórica, substituída (ver "Multiclasse
+abandonado…" mais abaixo) — não entra na tese nesta forma.
 
 ### RQ3 aprovada
 
@@ -231,6 +260,12 @@ outras regiões; Phillips et al. (2009) para corrigir o enviesamento
 com observações dos mesmos observadores.
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq3--spatial-sampling-bias).
+
+**Na tese:** ✅ Parcial — o enunciado da RQ3 e a estatística do
+observador dominante (83%/88%) já estão em
+[`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
+(secções Motivation e Research Questions); a fundamentação completa
+(Dimson, Zhu/Yang) fica para o capítulo de Metodologia.
 
 ### Usar os dados de especialistas, com limpeza
 
@@ -281,6 +316,9 @@ de especialistas").
 
 **Onde:** [`notebooks/03_expert_reference/expert_polygons.ipynb`](../notebooks/03_expert_reference/expert_polygons.ipynb)
 (secções 5–11). Ainda não atualizado para tirar os `classifica = 0`.
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
+placeholder).
 
 ### Só observações *research*, nos dois lados
 
@@ -342,6 +380,11 @@ e passo 8 de
 [`docs/research_questions.md`](../docs/research_questions.md) (tabela
 do pipeline, passo 3).
 
+**Na tese:** ✅ Parcial — mencionada em resumo na Introdução
+("keeping only identification-confirmed (research-grade) records",
+secção Contributions); o detalhe completo (números, porquê) fica para
+o capítulo de Metodologia.
+
 ### Precisão da localização: tirar acima de 30 m, manter as sem valor
 
 *2026-10-29, decisão minha (por recomendação, depois de um teste).*
@@ -398,6 +441,10 @@ COS é meu; não verifiquei se outros estudos o usaram.
 [`docs/research_questions.md`](../docs/research_questions.md) (tabela
 do pipeline, passo 2).
 
+**Na tese:** ✅ Parcial — mencionada em resumo na Introdução
+("discarding imprecise locations", secção Contributions); o detalhe
+completo (teste, limiar de 30 m) fica para o capítulo de Metodologia.
+
 ### Uma observação por píxel; nos conflitos fica a presença
 
 *2026-10-29, decisão minha (o ponto dos conflitos é a versão mínima da
@@ -443,6 +490,11 @@ e passo 10 de
 código da grelha em [`src/grid.py`](../src/grid.py);
 [`docs/research_questions.md`](../docs/research_questions.md) (tabela
 do pipeline, passo 8).
+
+**Na tese:** ✅ Parcial — mencionada em resumo na Introdução
+("collapsing repeated observations onto the same pixel", secção
+Contributions); o detalhe completo (regra dos conflitos) fica para o
+capítulo de Metodologia.
 
 ### Outras plantas em 8 grupos; herbáceas só onde são a camada de cima
 
@@ -571,6 +623,11 @@ o orientador). Revista no mesmo dia: ver "O que mudou".*
 fontes em [`data/README.md`](../data/README.md) (GIFT e lista
 nacional de invasoras).
 
+**Na tese:** ❌ Desenho de classes multiclasse, substituído por
+"Multiclasse abandonado…" (mais abaixo) — não entra na tese nesta
+forma; o sub-bosque debaixo de floresta como candidato a contributo
+pode reaparecer de outra forma no pipeline do fundo, por rever.
+
 ### Observer A: todas as observações no modelo principal
 
 *2026-11-03, decisão minha.*
@@ -599,6 +656,10 @@ enviesamento descrito por Dimson et al. (2023).
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md)
 (tabela do pipeline, passo 10, e
 [RQ3](../docs/research_questions.md#rq3--spatial-sampling-bias)).
+
+**Na tese:** ✅ Parcial — a estatística dos 88% já está na Introdução
+(tabela Motivation); a decisão de manter todas as observações no
+modelo principal fica para o capítulo de Metodologia.
 
 ### Matos debaixo de floresta saem
 
@@ -638,6 +699,11 @@ contributo.
 [`docs/research_questions.md`](../docs/research_questions.md) (secção
 "Other Plants as Classes" e tabela do pipeline, passo 9).
 
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
+placeholder); o desenho de base (matos como classe multiclasse) foi
+substituído por "Multiclasse abandonado…", por rever se a regra da
+camada de cima ainda se aplica ao fundo.
+
 ### Máscara de segmentação: sem a direção da câmara; testar várias abordagens
 
 *2026-11-04, decisão do orientador (por mensagem). A regra concreta
@@ -657,6 +723,33 @@ está por definir por mim.*
   edifício; (2) estender o rótulo do ponto à mancha à volta, como no
   artigo que indicou (superpíxeis). A segunda é a minha leitura, a
   confirmar.
+- **Adotado (meu, a confirmar com o orientador, 2026-11-04):** entre
+  as duas leituras acima, fico com a (2) — estender o rótulo à mancha
+  à volta — como interpretação de trabalho para desenhar e testar as
+  abordagens. Razão: ele escreveu "área de vegetação", não "pixel" ou
+  "ponto", e "considerar" essa área sugere usá-la toda, não só realocar
+  a coordenada para dentro dela. Continua por confirmar explicitamente
+  com ele — pergunta registada em
+  [`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md).
+- **Esclarecido (meu, 2026-11-04):** da candidata dos superpíxeis
+  (Rivier et al.), uso só a ideia — superpíxeis + rótulo por maioria
+  de voto dos pontos dentro de cada um — aplicada a patches de
+  embeddings TESSERA e alimentando o classificador já adotado (frozen
+  embeddings + classificador). Não replico o método deles por inteiro
+  (eles usam imagem RGB sub-métrica e treinam uma rede de segmentação
+  de raiz); ver diferenças em
+  [`docs/literature.md`](../docs/literature.md#weak-supervision-from-point-labels).
+- **Proposta de parâmetros por omissão para a candidata do crescimento
+  de região (meu raciocínio, ainda por testar):** similaridade por
+  cosseno; comparar sempre ao pixel-semente, não à média corrente da
+  mancha (para não deixar a mancha "andar" para longe do perfil da
+  semente); conectividade a 8 vizinhos; raio máximo balizado pelo
+  tamanho real dos polígonos "Florestas de acácias" da COS já medidos
+  (244 ha / 1 849 polígonos), em vez de um valor inventado; limiar de
+  similaridade a definir pela distribuição real de distâncias entre
+  cada presença conhecida e os seus vizinhos imediatos (um percentil
+  dessa distribuição), em vez de um número fixo à mão. Nenhum destes
+  valores foi ainda testado.
 
 **Porquê:**
 - O orientador acha que a ideia da câmara não vale a pena.
@@ -682,6 +775,12 @@ A ideia da câmara veio da apresentação da Lucie Radová (2026-10-30).
 
 **Onde:** [`docs/meetings/2026-11-04.md`](../docs/meetings/2026-11-04.md)
 (resposta dos orientadores).
+
+**Na tese:** ✅ Parcial — já referida como candidato a contributo
+metodológico na Introdução (secção Contributions: "matching what
+citizen scientists tend to photograph… against what the satellite
+actually sees"); o desenho concreto e a comparação de abordagens
+ficam para o capítulo de Metodologia.
 
 ### Baseline do modelo de ciência cidadã pode ser one-class (pergunta sobre os `classifica = 0` sem resposta direta)
 
@@ -735,6 +834,16 @@ dados de especialistas, com limpeza").
 - Por decidir (minha escolha): se aceito falar com o orientador esta
   semana, como ofereceu.
 
+**Resolvido (2026-11-05, reunião presencial):** o orientador esclareceu
+em pessoa que a mudança é para abandonar o multiclasse nos dois
+modelos principais (ciência cidadã e especialistas), não só no braço
+Sentinel-2/baseline da RQ1, como parte de um redesenho maior da RQ1 —
+ver a entrada completa em "Multiclasse abandonado; RQ1 passa a uma
+curva de redução de esforço (presença vs. fundo)", mais abaixo. O
+método concreto para o "one-class" foi escolhido por mim nessa
+conversa de seguimento: presença-vs-fundo, não deteção de novidade
+pura.
+
 **Fundamentação:** nenhuma referida pelo orientador. Fiz uma primeira
 pesquisa (só por resumos/snippets de motor de busca, nenhum artigo lido
 por inteiro — a confirmar antes de citar na tese):
@@ -749,10 +858,13 @@ por inteiro — a confirmar antes de citar na tese):
   Remote Sensing* (doi: 10.1080/01431161003702245) — aplica MaxEnt como
   classificador one-class a imagens de satélite, com melhor exatidão
   que a one-class SVM.
-- Zhao & Zhong (2021), "One-Class Classification of Natural Vegetation
-  Using Remote Sensing: A Review", *Remote Sensing* 13(10):1892
-  (doi: 10.3390/rs13101892) — revisão dos métodos OCC para vegetação,
-  todos dispensam dados de ausência.
+- Rapinel & Hubert-Moy (2021), "One-Class Classification of Natural
+  Vegetation Using Remote Sensing: A Review", *Remote Sensing*
+  13(10):1892 (doi: 10.3390/rs13101892) — revisão dos métodos OCC para
+  vegetação, todos dispensam dados de ausência. **Correção
+  (2026-11-06):** esta entrada tinha o nome errado dos autores ("Zhao
+  & Zhong"); confirmado via pesquisa (DOAJ, OpenAlex, dblp) que são
+  Sébastien Rapinel e Laurence Hubert-Moy.
 - Skowronek, Asner & Feilhauer (2017), comparação de Maxent, SVM
   enviesada (biased SVM) e BRT para duas invasoras com espectroscopia
   aérea (não satélite): Maxent e BRT ligeiramente melhores que a SVM
@@ -776,6 +888,98 @@ com Sentinel-2), e perceber se o orientador tinha um método específico
 em mente.
 
 **Onde:** [`docs/meetings/2026-11-04.md`](../docs/meetings/2026-11-04.md#pergunta-de-seguimento-sobre-classifica--0-para-avaliação-por-mensagem).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
+placeholder); resolvida por "Multiclasse abandonado…" mais abaixo.
+
+### Validação espacial no lado dos especialistas: zona-tampão, além dos blocos de 10 km
+
+*2026-11-06, minha decisão (unidade assumida, não confirmada pelo
+orientador). Pedido de verificação da Íris, a partir de algo dito pelo
+orientador na reunião presencial de 2026-11-05 (não registado nessa
+altura — ver
+[`docs/meetings/2026-11-05.md`](../docs/meetings/2026-11-05.md)).*
+
+**O que o orientador disse (recordado pela Íris, não citação exata):**
+na validação do lado dos especialistas, escolher pontos de teste só
+aleatoriamente arrisca ficarem ao lado de pontos de treino (vizinhos
+próximos), o que infla o desempenho aparente — deu os números "20/30"
+como zona-tampão (unidade não confirmada).
+
+**Porquê faz sentido:** os polígonos de especialistas são manchas
+contíguas, não pontos dispersos — dividir píxeis individualmente em
+treino/teste ao acaso pode colocar um píxel de teste a poucos metros
+de um píxel de treino, por vezes no mesmo polígono. As features da
+TESSERA/Sentinel-2 são fortemente autocorrelacionadas no espaço a
+curta distância, por isso um ponto de teste mesmo ao lado de um ponto
+de treino não é realmente "novo" — infla a métrica. Isto é
+precisamente o problema descrito por Karasiak et al. (ver abaixo) e
+complementa, não substitui, os blocos de 10 km já usados para separar
+viés geográfico/do observador a uma escala mais grosseira.
+
+**Investigação feita (2026-11-06):**
+- **Literatura (texto completo lido — Mahoney, Johnson & Silge, 2023;
+  ver
+  [`docs/literature.md#spatial-validation`](../docs/literature.md#spatial-validation)):**
+  a distância da zona-tampão **não é uma constante fixa** na
+  literatura — deve corresponder ao alcance da autocorrelação espacial
+  (dos preditores, da variável-alvo ou dos resíduos do modelo),
+  estimado por um variograma empírico (Le Rest et al., 2014, que
+  introduziu o SLOO). O mesmo artigo mostra que o bloqueio/clustering
+  espacial (mais perto do que já fazemos com os blocos de 10 km) foi
+  pelo menos tão robusto quanto a zona-tampão por leave-one-out nas
+  simulações deles.
+- **Unidade do "20/30":** a biblioteca do próprio Karasiak (Museo
+  ToolBox, `SpatialLeaveOneOut`) define a distância da zona-tampão em
+  **píxeis**, não metros — o que tornaria "20/30" em 200–300 m (à
+  resolução de 10 m da TESSERA), não 20–30 m. Não é uma confirmação
+  direta do que o orientador quis dizer, só um indício a favor de
+  píxeis.
+- **Variograma empírico nos nossos próprios dados (não é de nenhum
+  artigo, é cálculo meu — ver
+  [`notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb`](../notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb)):**
+  a semivariância dos embeddings TESSERA (presenças + fundo, toda a
+  extensão do piloto) sobe até cerca de 300–500 m e estabiliza depois
+  disso — ou seja, o alcance real da autocorrelação espacial nestes
+  dados ronda os 300–500 m, muito mais perto de "20–30 píxeis" do que
+  de "20–30 m".
+
+**O que decidi:** assumir "20/30" como metros (zona-tampão de 20–30 m),
+sem voltar a perguntar ao orientador, e tirar o ponto da agenda da
+próxima reunião.
+
+**Porquê:** a investigação (variograma empírico nos nossos dados,
+unidade em píxeis na biblioteca do próprio Karasiak) aponta para
+píxeis (200–300 m) como leitura mais provável, não metros — mas gastar
+tempo de reunião a confirmar uma unidade de uma zona-tampão não
+compensa face ao resto da agenda. Fica registado que isto é uma
+suposição minha, não o que o orientador provavelmente quis dizer, para
+que a contradição fique visível e não se perca se for preciso revisitar
+mais tarde (p. ex. se os resultados da validação parecerem estranhos).
+
+**Fundamentação:** nenhuma — é uma escolha pragmática, não uma decisão
+com base em literatura; a literatura e o variograma empírico (ver
+"Investigação feita" acima) continuam a apontar na direção oposta
+(píxeis, não metros).
+
+**Em aberto:**
+- Implementar a zona-tampão de 20–30 m em concreto na divisão
+  treino/teste do lado dos especialistas (ainda não feito).
+- O variograma usado (~300–500 m) é uma primeira estimativa de área
+  larga, não um ajuste de modelo de variograma propriamente dito
+  (exponencial/esférico, com intervalo de confiança) — ver limitações
+  no notebook. Mantido só como referência, já que a zona-tampão
+  adotada (20–30 m) não o segue.
+
+**Onde:**
+[`notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb`](../notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb);
+[`docs/methodology.md#validation`](../docs/methodology.md#validation);
+[`docs/meetings/2026-11-05.md`](../docs/meetings/2026-11-05.md).
+
+**Na tese:** ✅ Parcial — a autocorrelação espacial/validação já é
+referida em resumo na Introdução (tabela Motivation, linha Karasiak et
+al. 2022); o desenho concreto da zona-tampão fica para o capítulo de
+Metodologia.
 
 ### Sentinel-2 bruto: via Earth Search (AWS), sem conta, alinhado à grelha da TESSERA
 
@@ -818,3 +1022,193 @@ o que o modelo usa.
 
 **Onde:** [`notebooks/04_satellite/sentinel2_download.ipynb`](../notebooks/04_satellite/sentinel2_download.ipynb),
 [`data/README.md`](../data/README.md#sentinel-2-l2a-tessera-grid-2023).
+
+**Na tese:** ⏳ Ainda não escrita (detalhe técnico de acesso a dados;
+não é uma decisão metodológica — deve entrar no capítulo de
+Metodologia ou em apêndice, se for necessário).
+
+### Multiclasse abandonado; RQ1 passa a uma curva de redução de esforço (presença vs. fundo)
+
+*2026-11-05, reunião presencial. Decisão do orientador (pontos 1 a 4);
+ponto 5 é decisão minha, informada por esta conversa. Substitui por
+inteiro "Multiclasse também no modelo de especialistas" e resolve
+"Baseline do modelo de ciência cidadã pode ser one-class" (ambas
+acima).*
+
+**O que decidi:**
+1. **Multiclasse abandonado nos dois modelos** (ciência cidadã e
+   especialistas): usar outras plantas/COS como classes próprias de
+   forma consistente exigiria construir dados de treino à mão
+   (interpretação visual, p. ex. do OrtoSat) para ter ausências
+   confirmadas, o que o orientador não considera eficiente. Os dois
+   modelos passam a ter só *A. dealbata* como alvo.
+2. **RQ1 passa a uma experiência de redução de esforço:** em vez de um
+   "upper bound" fixo (só especialistas), a experiência começa só com
+   ciência cidadã e acrescenta progressivamente dados de especialistas
+   (p. ex. 10%, 20%, …) para encontrar o equilíbrio entre desempenho e
+   o esforço de recolha no terreno. O ponto 100% especialistas continua
+   a existir, como o extremo da curva, não como um braço à parte.
+3. **Correr a experiência toda uma vez por representação**, mudando só
+   a fonte (TESSERA, depois Sentinel-2), para que a comparação entre
+   representações não se confunda com diferenças na curva em si.
+4. **Fase 1: só embeddings TESSERA.** O Sentinel-2 fica para uma fase
+   posterior.
+5. **Testar os dois métodos em paralelo desde o início: one-class
+   verdadeiro (deteção de novidade) e presença-vs-fundo.** *Revisto a
+   2026-11-06, segunda vez no mesmo dia:* a ideia inicial (só
+   presença-vs-fundo) passou primeiro a uma abordagem faseada (one-class
+   primeiro, fundo como recurso), e depois — depois da pesquisa de
+   literatura (ver "Atualização" abaixo) mostrar que a avaliação
+   provavelmente precisa de fundo de qualquer forma, o que esvazia parte
+   da vantagem de testar o one-class verdadeiro sozinho primeiro — a
+   decisão final é correr os dois desde a primeira experiência, em vez
+   de faseado. Decisão minha, a pedido da Íris.
+6. **Mistura aditiva na curva de redução de esforço:** a base de
+   ciência cidadã fica fixa; os dados de especialistas são
+   acrescentados progressivamente por cima (não trocados), por isso o
+   N total de treino cresce a cada nível da curva. Reportar sempre o N
+   total ao lado da percentagem de especialistas em cada ponto, para
+   não esconder o efeito do volume de dados. Decisão minha, confirmada
+   pela Íris (2026-11-06).
+7. **Método one-class concreto: one-class SVM, não Isolation Forest.**
+   Decisão minha, a pedido explícito da Íris ("decide those for
+   yourself and start comparing them", 2026-11-06), resolvida por
+   comparação direta, não só por literatura — ver "Atualização
+   (comparação direta)" abaixo.
+8. **Fundo partilhado construído (primeira versão):** 2000 pontos
+   aleatórios uniformes na extensão já coberta pelos embeddings TESSERA
+   do piloto, excluindo uma zona-tampão de 50 m à volta de cada
+   presença confirmada de *A. dealbata* (ciência cidadã e polígonos de
+   especialistas). Decisão minha, a pedido explícito da Íris; **ainda
+   não confirmada pelo orientador** como o desenho final e partilhado
+   para toda a curva — ver "Atualização" abaixo.
+
+**Porquê:**
+- A construção manual de ausências confirmadas (alternativa dada pelo
+  orientador) não é eficiente face ao volume de dados necessário.
+- A redução de esforço responde diretamente ao objetivo 1 da proposta
+  (reduzir a dependência de dados de referência caros): a curva mostra
+  quanto desempenho se ganha por cada fração adicional de dados de
+  especialistas, em vez de um único ponto de comparação.
+- Correr tudo uma vez por representação isola o efeito da
+  representação (TESSERA vs. Sentinel-2) do efeito da curva de redução
+  de esforço.
+- TESSERA primeiro porque é o foundation model já acessível (ver "Fase
+  1 só TESSERA" no to-do); o Sentinel-2 já está parcialmente testado
+  (ver "Sentinel-2 bruto…" acima) mas fica para confirmar o desenho
+  antes de repetir tudo.
+- Testar os dois em paralelo, não faseado: a pesquisa de literatura
+  (ver "Atualização" abaixo) mostra que a avaliação de um modelo só com
+  presenças provavelmente precisa de um fundo de qualquer forma (índice
+  de Boyce, F-pb/F-cpb — nenhum dos dois dispensa fundo por completo),
+  por isso testar o one-class verdadeiro sozinho primeiro já não evita
+  por completo o problema do fundo, que tem de ser resolvido de
+  qualquer forma. Correr os dois desde já também poupa tempo face a um
+  ciclo faseado (testar um, esperar, só depois testar o outro).
+- Mistura aditiva: mapeia diretamente a pergunta do orientador ("quanto
+  esforço de campo compensa?"); a alternativa (troca, N total fixo)
+  respondia a uma pergunta diferente (qualidade dos dados a custo
+  fixo), não à redução de esforço.
+
+**Fundamentação:**
+- Phillips et al. (2009): *target-group background*, já citado para
+  "Outras plantas como classes" — continua relevante se/quando for
+  preciso um fundo (ver ponto 7 em "Em aberto").
+- Pesquisa de literatura mais completa feita a 2026-11-06 (ver
+  "Atualização" abaixo e
+  [`docs/literature.md`](../docs/literature.md#one-class--positive-unlabeled-classification)):
+  em todas as comparações empíricas encontradas, um método one-class
+  verdadeiro sem fundo foi o pior ou quase o pior, sem contraexemplo
+  encontrado — mas nenhum dos estudos tem exatamente a nossa
+  combinação, por isso não é motivo para desistir do one-class
+  verdadeiro, só para não apostar só nele.
+- A separação "multiclasse abandonado" / "redução de esforço" / "uma
+  vez por representação" / "fase 1 só TESSERA" vem diretamente do que
+  o orientador disse na reunião; não tem fundamentação de literatura
+  própria para já. A ordem "one-class primeiro, fundo depois" e a
+  mistura aditiva são raciocínio meu, a partir desta conversa.
+
+**Atualização (2026-11-06, pesquisa de literatura — ver
+[`docs/literature.md`](../docs/literature.md#one-class--positive-unlabeled-classification)
+para o detalhe completo, tudo por confirmar a partir de resumos, sem
+texto completo lido):**
+- Em todas as comparações empíricas encontradas, um método one-class
+  verdadeiro sem fundo nenhum (one-class SVM simples, Isolation Forest
+  como deteção de anomalias pura) foi o pior ou quase o pior método, e
+  não encontrei nenhum contraexemplo. Isto não garante que vá falhar
+  para a *A. dealbata* (nenhum destes estudos tem exatamente a nossa
+  combinação: embeddings de foundation models congelados, presenças de
+  ciência cidadã esparsas e ruidosas, Portugal), mas a literatura não
+  dá uma razão positiva para esperar que o one-class verdadeiro ganhe.
+- Nenhum método de avaliação para modelos só-com-presenças encontrado
+  (índice de Boyce contínuo, F-pb/F-cpb) dispensa dados de fundo por
+  completo — todos evitam só a necessidade de ausências *rotuladas*,
+  não de fundo. Ou seja: mesmo que o treino do one-class verdadeiro não
+  precise de fundo, a avaliação provavelmente vai precisar — o que
+  enfraquece parcialmente o motivo original para o testar primeiro
+  (evitar o problema do fundo).
+- Correção: a entrada "Rapinel & Hubert-Moy (2021)" acima estava
+  atribuída erradamente a "Zhao & Zhong" — corrigido.
+- **Consequência (2026-11-06):** esta informação levou a rever o ponto
+  5 acima — em vez de testar o one-class verdadeiro primeiro e só
+  avançar para presença-vs-fundo se corresse mal, os dois métodos
+  passam a ser testados em paralelo desde a primeira experiência.
+
+**Atualização (2026-11-06, comparação direta — ver
+[`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb)):**
+- A pedido explícito da Íris ("decide those for yourself and start
+  comparing them, so we have a final decision regarding these two
+  options"), construí o fundo partilhado (ponto 8 acima) e comparei
+  one-class SVM (RBF, `nu` 0.05/0.10/0.20) com Isolation Forest
+  (`contamination` auto/0.1), treinados só com embeddings TESSERA de
+  presenças de ciência cidadã (2 995 pontos válidos de 3 000), 5
+  divisões espaciais diferentes (20% dos 85 blocos de 10 km como
+  teste, reaproveitando a mesma grelha dos ficheiros de embeddings do
+  piloto), avaliados contra as presenças de teste e o fundo de teste
+  com ROC-AUC e o índice de Boyce contínuo (Hirzel et al., 2006).
+- **Resultado:** one-class SVM claramente melhor nas duas métricas, em
+  todas as divisões espaciais e configurações testadas — ROC-AUC
+  ≈0.64–0.65 vs. ≈0.57; índice de Boyce ≈0.6–0.8 vs. ≈0.25 (Isolation
+  Forest perto de zero/sem padrão útil). Ver ponto 7 acima.
+- **Só um primeiro passo, não um benchmark definitivo:** só o braço de
+  ciência cidadã foi testado (não especialistas, não a curva
+  completa); os hiperparâmetros não foram afinados por validação
+  aninhada, só uma pequena varrimento; o fundo usado (ponto 8) ainda
+  não está confirmado pelo orientador como o desenho final.
+
+**Em aberto (ainda por decidir, não resolvido nesta conversa):**
+- Níveis exatos de mistura da curva (p. ex. 10%, 20%, …) e como manter
+  um bloco espacial de teste fixo em todos os pontos da curva, dado
+  que o observador dominante e os especialistas visitaram zonas
+  sobrepostas. Proposta em discussão, não confirmada: reutilizar os 15
+  blocos de 10 km já definidos para os polígonos de especialistas,
+  escolhendo o conjunto de teste para não ficar só em zona densa de um
+  dos lados (ciência cidadã ou especialistas). A comparação acima já
+  mostra que reutilizar a grelha de 10 km dos embeddings do piloto
+  funciona tecnicamente (85 blocos nessa extensão maior).
+- **Confirmar com o orientador o desenho do fundo partilhado** (ponto
+  8 acima): 2000 pontos aleatórios uniformes, zona-tampão de 50 m —
+  tanto o N como o raio da zona-tampão são escolha minha, sem valor
+  específico encontrado na literatura para o raio.
+- A RQ3 tinha como candidata "outras plantas como classes vs. fundo ao
+  acaso"; sem classes próprias, isto passa a "fundo de outras plantas
+  vs. fundo ao acaso" — por rever.
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq1--foundation-models-vs-conventional-approaches)
+(RQ1 reescrita) e
+[`docs/research_questions.md`](../docs/research_questions.md#other-plants-as-classes-adopted-direction)
+(fundo em vez de classes);
+[`docs/meetings/2026-11-05.md`](../docs/meetings/2026-11-05.md).
+
+**Na tese:** ✅ Parcial — o desenho atual da RQ1 (curva de redução de
+esforço, mistura aditiva) já está resumido em
+[`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
+(secções Research Questions e Contributions); o desenho operacional
+completo (níveis da curva, fundo partilhado, one-class vs.
+presença-vs-fundo) fica para o capítulo de Metodologia. **Decidido
+nesta conversa:** o multiclasse abandonado não desaparece da tese por
+completo — ao escrever o capítulo de Metodologia, incluir um parágrafo
+breve (não uma secção) explicando porque foi abandonado (custo de
+construir ausências confirmadas à mão; literatura sem vantagem clara
+do one-class puro sem fundo, ver "Atualização" acima), como
+justificação do desenho final, não como histórico extenso.

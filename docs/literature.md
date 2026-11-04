@@ -322,18 +322,261 @@ with the largest gains where the presence records were most biased.
 Basis for using other plants as classes in
 [`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction).
 
+### One-class / positive-unlabeled classification
+
+> Literature search 2026-11-06 for the RQ1 one-class staging decision
+> (try true one-class/novelty detection first, presence-vs-background
+> as fallback — see
+> [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)).
+> **All entries below come from search snippets, abstracts or
+> secondary/citing-paper summaries — no full text was read, and two
+> attempts to fetch full PDFs (MDPI) were blocked (HTTP 403). Treat
+> quantitative figures as needing verification before citing in the
+> thesis.**
+
+**Phillips et al. (2009)** (above) **is presence-*background*, not
+true one-class:** it needs background points to fit at all (a ratio of
+two densities, by its own formulation). Several remote-sensing papers
+below nonetheless call MaxEnt applications "one-class classification"
+— the field's terminology is inconsistent between "no background data
+at all" (true one-class/novelty detection, this thesis's first
+attempt) and "no *labelled negatives*, but still uses
+unlabelled/background data" (presence-background, PU-learning).
+
+**Li & Guo (2010).** A maximum entropy approach to one-class
+classification of remote sensing imagery. *Int. J. Remote Sensing*.
+DOI: 10.1080/01431161003702245 — *Abstract via aggregator*
+
+Applies MaxEnt to a single target class in 0.3 m aerial photography;
+needs only target-class samples; reports MaxEnt beating one-class SVM.
+Still a presence-*background* method (MaxEnt), not zero-background.
+Contradicted by the 2016 *Remote Sensing Letters* comparison below.
+
+**Rapinel & Hubert-Moy (2021)** (name corrected — this entry was
+previously, wrongly, attributed to "Zhao & Zhong"; see
+[`thesis/notes.md`](../thesis/notes.md#baseline-do-modelo-de-ciência-cidadã-pode-ser-one-class-pergunta-sobre-os-classifica--0-sem-resposta-direta)).
+Systematic review, 2013–2020, 136 articles on one-class vegetation
+classification. Could not retrieve the accuracy-assessment section's
+actual content (403 on MDPI).
+
+**Skowronek, Asner & Feilhauer (2017).** Performance of one-class
+classifiers for invasive species mapping using airborne imaging
+spectroscopy. *Ecological Informatics*, 37, 66–76.
+DOI: 10.1016/j.ecoinf.2016.11.005 — *Abstract via aggregator*
+
+Two invasives (*Phalaris aquatica*, *Centaurea solstitialis*), Jasper
+Ridge CA, airborne imaging spectroscopy (1 m), not satellite. Compared
+MaxEnt, biased SVM and BRT — all presence-background/PU-style, not
+zero-background one-class. Overall accuracy 72–88%; MaxEnt and BRT
+slightly ahead of biased SVM.
+
+**Li, Guo & Elkan (2011).** A Positive and Unlabeled Learning
+Algorithm for One-Class Classification of Remote-Sensing Data. *IEEE
+TGRS*, 49(2), 717–725. DOI: 10.1109/TGRS.2010.2058578 — *Abstract via
+aggregator*
+
+PU-learning: trains on positive + unlabeled data, estimates the
+labelling probability, adjusts the decision threshold. Outperformed
+biased SVM, one-class SVM and a Gaussian domain descriptor on two
+high-resolution aerial scenes. Still uses unlabelled/background
+pixels — PU-learning, not zero-background.
+
+**Li, Guo & Elkan (2021).** Positive-and-background learning with
+constraints (PBLC), extending the PUL→PBL lineage above to
+case-control sampling. *IEEE JSTARS*. DOI: 10.1109/JSTARS.2020.3025451
+— *Metadata/abstract only*
+
+**Deng, Li, Liu, Guo & Newsam (~2018).** One-class remote sensing
+classification: one-class vs. binary classifiers. *Int. J. Remote
+Sensing*. DOI: 10.1080/01431161.2017.1416697 — *Abstract via
+aggregator*
+
+**The most directly relevant paper found to this thesis's exact
+framing** (fixed labelling effort, one-class vs. background-using
+methods): with *ample, complete* training data, binary classifiers
+generally win; but under a *fixed/limited labelling budget*,
+Presence-and-Background Learning (PBL — a PU-style method using
+abundant unlabelled pixels) consistently beat both plain one-class SVM
+and the binary classifiers tested (BP-ANN, SVM, maximum-likelihood).
+The advantage comes from exploiting unlabelled/background data, not
+from avoiding it — does not support a *zero*-background method.
+
+**"In-depth comparisons of MaxEnt, biased SVM and one-class SVM."**
+*Remote Sensing Letters*, Dec 2016. DOI: 10.1080/2150704X.2016.1265689
+— *Abstract via aggregator*
+
+Found biased SVM outperforming one-class SVM and MaxEnt overall —
+**contradicts Li & Guo (2010)'s ranking**; also notes "even the best
+overall approach still performs poorly in a significant number of
+tasks." A separate 2017 *Remote Sensing* paper on *Spartina
+alterniflora* reportedly found MaxEnt and biased SVM performing
+equally — cited only secondhand here, not verified.
+
+**Mack (2017).** Applied One-Class Classification of Remote Sensing
+Data. PhD dissertation, Freie Universität Berlin (advisors Waske,
+Schmidtlein) — *Metadata only*
+
+Reportedly finds MaxEnt's potential performance poorer than biased
+SVM, consistent with the 2016 comparison above.
+
+**Mack, Roscher & Waske (2014).** Can I Trust My One-Class
+Classification? *Remote Sensing*, 6(9), 8779 — *Abstract only; full
+text blocked (403 on MDPI)*
+
+Proposes visualising/interpreting one-class classifier outputs during
+processing rather than relying on a single accuracy number, because
+OCC is "uncertain and hard to fully automate" without complete
+validation data. A qualitative/diagnostic complement, not a metric —
+relevant to the evaluation problem below.
+
+**Goldenrod (*Solidago*) vs. Sentinel-2/PlanetScope, Kampinos National
+Park, Poland (2024; likely "Sentinel-2 Versus PlanetScope Images for
+Goldenrod Invasive Plant Species Mapping," *Remote Sensing* 16(4):636
+— title/authorship not independently confirmed).** — *Search summary
+only*
+
+Random Forest "consistently outperformed" One-Class SVM by 1–15
+percentage points (best F1 0.98, multitemporal Sentinel-2). Caveat:
+this RF advantage was for goldenrod-*dominated* stands; a related UAV
+study from the same group reportedly found a substantial drop for
+patchy/fragmented/transitional vegetation — relevant since this
+thesis's *A. dealbata* citizen-science presences are often isolated
+trees, not dense stands.
+
+**Zhu, Samat, Li, Xu, Li & Li (2025).** Adversarial Positive-Unlabeled
+Learning-Based Invasive Plant Detection in Alpine Wetland Using
+Jilin-1 and Sentinel-2 Imageries. *Remote Sensing*, 17(6), 1041.
+DOI: 10.3390/rs17061041 — *Abstract/snippet only*
+
+Target: *Pedicularis kansuensis*, Bayinbuluk Grassland, Xinjiang.
+Adversarial PU-learning (dual-branch discriminator); claimed to beat
+traditional PUL methods. No quantitative figures retrieved for this
+specific paper (an earlier, separate PUL study on the same grassland
+reported F1 0.70–0.94, Sentinel-2 beating PlanetScope).
+
+**itsdm** (CRAN R package, Lei Song/Lyndon Estes). Presence-only SDM
+via Isolation Forest (plus Extended Isolation Forest, SCiForest
+variants), with a built-in `evaluate_po()` presence-only evaluation
+function — *Package docs only; no methods paper found; `evaluate_po()`
+internals not confirmed*
+
+A ready-made implementation if Isolation Forest is the concrete
+one-class method tried.
+
+**Risk-calculus synthesis (my own reading of the above, not itself a
+citation):** across every empirical comparison found, a *true*,
+zero-background one-class method (plain one-class SVM, or Isolation
+Forest used as pure anomaly detection) was the worst or near-worst
+performer in every case found. No counter-example turned up in this
+search. This does not prove it will fail for *A. dealbata*
+specifically (none of these studies match this setup — frozen
+foundation-model embeddings, sparse noisy citizen-science presences,
+Portugal) but it means the literature gives no positive reason found
+so far to expect the true one-class method to win outright.
+
+### Evaluating presence-only models without confirmed absences
+
+> Relevant regardless of which one-class formulation is used — this
+> is the original open question from the `classifica = 0` follow-up
+> (see
+> [`thesis/notes.md`](../thesis/notes.md#baseline-do-modelo-de-ciência-cidadã-pode-ser-one-class-pergunta-sobre-os-classifica--0-sem-resposta-direta)).
+
+**Hirzel, Le Lay, Helfer, Randin & Guisan (2006).** Evaluating the
+ability of habitat suitability models to predict species presences.
+*Ecological Modelling*, 199(2), 142–152.
+DOI: 10.1016/j.ecolmodel.2006.05.017 — *Abstract + secondary
+documentation (R package docs), full text not read*
+
+Introduces the **continuous Boyce index**: a Spearman rank correlation
+between the proportion of presence sites falling in each
+prediction-value class and the proportion expected from background
+sites in that class; range −1 to 1, with values above 0 meaning
+predictions track true presence probability. Tested on 114 alpine
+plant species (Swiss Alps) against AUC/Kappa-style metrics —
+moderately-to-strongly correlated with them, fairly insensitive to
+prevalence. **Still needs background points**: it avoids needing
+*labelled absences*, not background data entirely. Implemented in R:
+`enmSdmX::evalContBoyce`, `tidysdm::boyce_cont`, `itsdm::evaluate_po`
+(above).
+
+**Li & Guo (2014).** Positive-background learning F-measures (F-pb,
+F-cpb). *IEEE TGRS*, 52(8), 4621–4632. DOI: 10.1109/TGRS.2013.2283082
+— *Abstract only; exact title not independently confirmed*
+
+Replaces observed negatives with background data in a modified
+confusion matrix; F-cpb calibrated for class prevalence. Tested on two
+aerial-photo scenes, ranked models similarly to standard
+F-measure/kappa. A 2023 follow-up (Hainan University) extended the
+idea to impervious-surface mapping (WorldView-3, Landsat 8). Also
+needs background data — same caveat as the Boyce index.
+
+**No method was found in this search that evaluates a presence-only
+model without needing *any* background or unlabelled sample at all.**
+This matters directly for the RQ1 one-class staging decision: even a
+zero-background *training* method will likely still need background
+data to *evaluate* well — see "Em aberto" in
+[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
+
 ### Spatial validation
 
-**Karasiak et al. (2022).** Spatial dependence between training and
-test sets: another pitfall of classification accuracy assessment in
-remote sensing. [HAL: hal-03238347](https://hal.inrae.fr/hal-03238347)
-— *To read; check venue and authors*
+**Karasiak, Dejoux, Monteil & Sheeren (2021/2022).** Spatial
+dependence between training and test sets: another pitfall of
+classification accuracy assessment in remote sensing. *Machine
+Learning*, 111(7), 2715–2740. DOI:
+[10.1007/s10994-021-05972-1](https://doi.org/10.1007/s10994-021-05972-1)
+(online 2021, journal issue dated 2022) — authors/venue confirmed via
+dblp/OpenAlex (2026-11-06) — *Full text not read: blocked by bot
+protection on HAL and a login wall on Springer; everything below is
+from its own software's documentation and from a citing review
+(Mahoney et al., 2023, full text read — see below)*
 
 Sentinel-2 forest classification: non-spatial cross-validation
-overestimates accuracy; spatial leave-one-out gives estimates
-consistent with real map quality. Released Museo ToolBox for spatial
-cross-validation. Methodological reference for
-[Validation](methodology.md#validation).
+overestimates accuracy; spatial leave-one-out (SLOO) gives estimates
+consistent with real map quality. Released **Museo ToolBox**, whose
+`SpatialLeaveOneOut` class takes its buffer/exclusion distance as
+`distance_thresold`, documented **in pixels, not metres**
+(museotoolbox.readthedocs.io, checked 2026-11-06) — relevant directly
+to how many pixels/metres a validation buffer should be, see
+[methodology.md#validation](methodology.md#validation).
+
+**Le Rest, Pinaud, Monestiez, Chadoeuf & Bretagnolle (2014).** Spatial
+leave-one-out cross-validation for variable selection in the presence
+of spatial autocorrelation. *Global Ecology and Biogeography*, 23(7),
+811–820. DOI:
+[10.1111/geb.12161](https://doi.org/10.1111/geb.12161) — *Full text
+not read (403 on the publisher); secondary summary and the citing
+review (below) only*
+
+Introduced SLOO: the exclusion buffer/threshold distance is set equal
+to the **range of residual spatial autocorrelation (RSA)** —
+estimated from the data (e.g. via a variogram), not a fixed universal
+value.
+
+**Mahoney, Johnson & Silge (2023).** Assessing the performance of
+spatial cross-validation approaches for models of spatially structured
+data. arXiv:2303.07334. — *Full text read (open-access preprint)*
+
+Simulation study comparing five spatial CV strategies (clustered,
+blocked, LODO, buffered leave-one-observation-out, inclusion-radius
+variants). Confirms the buffer/exclusion distance is "a matter of some
+debate," with suggestions across the field (including Karasiak et al.,
+2021) to use the **variogram range of the predictors, outcome, or
+model residuals** — not a fixed constant. In their simulations, the
+best-performing parameterisations separated train/test by roughly
+**25–41% of the study-area extent**, close to the measured ~25%
+autocorrelation range of their simulated outcome variable; spatial
+blocking/clustering (closer to this thesis's existing 10 km block
+holdout) was at least as robust as buffered leave-one-out, which was
+comparatively sensitive to the buffer size chosen. Introduces the R
+package `spatialsample`.
+
+**Applied here (2026-11-06):** an empirical variogram computed
+directly on this project's own TESSERA embeddings (not from any of the
+papers above) found the spatial autocorrelation range to be roughly
+**300–500 m**, much closer to "20–30 pixels" (200–300 m at TESSERA's
+10 m resolution) than to "20–30 m" — see
+[`notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb`](../notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb)
+and [`thesis/notes.md`](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km).
 
 ### *Acacia* fire ecology
 
