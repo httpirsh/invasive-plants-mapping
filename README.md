@@ -22,6 +22,7 @@ invasive-plants-mapping/
 ├── src/           # Reusable code, extracted from notebooks once stable
 ├── experiments/   # Experiment configurations and runs
 ├── results/       # Generated figures, tables, maps and models (not versioned)
+├── thesis/        # Decision log (notes.md) and document/ (LaTeX manuscript, synced with Overleaf)
 └── docs/          # Research questions, literature, open questions, meetings, to-do
 ```
 
@@ -46,3 +47,39 @@ stripped.
 
 Repository conventions (data handling, commits, notebooks) are in
 [`CLAUDE.md`](CLAUDE.md).
+
+## Thesis Manuscript (Overleaf)
+
+The manuscript lives in `thesis/document/`, synced with Overleaf via
+`git subtree` (not a submodule, so a normal clone of this repo already
+has the full text — no extra `--recurse-submodules` step).
+
+One-time setup (only needed again on a fresh machine or if the
+Overleaf project changes):
+
+```bash
+git remote add overleaf https://git.overleaf.com/<project_id>
+git fetch overleaf
+git subtree add --prefix=thesis/document overleaf main --squash
+```
+
+`<project_id>` and the git URL are in the Overleaf project menu →
+**Git**. Overleaf prompts for your Overleaf email as username and a
+token as password — generate the token once under Overleaf account
+settings → **Git integration**; it is not your account password. Check
+the Overleaf project's default branch name with `git ls-remote
+overleaf` — it has been `main`, not `master`.
+
+To sync afterwards:
+
+```bash
+# pull edits made in the Overleaf web editor into this repo
+git subtree pull --prefix=thesis/document overleaf main --squash
+
+# push local edits back to Overleaf
+git subtree push --prefix=thesis/document overleaf main
+```
+
+Overleaf's git bridge only fast-forwards: always `pull` before editing
+locally if the document was also touched in the web editor, to avoid a
+conflicted push.
