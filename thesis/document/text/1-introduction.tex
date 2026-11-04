@@ -1,37 +1,203 @@
 \chapter{Introduction}
 \label{sec:introduction}
 
-\todo[inline]{Open with the problem of mapping invasive alien plants
-(e.g.\ \emph{Acacia dealbata}) and why it matters, grounded in
-docs/literature\_review.md and thesis/notes.md (``Introdução para um
-júri de informática''). Introduce Earth Observation, satellite
-imagery, foundation-model embeddings and citizen science at a level a
-non-EO informatics jury can follow -- see the concepts already listed
-in thesis/notes.md before writing this from scratch.}
+Invasive alien plants alter ecosystems, reduce native biodiversity and
+are costly to control once they have spread over large areas.
+\emph{Acacia dealbata} (silver wattle), native to south-eastern
+Australia, is one such species in Portugal, where several \emph{Acacia}
+species are classified as invasive under national law (Decree-Law
+No.~92/2019). It forms dense stands that outcompete native vegetation,
+and knowing where it currently grows is a prerequisite for any control
+effort. Producing an up-to-date map over a large area is nonetheless
+difficult: the species must be told apart from visually similar trees
+and shrubs in a satellite image, and the land it occupies changes from
+year to year.
+
+Satellites make it possible to observe vegetation repeatedly and at
+scale. The Sentinel-2 mission, for example, revisits the same location
+every few days and records several spectral bands beyond what the
+human eye sees, at a resolution of 10 metres per pixel. Mapping a
+species from these images means classifying each pixel as that species
+or not, using whatever signal best separates it from its surroundings;
+for \emph{A.\ dealbata}, this is mainly its distinctive winter
+flowering period \cite{domingo2023,martins2016}.
+
+Classifying pixels requires reference data: locations where the
+species is known to be present (and, ideally, known to be absent),
+used to train and evaluate the classifier. Collecting this data in the
+field is slow and expensive, which limits how much of it is ever
+available for a given study area -- this is the starting constraint
+that motivates this thesis.
+
+Two developments offer a way to work within that constraint. The
+first is \emph{Earth Observation foundation models}: models
+pre-trained on large volumes of satellite imagery that turn each pixel
+into a fixed-length vector, or \emph{embedding}, capturing structure
+learned across many places and times, rather than a hand-engineered
+spectral feature. TESSERA \cite{feng2025} and AlphaEarth
+\cite{brown2025} are two recent examples. For a reader familiar with
+machine learning but not Earth Observation, the closest analogy is a
+pre-trained language or vision model: instead of engineering features
+by hand, a light classifier is trained on top of embeddings produced
+by a model that has already learned general-purpose structure from far
+more data than any single study could label. The second is
+\emph{citizen science}: platforms such as iNaturalist let members of
+the public record species observations with a photograph, a date and a
+location \cite{gillespie2024}. These records are far cheaper to obtain
+than a field survey, but they are opportunistic rather than
+systematic: a citizen-science dataset is a set of points where someone
+happened to look and recognise the species, not a designed survey, and
+it almost never records a confirmed absence.
+
+This thesis asks whether foundation-model embeddings make it possible
+to map an invasive plant accurately from this kind of cheap, imperfect
+reference data, and how much performance is still gained by adding
+progressively costlier, expert-collected data on top of it.
 
 \section{Motivation}
 \label{sec:introduction-motivation}
-\todo[inline]{Why invasive species mapping matters; why citizen
-science + EO foundation models is a promising combination; what makes
-it hard (sparse/biased reference data, species visual similarity).
-Established facts only, cited from docs/literature\_review.md.}
+
+Combining citizen science with Earth Observation foundation models is
+attractive because the two weaknesses are complementary in principle:
+citizen science is cheap but biased and incomplete, while foundation
+models are expensive to produce but, once available, are reused for
+free across tasks. Whether that combination actually works for a
+specific invasive species in a specific region is an open empirical
+question, not something that follows automatically from either
+technology on its own.
+
+Several concrete problems make it hard, each already observed in this
+thesis's own exploratory analysis of the Coimbra-district iNaturalist
+data, and each already associated with findings elsewhere in the
+literature:
+
+\begin{table}[h]
+\centering
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Problem} & \textbf{In machine-learning terms} & \textbf{Addressed in} \\
+\hline
+Observations cluster near roads and trails \cite{dimson2023} &
+Sampling / dataset bias & RQ3 \\
+\hline
+A single observer made most observations (83\% overall, 88\% of the
+cleaned presences used in this thesis) & Low training-data diversity &
+RQ3; observer balancing \\
+\hline
+Citizen science records only presences, never confirmed absences
+\cite{phillips2009} & Positive-unlabelled learning & Background pool
+built from other-species observations (Chapter~\ref{sec:methodology}) \\
+\hline
+Imprecise locations and mixed pixels \cite{ball2026} & Label noise &
+Reference-data pipeline (Chapter~\ref{sec:methodology}) \\
+\hline
+Limited volume of reference data & Data efficiency & RQ2 \\
+\hline
+Observations recorded in years other than the satellite imagery
+\cite{ball2026} & Temporal mismatch between data and imagery & Single
+reference year; disturbance filter \\
+\hline
+Nearby observations inflate accuracy estimates \cite{karasiak2022} &
+Data leakage / spatial autocorrelation & Spatial validation \\
+\hline
+Weaker transfer of embeddings to new regions \cite{zhu2026} &
+Distribution shift & RQ3 \\
+\hline
+\end{tabularx}
+\caption{Practical problems in using citizen-science data with Earth
+Observation foundation models, and where each is addressed in this
+thesis.}
+\label{tab:introduction-problems}
+\end{table}
 
 \section{Research Questions}
 \label{sec:introduction-rqs}
-\todo[inline]{State the Main Research Question and RQ1--RQ3 exactly as
-currently agreed in docs/research\_questions.md. Do not reword them
-here -- copy the current wording verbatim, and note that RQ4
-(temporal mismatch) was eliminated from scope on 2026-10-17 only if
-that history is relevant to the jury.}
+
+Each ingredient above -- foundation models for mapping, citizen
+science as reference data, and invasive species as the target -- has
+been studied on its own or in pairs, but their three-way combination,
+together with an explicit evaluation of data sparsity and spatial
+bias, has not (Chapter~\ref{sec:related-work}). This thesis's main
+question is:
+
+\begin{quote}
+How robust and data-efficient are Earth Observation foundation models
+for invasive plant mapping when trained with citizen-science reference
+data?
+\end{quote}
+
+This is treated as a question of degree, not a yes/no answer: EO
+foundation models may give more data-efficient representations, but
+their advantage may be limited by the quality, quantity and spatial
+distribution of citizen-science data. The thesis asks under what
+conditions they are useful, not only whether they are better.
+
+Three secondary questions operationalise this, in order of priority --
+RQ1 is the prerequisite and core deliverable, and each later question
+builds on it and on the same pipeline:
+
+\textbf{RQ1 -- Foundation models vs.\ conventional approaches.} To
+what extent do Earth Observation foundation-model representations
+improve invasive plant mapping over conventional spectral-temporal
+satellite features when trained on citizen-science labels, and how
+much performance is gained by progressively adding costlier expert
+reference data on top of it?
+
+\textbf{RQ2 -- Data efficiency.} How does the performance of EO
+foundation models compare with conventional approaches as
+citizen-science reference data are reduced by a filter that keeps the
+most recent and most reliable observations?
+
+\textbf{RQ3 -- Spatial sampling bias.} Do EO foundation-model
+representations amplify or mitigate the effect of spatial sampling
+bias in citizen-science observations, compared with conventional
+satellite features, when evaluated across geographically distinct
+regions?
+
+RQ1 alone already constitutes a complete contribution, answering the
+first and third objectives, and part of the second objective, of the
+MAP.INVADER project proposal this thesis is part of; RQ2 reuses the
+same pipeline, model and test set at a low extra cost; RQ3 is the most
+demanding, since it requires a second, geographically distinct study
+region, and is pursued only as time and data allow. The full design
+for each question, including how expert reference data enters RQ1 as a
+progressively added increment rather than a fixed point of comparison,
+is given in Chapter~\ref{sec:methodology}.
 
 \section{Contributions}
 \label{sec:introduction-contributions}
-\todo[inline]{Only list contributions once they exist (established
-by a run experiment or a settled methodological decision) -- see
-docs/research\_gaps.md, Candidate Contribution. Do not anticipate
-results.}
+
+Two contributions are intended: one already settled as a methodological
+design, and one still pending the experiments that will establish it.
+
+\textbf{A documented, evaluated pipeline} that turns raw
+citizen-science point observations into labelled satellite training
+data, addressing the proposal's first objective. Each cleaning and
+filtering step -- removing obscured coordinates, keeping only
+identification-confirmed (\emph{research-grade}) records, discarding
+imprecise locations, collapsing repeated observations onto the same
+pixel, among others -- is documented individually, and its effect on
+the final dataset is measured through a cumulative ablation rather
+than assumed. One step in particular, matching what citizen scientists
+tend to photograph (often low, understory plants) against what the
+satellite actually sees (the top of the canopy), has no precedent
+found in the literature reviewed so far
+(Chapter~\ref{sec:related-work}) and is treated as a candidate
+methodological contribution in its own right.
+
+\textbf{An empirical answer to RQ1--RQ3}, established through the
+experiments described in Chapter~\ref{sec:methodology} and reported in
+Chapter~\ref{sec:results}: how far conventional and foundation-model
+representations differ under citizen-science labels, how much of that
+gap closes as costlier expert data is progressively added, how
+performance degrades as citizen-science data are reduced, and whether
+foundation-model representations amplify or dampen the effect of
+spatial sampling bias. No result is anticipated here; what follows in
+this thesis is the account of how these questions were answered, not a
+restatement of answers assumed in advance.
 
 \section{Thesis Structure}
 \label{sec:introduction-structure}
-\todo[inline]{One short paragraph per chapter, written last, once the
-chapters it describes are no longer stubs.}
+\todo[inline]{To be written last, once Chapters~\ref{sec:related-work}
+-- \ref{sec:conclusion} are no longer stubs, so each paragraph previews
+content that actually exists rather than a plan.}
