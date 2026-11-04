@@ -855,46 +855,15 @@ pura.
 
 **Fundamentação:** nenhuma referida pelo orientador. Fiz uma primeira
 pesquisa (só por resumos/snippets de motor de busca, nenhum artigo lido
-por inteiro — a confirmar antes de citar na tese):
-- **MaxEnt já está na bibliografia da tese, noutro papel:** Phillips,
-  Anderson & Schapire (2009) — já citado para o *target-group
-  background* (ver "Outras plantas como classes, não como ausências")
-  — é também o método de referência para modelação de distribuição de
-  espécies só com presenças (one-class/presence-only). Pode ser a
-  "abordagem" a que o orientador se referiu sem a nomear.
-- Li & Guo (2010), "A maximum entropy approach to one-class
-  classification of remote sensing imagery", *International Journal of
-  Remote Sensing* (doi: 10.1080/01431161003702245) — aplica MaxEnt como
-  classificador one-class a imagens de satélite, com melhor exatidão
-  que a one-class SVM.
-- Rapinel & Hubert-Moy (2021), "One-Class Classification of Natural
-  Vegetation Using Remote Sensing: A Review", *Remote Sensing*
-  13(10):1892 (doi: 10.3390/rs13101892) — revisão dos métodos OCC para
-  vegetação, todos dispensam dados de ausência. **Correção
-  (2026-11-06):** esta entrada tinha o nome errado dos autores ("Zhao
-  & Zhong"); confirmado via pesquisa (DOAJ, OpenAlex, dblp) que são
-  Sébastien Rapinel e Laurence Hubert-Moy.
-- Skowronek, Asner & Feilhauer (2017), comparação de Maxent, SVM
-  enviesada (biased SVM) e BRT para duas invasoras com espectroscopia
-  aérea (não satélite): Maxent e BRT ligeiramente melhores que a SVM
-  enviesada.
-- Li et al. (2011, IEEE TGRS) — método fundador de PU learning
-  (positive-unlabeled) para classificação one-class em deteção remota.
-- Artigo de 2025 em *Remote Sensing* (doi: 10.3390/rs17061041) —
-  PU learning adversarial para mapear *Pedicularis kansuensis*
-  (invasora) com Jilin-1 e **Sentinel-2**: o caso mais próximo do meu
-  (invasora + Sentinel-2 + one-class/PU).
-- **Contraponto a considerar:** um estudo sobre *Solidago* (vara-de-
-  ouro) com Sentinel-2 multitemporal encontrou Random Forest sempre
-  melhor que One-Class SVM (1–15 pontos percentuais, F1 0,98 para o
-  RF) — não é garantido que one-class supere o multiclasse/binário já
-  em curso.
-
-Nenhum destes é sobre *Acacia* nem sobre dados de ciência cidadã; são
-pistas para ler, não conclusões. Antes de decidir, falta: ler os
-artigos (começar por Phillips et al. 2009, que já tenho, e o de 2025
-com Sentinel-2), e perceber se o orientador tinha um método específico
-em mente.
+por inteiro — a confirmar antes de citar na tese); resumo completo de
+cada artigo (Li & Guo 2010, Rapinel & Hubert-Moy 2021, Skowronek/Asner/
+Feilhauer 2017, Li/Guo/Elkan 2011, o artigo de 2025 sobre
+Jilin-1/Sentinel-2, o contraponto do *Solidago*, etc.) em
+[`docs/literature.md#one-class--positive-unlabeled-classification`](../docs/literature.md#one-class--positive-unlabeled-classification),
+incluindo a síntese de risco (em todas as comparações encontradas, um
+método one-class puro sem fundo foi o pior ou quase o pior). Não achei
+nenhum destes sobre *Acacia* nem sobre dados de ciência cidadã; são
+pistas para ler, não conclusões.
 
 **Onde:** [`docs/meetings/2026-11-04.md`](../docs/meetings/2026-11-04.md#pergunta-de-seguimento-sobre-classifica--0-para-avaliação-por-mensagem).
 
@@ -1359,3 +1328,60 @@ como referência de género.
 **Na tese:** ⏳ Ainda não escrita — é a própria entrega que está em
 causa; o mapeamento de capítulos fica para quando as experiências da
 RQ1 estiverem mais avançadas.
+
+### Classificador presença-vs-fundo (ciência cidadã): Random Forest, por agora
+
+*2026-11-06, decisão minha, primeira passagem, não confirmada pelo
+orientador.*
+
+**O que decidi:** usar **Random Forest** como classificador por
+omissão para o braço presença-vs-fundo da RQ1 (candidatos de
+`docs/research_questions.md`: Random Forest, Logistic Regression, rede
+neuronal compacta). Comparei Random Forest e Logistic Regression nos
+mesmos blocos espaciais (10 km, 5 divisões) e no mesmo fundo
+partilhado já usados para escolher o one-class SVM: Random Forest
+ROC-AUC 0,842 (dp 0,028), Boyce 0,989 (dp 0,022); Logistic Regression
+ROC-AUC 0,878 (dp 0,052), Boyce 0,973 (dp 0,042). Nenhum dos dois
+domina nas duas métricas — a Logistic Regression tem o ROC-AUC médio
+mais alto mas também mais variável entre divisões; o Random Forest tem
+o índice de Boyce mais alto e é mais estável nas duas métricas.
+
+**Porquê Random Forest e não Logistic Regression:** com a diferença de
+desempenho pequena e sem vencedor claro, desempatei por (1)
+estabilidade entre divisões espaciais, que importa mais aqui do que um
+pequeno ganho médio de AUC, dado que o lado dos especialistas só tem
+15 blocos de 10 km independentes (ver `expert_polygons.ipynb`); e (2)
+fundamentação: o Random Forest já tem cinco citações de apoio em
+`docs/research_questions.md`, a Logistic Regression nenhuma. A
+Logistic Regression não é descartada, continua a ser reportada como
+referência barata de calcular.
+
+**A rede neuronal compacta (terceira candidata) não foi testada** —
+decisão de alcance, não de mérito: o objetivo desta passagem era
+confirmar que o braço presença-vs-fundo funciona e escolher um
+classificador para levar à curva completa, não esgotar os três
+candidatos.
+
+**Resultado também confirma a literatura:** os dois classificadores
+presença-vs-fundo têm desempenho muito superior ao one-class SVM
+testado antes (ROC-AUC ≈0,64–0,65, Boyce ≈0,6–0,8), no mesmo fundo e
+divisões — alinhado com a pesquisa de literatura já feita (ver
+"Atualização", acima, em "Multiclasse abandonado"), que não encontrou
+nenhum caso onde o one-class puro batesse um método com fundo.
+
+**Fundamentação:** candidatos e citações do Random Forest já listados
+em `docs/research_questions.md` (Ball et al., 2026; Yang et al., 2026;
+Mouta et al., 2021; Domingo et al., 2023; Eskandari et al., 2025); a
+Logistic Regression não tem fundamentação de literatura verificada —
+está incluída como referência linear simples, não por recomendação de
+um artigo específico.
+
+**Em aberto:** confirmar com o orientador; repetir a comparação no
+braço de especialistas (só 15 blocos, muito menos dados) antes de
+assumir que a escolha se mantém; afinação de hiperparâmetros fica para
+mais tarde; testar a rede neuronal compacta.
+
+**Onde:** [`notebooks/07_foundation_models/presence_background_citizen_science.ipynb`](../notebooks/07_foundation_models/presence_background_citizen_science.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
+placeholder).

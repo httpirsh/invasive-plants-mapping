@@ -570,13 +570,11 @@ holdout) was at least as robust as buffered leave-one-out, which was
 comparatively sensitive to the buffer size chosen. Introduces the R
 package `spatialsample`.
 
-**Applied here (2026-11-06):** an empirical variogram computed
-directly on this project's own TESSERA embeddings (not from any of the
-papers above) found the spatial autocorrelation range to be roughly
-**300–500 m**, much closer to "20–30 pixels" (200–300 m at TESSERA's
-10 m resolution) than to "20–30 m" — see
-[`notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb`](../notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb)
-and [`thesis/notes.md`](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km).
+**Applied here (2026-11-06):** this project's own empirical variogram
+result and what it was used for (not a paper finding) is logged in
+[`thesis/notes.md`](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km),
+notebook:
+[`notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb`](../notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb).
 
 ### *Acacia* fire ecology
 

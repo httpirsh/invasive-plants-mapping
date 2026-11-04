@@ -9,11 +9,11 @@
 ## Agora
 
 - [ ] **Entrega de dezembro de 2026 é um relatório intermédio, não a
-  tese final** — decidir se `thesis/document/text/` mantém a forma de
-  tese final (capítulo de Resultados) ou passa a seguir a forma de
-  relatório intermédio (desenho proposto + plano de trabalho/riscos,
-  como o exemplo de referência), antes de escrever o conteúdo para
-  essa entrega
+  tese final (confirmado)** — `thesis/document/text/` não vai manter a
+  forma de tese final para essa entrega; falta decidir o mapeamento
+  exato dos capítulos (fica para quando as experiências da RQ1
+  estiverem mais avançadas — só o braço de ciência cidadã testado até
+  agora)
   ([thesis/notes.md](../thesis/notes.md#primeira-entrega-relatório-intermédio-início-de-dezembro-de-2026))
 - [x] Perguntar aos orientadores porquê não usar os `classifica = 0`
   na avaliação — resposta não respondeu diretamente, sugeriu baseline
@@ -44,11 +44,17 @@
   pontos estratificados pela COS); **ainda por confirmar com o
   orientador** como desenho final
   ([data/README.md](../data/README.md#tessera-embeddings--rq1-background-pool-2026-11-06))
-- [ ] Implementar os dois classificadores da RQ1 em paralelo (ciência
-  cidadã e especialistas): one-class SVM e presença-vs-fundo,
-  substituindo o desenho multiclasse, para o braço de especialistas e
-  a curva de redução de esforço completa (só o braço de ciência
-  cidadã foi testado até agora)
+- [x] Implementar o classificador presença-vs-fundo para o braço de
+  ciência cidadã — feito (2026-11-06): Random Forest (ROC-AUC 0.842,
+  Boyce 0.989) e Logistic Regression (ROC-AUC 0.878, Boyce 0.973)
+  comparados nos mesmos blocos espaciais do one-class; Random Forest
+  proposto como classificador por omissão para o resto da RQ1 (minha
+  escolha, por agora, não confirmada pelo orientador)
+  ([notebooks/07_foundation_models/presence_background_citizen_science.ipynb](../notebooks/07_foundation_models/presence_background_citizen_science.ipynb))
+- [ ] Implementar os dois classificadores da RQ1 para o **braço de
+  especialistas** (one-class SVM e presença-vs-fundo com Random
+  Forest) e depois para a curva de redução de esforço completa — só o
+  braço de ciência cidadã está feito nos dois métodos até agora
   ([thesis/notes.md](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo))
 - [ ] Implementar a zona-tampão de 20–30 m na **validação por divisão
   espacial** (spatial split) do lado dos especialistas, além dos
@@ -100,7 +106,12 @@
   [reunião 2026-11-04](meetings/2026-11-04.md#2-outras-perguntas)) ao
   repositório — feito (2026-11-04), passos em
   [`README.md`](../README.md#thesis-manuscript-overleaf)
-- [ ] Atualizar `expert_polygons.ipynb` para tirar os `classifica = 0`
+- [x] Atualizar `expert_polygons.ipynb` para tirar os `classifica = 0`
+  — feito (2026-11-06): secção 6 passa a só manter `classifica = 1`
+  (2 470 polígonos); coluna `use` removida (já não há ausências a
+  marcar); `expert_polygons_clean.gpkg` regenerado e o notebook do
+  fundo partilhado atualizado para a nova estrutura
+  ([data/README.md](../data/README.md#expert-reference-polygons-cleaned-derived))
 - [ ] Rever a estrutura de cada capítulo de `thesis/document/text/`
   face ao relatório de referência, à medida que for escrito/revisto
   (não reescrever o que já existe de uma vez)

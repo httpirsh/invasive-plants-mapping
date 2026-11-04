@@ -338,25 +338,23 @@ Expert reference data for the RQ1 upper bound (see
 ### Expert reference polygons, cleaned (derived)
 
 - **File:** `interim/expert_reference/expert_polygons_clean.gpkg`,
-  layer `expert_polygons_clean`, EPSG:3763, 7 483 polygons.
+  layer `expert_polygons_clean`, EPSG:3763, 2 470 polygons (all
+  `classifica = 1`, *A. dealbata* presences).
 - **Made by:** `notebooks/03_expert_reference/expert_polygons.ipynb`
-  (part 2), 2026-10-28.
-- **Steps:** dropped the 11 rows without `classifica`; repaired the
-  531 invalid geometries with `make_valid`, keeping polygon parts only
-  (total area unchanged); overlaps checked and left as they are
-  (negligible, no label conflicts).
-- **Columns:** `label` (`dealbata` / `not_dealbata`), `source` (`TNE`
-  / `notTNE`), `area_m2`, `segment` (< 100 m²), `in_district`,
-  `cos_code`, `cos_label`, `cos_group` (COS 2023 class at a point
-  inside the polygon), `use`. **Stale (2026-11-04):** `use` still has
-  the `absence_vegetation` / `absence_artificial` / `absence_other`
-  values from before the supervisor's decision to drop all
-  `classifica = 0` rows (see
-  [`thesis/notes.md`](../thesis/notes.md#usar-os-dados-de-especialistas-com-limpeza));
-  only `presence` (`classifica = 1`, `label = dealbata`) is actually
-  used now. Not yet updated in
-  `notebooks/03_expert_reference/expert_polygons.ipynb` (see
-  `docs/todo.md`).
+  (part 2), 2026-10-28; updated 2026-11-06 to drop `classifica = 0`
+  rows entirely, per the supervisor's decision
+  ([`thesis/notes.md`](../thesis/notes.md#usar-os-dados-de-especialistas-com-limpeza)).
+- **Steps:** dropped the 11 rows without `classifica` and all 5 013
+  `classifica = 0` rows (2026-11-04 decision: they are not reliable
+  absences, 44% sit in artificial areas); repaired the 49 invalid
+  geometries among the remaining positives with `make_valid`, keeping
+  polygon parts only (total area unchanged); overlaps checked and left
+  as they are (negligible, 1 pair sharing 1.6 m²).
+- **Columns:** `source` (`TNE` / `notTNE`), `area_m2`, `segment`
+  (< 100 m²), `in_district`, `cos_code`, `cos_label`, `cos_group` (COS
+  2023 class at a point inside the polygon — informational only, not
+  used to assign a label). No `label`/`use` columns: every row is a
+  presence, so they would be constant.
 
 ## Not Yet Obtained
 

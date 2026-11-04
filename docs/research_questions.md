@@ -119,6 +119,17 @@ Isolation Forest by direct comparison on the citizen-science arm (see
 [`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb)
 and `thesis/notes.md`) — a first pass, not yet repeated for the expert
 arm or the full curve.
+**Presence-vs-background classifier: Random Forest**, chosen
+2026-11-06 over Logistic Regression by the same comparison on the
+citizen-science arm (ROC-AUC 0.842 vs. 0.878, Boyce 0.989 vs. 0.973 —
+neither dominates both metrics, Random Forest chosen for stability
+across spatial splits and stronger literature grounding; see
+[`notebooks/07_foundation_models/presence_background_citizen_science.ipynb`](../notebooks/07_foundation_models/presence_background_citizen_science.ipynb)
+and `thesis/notes.md`) — also a first pass, not yet repeated for the
+expert arm; the compact neural network candidate not tested yet. Both
+classifiers clearly outperform the one-class SVM on the citizen-science
+arm, consistent with the literature review's finding that true
+one-class methods tend to underperform presence-background ones.
 **Curve mechanics:** mixing is additive — the citizen-science base
 stays fixed, expert presences are added on top, so total N grows with
 each level; total N is reported alongside the mixing percentage so

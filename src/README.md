@@ -10,3 +10,9 @@ Modules:
   citizen-science notebooks).
 - `grid.py`: 10 m pixel ids (EPSG:32629), to match observations to
   the pixel the model sees.
+- `embeddings.py`: loads the RQ1 pilot's fetched TESSERA embeddings
+  and assigns 10 km spatial-block ids, for the one-class and
+  presence-vs-background notebooks under `07_foundation_models/`.
+- `evaluation.py`: continuous Boyce index (Hirzel et al., 2006), used
+  by the same notebooks to evaluate presence-only/presence-background
+  models.
