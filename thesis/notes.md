@@ -1212,3 +1212,132 @@ breve (não uma secção) explicando porque foi abandonado (custo de
 construir ausências confirmadas à mão; literatura sem vantagem clara
 do one-class puro sem fundo, ver "Atualização" acima), como
 justificação do desenho final, não como histórico extenso.
+
+### Estrutura do documento: seguir um relatório de referência de outro aluno, onde for aplicável
+
+*2026-11-06, decisão minha.*
+
+**O que decidi:** usar
+[`thesis/guidance_example/1768249601_Entrega_intermedia-1.pdf`](guidance_example/1768249601_Entrega_intermedia-1.pdf)
+(Gonçalo da Silva Lopes dos Santos, "Enhancing Cargo Container License
+Plate Recognition Using Visual Language Models", DEI/FCTUC, orientado
+por Jacinto Estima e Catarina Silva, janeiro de 2026) como referência
+de estrutura para o meu próprio documento, no que for aplicável —
+avaliado como um trabalho com boa nota pela Íris.
+
+**Porquê:** ter um exemplo real do mesmo departamento, já avaliado,
+ajuda a calibrar o nível de detalhe e a organização esperados, em vez
+de inventar a estrutura do zero.
+
+**O que a estrutura do exemplo tem, concretamente:** capa, declaração
+de uso de IA, abstract/resumo + palavras-chave em inglês e português,
+lista de acrónimos, lista de figuras, lista de tabelas; depois 5
+capítulos — (1) Introduction (Context and Motivation, Goals, Document
+Structure), (2) Background (conceitos de base do domínio e da área
+técnica), (3) State of Art (dividido por sub-tema), (4) Proposed Work
+(a parte central, incluindo descrição dos dados e um plano de
+trabalho/avaliação de risco para o trabalho que falta), (5) Conclusion
+and Future Work; referências no fim.
+
+**Nota importante, para não confundir mais tarde:** apesar do título
+dizer "Dissertation", o nome do ficheiro
+("Entrega_intermedia") e o conteúdo do capítulo 4 (secções de Work
+Plan com Gantt chart e Risk Assessment para o segundo semestre, e um
+capítulo 5 que é só "Conclusion and Future Work", sem capítulo de
+Resultados) indicam que isto é um **relatório intermédio** (um
+marco a meio do trabalho), não uma tese final já defendida. É uma boa
+referência para a estrutura dos capítulos iniciais (Introduction,
+Background, State of Art) e para o aparato (acrónimos, listas,
+declaração de IA), mas não tem um capítulo de Resultados para comparar
+com o meu capítulo `4-results.tex` — isso ainda não está resolvido por
+este exemplo.
+
+**Comparação com a estrutura atual (`thesis/document/text/`):** já
+tenho `1-introduction.tex`, `2-related-work.tex`, `3-methodology.tex`,
+`4-results.tex`, `5-conclusion.tex` — à partida mais próxima de uma
+tese final do que deste relatório intermédio. Capítulos 1–3 do exemplo
+mapeiam razoavelmente para os meus capítulos 1–2; o capítulo 4 do
+exemplo (Proposed Work) não mapeia diretamente, porque mistura o que
+no meu caso são dois capítulos separados (Metodologia e Resultados).
+
+**Fundamentação:** nenhuma — é uma escolha de estrutura/organização,
+não uma decisão metodológica de investigação.
+
+**Em aberto:** rever capítulo a capítulo, à medida que cada um for
+escrito, o que vale a pena imitar (p. ex. a secção "Overall Analysis"
+no fim do Background, ou a lista de acrónimos) e o que não se aplica
+(Work Plan/Gantt/Risk Assessment, próprios de um relatório intermédio).
+
+**Atualização (2026-11-06):** confirmado que a minha primeira entrega
+também é um **relatório intermédio** (não a tese final), prevista para
+o início de dezembro de 2026 — ver a entrada seguinte, "Primeira
+entrega: relatório intermédio, início de dezembro de 2026". Isto torna
+a "Nota importante" acima diretamente relevante, não só uma ressalva:
+o exemplo passa a ser a referência certa para o género de documento
+todo (não só os capítulos iniciais), incluindo a parte de Work
+Plan/Risk Assessment que antes parecia não aplicável.
+
+**Onde:** [`thesis/guidance_example/1768249601_Entrega_intermedia-1.pdf`](guidance_example/1768249601_Entrega_intermedia-1.pdf).
+
+**Na tese:** ✅ Parcial — `1-introduction.tex` já existe e mapeia
+razoavelmente para os capítulos 1–2 do exemplo (ver "Comparação"
+acima); os restantes capítulos (2–5) ainda por escrever/rever à luz
+desta referência, agora sabendo que o destino de dezembro é um
+relatório intermédio, não a tese final.
+
+### Primeira entrega: relatório intermédio, início de dezembro de 2026
+
+*2026-11-06, informação dada pela Íris (facto do calendário da tese,
+não uma decisão de desenho).*
+
+**O que sei:** a minha primeira entrega da tese é um relatório
+intermédio (marco a meio do trabalho), a entregar no início de
+dezembro de 2026 — não a tese final. Isto está em linha com o género
+de documento do exemplo de referência (ver entrada anterior), que
+também é um relatório deste tipo, do mesmo departamento.
+
+**Porquê isto importa agora:** a estrutura atual de
+`thesis/document/text/` (`1-introduction.tex`, `2-related-work.tex`,
+`3-methodology.tex`, `4-results.tex`, `5-conclusion.tex`) está desenhada
+como uma tese final, com um capítulo de Resultados. Para um relatório
+intermédio em dezembro, não vou ter resultados finais da RQ1 (a curva
+de redução de esforço ainda não está implementada para o braço de
+especialistas — ver
+[multiclasse abandonado](#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
+acima). O conteúdo provável para dezembro é mais próximo do capítulo
+"Proposed Work" do exemplo (desenho proposto, dados preparados, plano
+de trabalho e riscos para o resto da tese) do que de um capítulo de
+Resultados fechado.
+
+**Decidido (2026-11-06):** a entrega de dezembro **não** vai seguir a
+estrutura final-de-tese tal como está em `thesis/document/text/` —
+confirmado por mim. Ainda não decido o mapeamento exato (que capítulo
+vira o quê) porque as experiências da RQ1 ainda não estão todas
+feitas (só o braço de ciência cidadã foi testado até agora — ver
+[multiclasse abandonado](#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
+acima) e isso condiciona quanto fica como "resultado" versus "plano de
+trabalho".
+
+**Em aberto (por decidir, não resolvido nesta conversa):**
+- O mapeamento exato de `thesis/document/text/` para a forma de
+  relatório intermédio (p. ex. se `4-results.tex` se torna uma secção
+  de resultados preliminares dentro de um capítulo tipo "Proposed
+  Work", ou se mantém capítulo próprio mas sem fechar os resultados) —
+  fica para decidir quando as experiências da RQ1 estiverem mais
+  avançadas.
+- Que resultados preliminares (só o braço de ciência cidadã, testado
+  até agora — ver
+  [notebooks/07_foundation_models/one_class_method_selection.ipynb](../notebooks/07_foundation_models/one_class_method_selection.ipynb))
+  é razoável incluir como resultados parciais, versus deixar só como
+  "trabalho em curso" no plano de trabalho.
+- Prazo exato de início de dezembro — só foi dito "início de dezembro
+  de 2026", sem data exata.
+
+**Onde:** sem notebook/figura própria; afeta diretamente
+`thesis/document/text/` e
+[`thesis/guidance_example/1768249601_Entrega_intermedia-1.pdf`](guidance_example/1768249601_Entrega_intermedia-1.pdf)
+como referência de género.
+
+**Na tese:** ⏳ Ainda não escrita — é a própria entrega que está em
+causa; o mapeamento de capítulos fica para quando as experiências da
+RQ1 estiverem mais avançadas.

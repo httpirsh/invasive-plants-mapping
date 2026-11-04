@@ -8,6 +8,13 @@
 
 ## Agora
 
+- [ ] **Entrega de dezembro de 2026 é um relatório intermédio, não a
+  tese final** — decidir se `thesis/document/text/` mantém a forma de
+  tese final (capítulo de Resultados) ou passa a seguir a forma de
+  relatório intermédio (desenho proposto + plano de trabalho/riscos,
+  como o exemplo de referência), antes de escrever o conteúdo para
+  essa entrega
+  ([thesis/notes.md](../thesis/notes.md#primeira-entrega-relatório-intermédio-início-de-dezembro-de-2026))
 - [x] Perguntar aos orientadores porquê não usar os `classifica = 0`
   na avaliação — resposta não respondeu diretamente, sugeriu baseline
   one-class em vez disso ([seguimento, reunião 2026-11-04](meetings/2026-11-04.md#pergunta-de-seguimento-sobre-classifica--0-para-avaliação-por-mensagem))
@@ -94,6 +101,10 @@
   repositório — feito (2026-11-04), passos em
   [`README.md`](../README.md#thesis-manuscript-overleaf)
 - [ ] Atualizar `expert_polygons.ipynb` para tirar os `classifica = 0`
+- [ ] Rever a estrutura de cada capítulo de `thesis/document/text/`
+  face ao relatório de referência, à medida que for escrito/revisto
+  (não reescrever o que já existe de uma vez)
+  ([thesis/notes.md](../thesis/notes.md#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável))
 
 ## Mais tarde
 
