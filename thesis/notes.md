@@ -315,7 +315,16 @@ classes de vegetação da COS 2023 (ver "Multiclasse também no modelo
 de especialistas").
 
 **Onde:** [`notebooks/03_expert_reference/expert_polygons.ipynb`](../notebooks/03_expert_reference/expert_polygons.ipynb)
-(secções 5–11). Ainda não atualizado para tirar os `classifica = 0`.
+(secções 5–10). **Atualizado (2026-11-06):** a secção 6 passa a tirar
+também os `classifica = 0` (não só as linhas sem valor); a coluna
+`use` (secção 10 antiga) foi removida, já que deixou de haver
+ausências para marcar. Ficheiro `expert_polygons_clean.gpkg`
+regenerado: 2 470 polígonos (todos `classifica = 1`), ver
+[`data/README.md`](../data/README.md#expert-reference-polygons-cleaned-derived).
+O notebook consumidor
+([`one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb))
+foi atualizado para a nova estrutura (deixou de filtrar por
+`label == "dealbata"`, coluna que já não existe).
 
 **Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
 placeholder).
@@ -1317,6 +1326,15 @@ feitas (só o braço de ciência cidadã foi testado até agora — ver
 [multiclasse abandonado](#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
 acima) e isso condiciona quanto fica como "resultado" versus "plano de
 trabalho".
+
+**Plano (2026-11-07, esclarecido pela Íris):** o objetivo é terminar as
+experiências da RQ1 (curva de redução de esforço completa, nos dois
+braços — ciência cidadã e especialistas, com o fundo confirmado e
+ambos os métodos, one-class SVM e presença-vs-fundo) antes da entrega
+de dezembro, para que o capítulo de Resultados apresente a RQ1
+respondida, não um resultado preliminar isolado. Se não for possível
+terminar a tempo, o conteúdo recua para resultado preliminar + plano
+de trabalho (ver "Em aberto" abaixo).
 
 **Em aberto (por decidir, não resolvido nesta conversa):**
 - O mapeamento exato de `thesis/document/text/` para a forma de
