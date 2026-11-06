@@ -25,6 +25,16 @@ Run order: `02_citizen_science/acacia_observations` →
 `02_citizen_science/other_plants_observations` →
 `03_expert_reference/expert_polygons` →
 `04_satellite/tessera_embeddings` →
-`05_data_integration/qgis_overview`.
+`04_satellite/sentinel2_download` →
+`04_satellite/tessera_spatial_autocorrelation` →
+`05_data_integration/qgis_overview` →
+`05_data_integration/segmentation_mask` →
+`07_foundation_models/one_class_method_selection` →
+`07_foundation_models/presence_background_citizen_science` →
+`07_foundation_models/expert_arm_classifiers` →
+`07_foundation_models/effort_reduction_curve` →
+`07_foundation_models/forest_only_background_check` →
+`07_foundation_models/expert_polygon_redundancy_check` →
+`07_foundation_models/expert_polygon_geographic_diversity`.
 
 When to move code into `src/` instead: [`src/README.md`](../src/README.md).
