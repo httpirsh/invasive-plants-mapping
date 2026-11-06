@@ -9,8 +9,8 @@
 ## Agora
 
 - [ ] **Entrega de início de janeiro de 2027 é um relatório intermédio,
-  não a tese final (confirmado)** — data corrigida de dezembro de 2026
-  (2026-11-06); `thesis/document/text/` não vai manter a forma de tese
+  não a tese final (confirmado)** — data corrigida de dezembro de 2026;
+  `thesis/document/text/` não vai manter a forma de tese
   final para essa entrega; mapeamento exato dos capítulos ainda por
   decidir, para quando as experiências da RQ1 estiverem mais avançadas
   nos dois braços
@@ -19,25 +19,34 @@
   com Sentinel-2 (pistas da pesquisa sobre baselines one-class)
 - [ ] Implementar a zona-tampão de 20–30 m na **validação por divisão
   espacial** (spatial split) do lado dos especialistas, além dos
-  blocos de 10 km — unidade assumida por decisão própria (2026-11-06),
+  blocos de 10 km — unidade assumida por decisão própria,
   não confirmada pelo orientador
   ([thesis/notes.md](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km))
 - [ ] **Máscara de segmentação** (ponto central; [reunião 2026-11-04](meetings/2026-11-04.md#resposta-dos-orientadores-por-mensagem)):
   - [ ] Definir uma regra para a área de vegetação mais próxima de
-    cada observação
-  - [ ] Candidata do crescimento de região nos embeddings TESSERA —
-    testar na amostra de 30, agora que o acesso funciona. Parâmetros
-    por omissão propostos (ver
-    [thesis/notes.md](../thesis/notes.md#máscara-de-segmentação-sem-a-direção-da-câmara-testar-várias-abordagens)):
-    similaridade por cosseno; comparar ao pixel-semente (não à média
-    corrente); conectividade a 8 vizinhos; raio máximo balizado pelo
-    tamanho real dos polígonos "Florestas de acácias" da COS; limiar
-    de similaridade por um percentil da distância real
-    presença-vizinho
-  - [ ] Candidata dos superpíxeis — usar a mesma patch do TESSERA como
-    entrada (ideia de Rivier et al., não o método completo deles —
-    ver [thesis/notes.md](../thesis/notes.md#máscara-de-segmentação-sem-a-direção-da-câmara-testar-várias-abordagens));
-    precisa de `scikit-image` (ainda não é dependência)
+    cada observação — ainda por escolher entre as candidatas abaixo
+  - [x] Candidata do crescimento de região nos embeddings TESSERA —
+    testada na amostra de 30 (parâmetros por omissão, não calibrados:
+    similaridade por cosseno ao pixel-semente, 8 vizinhos, raio máximo
+    20 px/200 m, limiar 0,90). Resultado: 1/15/758 píxeis (min/mediana/
+    máx) — a cauda superior (758, bate no limite do raio) sugere limiar
+    permissivo demais nalguns casos
+    ([thesis/notes.md](../thesis/notes.md#máscara-de-segmentação-sem-a-direção-da-câmara-testar-várias-abordagens),
+    [notebook](../notebooks/05_data_integration/segmentation_mask.ipynb))
+  - [x] Candidata dos superpíxeis (SLIC sobre as patches de embeddings
+    TESSERA, ideia de Rivier et al., não o método completo deles) —
+    testada na mesma amostra de 30; `scikit-image` agora é dependência
+    (`requirements.txt`). Resultado: 11/21/45 píxeis — mais consistente,
+    mas só porque `n_segments` limita o tamanho máximo por construção,
+    não por ser mais exata. Propagação por voto maioritário (a proposta
+    real de Rivier et al.) ainda não foi exercitada — esta amostra tem
+    um ponto por patch
+    ([notebook](../notebooks/05_data_integration/segmentation_mask.ipynb))
+  - [ ] Comparar visualmente as três candidatas no QGIS
+    (`data/interim/spatial/segmentation_mask_sample.gpkg` já tem as
+    camadas `mask_cos`, `mask_tessera`, `mask_superpixels` e
+    `sample_points`) e escolher — a contagem de píxeis sozinha não
+    decide
   - [ ] Comparar as abordagens (com e sem, na ablação)
 - [x] **Pureza dos rótulos da ciência cidadã** — verificado; sem
   problema em larga escala, excluir as presenças mais isoladas em
@@ -50,16 +59,18 @@
   ([thesis/notes.md](../thesis/notes.md#discrepância-de-15-vs-18-blocos-espaciais-no-lado-dos-especialistas-é-o-sistema-de-coordenadas-não-um-bug))
 - [x] Ler Ball et al. (2026) e Domingo et al. (2023) na íntegra —
   métodos exatos confirmados em [literature.md](literature.md); conjunto
-  de features decidido (compósito anual à Ball et al., fenologia da
-  floração à Domingo et al. testada depois por ablação)
+  de features decidido para quando o braço Sentinel-2 for retomado
+  (compósito anual à Ball et al., fenologia da floração à Domingo et
+  al. testada depois por ablação) — Sentinel-2 está de novo em espera
   ([thesis/notes.md](../thesis/notes.md#conjunto-de-features-do-sentinel-2-na-rq1-compósito-anual-ball-et-al-fenologia-da-floração-como-extensão-por-ablação-domingo-et-al))
-- [ ] Sentinel-2 na RQ1: extrair o compósito anual (12 bandas + NDVI,
-  NDWI, NBR; ano 2023) nos mesmos pontos já usados para a TESSERA (não
-  um raster completo da extensão do piloto — fica muito mais caro sem
-  necessidade, já que a curva treina e avalia em pontos)
-  ([thesis/notes.md](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo),
-  [conjunto de features](../thesis/notes.md#conjunto-de-features-do-sentinel-2-na-rq1-compósito-anual-ball-et-al-fenologia-da-floração-como-extensão-por-ablação-domingo-et-al))
 - [ ] Rever a estrutura de cada capítulo de `thesis/document/text/`
   face ao relatório de referência, à medida que for escrito/revisto
   (não reescrever o que já existe de uma vez)
   ([thesis/notes.md](../thesis/notes.md#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável))
+
+## A fazer só após a defesa intermédia
+
+- [ ] Retomar o braço Sentinel-2 da RQ1 — posto em espera outra vez
+  por custo de extração mais alto do que esperado, em vez
+  de feito agora
+  ([thesis/notes.md](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo))

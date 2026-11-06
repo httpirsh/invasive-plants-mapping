@@ -162,7 +162,7 @@ only, and write to these files only once I say it's closed/final, or
 once a real reply from the supervisor arrives.
 
 - Write in Portuguese, in my voice, following the existing entries:
-  heading, date and who decided (mine / supervisor / to confirm),
+  heading and who decided (mine / supervisor / to confirm),
   **O que decidi**, **Porquê**, **Fundamentação** (literature, only
   real citations; say so if none was checked), **Onde** (notebook,
   doc or figure).

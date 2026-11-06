@@ -3,16 +3,16 @@
 | Item | Status |
 |---|---|
 | Main question | Adopted |
-| RQ1 | Adopted 2026-10-21 (approved by the supervisor, as the thesis's core); redesigned 2026-11-05 (supervisor, in person) as an effort-reduction curve — see [RQ1](#rq1--foundation-models-vs-conventional-approaches) |
-| RQ3 | Adopted 2026-10-21 (approved by the supervisor) |
-| RQ2 (recency-based filter, no random removal) | Adopted 2026-10-21 |
-| Prediction task | Adopted; segmentation mask: direction set 2026-11-04 (supervisor), rule to define |
+| RQ1 | Adopted (approved by the supervisor, as the thesis's core); redesigned (supervisor, in person) as an effort-reduction curve — see [RQ1](#rq1--foundation-models-vs-conventional-approaches) |
+| RQ3 | Adopted (approved by the supervisor) |
+| RQ2 (recency-based filter, no random removal) | Adopted |
+| Prediction task | Adopted; segmentation mask: direction set (supervisor), rule to define |
 | Reference-data pipeline (proposal objective 1) | Proposed |
-| Temporal design: all iNaturalist observations treated as 2023 | Adopted 2026-10-21 |
-| Other plants as classes (multiclass) | **Superseded 2026-11-05** (supervisor, in person): multiclass dropped for both models; RQ1's background is a uniform-random point pool, not other-plant data — see [RQ1](#rq1--foundation-models-vs-conventional-approaches) and [Other Plants as Classes](#other-plants-as-classes-adopted-direction) |
-| Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; year 2023 (confirmed 2026-10-28) |
-| Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal); phase 1 (TESSERA only, 2026-11-05, supervisor) done, phase 2 (Sentinel-2) starts now (2026-11-07) |
-| Species scope | Proposed (2026-10-20): *A. dealbata*, other *Acacia* left out |
+| Temporal design: all iNaturalist observations treated as 2023 | Adopted |
+| Other plants as classes (multiclass) | **Superseded** (supervisor, in person): multiclass dropped for both models; RQ1's background is a uniform-random point pool, not other-plant data — see [RQ1](#rq1--foundation-models-vs-conventional-approaches) and [Other Plants as Classes](#other-plants-as-classes-adopted-direction) |
+| Expert reference data: *A. dealbata* polygons from the supervisor | Adopted; year 2023 (confirmed) |
+| Frozen embeddings instead of fine-tuning | Adopted (deviation from proposal); phase 1 (TESSERA only, supervisor) done, phase 2 (Sentinel-2) deferred again (extraction cost higher than expected) |
+| Species scope | Proposed: *A. dealbata*, other *Acacia* left out |
 | Experiments per RQ | Candidate sketches |
 
 How these questions follow from the literature: [`literature.md`](literature.md).
@@ -102,26 +102,26 @@ performance and field-collection effort lies.
   literature precedent checked yet. Full decision and open points:
   [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
 
-**Redesigned 2026-11-05 (supervisor, in person):** replaces the
+**Redesigned (supervisor, in person):** replaces the
 earlier fixed "upper bound" design with an effort-reduction curve
 (0–100% expert data mixed into the citizen-science base, 10-point
 steps, polygon-level nested mixing, one fixed spatial test set per
 seed reused at every level). Multiclass dropped for both models (see
 [Other Plants as Classes](#other-plants-as-classes-adopted-direction)).
 
-**Method (2026-11-06):** true one-class/novelty detection and
+**Method:** true one-class/novelty detection and
 presence-vs-background classification run in parallel, not staged —
 no presence-only evaluation method found avoids needing background
 data anyway. **One-class SVM** chosen over Isolation Forest, **Random
 Forest** chosen over Logistic Regression, both by direct comparison on
 the citizen-science arm; both rankings confirmed on the expert arm
-(2026-11-07). Full comparison and numbers:
+Full comparison and numbers:
 [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo),
 [`one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb),
 [`presence_background_citizen_science.ipynb`](../notebooks/07_foundation_models/presence_background_citizen_science.ipynb),
 [`expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb).
 
-**Status (2026-11-07, not yet confirmed by the supervisor):** full
+**Status (not yet confirmed by the supervisor):** full
 curve run on both arms. Random Forest and Logistic Regression are
 essentially flat across the whole curve, dropping only at 100% expert
 (no citizen science); One-Class SVM is the only one that improves as
@@ -139,7 +139,7 @@ effects, single background design) and the diagnostic notebooks:
 [`expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb),
 [`label_purity_check.ipynb`](../notebooks/07_foundation_models/label_purity_check.ipynb).
 
-Run once per representation (TESSERA done; Sentinel-2 next, see
+Run once per representation (TESSERA done; Sentinel-2 deferred, see
 [Foundation Model Use](#foundation-model-use-adopted)), same
 classifiers, same held-out spatial test set, at every curve level.
 
@@ -158,14 +158,14 @@ classifiers, same held-out spatial test set, at every curve level.
   - **Species:** *A. dealbata* only, the proposed target (see
     [Species Scope](#species-scope-proposed)).
   - **Clustered:** the district polygons fall in only **18** cells of
-    10 km (reconciled 2026-11-07), so few independent spatial blocks
+    10 km (reconciled), so few independent spatial blocks
     are available to split training and test. An earlier "15" figure
     for the same polygons was a coordinate-system artefact, not a
     smaller polygon set or a split bug — see
     [`notebooks/07_foundation_models/expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb)
     and `thesis/notes.md`.
   - **Background:** `classifica = 0` polygons not used as negatives
-    (supervisor, 2026-11-04 — why:
+    (supervisor — why:
     [`thesis/notes.md`](../thesis/notes.md#usar-os-dados-de-especialistas-com-limpeza)).
     Shares the uniform-random background pool with the citizen-science
     arm — see step 7 of the [Reference-Data
@@ -173,7 +173,7 @@ classifiers, same held-out spatial test set, at every curve level.
   - **Cleaning and year/method:** see the `data/README.md` entry
     linked above.
   - **Labels independent of citizen science:** iNaturalist did not
-    influence the collection (supervisor, 2026-10-28).
+    influence the collection (supervisor).
   - **Locations overlap with citizen science (design constraint):**
     all 22 cleaned iNaturalist *A. dealbata* presences inside a
     polygon, and 93% of the 162 within 50 m, are the dominant
@@ -212,10 +212,10 @@ removed and *why*.
   year. Fix levels after checking the real counts.
 - **Open:** whether observations after 2023 (2024–2026: 1 009
   presences) count as "more recent", or whether recency is distance
-  to 2023. **Not just wording (checked 2026-11-04):** the two readings
+  to 2023. **Not just wording (checked):** the two readings
   give different observer compositions at the same retention level —
   see the limitation below.
-- **Limitation (checked 2026-11-04, see
+- **Limitation (checked, see
   `notebooks/02_citizen_science/acacia_observations.ipynb`):** without
   a random-removal baseline, each level changes quantity *and*
   composition (age, observers, places) at once; RQ2 measures their
@@ -275,7 +275,7 @@ Design notes:
   rather than exposing it; a uniform-random background does not share
   that bias, so it should expose more of it. Results must state which
   background was used.
-- **Reviewed 2026-11-06 (mine; reasonable proposal, not yet confirmed
+- **Reviewed (mine; reasonable proposal, not yet confirmed
   by the supervisor):** the candidate experiment — other-plant
   background pool vs. random background — does not actually depend on
   the dropped multiclass design; it only needs the other-plant pool to
@@ -335,7 +335,7 @@ pixel.
 **Grounded in:** Brown et al. (2025) and the Cambridge TESSERA group —
 findings in `literature.md`.
 
-- **Segmentation mask (supervisor, 2026-11-04: central, try several
+- **Segmentation mask (supervisor: central, try several
   approaches; rule to define):** raised when discussing exclusion
   buffers. Decided (supervisor): a rule to consider the nearest
   vegetation area to each observation; the concrete rule is mine to
@@ -363,7 +363,7 @@ findings in `literature.md`.
   falls inside one (about 17% of 2021–2025 presences). Risks: the mask
   may spread into similar non-*Acacia* vegetation (check a sample on
   OrtoSat), and large patches give many more pixels than isolated
-  trees (may need balancing). Literature search (2026-11-03) found
+  trees (may need balancing). Literature search found
   this is an active technique in weakly-supervised remote-sensing
   segmentation generally, but no paper combines it with sparse
   citizen-science points and frozen foundation-model embeddings as
@@ -385,15 +385,15 @@ reported, and its effect is measured.
 | Step | Status | Notes | Grounded in |
 |---|---|---|---|
 | 1. Remove obscured coordinates | Done | 43 presences, 9 903 other plants | iNaturalist geoprivacy randomises these coordinates (platform documentation); research-grade-only data in Gillespie et al. (2024) and Brown et al. (2025) also implies location-quality filtering |
-| 2. Positional accuracy | Adopted (2026-10-29) | Drop known accuracy > 30 m; keep missing values, marked `accuracy_missing`. Presences 3 441 → 3 276, other plants 60 630 → 48 125. Why 30 m (the COS test): [`thesis/notes.md`](../thesis/notes.md#precisão-da-localização-tirar-acima-de-30-m-manter-as-sem-valor) | Ball et al. (2026) |
-| 3. Quality grade | Adopted (2026-10-29) | Research grade only, on both sides. Presences 5 242 → 3 441, other plants 110 576 → 60 630. Why: [`thesis/notes.md`](../thesis/notes.md#só-observações-research-nos-dois-lados) | Gillespie et al. (2024); Brown et al. (2025) |
+| 2. Positional accuracy | Adopted | Drop known accuracy > 30 m; keep missing values, marked `accuracy_missing`. Presences 3 441 → 3 276, other plants 60 630 → 48 125. Why 30 m (the COS test): [`thesis/notes.md`](../thesis/notes.md#precisão-da-localização-tirar-acima-de-30-m-manter-as-sem-valor) | Ball et al. (2026) |
+| 3. Quality grade | Adopted | Research grade only, on both sides. Presences 5 242 → 3 441, other plants 110 576 → 60 630. Why: [`thesis/notes.md`](../thesis/notes.md#só-observações-research-nos-dois-lados) | Gillespie et al. (2024); Brown et al. (2025) |
 | 4. Temporal design | Adopted | All observations treated as 2023, see [Temporal Design](#temporal-design-adopted) | See that section |
 | 5. Disturbance filter | Proposed (fixed) | Burned between observation and 2023 (ICNF 1975–2025): 6 *A. dealbata* presences (0.2%), 125 other plants (0.9%) | Riveiro et al. (2025): burned stands regrow, pixel no longer matches the label |
-| 6. Label purity | Checked (2026-11-07), no large-scale problem found | Expert-polygon agreement (limited power) and embedding-outlier detection found no evidence citizen-science presences are frequently off-target; see [RQ1](#rq1--foundation-models-vs-conventional-approaches) and `thesis/notes.md` | Ball et al. (2026) |
-| 7. Negative/background | Adopted (2026-11-06) | Uniform-random points, 50 m buffer around known presences, not COS-stratified — not yet confirmed by the supervisor as final. See [RQ1](#rq1--foundation-models-vs-conventional-approaches) and [`data/README.md`](../data/README.md) | Phillips et al. (2009) |
-| 8. Same pixel | Adopted (2026-10-29) | Pixel = 10 m cell in EPSG:32629. One presence per pixel, closest to 2023 (3 276 → 3 000). Conflicts: co-located other plants dropped, presence kept. Other plants: one per pixel, tallest group first, then closest to 2023 (16 720 → 13 554). Why: [`thesis/notes.md`](../thesis/notes.md#uma-observação-por-píxel-nos-conflitos-fica-a-presença) | Karasiak et al. (2022) |
-| 9. Other-plant classes | **Superseded 2026-11-05** | Multiclass dropped; the cleaned, grouped other-plant dataset is kept only as a candidate background source for the RQ3 amplify/mitigate experiment (not yet run) — see [RQ3](#rq3--spatial-sampling-bias) and [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | FAO LCCS (Di Gregorio & Jansen, 2000); GIFT (Weigelt et al., 2020; Denelle et al., 2023); Decreto-Lei 92/2019, Annex II; EPPO (2024); Ball et al. (2026) |
-| 10. Observer balancing | Adopted (2026-11-03) | Main model: all of Observer A's observations (88% of the 3 000 presences); capping/removing is the RQ3 experiment, not preprocessing. Why: [`thesis/notes.md`](../thesis/notes.md#observer-a-todas-as-observações-no-modelo-principal) | Observer clustering (Cambridge TESSERA group); Phillips et al. (2009) |
+| 6. Label purity | Checked, no large-scale problem found | Expert-polygon agreement (limited power) and embedding-outlier detection found no evidence citizen-science presences are frequently off-target; see [RQ1](#rq1--foundation-models-vs-conventional-approaches) and `thesis/notes.md` | Ball et al. (2026) |
+| 7. Negative/background | Adopted | Uniform-random points, 50 m buffer around known presences, not COS-stratified — not yet confirmed by the supervisor as final. See [RQ1](#rq1--foundation-models-vs-conventional-approaches) and [`data/README.md`](../data/README.md) | Phillips et al. (2009) |
+| 8. Same pixel | Adopted | Pixel = 10 m cell in EPSG:32629. One presence per pixel, closest to 2023 (3 276 → 3 000). Conflicts: co-located other plants dropped, presence kept. Other plants: one per pixel, tallest group first, then closest to 2023 (16 720 → 13 554). Why: [`thesis/notes.md`](../thesis/notes.md#uma-observação-por-píxel-nos-conflitos-fica-a-presença) | Karasiak et al. (2022) |
+| 9. Other-plant classes | **Superseded** | Multiclass dropped; the cleaned, grouped other-plant dataset is kept only as a candidate background source for the RQ3 amplify/mitigate experiment (not yet run) — see [RQ3](#rq3--spatial-sampling-bias) and [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | FAO LCCS (Di Gregorio & Jansen, 2000); GIFT (Weigelt et al., 2020; Denelle et al., 2023); Decreto-Lei 92/2019, Annex II; EPPO (2024); Ball et al. (2026) |
+| 10. Observer balancing | Adopted | Main model: all of Observer A's observations (88% of the 3 000 presences); capping/removing is the RQ3 experiment, not preprocessing. Why: [`thesis/notes.md`](../thesis/notes.md#observer-a-todas-as-observações-no-modelo-principal) | Observer clustering (Cambridge TESSERA group); Phillips et al. (2009) |
 
 **Evaluation — cumulative ablation:** run the RQ1 setup after adding
 each step and report the change in performance. This shows which
@@ -425,20 +425,23 @@ Possible extension, if time and weights allow: fine-tune TESSERA, or
 train a small MLP head on the embeddings, and compare with the frozen
 setup.
 
-**Phase 1: TESSERA only (decision, supervisor, 2026-11-05, in
+**Phase 1: TESSERA only (decision, supervisor, in
 person).** The RQ1 effort-reduction curve (see
 [RQ1](#rq1--foundation-models-vs-conventional-approaches)) ran first
 with TESSERA embeddings. No literature grounding checked for the
 phasing itself — it was a scheduling decision, not a methodological
-one. **Phase 2 starts now (2026-11-07, my decision):** the TESSERA
-results are in, so the Sentinel-2 arm is no longer deferred — see
+one. **Phase 2 deferred again (my decision):** a same-day
+attempt to start the Sentinel-2 arm found its point-level extraction
+is not actually cheap here — see
 [`thesis/notes.md`](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo).
-Feature set decided (bands, indices, seasonal composites) — see
+The original supervisor sequencing stands; other RQ1 items take
+priority for now. Feature set is decided for whenever it resumes
+(bands, indices, seasonal composites) — see
 [`methodology.md`](methodology.md#baseline).
 
 ### Other Plants as Classes (adopted direction)
 
-**Superseded 2026-11-05 (supervisor, in person):** multiclass is
+**Superseded (supervisor, in person):** multiclass is
 dropped for both models — other-plant observations are not separate
 classifier classes. RQ1's background in force is a uniform-random
 point pool, unrelated to other-plant data; see
@@ -511,7 +514,7 @@ The proposal asks for **species-level** mapping of a limited number of
 representative species. Observations (all years, non-obscured):
 *A. dealbata* 5 241, *A. melanoxylon* 1 884, *A. longifolia* 512.
 
-**Proposed (2026-10-20): *A. dealbata* as the target.** Other
+**Proposed: *A. dealbata* as the target.** Other
 *Acacia* species are left out of training (not used as other-plant
 classes, since they are *Acacia*). Why: [`thesis/notes.md`](../thesis/notes.md#só-acacia-dealbata).
 

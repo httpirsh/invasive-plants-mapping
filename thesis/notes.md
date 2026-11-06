@@ -9,7 +9,7 @@ fica o registo do que decidi, quando e porquê.
 
 ### Perguntas ambiciosas
 
-*2026-10-21, sugestão dos orientadores para a defesa.*
+*Sugestão dos orientadores para a defesa.*
 
 > "Tenho noção de que as perguntas são ambiciosas. Num cenário ideal,
 > com todo o tempo do mundo, chegaria à RQ3. Por isso estão ordenadas
@@ -34,15 +34,15 @@ mais exigente) já está em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
 (secção Research Questions).
 
-**Nota (2026-11-04, minha correção):** a tabela de estado em
+**Nota (minha correção):** a tabela de estado em
 `research_questions.md` tinha a RQ1 como "proposed, to confirm", apesar
 de esta citação (da mesma reunião que aprovou a RQ3) já a aprovar como
-núcleo da tese. Corrigido para "Adopted 2026-10-21", consistente com a
+núcleo da tese. Corrigido para "Adopted", consistente com a
 RQ2 e a RQ3.
 
 ### Introdução para um júri de informática
 
-*2026-10, sugestão do orientador.* O júri é de um departamento de
+*Sugestão do orientador.* O júri é de um departamento de
 informática e não está por dentro da observação da Terra. A tese (e a
 defesa) tem de começar por sensibilizar para o tema: explicar os
 conceitos base e os problemas que depois tento resolver.
@@ -92,7 +92,7 @@ nas Decisões). O diagrama do pipeline ainda não foi feito.
 
 ### Outras plantas como classes, não como ausências
 
-*2026-10-30, para a defesa — caso perguntem porque não uso as outras
+*Para a defesa — caso perguntem porque não uso as outras
 plantas como "não é acácia".*
 
 > "O iNaturalist só regista presenças: nunca há um registo que diga
@@ -125,7 +125,7 @@ Porque isto é diferente na prática de um "não-acácia" direto:
   também no modelo de especialistas" nas Decisões).
 
 **Contraste, se perguntarem se isto é mesmo relevante:** a colega
-Lucie Radová, numa apresentação interna que assisti em 2026-10-30
+Lucie Radová, numa apresentação interna que assisti
 (ainda não publicada, não é artigo nem preprint), propõe exatamente o
 oposto nos próximos passos do trabalho dela: usar observações de
 outras plantas para *descer* a probabilidade de acácia, ou seja, como
@@ -152,7 +152,7 @@ Uma entrada por decisão: data, o que decidi, porquê, e onde está
 
 ### Só *Acacia dealbata*
 
-*2026-10-20, decisão minha (a confirmar com o orientador).*
+*Decisão minha (a confirmar com o orientador).*
 
 **O que decidi:** o alvo é a *A. dealbata*. As outras espécies de
 *Acacia* ficam fora do treino (opção A). Mais tarde posso testá-las
@@ -173,7 +173,7 @@ como classe própria (opção B) ou mapear o género como extensão.
 mapearam a *A. dealbata* sozinha.
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#species-scope-proposed).
-Aplicado a 2026-10-29 no passo 10 de
+Aplicado no passo 10 de
 [`acacia_observations.ipynb`](../notebooks/02_citizen_science/acacia_observations.ipynb):
 ficam 5 242 observações (5 240 da espécie e 2 da subespécie
 *A. dealbata dealbata*); saem 2 621 de outras espécies e 35
@@ -186,7 +186,7 @@ justificar o scope.
 
 ### Multiclasse também no modelo de especialistas
 
-*2026-10-20, proposta minha (a confirmar com o orientador).*
+*Proposta minha (a confirmar com o orientador).*
 
 **O que decidi:** na RQ1, os dois modelos são multiclasse. O de
 ciência cidadã já o era (outras plantas do iNaturalist como classes,
@@ -214,13 +214,13 @@ binária (*A. dealbata* vs. o resto) corre também, como verificação.
 de espécies como classes, com embeddings. Não verifiquei outras fontes
 para esta escolha.
 
-*Atualizado a 2026-11-04:* os polígonos `classifica = 0` dos
+*Atualizado:* os polígonos `classifica = 0` dos
 especialistas deixam de ser usados (decisão do orientador, ver "Usar
 os dados de especialistas"). As classes negativas do modelo de
 especialistas passam a vir só de pontos ao acaso na COS 2023; como
 escolhê-los está em aberto.
 
-*Substituída a 2026-11-05 (reunião presencial, decisão do orientador):*
+*Substituída (reunião presencial, decisão do orientador):*
 o multiclasse é abandonado nos dois modelos — esta decisão fica
 histórica. Ver a entrada completa em "Multiclasse abandonado; RQ1
 passa a uma curva de redução de esforço (presença vs. fundo)", mais
@@ -235,7 +235,7 @@ abandonado…" mais abaixo) — não entra na tese nesta forma.
 
 ### RQ3 aprovada
 
-*2026-10-21, decisão do orientador (na reunião).*
+*Decisão do orientador (na reunião).*
 
 **O que decidi:** a RQ3 (os embeddings amplificam ou atenuam o
 enviesamento espacial da ciência cidadã, comparados com o
@@ -269,8 +269,8 @@ observador dominante (83%/88%) já estão em
 
 ### Usar os dados de especialistas, com limpeza
 
-*2026-10-28, decisão minha depois de os ver no QGIS. As ausências
-mudaram a 2026-11-04, por decisão do orientador: ver "O que mudou".*
+*Decisão minha depois de os ver no QGIS. As ausências
+mudaram, por decisão do orientador: ver "O que mudou".*
 
 **O que decidi:** os dados de especialistas são de confiança e vão ser
 usados. Limpeza: tirar as 11 linhas sem `classifica` e corrigir as 531
@@ -295,7 +295,7 @@ que está no próprio segmento (p. ex. uma árvore num jardim fica
 
 **Porquê:**
 - Vistos no QGIS, os polígonos estão onde devem. São de 2023, feitos
-  no campo e sobre o OrtoSat (resposta do orientador, 2026-10-28).
+  no campo e sobre o OrtoSat (resposta do orientador).
 - A forma estranha vem da segmentação da imagem. As geometrias
   inválidas são contornos que se tocam num canto de píxel; a correção
   não muda a área.
@@ -304,7 +304,7 @@ que está no próprio segmento (p. ex. uma árvore num jardim fica
   exatidão sairia inflacionada. Mas também tem de saber que um
   edifício não é acácia, por isso fica uma amostra.
 
-**O que mudou (2026-11-04, decisão do orientador, por mensagem):**
+**O que mudou (decisão do orientador, por mensagem):**
 só conto os polígonos com `classifica = 1`. Os de `classifica = 0`
 são áreas de não acácia que não devem entrar no estudo; era por os
 estar a usar que apareciam ausências em edifícios. Deixa de haver
@@ -315,7 +315,7 @@ classes de vegetação da COS 2023 (ver "Multiclasse também no modelo
 de especialistas").
 
 **Onde:** [`notebooks/03_expert_reference/expert_polygons.ipynb`](../notebooks/03_expert_reference/expert_polygons.ipynb)
-(secções 5–10). **Atualizado (2026-11-06):** a secção 6 passa a tirar
+(secções 5–10). **Atualizado:** a secção 6 passa a tirar
 também os `classifica = 0` (não só as linhas sem valor); a coluna
 `use` (secção 10 antiga) foi removida, já que deixou de haver
 ausências para marcar. Ficheiro `expert_polygons_clean.gpkg`
@@ -331,7 +331,7 @@ placeholder).
 
 ### Só observações *research*, nos dois lados
 
-*2026-10-29, decisão minha.*
+*Decisão minha.*
 
 **O que decidi:** no modelo principal, as observações do iNaturalist
 são só as *research*, nas presenças e nas outras plantas.
@@ -349,8 +349,8 @@ decidi aplicar também às outras plantas, para ser consistente (ver o
   comunidade (pelo menos duas pessoas concordam), com foto, data,
   localização e organismo selvagem.
 - As nossas *casual* são quase todas observações **sem foto**: 1 670
-  das 1 679 do distrito (contagem na API do iNaturalist a
-  2026-10-29); só 8 estão marcadas como cultivadas. Ninguém consegue
+  das 1 679 do distrito (contagem na API do iNaturalist);
+  só 8 estão marcadas como cultivadas. Ninguém consegue
   confirmar a identificação.
 - 98% das *casual* são do Observer A, sobretudo de 2021. Ao tirá-las,
   o peso do Observer A desce de 90% para 87%.
@@ -396,7 +396,7 @@ o capítulo de Metodologia.
 
 ### Precisão da localização: tirar acima de 30 m, manter as sem valor
 
-*2026-10-29, decisão minha (por recomendação, depois de um teste).*
+*Decisão minha (por recomendação, depois de um teste).*
 
 **O que decidi:** nos dois lados (presenças e outras plantas), saem
 as observações com `positional_accuracy` conhecida acima de 30 m (3
@@ -456,7 +456,7 @@ completo (teste, limiar de 30 m) fica para o capítulo de Metodologia.
 
 ### Uma observação por píxel; nos conflitos fica a presença
 
-*2026-10-29, decisão minha (o ponto dos conflitos é a versão mínima da
+*Decisão minha (o ponto dos conflitos é a versão mínima da
 máscara de segmentação, a confirmar com o orientador).*
 
 **O que decidi:**
@@ -466,7 +466,7 @@ máscara de segmentação, a confirmar com o orientador).*
 - **Conflitos:** nos 443 píxeis com uma *A. dealbata* e outras
   plantas, saem as outras plantas (772) e fica a presença.
 - **Outras plantas repetidas:** uma por píxel, decidido depois de as
-  agrupar em classes (ver a entrada seguinte). *Mudou a 2026-10-30:*
+  agrupar em classes (ver a entrada seguinte). *Mudou:*
   antes era "uma por píxel e por classe", mas isso deixava 771 píxeis
   com dois rótulos diferentes.
 
@@ -507,7 +507,7 @@ capítulo de Metodologia.
 
 ### Outras plantas em 8 grupos; herbáceas só onde são a camada de cima
 
-*2026-10-30, proposta (deixei a escolha ao assistente; a confirmar com
+*Proposta (deixei a escolha ao assistente; a confirmar com
 o orientador). Revista no mesmo dia: ver "O que mudou".*
 
 **O que decidi:**
@@ -536,13 +536,13 @@ o orientador). Revista no mesmo dia: ver "O que mudou".*
 - Resultado: matos 8 145, herbáceas 4 218, invasoras grandes 2 958,
   outras árvores 1 663, carvalhos 802, aquáticas 621, pinheiros 319,
   eucalipto 169. Ficam 6,3 outras plantas por presença.
-  *Mudou a 2026-11-03:* os matos debaixo de floresta passaram a sair
+  *Mudou:* os matos debaixo de floresta passaram a sair
   (ver "Matos debaixo de floresta saem" abaixo). Ficam 13 554 (4,5 por
   presença): herbáceas 4 229, invasoras grandes 2 958, matos 2 790,
   outras árvores 1 663, carvalhos 802, aquáticas 624, pinheiros 319,
   eucalipto 169.
 
-**O que mudou (2026-10-30):**
+**O que mudou:**
 - Primeiro os grupos vinham de listas de géneros feitas à mão. Pedi
   que se baseassem em fontes; passaram a vir do GIFT, da lista
   nacional de invasoras e da taxonomia do iNaturalist. O GIFT
@@ -615,7 +615,7 @@ o orientador). Revista no mesmo dia: ver "O que mudou".*
   leitura dos nomes das classes, não uma regra publicada. A COS tem
   unidade mínima de 1 ha: clareiras pequenas perdem-se.
 - Os matos também estão sobretudo debaixo de floresta (26% em pinhal,
-  21% em eucaliptal, só 13% em matos). *Resolvido a 2026-11-03:* saem
+  21% em eucaliptal, só 13% em matos). *Resolvido:* saem
   (ver a entrada abaixo).
 - Eucalipto (169) e pinheiros (319) são classes pequenas. Porquê:
   são pouco fotografados (1% e 0,7% das observações de plantas) e o
@@ -639,7 +639,7 @@ pode reaparecer de outra forma no pipeline do fundo, por rever.
 
 ### Observer A: todas as observações no modelo principal
 
-*2026-11-03, decisão minha.*
+*Decisão minha.*
 
 **O que decidi:** no modelo principal ficam todas as observações do
 Observer A (88% das 3 000 presenças de *A. dealbata*). Não limito o
@@ -672,7 +672,7 @@ modelo principal fica para o capítulo de Metodologia.
 
 ### Matos debaixo de floresta saem
 
-*2026-11-03, decisão minha (a confirmar com a ablação).*
+*Decisão minha (a confirmar com a ablação).*
 
 **O que decidi:** para começar, os matos que caem em floresta na COS
 2023 (código 5: pinhal, eucaliptal, outras florestas, acacial) saem,
@@ -715,7 +715,7 @@ camada de cima ainda se aplica ao fundo.
 
 ### Máscara de segmentação: sem a direção da câmara; testar várias abordagens
 
-*2026-11-04, decisão do orientador (por mensagem). A regra concreta
+*Decisão do orientador (por mensagem). A regra concreta
 está por definir por mim.*
 
 **O que decidi:**
@@ -732,7 +732,7 @@ está por definir por mim.*
   edifício; (2) estender o rótulo do ponto à mancha à volta, como no
   artigo que indicou (superpíxeis). A segunda é a minha leitura, a
   confirmar.
-- **Adotado (meu, a confirmar com o orientador, 2026-11-04):** entre
+- **Adotado (meu, a confirmar com o orientador):** entre
   as duas leituras acima, fico com a (2) — estender o rótulo à mancha
   à volta — como interpretação de trabalho para desenhar e testar as
   abordagens. Razão: ele escreveu "área de vegetação", não "pixel" ou
@@ -740,7 +740,7 @@ está por definir por mim.*
   a coordenada para dentro dela. Continua por confirmar explicitamente
   com ele — pergunta registada em
   [`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md).
-- **Esclarecido (meu, 2026-11-04):** da candidata dos superpíxeis
+- **Esclarecido (meu):** da candidata dos superpíxeis
   (Rivier et al.), uso só a ideia — superpíxeis + rótulo por maioria
   de voto dos pontos dentro de cada um — aplicada a patches de
   embeddings TESSERA e alimentando o classificador já adotado (frozen
@@ -759,6 +759,19 @@ está por definir por mim.*
   cada presença conhecida e os seus vizinhos imediatos (um percentil
   dessa distribuição), em vez de um número fixo à mão. Nenhum destes
   valores foi ainda testado.
+- **Testado (crescimento de região, amostra de 30):** parâmetros por
+  omissão acima, por correr. Resultado: 1/15/758 píxeis (mín/mediana/
+  máx) — a cauda superior bate no limite do raio (20 px/200 m), sinal
+  de que o limiar de 0,90 é permissivo demais nalguns casos, ainda não
+  calibrado.
+- **Testado (superpíxeis, SLIC sobre as patches de embeddings
+  TESSERA, amostra de 30):** `n_segments=100`, `compactness=0,1`
+  (também não fundamentados, só escolhidos para aproximar o tamanho
+  mediano da candidata anterior). Resultado: 11/21/45 píxeis — mais
+  consistente, mas só porque o número de segmentos limita o tamanho
+  máximo por construção, não por ser mais exato. A propagação por voto
+  maioritário (a proposta real de Rivier et al.) ainda não foi
+  exercitada — esta amostra tem um ponto por patch.
 
 **Porquê:**
 - O orientador acha que a ideia da câmara não vale a pena.
@@ -770,7 +783,7 @@ está por definir por mim.*
 
 **Fundamentação:** o orientador indicou Rivier et al. (2024, IEEE
 ICIP), que propaga rótulos de pontos a superpíxeis, e disse que há
-mais trabalhos do género. Li o artigo completo (2026-11-03) e procurei
+mais trabalhos do género. Li o artigo completo e procurei
 mais trabalhos do género — resumos, números e a comparação com
 Gillespie et al. (2024) e Zhang et al. (2021) ficam só em
 [`docs/literature.md`](../docs/literature.md#weak-supervision-from-point-labels),
@@ -780,10 +793,12 @@ de foundation models congelados, regra de "vegetação mais próxima");
 a técnica em geral não é inédita, mas esta combinação concreta
 mantém-se como possível contributo, não prática já estabelecida.
 
-A ideia da câmara veio da apresentação da Lucie Radová (2026-10-30).
+A ideia da câmara veio da apresentação da Lucie Radová.
 
 **Onde:** [`docs/meetings/2026-11-04.md`](../docs/meetings/2026-11-04.md)
-(resposta dos orientadores).
+(resposta dos orientadores);
+[`notebooks/05_data_integration/segmentation_mask.ipynb`](../notebooks/05_data_integration/segmentation_mask.ipynb)
+(as três candidatas testadas na amostra de 30).
 
 **Na tese:** ✅ Parcial — já referida como candidato a contributo
 metodológico na Introdução (secção Contributions: "matching what
@@ -793,7 +808,7 @@ ficam para o capítulo de Metodologia.
 
 ### Baseline do modelo de ciência cidadã pode ser one-class (pergunta sobre os `classifica = 0` sem resposta direta)
 
-*2026-11-03, resposta do orientador por mensagem, a seguimento da
+*Resposta do orientador por mensagem, a seguimento da
 pergunta se os `classifica = 0` podiam servir só para avaliar o modelo
 de ciência cidadã.*
 
@@ -829,7 +844,7 @@ dados de especialistas, com limpeza").
   modelos de RQ1 como multiclasse, com as outras plantas como classes
   (ver "Multiclasse também no modelo de especialistas"): um classificador
   one-class é uma tarefa diferente de um classificador multiclasse.
-  **Correção (2026-11-03):** eu tinha escrito aqui que isto era
+  **Correção:** eu tinha escrito aqui que isto era
   "provavelmente sobre a avaliação, não sobre o treino" — está errado.
   A resposta usa a palavra "treino" nas duas opções que dá (one-class
   vs. construir o treino à mão), por isso é sobre o treino do
@@ -843,7 +858,7 @@ dados de especialistas, com limpeza").
 - Por decidir (minha escolha): se aceito falar com o orientador esta
   semana, como ofereceu.
 
-**Resolvido (2026-11-05, reunião presencial):** o orientador esclareceu
+**Resolvido (reunião presencial):** o orientador esclareceu
 em pessoa que a mudança é para abandonar o multiclasse nos dois
 modelos principais (ciência cidadã e especialistas), não só no braço
 Sentinel-2/baseline da RQ1, como parte de um redesenho maior da RQ1 —
@@ -872,7 +887,7 @@ placeholder); resolvida por "Multiclasse abandonado…" mais abaixo.
 
 ### Validação espacial no lado dos especialistas: zona-tampão, além dos blocos de 10 km
 
-*2026-11-06, minha decisão (unidade assumida, não confirmada pelo
+*Minha decisão (unidade assumida, não confirmada pelo
 orientador). Pedido de verificação da Íris, a partir de algo dito pelo
 orientador na reunião presencial de 2026-11-05 (não registado nessa
 altura — ver
@@ -895,7 +910,7 @@ precisamente o problema descrito por Karasiak et al. (ver abaixo) e
 complementa, não substitui, os blocos de 10 km já usados para separar
 viés geográfico/do observador a uma escala mais grosseira.
 
-**Investigação feita (2026-11-06):**
+**Investigação feita:**
 - **Literatura (texto completo lido — Mahoney, Johnson & Silge, 2023;
   ver
   [`docs/literature.md#spatial-validation`](../docs/literature.md#spatial-validation)):**
@@ -961,7 +976,7 @@ Metodologia.
 
 ### Sentinel-2 bruto: via Earth Search (AWS), sem conta, alinhado à grelha da TESSERA
 
-*2026-11-03, minha decisão. Fica só a versão final; ver abaixo as
+*Minha decisão. Fica só a versão final; ver abaixo as
 versões anteriores.*
 
 **O que decidi:** descarregar o Sentinel-2 L2A (ainda em falta em
@@ -1007,7 +1022,7 @@ Metodologia ou em apêndice, se for necessário).
 
 ### Multiclasse abandonado; RQ1 passa a uma curva de redução de esforço (presença vs. fundo)
 
-*2026-11-05, reunião presencial. Decisão do orientador (pontos 1 a 4);
+*Reunião presencial. Decisão do orientador (pontos 1 a 4);
 ponto 5 é decisão minha, informada por esta conversa. Substitui por
 inteiro "Multiclasse também no modelo de especialistas" e resolve
 "Baseline do modelo de ciência cidadã pode ser one-class" (ambas
@@ -1032,8 +1047,8 @@ acima).*
 4. **Fase 1: só embeddings TESSERA.** O Sentinel-2 fica para uma fase
    posterior.
 5. **Testar os dois métodos em paralelo desde o início: one-class
-   verdadeiro (deteção de novidade) e presença-vs-fundo.** *Revisto a
-   2026-11-06, segunda vez no mesmo dia:* a ideia inicial (só
+   verdadeiro (deteção de novidade) e presença-vs-fundo.** *Revisto,
+   segunda vez no mesmo dia:* a ideia inicial (só
    presença-vs-fundo) passou primeiro a uma abordagem faseada (one-class
    primeiro, fundo como recurso), e depois — depois da pesquisa de
    literatura (ver "Atualização" abaixo) mostrar que a avaliação
@@ -1047,10 +1062,10 @@ acima).*
    N total de treino cresce a cada nível da curva. Reportar sempre o N
    total ao lado da percentagem de especialistas em cada ponto, para
    não esconder o efeito do volume de dados. Decisão minha, confirmada
-   pela Íris (2026-11-06).
+   pela Íris.
 7. **Método one-class concreto: one-class SVM, não Isolation Forest.**
    Decisão minha, a pedido explícito da Íris ("decide those for
-   yourself and start comparing them", 2026-11-06), resolvida por
+   yourself and start comparing them"), resolvida por
    comparação direta, não só por literatura — ver "Atualização
    (comparação direta)" abaixo.
 8. **Fundo partilhado construído (primeira versão):** 2000 pontos
@@ -1092,7 +1107,7 @@ acima).*
 - Phillips et al. (2009): *target-group background*, já citado para
   "Outras plantas como classes" — continua relevante se/quando for
   preciso um fundo (ver ponto 7 em "Em aberto").
-- Pesquisa de literatura mais completa feita a 2026-11-06 (ver
+- Pesquisa de literatura mais completa feita (ver
   "Atualização" abaixo e
   [`docs/literature.md`](../docs/literature.md#one-class--positive-unlabeled-classification)):
   em todas as comparações empíricas encontradas, um método one-class
@@ -1106,7 +1121,7 @@ acima).*
   própria para já. A ordem "one-class primeiro, fundo depois" e a
   mistura aditiva são raciocínio meu, a partir desta conversa.
 
-**Atualização (2026-11-06, pesquisa de literatura — ver
+**Atualização (pesquisa de literatura — ver
 [`docs/literature.md`](../docs/literature.md#one-class--positive-unlabeled-classification)
 para o detalhe completo, tudo por confirmar a partir de resumos, sem
 texto completo lido):**
@@ -1127,12 +1142,12 @@ texto completo lido):**
   (evitar o problema do fundo).
 - Correção: a entrada "Rapinel & Hubert-Moy (2021)" acima estava
   atribuída erradamente a "Zhao & Zhong" — corrigido.
-- **Consequência (2026-11-06):** esta informação levou a rever o ponto
+- **Consequência:** esta informação levou a rever o ponto
   5 acima — em vez de testar o one-class verdadeiro primeiro e só
   avançar para presença-vs-fundo se corresse mal, os dois métodos
   passam a ser testados em paralelo desde a primeira experiência.
 
-**Atualização (2026-11-06, comparação direta — ver
+**Atualização (comparação direta — ver
 [`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb)):**
 - A pedido explícito da Íris ("decide those for yourself and start
   comparing them, so we have a final decision regarding these two
@@ -1156,7 +1171,7 @@ texto completo lido):**
 
 **Em aberto (ainda por decidir, não resolvido nesta conversa):**
 - ~~Níveis exatos de mistura da curva e bloco espacial de teste fixo em
-  todos os pontos da curva~~ — feito (2026-11-07), ver
+  todos os pontos da curva~~ — feito, ver
   [Curva de redução de esforço completa: 0%–100%, com fundo e bloco de teste fixos](#curva-de-redução-de-esforço-completa-0100-com-fundo-e-bloco-de-teste-fixos)
   abaixo. Resultado inesperado: para Random Forest e Logistic
   Regression, acrescentar dados de especialistas de 10% a 90% quase não
@@ -1168,7 +1183,7 @@ texto completo lido):**
   específico encontrado na literatura para o raio.
 - ~~A RQ3 tinha como candidata "outras plantas como classes vs. fundo ao
   acaso"; sem classes próprias, isto passa a "fundo de outras plantas
-  vs. fundo ao acaso" — por rever.~~ — revisto (2026-11-06): a
+  vs. fundo ao acaso" — por rever.~~ — revisto: a
   experiência não dependia do multiclasse, só precisa do fundo de
   outras plantas existir como opção, o que continua a acontecer. O que
   mudou é que o fundo principal já construído para a RQ1 é aleatório
@@ -1201,7 +1216,7 @@ justificação do desenho final, não como histórico extenso.
 
 ### Estrutura do documento: seguir um relatório de referência de outro aluno, onde for aplicável
 
-*2026-11-06, decisão minha.*
+*Decisão minha.*
 
 **O que decidi:** usar
 [`thesis/guidance_example/1768249601_Entrega_intermedia-1.pdf`](guidance_example/1768249601_Entrega_intermedia-1.pdf)
@@ -1254,7 +1269,7 @@ escrito, o que vale a pena imitar (p. ex. a secção "Overall Analysis"
 no fim do Background, ou a lista de acrónimos) e o que não se aplica
 (Work Plan/Gantt/Risk Assessment, próprios de um relatório intermédio).
 
-**Atualização (2026-11-06):** confirmado que a minha primeira entrega
+**Atualização:** confirmado que a minha primeira entrega
 também é um **relatório intermédio** (não a tese final), prevista para
 o início de dezembro de 2026 — ver a entrada seguinte, "Primeira
 entrega: relatório intermédio, início de dezembro de 2026". Isto torna
@@ -1273,7 +1288,7 @@ relatório intermédio, não a tese final.
 
 ### Identidade da tese confirmada: título, mestrado, orientadores, idioma e data da entrega
 
-*2026-11-06, informação dada pela Íris (factos fixos da tese, não
+*Informação dada pela Íris (factos fixos da tese, não
 decisões de desenho).*
 
 **O que sei:**
@@ -1301,9 +1316,9 @@ refletem estes dados via `0-main.tex`.
 
 ### Primeira entrega: relatório intermédio, início de janeiro de 2027
 
-*2026-11-06, informação dada pela Íris (facto do calendário da tese,
+*Informação dada pela Íris (facto do calendário da tese,
 não uma decisão de desenho). Data corrigida de dezembro de 2026 para
-janeiro de 2027 em 2026-11-06 (ver entrada anterior).*
+janeiro de 2027 (ver entrada anterior).*
 
 **O que sei:** a minha primeira entrega da tese é um relatório
 intermédio (marco a meio do trabalho), a entregar no início de
@@ -1324,7 +1339,7 @@ acima). O conteúdo provável para dezembro é mais próximo do capítulo
 de trabalho e riscos para o resto da tese) do que de um capítulo de
 Resultados fechado.
 
-**Decidido (2026-11-06):** a entrega de janeiro **não** vai seguir a
+**Decidido:** a entrega de janeiro **não** vai seguir a
 estrutura final-de-tese tal como está em `thesis/document/text/` —
 confirmado por mim. Ainda não decido o mapeamento exato (que capítulo
 vira o quê) porque as experiências da RQ1 ainda não estão todas
@@ -1333,7 +1348,7 @@ feitas (só o braço de ciência cidadã foi testado até agora — ver
 acima) e isso condiciona quanto fica como "resultado" versus "plano de
 trabalho".
 
-**Plano (2026-11-07, esclarecido pela Íris):** o objetivo é terminar as
+**Plano (esclarecido pela Íris):** o objetivo é terminar as
 experiências da RQ1 (curva de redução de esforço completa, nos dois
 braços — ciência cidadã e especialistas, com o fundo confirmado e
 ambos os métodos, one-class SVM e presença-vs-fundo) antes da entrega
@@ -1368,7 +1383,7 @@ RQ1 estiverem mais avançadas.
 
 ### Classificador presença-vs-fundo (ciência cidadã): Random Forest, por agora
 
-*2026-11-06, decisão minha, primeira passagem, não confirmada pelo
+*Decisão minha, primeira passagem, não confirmada pelo
 orientador.*
 
 **O que decidi:** usar **Random Forest** como classificador por
@@ -1387,7 +1402,7 @@ o índice de Boyce mais alto e é mais estável nas duas métricas.
 desempenho pequena e sem vencedor claro, desempatei por (1)
 estabilidade entre divisões espaciais, que importa mais aqui do que um
 pequeno ganho médio de AUC, dado que o lado dos especialistas só tem
-18 blocos de 10 km independentes (corrigido 2026-11-07 — o valor de 15
+18 blocos de 10 km independentes (corrigido — o valor de 15
 citado aqui originalmente media a mesma coisa noutro sistema de
 coordenadas, ver
 [[discrepância-de-15-vs-18-blocos-espaciais-no-lado-dos-especialistas-é-o-sistema-de-coordenadas-não-um-bug]]);
@@ -1431,7 +1446,7 @@ placeholder).
 
 ### Braço de especialistas: one-class SVM e Random Forest confirmados (100% especialistas)
 
-*2026-11-07, decisão minha, primeira passagem, não confirmada pelo
+*Decisão minha, primeira passagem, não confirmada pelo
 orientador.*
 
 **O que decidi:** aplicar as duas escolhas já feitas no braço de
@@ -1503,7 +1518,7 @@ placeholder).
 
 ### Curva de redução de esforço completa: 0%–100%, com fundo e bloco de teste fixos
 
-*2026-11-07, decisão minha, primeira passagem, não confirmada pelo
+*Decisão minha, primeira passagem, não confirmada pelo
 orientador. Pedido explícito da Íris: testar 100%, 10%, 20%, … até
 encontrar o equilíbrio entre desempenho e custo de recolha no terreno.*
 
@@ -1610,7 +1625,7 @@ ainda placeholder).
 
 ### Curva de redução de esforço sob um fundo só de floresta: verificação de robustez {#curva-fundo-so-floresta}
 
-*2026-11-07, decisão minha (investigar), não confirmada pelo
+*Decisão minha (investigar), não confirmada pelo
 orientador. Motivado pela pergunta da Íris "não devíamos ter melhores
 resultados com os dados de especialistas? não pode ser um erro?" sobre
 o Random Forest já quase no teto (Boyce ≈0,99) a 0% de especialistas.*
@@ -1709,7 +1724,7 @@ ainda placeholder).
 
 ### Redundância dentro dos polígonos de especialistas: diagnóstico
 
-*2026-11-07, decisão minha (investigar), não confirmada pelo
+*Decisão minha (investigar), não confirmada pelo
 orientador. Seguimento da pergunta "o trabalho dos especialistas foi
 inútil? estaremos a perder alguma coisa?" — ver também
 [[curva-fundo-so-floresta]]. Descartadas, por agora: revisitar o
@@ -1788,7 +1803,7 @@ ainda placeholder).
 
 ### Por que os polígonos de especialistas são menos diversos entre si: é habitat, não geografia
 
-*2026-11-07, decisão minha (investigar), não confirmada pelo
+*Decisão minha (investigar), não confirmada pelo
 orientador. Segue diretamente do achado em aberto do diagnóstico
 anterior — ver acima.*
 
@@ -1836,7 +1851,7 @@ especialistas para outros tipos de habitat, por delimitação de área, ou
 como validação externa. A sobreposição de 55% com a classe "floresta
 de acácias" da própria COS é coincidência ecológica — os dados de
 especialistas são completamente independentes da COS (confirmado por
-mim, 2026-11-07); não é um indício de circularidade entre as duas
+mim); não é um indício de circularidade entre as duas
 fontes.
 
 **Fundamentação:** raciocínio meu a partir dos números desta
@@ -1857,7 +1872,7 @@ ainda placeholder).
 
 ### Pureza dos rótulos da ciência cidadã: não é a explicação para a curva plana
 
-*2026-11-07, decisão minha (investigar), não confirmada pelo
+*Decisão minha (investigar), não confirmada pelo
 orientador.*
 
 **O que decidi:** testar se o píxel de 10 m de um ponto do iNaturalist
@@ -1917,7 +1932,7 @@ ainda placeholder).
 
 ### Discrepância de 15 vs. 18 blocos espaciais no lado dos especialistas: é o sistema de coordenadas, não um bug
 
-*2026-11-07, decisão minha (investigar), não confirmada pelo
+*Decisão minha (investigar), não confirmada pelo
 orientador.*
 
 **O que decidi:** verificar se a diferença entre os "15 blocos"
@@ -1970,10 +1985,11 @@ placeholder).
 
 ### Sentinel-2 na RQ1: avançar já, por extração em pontos, não raster completo
 
-*2026-11-07, decisão minha, não confirmada pelo orientador.*
+*Decisão minha — revertida no mesmo dia (ver **Reversão**
+no fim desta entrada); não confirmada pelo orientador.*
 
 **O que decidi:** deixar de adiar o braço Sentinel-2 da RQ1. A fase 1
-"só TESSERA" (decisão do orientador, 2026-11-05, presencial) era um
+"só TESSERA" (decisão do orientador, presencial) era um
 faseamento ("primeiro TESSERA, depois Sentinel-2"), não um corte de
 âmbito — confirmado em conversa. Como todas as experiências da RQ1
 feitas até agora treinam e avaliam em pontos individuais (presenças,
@@ -2001,15 +2017,42 @@ artigos primeiro.
 braço Sentinel-2 em si já estava fundamentada em Mouta et al. (2021) e
 Domingo et al. (2023) (ver `docs/methodology.md`).
 
-**Onde:** ainda sem notebook — a construir depois de decidido o
-conjunto de features.
+**Correção (medido diretamente):** a premissa de que a
+extração por pontos seria "ordens de grandeza" mais barata estava
+errada. Os ~31 000 pontos (29 021 do piloto + 2 000 de fundo) ocupam
+294 de ~263 células de 5 km na área delimitadora (quase toda a
+extensão), pelo que uma leitura por ponto acaba por tocar quase todos
+os blocos internos dos COGs do Sentinel-2 na AWS — o mesmo volume de
+dados que uma leitura completa da área. Testado diretamente: amostrar
+2 000/31 021 pontos numa só banda/cena demorou 37 s (ritmo que dá
+~9-10 min só para essa combinação de banda/cena, multiplicado por 12
+bandas × dezenas a centenas de cenas = inviável). Uma leitura em bloco
+(janela 10×10 km, 1 banda, 1 cena) nem sequer terminou em 2 minutos
+neste ambiente — sinal de que o próprio acesso de rede a este bucket
+S3 está anormalmente lento aqui, não é só um problema de volume de
+dados. Conclusão: por pontos ou por raster dá praticamente o mesmo
+custo nesta área; falta decidir como reduzir esse custo (menos cenas,
+resolução mais grosseira, ou correr fora deste ambiente) antes de
+implementar — ver tarefa em `docs/todo.md`.
+
+**Reversão (decisão minha):** dada a correção acima, voltei
+a pôr o braço Sentinel-2 em espera — exatamente a indicação original do
+orientador, que entretanto se confirma como a prioridade
+certa, não só um faseamento a saltar. Prioridade passa para os outros
+itens abertos da RQ1 (máscara de segmentação, zona-tampão espacial do
+lado dos especialistas — ver `docs/todo.md`). O conjunto de features já
+decidido abaixo mantém-se válido para quando este braço for retomado;
+falta ainda decidir como reduzir o custo da extração em si antes de o
+fazer.
+
+**Onde:** ainda sem notebook — em espera.
 
 **Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
 placeholder).
 
 ### Conjunto de features do Sentinel-2 na RQ1: compósito anual (Ball et al.), fenologia da floração como extensão por ablação (Domingo et al.)
 
-*2026-11-07, proposta minha, aceite em conversa — não confirmada pelo
+*Proposta minha, aceite em conversa — não confirmada pelo
 orientador.*
 
 **O que decidi:** a primeira versão do braço Sentinel-2 usa o

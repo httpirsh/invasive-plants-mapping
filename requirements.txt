@@ -4,5 +4,6 @@ matplotlib
 geopandas
 rasterio
 scikit-learn
+scikit-image
 jupyter
 geotessera

@@ -62,8 +62,8 @@ Compares TESSERA embeddings, AlphaEarth embeddings and conventional
 Sentinel-1 + Sentinel-2 features for 18 tree species/groups
 (parcel-level forest inventories) in Trentino, Italy.
 
-**Conventional Sentinel-2 baseline, confirmed from source code
-(2026-11-07):** Sentinel-2 SR (`COPERNICUS/S2_SR_HARMONIZED`),
+**Conventional Sentinel-2 baseline, confirmed from source
+code:** Sentinel-2 SR (`COPERNICUS/S2_SR_HARMONIZED`),
 cloud/shadow-masked per scene (SCL classes 4/5/6/7 kept, 0/1/3/8/9/10/11
 dropped, plus QA60 opaque-cloud/cirrus bits), scenes with
 `CLOUDY_PIXEL_PERCENTAGE < 60` only. Two composite variants, both
@@ -305,7 +305,7 @@ conventional baseline.
 Spectral Differences to Detect Invasive Alien *Acacia dealbata* Using
 Sentinel-2 Data in Southern Europe. *Remote Sensing*, 15(3), 722.
 DOI: [10.3390/rs15030722](https://doi.org/10.3390/rs15030722)
-— read in full (2026-11-07, open-access copy via Universidad de
+— read in full (open-access copy via Universidad de
 Zaragoza repository, since MDPI blocks automated access).
 
 Sentinel-2 time series and flowering-period spectral differences,
@@ -364,7 +364,7 @@ Basis for using other plants as classes in
 
 ### One-class / positive-unlabeled classification
 
-> Literature search 2026-11-06 for the RQ1 one-class staging decision
+> Literature search for the RQ1 one-class staging decision
 > (try true one-class/novelty detection first, presence-vs-background
 > as fallback — see
 > [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)).
@@ -565,7 +565,7 @@ classification accuracy assessment in remote sensing. *Machine
 Learning*, 111(7), 2715–2740. DOI:
 [10.1007/s10994-021-05972-1](https://doi.org/10.1007/s10994-021-05972-1)
 (online 2021, journal issue dated 2022) — authors/venue confirmed via
-dblp/OpenAlex (2026-11-06) — *Full text not read: blocked by bot
+dblp/OpenAlex — *Full text not read: blocked by bot
 protection on HAL and a login wall on Springer; everything below is
 from its own software's documentation and from a citing review
 (Mahoney et al., 2023, full text read — see below)*
@@ -575,7 +575,7 @@ overestimates accuracy; spatial leave-one-out (SLOO) gives estimates
 consistent with real map quality. Released **Museo ToolBox**, whose
 `SpatialLeaveOneOut` class takes its buffer/exclusion distance as
 `distance_thresold`, documented **in pixels, not metres**
-(museotoolbox.readthedocs.io, checked 2026-11-06) — relevant directly
+(museotoolbox.readthedocs.io, checked) — relevant directly
 to how many pixels/metres a validation buffer should be, see
 [methodology.md#validation](methodology.md#validation).
 
@@ -610,7 +610,7 @@ holdout) was at least as robust as buffered leave-one-out, which was
 comparatively sensitive to the buffer size chosen. Introduces the R
 package `spatialsample`.
 
-**Applied here (2026-11-06):** this project's own empirical variogram
+**Applied here:** this project's own empirical variogram
 result and what it was used for (not a paper finding) is logged in
 [`thesis/notes.md`](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km),
 notebook:
@@ -640,7 +640,7 @@ Aerial Imagery Using Query Points and Superpixel Supervision.
 arXiv:2309.05490v2; published at IEEE ICIP 2024,
 DOI: [10.1109/ICIP51287.2024.10647646](https://doi.org/10.1109/ICIP51287.2024.10647646).
 PDF: [`literature/rivier_2024_superpixel_query_points.pdf`](literature/rivier_2024_superpixel_query_points.pdf).
-Recommended by the supervisor (2026-11-04) for the segmentation mask:
+Recommended by the supervisor for the segmentation mask:
 a rule linking each citizen-science point to the nearest vegetation
 area, with several approaches to compare (see
 [`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction)).
@@ -719,7 +719,7 @@ up to r = 0.69, best where observations are dense and in biomes *not
 dominated by trees*. Consistent with citizen science under-recording
 the canopy layer.
 
-**Searched, not found (2026-10-30):** no study handling understory
+**Searched, not found:** no study handling understory
 citizen-science observations when using them to label satellite
 pixels. Possible methodological contribution (see Contribution).
 
