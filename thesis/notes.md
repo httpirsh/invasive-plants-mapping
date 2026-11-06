@@ -1155,15 +1155,13 @@ texto completo lido):**
   não está confirmado pelo orientador como o desenho final.
 
 **Em aberto (ainda por decidir, não resolvido nesta conversa):**
-- Níveis exatos de mistura da curva (p. ex. 10%, 20%, …) e como manter
-  um bloco espacial de teste fixo em todos os pontos da curva, dado
-  que o observador dominante e os especialistas visitaram zonas
-  sobrepostas. Proposta em discussão, não confirmada: reutilizar os 15
-  blocos de 10 km já definidos para os polígonos de especialistas,
-  escolhendo o conjunto de teste para não ficar só em zona densa de um
-  dos lados (ciência cidadã ou especialistas). A comparação acima já
-  mostra que reutilizar a grelha de 10 km dos embeddings do piloto
-  funciona tecnicamente (85 blocos nessa extensão maior).
+- ~~Níveis exatos de mistura da curva e bloco espacial de teste fixo em
+  todos os pontos da curva~~ — feito (2026-11-07), ver
+  [Curva de redução de esforço completa: 0%–100%, com fundo e bloco de teste fixos](#curva-de-redução-de-esforço-completa-0100-com-fundo-e-bloco-de-teste-fixos)
+  abaixo. Resultado inesperado: para Random Forest e Logistic
+  Regression, acrescentar dados de especialistas de 10% a 90% quase não
+  muda o desempenho — só muda a 100% (e para pior na generalização às
+  presenças de ciência cidadã).
 - **Confirmar com o orientador o desenho do fundo partilhado** (ponto
   8 acima): 2000 pontos aleatórios uniformes, zona-tampão de 50 m —
   tanto o N como o raio da zona-tampão são escolha minha, sem valor
@@ -1263,14 +1261,43 @@ acima); os restantes capítulos (2–5) ainda por escrever/rever à luz
 desta referência, agora sabendo que o destino de dezembro é um
 relatório intermédio, não a tese final.
 
-### Primeira entrega: relatório intermédio, início de dezembro de 2026
+### Identidade da tese confirmada: título, mestrado, orientadores, idioma e data da entrega
+
+*2026-11-06, informação dada pela Íris (factos fixos da tese, não
+decisões de desenho).*
+
+**O que sei:**
+- Mestrado: Mestrado em Inteligência Artificial e Ciência de Dados
+  (Master's in Artificial Intelligence and Data Science).
+- Título oficial: "Advancing the Mapping of Invasive Alien Plants by
+  Combining Citizen Science, Earth Observation Foundation Models and
+  Satellite Imagery" (EN) / "Mapeamento de Plantas Exóticas Invasoras
+  através da Combinação de Ciência Cidadã, Modelos Fundacionais de
+  Observação da Terra e Imagens de Satélite" (PT).
+- Orientadores: Professor Jacinto Paulo Simões Estima e Professor
+  Diogo André Vicente Amorim Duarte.
+- O documento (`thesis/document/`) passa a ser escrito em inglês
+  (`\docLanguage{en}` em `0-main.tex`), não em português.
+- A data da entrega intermédia passa de início de dezembro de 2026
+  para início de janeiro de 2027 (ver "Primeira entrega" abaixo).
+
+**Onde:** `thesis/document/0-main.tex` (bloco CONFIGURATION —
+`\titleEN`, `\titlePT`, `\descMScEN/PT`, `\titlePageDescMScEN/PT`,
+`\docLanguage`, `\dateEN`, `\datePT`).
+
+**Na tese:** ✅ Feito — capa e página de título
+(`frontmatter/1-coverpage.tex`, `frontmatter/2-titlepage.tex`) já
+refletem estes dados via `0-main.tex`.
+
+### Primeira entrega: relatório intermédio, início de janeiro de 2027
 
 *2026-11-06, informação dada pela Íris (facto do calendário da tese,
-não uma decisão de desenho).*
+não uma decisão de desenho). Data corrigida de dezembro de 2026 para
+janeiro de 2027 em 2026-11-06 (ver entrada anterior).*
 
 **O que sei:** a minha primeira entrega da tese é um relatório
 intermédio (marco a meio do trabalho), a entregar no início de
-dezembro de 2026 — não a tese final. Isto está em linha com o género
+janeiro de 2027 — não a tese final. Isto está em linha com o género
 de documento do exemplo de referência (ver entrada anterior), que
 também é um relatório deste tipo, do mesmo departamento.
 
@@ -1287,7 +1314,7 @@ acima). O conteúdo provável para dezembro é mais próximo do capítulo
 de trabalho e riscos para o resto da tese) do que de um capítulo de
 Resultados fechado.
 
-**Decidido (2026-11-06):** a entrega de dezembro **não** vai seguir a
+**Decidido (2026-11-06):** a entrega de janeiro **não** vai seguir a
 estrutura final-de-tese tal como está em `thesis/document/text/` —
 confirmado por mim. Ainda não decido o mapeamento exato (que capítulo
 vira o quê) porque as experiências da RQ1 ainda não estão todas
@@ -1300,7 +1327,7 @@ trabalho".
 experiências da RQ1 (curva de redução de esforço completa, nos dois
 braços — ciência cidadã e especialistas, com o fundo confirmado e
 ambos os métodos, one-class SVM e presença-vs-fundo) antes da entrega
-de dezembro, para que o capítulo de Resultados apresente a RQ1
+de janeiro, para que o capítulo de Resultados apresente a RQ1
 respondida, não um resultado preliminar isolado. Se não for possível
 terminar a tempo, o conteúdo recua para resultado preliminar + plano
 de trabalho (ver "Em aberto" abaixo).
@@ -1317,8 +1344,8 @@ de trabalho (ver "Em aberto" abaixo).
   [notebooks/07_foundation_models/one_class_method_selection.ipynb](../notebooks/07_foundation_models/one_class_method_selection.ipynb))
   é razoável incluir como resultados parciais, versus deixar só como
   "trabalho em curso" no plano de trabalho.
-- Prazo exato de início de dezembro — só foi dito "início de dezembro
-  de 2026", sem data exata.
+- Prazo exato de início de janeiro — só foi dito "início de janeiro
+  de 2027", sem data exata.
 
 **Onde:** sem notebook/figura própria; afeta diretamente
 `thesis/document/text/` e
@@ -1376,12 +1403,292 @@ Logistic Regression não tem fundamentação de literatura verificada —
 está incluída como referência linear simples, não por recomendação de
 um artigo específico.
 
-**Em aberto:** confirmar com o orientador; repetir a comparação no
-braço de especialistas (só 15 blocos, muito menos dados) antes de
-assumir que a escolha se mantém; afinação de hiperparâmetros fica para
-mais tarde; testar a rede neuronal compacta.
+**Em aberto:** confirmar com o orientador; afinação de hiperparâmetros
+fica para mais tarde; testar a rede neuronal compacta. ~~Repetir a
+comparação no braço de especialistas~~ — feito, ver
+[Braço de especialistas: one-class SVM e Random Forest confirmados (100% especialistas)](#braço-de-especialistas-one-class-svm-e-random-forest-confirmados-100-especialistas)
+abaixo: a escolha mantém-se, com um desempenho ainda mais claro a
+favor do Random Forest no índice de Boyce.
 
 **Onde:** [`notebooks/07_foundation_models/presence_background_citizen_science.ipynb`](../notebooks/07_foundation_models/presence_background_citizen_science.ipynb).
 
 **Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
 placeholder).
+
+### Braço de especialistas: one-class SVM e Random Forest confirmados (100% especialistas)
+
+*2026-11-07, decisão minha, primeira passagem, não confirmada pelo
+orientador.*
+
+**O que decidi:** aplicar as duas escolhas já feitas no braço de
+ciência cidadã — one-class SVM (`nu=0.05`) e Random Forest como
+classificador presença-vs-fundo por omissão, com Logistic Regression
+como referência — ao braço de especialistas (polígonos `classifica =
+1`, sem ciência cidadã), o ponto "100% especialistas" da curva de
+redução de esforço. Mesmo fundo partilhado, mesmas métricas (ROC-AUC,
+índice de Boyce contínuo), 5 divisões espaciais.
+
+**Resultado:** one-class SVM ROC-AUC 0,911 (dp 0,037), Boyce 0,868 (dp
+0,080); Random Forest ROC-AUC 0,990 (dp 0,004), Boyce 0,954 (dp
+0,011); Logistic Regression ROC-AUC 0,990 (dp 0,003), Boyce 0,879 (dp
+0,086) — as 5 divisões válidas em todos os casos. O mesmo padrão do
+braço de ciência cidadã mantém-se: presença-vs-fundo bate o one-class
+SVM nas duas métricas; Random Forest bate a Logistic Regression no
+índice de Boyce (0,954 vs. 0,879), com muito menos variância (dp 0,011
+vs. 0,086), e empata no ROC-AUC. **Random Forest mantém-se como
+classificador por omissão para o resto da RQ1.**
+
+**Tudo pontua muito mais alto aqui do que no braço de ciência cidadã**
+(p. ex. one-class SVM: 0,911/0,868 aqui vs. 0,654/0,816 lá; Random
+Forest: 0,990/0,954 aqui vs. 0,842/0,989 lá — o índice de Boyce fica
+parecido, mas o ROC-AUC sobe muito). **Interpretar isto como "o braço
+de especialistas é simplesmente mais fácil" seria prematuro (leitura
+minha, não confirmada):** as presenças de especialistas são manchas
+florestais grandes e contíguas, com embeddings TESSERA internamente
+parecidos, enquanto o fundo é aleatório uniforme sobre uso do solo
+misto — separar "dentro de uma mancha grande e homogénea de acácia" de
+"um ponto qualquer ao acaso no distrito" pode ser um problema
+geométrico mais fácil no espaço de embeddings do que separar
+observações de ciência cidadã, pontuais e ruidosas, do mesmo fundo,
+independentemente de qual dos dois modelos capta melhor a presença de
+acácia do ponto de vista ecológico. Fica como hipótese a vigiar quando
+a curva misturar as duas fontes, não como conclusão.
+
+**Adaptação nova, só neste braço:** com as presenças de especialistas
+concentradas em poucos blocos de 10 km, sortear os blocos de teste a
+partir do universo todo (presenças + fundo, como no braço de ciência
+cidadã) deixaria a maior parte das divisões sem presenças de teste
+suficientes. Os blocos de teste passam a ser sorteados só de entre os
+blocos que já têm presenças de especialistas; o fundo de treino/teste
+continua a vir do conjunto todo, dividido pelos blocos sorteados.
+Decisão minha, não confirmada pelo orientador.
+
+**Correção de contagem:** a junção espacial das presenças de
+especialistas com os embeddings do piloto encontrou **18** blocos de
+10 km, não os 15 referidos em `docs/research_questions.md` — esse
+número descrevia só os 1 849 polígonos dentro do distrito de Coimbra;
+a extensão dos embeddings do piloto e esta junção apanham mais alguns
+blocos na borda. Por corrigir em `docs/research_questions.md`.
+
+**Fundamentação:** mesma desta secção e da entrada "Multiclasse
+abandonado" acima — nenhuma literatura nova consultada para esta
+passagem, só a confirmação empírica de que as escolhas já
+fundamentadas no braço de ciência cidadã se mantêm aqui.
+
+**Em aberto:** confirmar com o orientador (fundo partilhado, Random
+Forest por omissão, e agora também a adaptação dos blocos de teste);
+testar a rede neuronal compacta; perceber se o salto de desempenho
+reflete uma tarefa mais fácil (hipótese acima) antes de comparar os
+dois braços como se fossem diretamente equivalentes; níveis
+intermédios da curva (mistura aditiva) ainda por fazer.
+
+**Onde:** [`notebooks/07_foundation_models/expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
+placeholder).
+
+### Curva de redução de esforço completa: 0%–100%, com fundo e bloco de teste fixos
+
+*2026-11-07, decisão minha, primeira passagem, não confirmada pelo
+orientador. Pedido explícito da Íris: testar 100%, 10%, 20%, … até
+encontrar o equilíbrio entre desempenho e custo de recolha no terreno.*
+
+**O que decidi (desenho dos 3 pontos em aberto, agora resolvidos):**
+
+1. **Unidade de mistura: polígonos, não píxeis.** "X% de especialistas"
+   passa a ser X% dos polígonos de especialistas sorteados (com todos
+   os seus píxeis), não X% dos píxeis espalhados por todos os
+   polígonos — o custo de campo é por local visitado, não por píxel.
+2. **Amostragem encaixada (nested):** uma única ordem aleatória fixa
+   (seed 0) decide que polígonos "já têm esforço gasto" em cada nível,
+   por isso os polígonos de 20% incluem sempre os de 10% — a curva
+   mostra esforço a acumular, não uma amostra nova a cada ponto.
+3. **Um conjunto de teste fixo por semente, igual em todos os níveis
+   da curva:** os blocos de teste são sorteados uma vez por semente
+   (não uma vez por nível), a partir dos blocos de 10 km com presenças
+   de ciência cidadã ou de especialistas, e mantidos iguais do 0% ao
+   100% dentro dessa semente — sem isto, uma mudança de pontuação ao
+   longo da curva podia só significar "dados de teste diferentes", não
+   "mais dados de especialistas ajudaram". Continua a média de 5
+   sementes.
+4. **O conjunto de teste inclui sempre as duas fontes**, mesmo a 100%
+   (treino só com especialistas) — mostra também se um modelo treinado
+   só com dados caros generaliza de volta à distribuição de ciência
+   cidadã, não só a mais dados de especialistas.
+
+**Resultado — Random Forest e Logistic Regression praticamente planos
+do 0% ao 90%, só mudam a 100%:** Random Forest ROC-AUC 0,879 (0%) →
+0,882 (20%) → 0,878 (90%) → 0,801 (100%); Boyce 0,993 (0%) → 0,994
+(20%) → 0,983 (90%) → 0,917 (100%) — todos os pontos 10–90% dentro do
+ruído de uma semente face ao 0%. Logistic Regression sobe um pouco, de
+forma genuína (ROC-AUC 0,873 → 0,896 do 0% ao 90%), mas também cai a
+100%. **Acrescentar dados de especialistas entre 10% e 90% não traz
+ganho visível para estes dois classificadores; só muda alguma coisa a
+100%, e para pior** — a 100% o modelo nunca viu ciência cidadã no
+treino, mas continua a ser avaliado contra presenças de ciência
+cidadã no teste (ponto 4 acima), e generaliza pior para lá.
+
+**Explicação provável, visível nos próprios números:** em todos os
+níveis 10–90%, a ciência cidadã continua a fornecer 85–100% das
+presenças de treino (p. ex. a 90%: 2 995 de ciência cidadã vs. 2 504
+píxeis de especialistas) — o sinal de ciência cidadã domina o treino o
+tempo todo, e um modelo já perto do teto só com ciência cidadã (Boyce
+≈0,98–0,99 desde o 0%) tem pouca margem para a fração crescente de
+especialistas mudar alguma coisa. Isto também é consistente com
+Dimson et al. (2023): as duas fontes têm vieses diferentes, e só
+retirar a ciência cidadã por completo (100%) muda o que o modelo
+aprende — mudança que aqui prejudica a generalização de volta à
+ciência cidadã, não ajuda.
+
+**One-Class SVM é a exceção — melhora mesmo com mais esforço de
+especialistas:** ROC-AUC sobe de forma monótona, 0,574 (0%) → 0,655
+(70%) → 0,765 (100%) — uma tendência real, não ruído, ainda que fique
+sempre bem abaixo dos dois classificadores presença-vs-fundo; o índice
+de Boyce para este método é ruidoso (0,63–0,77, dp até 0,30), sem
+tendência clara.
+
+**Estes números não são diretamente comparáveis aos 0% e 100% dos
+notebooks anteriores** (`one_class_method_selection.ipynb` /
+`presence_background_citizen_science.ipynb` para 0%,
+`expert_arm_classifiers.ipynb` para 100%) — esses usavam, cada um, o
+seu próprio sorteio de blocos de teste (85 blocos para o 0%, só
+presenças de especialistas no teste do 100%); aqui todos os níveis são
+avaliados contra o mesmo conjunto combinado (ciência cidadã +
+especialistas), sorteado só dos 47 blocos que têm alguma das duas
+fontes. As pontuações mais baixas aqui (p. ex. Random Forest a 100%:
+0,801/0,917 aqui vs. 0,990/0,954 lá) são a consequência direta e
+informativa de também exigir generalização à ciência cidadã, não uma
+contradição.
+
+**Resposta provisória à pergunta da Íris ("onde está o equilíbrio"):**
+com este desenho, **nenhuma quantidade de dados de especialistas
+abaixo da substituição total traz uma melhoria visível** — se isto se
+confirmar, a implicação prática é que este desenho de RQ1 não
+justifica o custo de recolha no terreno, porque a ciência cidadã
+sozinha já captura, aqui, praticamente todo o desempenho
+presença-vs-fundo alcançável. É o oposto de "mais dados de
+especialistas é sempre melhor" e merece escrutínio, não aceitação
+automática, antes de virar conclusão.
+
+**Fundamentação:** Dimson et al. (2023) para a diferença de viés entre
+fontes (já citado acima); o resto é raciocínio meu a partir dos
+números desta experiência, sem literatura nova consultada.
+
+**Em aberto:**
+- ~~Pode ser efeito de teto (Boyce já ≈0,98–0,99 no Random Forest a 0%)
+  em vez de prova de que os dados de especialistas não valem nada — um
+  conjunto de teste mais difícil ou outra métrica podiam revelar
+  diferenças que esta não consegue.~~ Testado com um fundo só de tipos
+  de floresta — ver [[curva-fundo-so-floresta]] abaixo: a conclusão
+  mantém-se (até melhora no Random Forest), não era efeito de teto do
+  fundo fácil.
+- Esforço medido só como % de polígonos, não ponderado por área ou por
+  custo real de campo (deslocação, dificuldade de acesso).
+- Rede neuronal compacta ainda não testada; só TESSERA, Sentinel-2 por
+  fazer; fundo partilhado ainda não confirmado pelo orientador.
+- Confirmar com o orientador antes de tratar isto como resposta final
+  à pergunta do equilíbrio custo/desempenho.
+
+**Onde:** [`notebooks/07_foundation_models/effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Resultados/Metodologia,
+ainda placeholder).
+
+### Curva de redução de esforço sob um fundo só de floresta: verificação de robustez {#curva-fundo-so-floresta}
+
+*2026-11-07, decisão minha (investigar), não confirmada pelo
+orientador. Motivado pela pergunta da Íris "não devíamos ter melhores
+resultados com os dados de especialistas? não pode ser um erro?" sobre
+o Random Forest já quase no teto (Boyce ≈0,99) a 0% de especialistas.*
+
+**O que decidi:** antes de aceitar "nenhuma quantidade parcial de
+dados de especialistas traz ganho visível" como resultado, verifiquei
+se é um erro/efeito artificial, não só tranquilizar com explicações.
+Quatro verificações, por esta ordem:
+1. Revisão de código de `continuous_boyce()` em `src/evaluation.py` —
+   sem erro (correlação de Spearman entre janela móvel e razão
+   presença/fundo, como em Hirzel et al., 2006).
+2. Composição de uso do solo (COS 2023) do fundo partilhado (2 000
+   pontos) vs. presenças de ciência cidadã: fundo ~29% não-floresta
+   (estradas, agricultura, água) vs. só ~8% nas presenças — desequilíbrio
+   real, mas…
+3. … reavaliação controlada do Random Forest (0% especialistas, mesmos
+   blocos/sementes) contra o fundo completo vs. um subconjunto do
+   mesmo fundo restrito a tipos de floresta: ROC-AUC 0,842→0,796, Boyce
+   0,989→0,980 — a maior parte da separabilidade sobrevive, não é
+   sobretudo um artefacto de composição.
+4. Verificação de fuga de dados (`scipy.spatial.cKDTree`): distância
+   mínima fundo→presença mais próxima de ciência cidadã = 54,06 m,
+   acima da zona-tampão de exclusão de 50 m — zero violações.
+
+Como o passo 3 só tinha testado o ponto 0% isolado, repeti a **curva
+completa de 11 pontos** (0–100%) contra um fundo novo, construído de
+propósito:
+[`forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb)
+reconstrói o fundo partilhado (mesma amostragem aleatória uniforme +
+zona-tampão de 50 m) acrescentando um filtro de uso do solo COS 2023:
+só pontos em eucaliptal, pinhal, "outra floresta" ou matos contam;
+excluídos: artificial, agricultura, água/solo nu, **e a classe COS
+"floresta de acácias"** (incluir esta como "não-acácia" seria uma
+contradição de rótulo, não um teste mais difícil). N = 2 000, igual ao
+fundo original, para a comparação ser limpa.
+
+**Resultado:** a conclusão da curva mantém-se — e para o Random Forest
+até melhora, não piora, sob o fundo mais difícil.
+- **Random Forest:** ROC-AUC sobe em todos os níveis sob o fundo só de
+  floresta (0,879→0,934 a 0%; 0,878→0,933 a 90%), curva continua plana
+  do 0% ao 90% nos dois fundos. Boyce mantém-se ~0,98–0,99 nos dois. A
+  100% (só especialistas no treino), ROC-AUC também sobe (0,801→0,885)
+  e Boyce cai pouco (0,917→0,905). **Restringir o fundo a tipos de
+  floresta ecologicamente equivalentes não expõe nenhuma fraqueza
+  escondida.**
+- **Logistic Regression:** mesmo padrão geral, com uma exceção: a 100%
+  o Boyce desaba de 0,897 (fundo completo) para 0,567 (só floresta),
+  apesar do ROC-AUC continuar a melhorar (0,822→0,870) — fica assinalado
+  como nota, não como parte da conclusão principal.
+- **One-Class SVM é muito diferente:** ROC-AUC cai para perto do acaso
+  a níveis baixos (0,515 a 0%, era 0,574) e o Boyce fica **negativo** a
+  0% (-0,039, era 0,628) — sem o fundo "fácil" (não-floresta), o
+  classificador one-class deixa de conseguir distinguir acácia de
+  outra floresta de forma consistente. Isto sugere fortemente que o
+  desempenho moderado deste método ao longo da curva (ROC-AUC
+  0,57–0,77) vinha, em boa parte, de reconhecer "isto claramente não é
+  vegetação" em vez de aprender algo específico da acácia — risco já
+  esperado de um método sem supervisão negativa. A melhoria monótona
+  com mais especialistas mantém-se (0,515→0,754, 0% a 100%), mas a
+  partir de um nível muito mais baixo.
+
+**Resposta à pergunta da Íris:** não é um erro. As quatro verificações
+mais esta repetição completa da curva confirmam que o resultado quase
+no teto do Random Forest/Logistic Regression, e a ausência de ganho
+visível com dados parciais de especialistas, não são artefacto de um
+fundo fácil — sobrevivem (e no Random Forest até melhoram) sob um
+fundo muito mais difícil e ecologicamente equivalente. A única
+atualização real: a competitividade parcial do One-Class SVM ao longo
+da curva parece ter sido, em grande parte, um artefacto da composição
+do fundo, específico a esse método — não toca o classificador
+presença-vs-fundo proposto por omissão para a RQ1.
+
+**Fundamentação:** raciocínio meu a partir dos números desta
+experiência; nenhuma literatura nova consultada para este passo
+específico (a distinção presença-vs-fundo com fundo estratificado por
+uso do solo segue a prática geral de background sampling de Phillips
+et al., já citada noutras entradas, mas não há uma fonte específica
+lida para "restringir o fundo à classe de habitat alvo" nesta tese).
+
+**Em aberto:**
+- Agrupamento dos códigos COS em "tipo floresta" é escolha minha, não
+  confirmada pelo orientador.
+- Fundo só de floresta continua com N = 2 000, igualado ao fundo
+  original por tamanho, não otimizado/alargado de forma independente.
+- Queda de Boyce da Logistic Regression a 100% não foi investigada
+  mais a fundo.
+- Esta verificação não substitui o fundo partilhado
+  ([data/README.md](../data/README.md#tessera-embeddings--rq1-background-pool-2026-11-06)),
+  ainda por confirmar com o orientador — só testa a conclusão da curva
+  contra uma alternativa mais difícil.
+
+**Onde:** [`notebooks/07_foundation_models/forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Resultados/Metodologia,
+ainda placeholder).
