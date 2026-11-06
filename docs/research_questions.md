@@ -182,6 +182,18 @@ covers. See
 [`notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb`](../notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb),
 [`notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb)
 and `thesis/notes.md` for the full numbers and caveats.
+
+**Label purity ruled out, 2026-11-07:** checked whether citizen-science
+presences are frequently off-target (GPS error, isolated/misidentified
+trees), which would add noise to every citizen-science result. Two
+cheap checks — agreement with nearby expert polygons (limited power,
+inconclusive), and TESSERA-embedding outlier detection (validated
+against that same expert ground truth) — found no large-scale problem;
+excluding the most outlier-like 5% of presences leaves the
+citizen-science-only result unchanged (ROC-AUC 0.842 → 0.843, Boyce
+0.992 → 0.995). See
+[`notebooks/07_foundation_models/label_purity_check.ipynb`](../notebooks/07_foundation_models/label_purity_check.ipynb)
+and `thesis/notes.md`.
 **Curve mechanics:** mixing is additive — the citizen-science base
 stays fixed, expert presences are added on top, so total N grows with
 each level; total N is reported alongside the mixing percentage so
@@ -222,13 +234,13 @@ data entirely) — see `thesis/notes.md` for the background design
   and other forest.
   - **Species:** *A. dealbata* only, the proposed target (see
     [Species Scope](#species-scope-proposed)).
-  - **Clustered:** the district polygons fall in 15 cells of 10 km,
-    so few independent spatial blocks are available to split training
-    and test. (The 2026-11-06 pilot embedding extent, joined against
-    all `classifica = 1` polygons rather than the district-only
-    subset, reaches 18 blocks — see
-    [`notebooks/07_foundation_models/expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb);
-    not yet reconciled into one number.)
+  - **Clustered:** the district polygons fall in only **18** cells of
+    10 km (reconciled 2026-11-07), so few independent spatial blocks
+    are available to split training and test. An earlier "15" figure
+    for the same polygons was a coordinate-system artefact, not a
+    smaller polygon set or a split bug — see
+    [`notebooks/07_foundation_models/expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb)
+    and `thesis/notes.md`.
   - **Background:** **decision (supervisor, 2026-11-04):** use only
     `classifica = 1`; the `classifica = 0` polygons are non-acacia
     areas that must not be used in this study (why they were dropped:
@@ -252,7 +264,7 @@ data entirely) — see `thesis/notes.md` for the background design
     visited the same places. Consequences: tested on these polygons,
     the citizen-science model would be evaluated where it was trained
     (inflated score), so training and test must be split by spatial
-    blocks (15 blocks of 10 km); as the upper bound, both models learn
+    blocks (18 blocks of 10 km); as the upper bound, both models learn
     from nearly the same areas, so only the label source changes, but
     both inherit the same spatial bias.
   - **Open:** how the sites were chosen.
@@ -341,14 +353,31 @@ Design notes:
 - A single reference year keeps observation year from correlating
   with geography.
 - The background affects the bias being measured: the other-plant
-  background pool shares the presences' bias and partly correct it.
-  Results must state this; other-plant background vs. random
-  background is a candidate experiment. **Note (2026-11-05):** this
-  candidate experiment assumed the other-plant *classes* design; with
-  multiclass dropped (see [Other Plants as
-  Background](#other-plants-as-classes-adopted-direction)), the pool
-  still exists as a background source, but this experiment needs
-  revisiting — not yet done.
+  background pool shares the presences' observers and places (same
+  citizen-science pipeline), so it partly absorbs their spatial bias
+  rather than exposing it; a uniform-random background does not share
+  that bias, so it should expose more of it. Results must state which
+  background was used.
+- **Reviewed 2026-11-06 (mine; reasonable proposal, not yet confirmed
+  by the supervisor):** the candidate experiment — other-plant
+  background pool vs. random background — does not actually depend on
+  the dropped multiclass design; it only needs the other-plant pool to
+  exist as *a* background source, which it still does (group pipeline,
+  kept for this purpose — see [Other Plants as
+  Background](#other-plants-as-classes-adopted-direction)). What
+  changed is which background RQ1 adopted as its main, shared one:
+  the background actually built and used so far for the
+  presence-vs-background classifier and the one-class evaluation is
+  **uniform-random points** (not yet confirmed by the supervisor as
+  final — see [RQ1](#rq1--foundation-models-vs-conventional-approaches)
+  and [`data/README.md`](../data/README.md)), not the other-plant
+  pool. So the two candidate backgrounds map onto the amplify/mitigate
+  question directly: random background is the "bias-exposed" condition
+  (closer to what RQ3 wants to measure), the other-plant/target-group
+  pool is the "bias-corrected" condition (per Phillips et al., 2009).
+  Running RQ3 under both and comparing the amplify/mitigate reading is
+  still a candidate experiment, now stated independently of multiclass;
+  not yet run, and not scheduled ahead of the RQ1 curve.
 - **Real bias case — the dominant observer.** One person made 83% of
   all observations (85% in 2021–2025; 98% of the 2021 peak). Candidate
   experiment: train with all observations vs. capped vs. without that
@@ -425,7 +454,7 @@ reported, and its effect is measured.
 | 3. Quality grade | Adopted (2026-10-29) | Research grade only, on both sides. Presences 5 242 → 3 441, other plants 110 576 → 60 630. Why: [`thesis/notes.md`](../thesis/notes.md#só-observações-research-nos-dois-lados) | Gillespie et al. (2024); Brown et al. (2025) |
 | 4. Temporal design | Adopted | All observations treated as 2023, see [Temporal Design](#temporal-design-adopted) | See that section |
 | 5. Disturbance filter | Proposed (fixed) | Burned between observation and 2023 (ICNF 1975–2025): 6 *A. dealbata* presences (0.2%), 125 other plants (0.9%) | Riveiro et al. (2025): burned stands regrow, pixel no longer matches the label |
-| 6. Label purity | Open | Does the point represent an *Acacia*-dominated pixel? (e.g. isolated garden tree vs. stand). Check against COS/OrtoSat on a sample; at minimum report | Ball et al. (2026) |
+| 6. Label purity | Checked (2026-11-07), no large-scale problem found | Expert-polygon agreement (limited power) and embedding-outlier detection found no evidence citizen-science presences are frequently off-target; see [RQ1](#rq1--foundation-models-vs-conventional-approaches) and `thesis/notes.md` | Ball et al. (2026) |
 | 7. Negative classes | Adopted direction | See [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | Phillips et al. (2009); see that section |
 | 8. Same pixel | Adopted (2026-10-29) | Pixel = 10 m cell in EPSG:32629. One presence per pixel, closest to 2023 (3 276 → 3 000). Conflicts: co-located other plants dropped, presence kept. Other plants: one per pixel, tallest group first, then closest to 2023 (16 720 → 13 554). Why: [`thesis/notes.md`](../thesis/notes.md#uma-observação-por-píxel-nos-conflitos-fica-a-presença) | Karasiak et al. (2022) |
 | 9. Other-plant classes | Proposed (2026-10-30, to confirm) | See [Other Plants as Classes](#other-plants-as-classes-adopted-direction) for the groups and counts | FAO LCCS (Di Gregorio & Jansen, 2000); GIFT (Weigelt et al., 2020; Denelle et al., 2023); Decreto-Lei 92/2019, Annex II; EPPO (2024); Ball et al. (2026) |

@@ -1166,9 +1166,19 @@ texto completo lido):**
   8 acima): 2000 pontos aleatórios uniformes, zona-tampão de 50 m —
   tanto o N como o raio da zona-tampão são escolha minha, sem valor
   específico encontrado na literatura para o raio.
-- A RQ3 tinha como candidata "outras plantas como classes vs. fundo ao
+- ~~A RQ3 tinha como candidata "outras plantas como classes vs. fundo ao
   acaso"; sem classes próprias, isto passa a "fundo de outras plantas
-  vs. fundo ao acaso" — por rever.
+  vs. fundo ao acaso" — por rever.~~ — revisto (2026-11-06): a
+  experiência não dependia do multiclasse, só precisa do fundo de
+  outras plantas existir como opção, o que continua a acontecer. O que
+  mudou é que o fundo principal já construído para a RQ1 é aleatório
+  uniforme, não o de outras plantas — por isso os dois fundos passam a
+  mapear diretamente para a pergunta de amplificar/mitigar da RQ3
+  (aleatório expõe mais o viés, o de outras plantas corrige-o em
+  parte). Ver
+  [`docs/research_questions.md`](../docs/research_questions.md#rq3--spatial-sampling-bias).
+  Proposta minha, por confirmar com o orientador; a experiência em si
+  continua por correr.
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq1--foundation-models-vs-conventional-approaches)
 (RQ1 reescrita) e
@@ -1377,7 +1387,11 @@ o índice de Boyce mais alto e é mais estável nas duas métricas.
 desempenho pequena e sem vencedor claro, desempatei por (1)
 estabilidade entre divisões espaciais, que importa mais aqui do que um
 pequeno ganho médio de AUC, dado que o lado dos especialistas só tem
-15 blocos de 10 km independentes (ver `expert_polygons.ipynb`); e (2)
+18 blocos de 10 km independentes (corrigido 2026-11-07 — o valor de 15
+citado aqui originalmente media a mesma coisa noutro sistema de
+coordenadas, ver
+[[discrepância-de-15-vs-18-blocos-espaciais-no-lado-dos-especialistas-é-o-sistema-de-coordenadas-não-um-bug]]);
+e (2)
 fundamentação: o Random Forest já tem cinco citações de apoio em
 `docs/research_questions.md`, a Logistic Regression nenhuma. A
 Logistic Regression não é descartada, continua a ser reportada como
@@ -1840,3 +1854,116 @@ experiência; nenhuma literatura nova consultada.
 
 **Na tese:** ⏳ Ainda não escrita (capítulo de Resultados/Metodologia,
 ainda placeholder).
+
+### Pureza dos rótulos da ciência cidadã: não é a explicação para a curva plana
+
+*2026-11-07, decisão minha (investigar), não confirmada pelo
+orientador.*
+
+**O que decidi:** testar se o píxel de 10 m de um ponto do iNaturalist
+costuma não estar realmente dominado por *A. dealbata* (erro de GPS,
+árvore isolada no meio de outra vegetação) — se isso for frequente,
+contamina todos os resultados da ciência cidadã na RQ1, incluindo a
+curva plana. Dois testes baratos: (1) onde um ponto cai perto de um
+polígono de especialista (verdade de campo independente), que fração
+está de facto dentro; (2) em que medida cada presença fica isolada no
+espaço de embeddings TESSERA face às outras.
+
+**Resultado:**
+- **Teste 1 (verdade de campo, cobertura limitada):** só 21 das 2 995
+  presenças (0,7%) caem mesmo dentro de um polígono de especialista;
+  alargando a 100 m, chegam a 298, das quais só 7,0% estão de facto
+  dentro. Inconclusivo por si só — os polígonos são manchas/segmentos
+  específicos, muitos pequenos (≤100 m²), por isso um ponto a 20–80 m
+  pode descrever a mesma ocorrência sem ser erro de GPS; e só cobre 10%
+  das presenças, nada diz sobre o resto.
+- **Teste 2 (distância média às 10 presenças mais próximas em
+  embeddings, cosseno):** validado pelo teste 1 — as 21 presenças
+  confirmadas dentro de um polígono têm distância mediana bem menor
+  (0,053) do que o resto (0,090), e nenhuma delas é sinalizada como
+  "outlier" (esperado ao acaso: 5%). As 5% mais isoladas (150
+  presenças) não se distinguem por precisão de GPS, mas sim por
+  observador: 48% são de observadores não-dominantes, contra só 9,7%
+  no resto (~5× mais representados).
+- **Importa?** Repetindo o classificador presença-vs-fundo (Random
+  Forest, mesmos blocos espaciais, 5 sementes) sem as 150 presenças
+  mais isoladas: ROC-AUC 0,842 → 0,843, Boyce 0,992 → 0,995 —
+  praticamente inalterado.
+
+**Leitura:** nenhum dos dois testes encontra um problema de pureza em
+larga escala. O teste de embeddings identifica um grupo plausível e
+modesto de presenças atípicas (concentradas em observadores
+ocasionais), mas excluí-las não muda o resultado da ciência cidadã
+sozinha. **A pureza dos rótulos não explica a curva plana** — resultado
+que complementa, não substitui, o achado de concentração de habitat em
+[[por-que-os-polígonos-de-especialistas-são-menos-diversos-entre-si-é-habitat-não-geografia]]
+(esse explica por que o lado dos especialistas não acrescenta; este
+descarta que o lado da ciência cidadã esteja simplesmente "sujo").
+
+**Fundamentação:** raciocínio meu; nenhuma literatura nova consultada.
+
+**Em aberto:**
+- O teste 1 só valida 10% das presenças; nada diz sobre o resto.
+- O teste 2 é um proxy (distância em embeddings), não verdade de
+  campo — uma mancha legítima mas atípica (pequena, no limite da área
+  de distribuição) também pontuaria como "outlier"; ninguém verificou
+  visualmente os pontos sinalizados contra ortofoto.
+- Resultado ainda não confirmado pelo orientador.
+
+**Onde:** [`notebooks/07_foundation_models/label_purity_check.ipynb`](../notebooks/07_foundation_models/label_purity_check.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Resultados/Metodologia,
+ainda placeholder).
+
+### Discrepância de 15 vs. 18 blocos espaciais no lado dos especialistas: é o sistema de coordenadas, não um bug
+
+*2026-11-07, decisão minha (investigar), não confirmada pelo
+orientador.*
+
+**O que decidi:** verificar se a diferença entre os "15 blocos"
+reportados em `expert_polygons.ipynb` e os "18 blocos" usados em
+`expert_arm_classifiers.ipynb` era só um detalhe de definição (extensão
+do distrito vs. extensão do piloto) ou um bug real na divisão
+treino/teste, que contaminaria tudo o que depende dela.
+
+**Resultado — é só o sistema de coordenadas:** decompondo a diferença
+em três efeitos possíveis, com os mesmos 1 849 polígonos do distrito
+em todos os casos:
+- **Extensão** (todos os polígonos `classifica = 1` do piloto vs. só os
+  do distrito): sem efeito nenhum — os conjuntos de blocos são
+  idênticos.
+- **Unidade** (píxel a píxel vs. centróide do polígono), mantendo o
+  mesmo CRS: sem efeito nenhum.
+- **Sistema de coordenadas** (EPSG:3763, usado em `expert_polygons.ipynb`,
+  vs. EPSG:32629/UTM 29N, usado em todo o resto do pipeline): isto
+  sozinho explica os 15 → 18. Uma grelha de 10 km desenhada numa
+  projeção não coincide com uma grelha de 10 km desenhada noutra —
+  nenhum polígono muda de sítio, só a contagem de blocos.
+
+**Sem bug na divisão treino/teste:** todos os notebooks que de facto
+fazem uma divisão espacial (`one_class_method_selection.ipynb`,
+`presence_background_citizen_science.ipynb`,
+`expert_arm_classifiers.ipynb`, `effort_reduction_curve.ipynb`,
+`forest_only_background_check.ipynb`) trabalham sempre em EPSG:32629,
+via `src.embeddings.block_id`/`load_pilot_embeddings` — a mesma grelha
+do início ao fim. O "15" foi uma contagem avulsa e só descritiva, feita
+em `expert_polygons.ipynb` antes de existir este pipeline por píxel,
+numa projeção diferente (EPSG:3763, usada ali só para o trabalho de GIS
+e COS) — nunca foi usado para parametrizar nenhuma divisão real.
+**O número correto para raciocinar sobre a escassez de blocos do lado
+dos especialistas é 18**, coerente com os 42 (ciência cidadã) e 85
+(fundo) usados no resto da RQ1, já que os três vêm da mesma função
+`block_id` na mesma projeção.
+
+**Correção:** a entrada "[[classificador-presença-vs-fundo-ciência-cidadã-random-forest-por-agora]]"
+citava "15 blocos" como parte da razão para preferir o Random Forest
+pela estabilidade — devia ler 18; a conclusão (Random Forest) não muda,
+18 continua a ser poucos blocos independentes.
+
+**Fundamentação:** raciocínio meu; nenhuma literatura nova consultada.
+
+**Onde:** [`notebooks/07_foundation_models/expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb)
+(secção "Reconciling the '15' vs. '18' block counts").
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
+placeholder).

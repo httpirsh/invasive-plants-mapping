@@ -35,6 +35,7 @@ Run order: `02_citizen_science/acacia_observations` →
 `07_foundation_models/effort_reduction_curve` →
 `07_foundation_models/forest_only_background_check` →
 `07_foundation_models/expert_polygon_redundancy_check` →
-`07_foundation_models/expert_polygon_geographic_diversity`.
+`07_foundation_models/expert_polygon_geographic_diversity` →
+`07_foundation_models/label_purity_check`.
 
 When to move code into `src/` instead: [`src/README.md`](../src/README.md).
