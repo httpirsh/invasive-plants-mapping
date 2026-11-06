@@ -71,8 +71,13 @@ and presence-vs-background in parallel (2026-11-06; see
 and [Other Plants as
 Background](research_questions.md#other-plants-as-classes-adopted-direction)).
 It answers *how well can this be done without foundation models?*
-Phase 1 uses TESSERA only; this Sentinel-2 arm is deferred (see
-[Foundation Model Use](research_questions.md#foundation-model-use-adopted)).
+Phase 1 used TESSERA only; the Sentinel-2 arm is no longer deferred
+(2026-11-07, my decision) — the "phase 1" sequencing was temporary,
+not a scope cut, and extracting the same bands at the same points
+already used for TESSERA is cheap. Blocked only on the feature-set
+decision below. See
+[Foundation Model Use](research_questions.md#foundation-model-use-adopted)
+and [`thesis/notes.md`](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo).
 
 **One-class method: one-class SVM (2026-11-06, my decision, by direct
 comparison, not Isolation Forest)** — see
@@ -81,8 +86,13 @@ and [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-um
 for the comparison and its caveats (citizen-science arm only so far,
 background not yet supervisor-confirmed).
 
-Open: feature set (bands, indices, seasonal composites) — see Ball et
-al. (2026) and `literature.md`. Also open: exact background design
+Feature set (2026-11-07, my proposal, agreed in conversation, not yet
+supervisor-confirmed): Ball et al. (2026) annual composite (median of
+all 12 bands, 2023, + NDVI/NDWI/NBR), with Domingo et al. (2023)
+flowering-phenology features added later as an ablation, not built
+together upfront — see
+[`thesis/notes.md`](../thesis/notes.md#conjunto-de-features-do-sentinel-2-na-rq1-compósito-anual-ball-et-al-fenologia-da-floração-como-extensão-por-ablação-domingo-et-al).
+Also open: exact background design
 confirmation (a first version — uniform random points, 50 m buffer —
 was built to run the comparison above, not yet supervisor-confirmed as
 final), and whether it is shared across both label sources and every

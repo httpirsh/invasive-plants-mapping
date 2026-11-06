@@ -1967,3 +1967,90 @@ pela estabilidade — devia ler 18; a conclusão (Random Forest) não muda,
 
 **Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
 placeholder).
+
+### Sentinel-2 na RQ1: avançar já, por extração em pontos, não raster completo
+
+*2026-11-07, decisão minha, não confirmada pelo orientador.*
+
+**O que decidi:** deixar de adiar o braço Sentinel-2 da RQ1. A fase 1
+"só TESSERA" (decisão do orientador, 2026-11-05, presencial) era um
+faseamento ("primeiro TESSERA, depois Sentinel-2"), não um corte de
+âmbito — confirmado em conversa. Como todas as experiências da RQ1
+feitas até agora treinam e avaliam em pontos individuais (presenças,
+píxeis de especialistas, fundo aleatório), não há necessidade de
+descarregar um raster Sentinel-2 completo sobre a extensão toda do
+piloto (~100 km × 66 km a 10 m, com 10 bandas × 61 cenas — provavelmente
+dezenas a mais de 100 GB): basta extrair as mesmas bandas Sentinel-2
+nos mesmos pontos já usados para a TESSERA. Isto reduz o custo em
+ordens de grandeza e não perde nada do que a curva precisa agora.
+
+**Porquê:** a pergunta da RQ1, tal como está escrita, é comparativa
+("em que medida os foundation models melhoram sobre features
+convencionais") — sem o braço Sentinel-2, essa metade fica por
+responder. Com o faseamento esclarecido como temporário, não há razão
+para continuar a adiar, sobretudo por extração em pontos ser barata.
+
+**Em aberto, antes de implementar:** o conjunto de features
+(bandas, índices, composição temporal/sazonal) continua por decidir
+— `docs/methodology.md` já marca isto como aberto, fundamentado só em
+Ball et al. (2026) e Domingo et al. (2023), ambos ainda por ler na
+íntegra (`docs/literature.md`). Não inventar isto sem ler esses
+artigos primeiro.
+
+**Fundamentação:** raciocínio meu sobre o custo; a necessidade do
+braço Sentinel-2 em si já estava fundamentada em Mouta et al. (2021) e
+Domingo et al. (2023) (ver `docs/methodology.md`).
+
+**Onde:** ainda sem notebook — a construir depois de decidido o
+conjunto de features.
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
+placeholder).
+
+### Conjunto de features do Sentinel-2 na RQ1: compósito anual (Ball et al.), fenologia da floração como extensão por ablação (Domingo et al.)
+
+*2026-11-07, proposta minha, aceite em conversa — não confirmada pelo
+orientador.*
+
+**O que decidi:** a primeira versão do braço Sentinel-2 usa o
+compósito anual à Ball et al. (2026) — mediana anual das 12 bandas
+(B01–B12/B8A) de 2023 + NDVI, NDWI (McFeeters) e NBR calculados sobre
+essa mediana, nos mesmos pontos já usados para a TESSERA, mascarando
+nuvens/sombra por SCL (manter classes 4/5/6/7) e QA60 (bits 10/11) com
+`CLOUDY_PIXEL_PERCENTAGE < 60`. As features de fenologia da floração à
+Domingo et al. (2023) — composições mensais, métricas de diferença
+normalizada (RG/GB/BR/NDVI/NIRG/NIRB) e os deltas pré/pós-floração —
+ficam para depois, testadas por ablação (adicionadas ao conjunto
+anual, não substituindo-o), seguindo o mesmo padrão cumulativo já
+usado no resto da pipeline da RQ1.
+
+**Porquê:** o compósito anual de Ball et al. é o candidato mais
+simples e mais barato de implementar primeiro, e não é específico de
+espécie — serve como baseline convencional genérico. O conjunto de
+Domingo et al., em contraste, foi desenhado especificamente para
+*Acacia dealbata* e depende de uma janela de floração encontrada
+empiricamente na Galiza (floração em março); aplicá-lo diretamente ao
+piloto de Coimbra sem verificar se essa janela se mantém seria inventar
+um facto não confirmado. Testar por ablação evita essa escolha prévia:
+se o sinal de floração ajudar, aparece na comparação; se a janela
+galega não servir para Portugal central, o conjunto anual continua de
+pé como baseline.
+
+**Em aberto:** a janela de floração (jan/mar/mai, de Domingo et al.)
+pode não se aplicar a Portugal central sem confirmação — ou redescobrir
+empiricamente nos próprios dados do piloto, ou tratar como suposição
+não verificada se usada sem mais verificação. Também em aberto: se
+este conjunto é "o" baseline reportado também em Ball et al. (2026) — o
+artigo tem também a variante sazonal (ver `literature.md`), mas qual
+delas é a reportada nos números principais do artigo não foi
+confirmado (artigo pago, lido só pelo código-fonte dos autores).
+
+**Fundamentação:** Ball et al. (2026) (código-fonte dos autores,
+`PatBall1/trentino-trees`, `s1s2annual.js`) e Domingo et al. (2023)
+(texto integral, cópia de acesso aberto via repositório da Universidade
+de Saragoça) — ver `docs/literature.md` para o resumo de cada um.
+
+**Onde:** ainda sem notebook — este desenho ainda não foi implementado.
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
+placeholder).

@@ -11,7 +11,7 @@
 | Temporal design: all iNaturalist observations treated as 2023 | Adopted 2026-10-21 |
 | Other plants as classes (multiclass) | **Superseded 2026-11-05** (supervisor, in person): multiclass dropped for both models; RQ1's background is a uniform-random point pool, not other-plant data — see [RQ1](#rq1--foundation-models-vs-conventional-approaches) and [Other Plants as Classes](#other-plants-as-classes-adopted-direction) |
 | Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; year 2023 (confirmed 2026-10-28) |
-| Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal); phase 1 uses TESSERA only, Sentinel-2 deferred (2026-11-05, supervisor) |
+| Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal); phase 1 (TESSERA only, 2026-11-05, supervisor) done, phase 2 (Sentinel-2) starts now (2026-11-07) |
 | Species scope | Proposed (2026-10-20): *A. dealbata*, other *Acacia* left out |
 | Experiments per RQ | Candidate sketches |
 
@@ -139,7 +139,7 @@ effects, single background design) and the diagnostic notebooks:
 [`expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb),
 [`label_purity_check.ipynb`](../notebooks/07_foundation_models/label_purity_check.ipynb).
 
-Run once per representation (TESSERA first; Sentinel-2 deferred, see
+Run once per representation (TESSERA done; Sentinel-2 next, see
 [Foundation Model Use](#foundation-model-use-adopted)), same
 classifiers, same held-out spatial test set, at every curve level.
 
@@ -427,11 +427,14 @@ setup.
 
 **Phase 1: TESSERA only (decision, supervisor, 2026-11-05, in
 person).** The RQ1 effort-reduction curve (see
-[RQ1](#rq1--foundation-models-vs-conventional-approaches)) runs first
-with TESSERA embeddings; Sentinel-2 features are deferred to a later
-phase, repeating the same curve once the TESSERA results are in. No
-literature grounding checked for the phasing itself — it is a
-scheduling decision, not a methodological one.
+[RQ1](#rq1--foundation-models-vs-conventional-approaches)) ran first
+with TESSERA embeddings. No literature grounding checked for the
+phasing itself — it was a scheduling decision, not a methodological
+one. **Phase 2 starts now (2026-11-07, my decision):** the TESSERA
+results are in, so the Sentinel-2 arm is no longer deferred — see
+[`thesis/notes.md`](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo).
+Feature set decided (bands, indices, seasonal composites) — see
+[`methodology.md`](methodology.md#baseline).
 
 ### Other Plants as Classes (adopted direction)
 

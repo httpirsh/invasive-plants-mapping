@@ -53,11 +53,31 @@ primary reference for the chosen foundation model.
 data-efficient tree species mapping in temperate mountain forests.
 *Science of Remote Sensing*, 14, 100466.
 DOI: [10.1016/j.srs.2026.100466](https://doi.org/10.1016/j.srs.2026.100466)
-— *To read*
+— paywalled; methods confirmed from the authors' own code
+([`PatBall1/trentino-trees`](https://github.com/PatBall1/trentino-trees),
+`src/data_acquisition/s1s2annual.js` and `s1s2seasonal.js`), not the
+paper's prose, which I haven't read in full.
 
 Compares TESSERA embeddings, AlphaEarth embeddings and conventional
 Sentinel-1 + Sentinel-2 features for 18 tree species/groups
 (parcel-level forest inventories) in Trentino, Italy.
+
+**Conventional Sentinel-2 baseline, confirmed from source code
+(2026-11-07):** Sentinel-2 SR (`COPERNICUS/S2_SR_HARMONIZED`),
+cloud/shadow-masked per scene (SCL classes 4/5/6/7 kept, 0/1/3/8/9/10/11
+dropped, plus QA60 opaque-cloud/cirrus bits), scenes with
+`CLOUDY_PIXEL_PERCENTAGE < 60` only. Two composite variants, both
+tested: **(a) annual** — single per-pixel median of all 12 bands
+(B01–B12, B8A) over the calendar year, plus NDVI, NDWI (McFeeters) and
+NBR computed on that median; **(b) seasonal** — the same but three
+separate medians (spring Mar–May, summer Jun–Aug, autumn Sep–Nov), each
+with its own NDVI/NDWI/NBR, i.e. 45 Sentinel-2 features. Sentinel-1
+VV/VH (dB, plus VV−VH and VV/VH) added the same way, annual or
+seasonal, as an optional second sensor. All exported on a fixed 10 m
+UTM grid. Which variant (annual vs. seasonal) is the one reported as
+"the" conventional baseline in the paper's headline numbers below is
+**not confirmed** — the repository exposes both as working scripts
+without saying which is primary.
 
 - Embeddings beat conventional composites (weighted F1 0.83 vs. 0.80;
   macro F1 0.55 vs. 0.50).
@@ -285,12 +305,32 @@ conventional baseline.
 Spectral Differences to Detect Invasive Alien *Acacia dealbata* Using
 Sentinel-2 Data in Southern Europe. *Remote Sensing*, 15(3), 722.
 DOI: [10.3390/rs15030722](https://doi.org/10.3390/rs15030722)
-— *To read*
+— read in full (2026-11-07, open-access copy via Universidad de
+Zaragoza repository, since MDPI blocks automated access).
 
 Sentinel-2 time series and flowering-period spectral differences,
 with Random Forest feature selection, map *A. dealbata* in Arnoia
 (Ourense, Galicia): 94% overall accuracy with six metrics. Sentinel-2
 only; no spatial cross-validation confirmed.
+
+**Exact method, confirmed from the text:** Sentinel-2 L2A, blue
+(B02)/green(B03)/red(B04)/NIR(B08) at native 10 m only; cloud/cirrus
+masked via the quality bitmask (<20% scene cloudiness kept); monthly
+median composites built from 208 cloud-free scenes, 2018–2021. Six
+normalized-difference indices from all pairwise combinations of the
+four bands (RG, GB, BR, NDVI = NIR/Red, NIRG, NIRB). The flowering
+peak was found empirically from the monthly time series (blooming:
+March; pre-flowering: January; post-flowering: May — chosen as the
+months where the ND indices returned to baseline either side of the
+peak), giving 27 candidate features (9 metrics × 3 periods: the raw
+bands/indices at each period, plus the pre→bloom and bloom→post
+deltas). Random Forest (GEE `smileRandomForest`, ntrees 1–3000,
+mtry 1–3, 75/25 train/test, 10 repeats) with Gini importance then
+narrowed this to **6 final features** for the reported 94% accuracy:
+NIR in March (blooming), Δpre-NDVI, Δpre-BR, Δpre-RG, ΔBR-post,
+ΔRG-post — i.e. every surviving feature is a flowering-period
+difference except the raw blooming-NIR value, and the two indices
+built from blue (BR, RG) carried the most importance.
 
 **Eskandari, Acuña-Alonso & Álvarez (2025).** Identification of
 Acacia invasive species in protected areas of Spain using PlanetScope

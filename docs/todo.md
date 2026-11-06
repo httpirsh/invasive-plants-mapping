@@ -48,9 +48,17 @@
   resolvida; é o sistema de coordenadas, não um bug na divisão
   treino/teste; 18 é o número correto
   ([thesis/notes.md](../thesis/notes.md#discrepância-de-15-vs-18-blocos-espaciais-no-lado-dos-especialistas-é-o-sistema-de-coordenadas-não-um-bug))
-- [ ] Alargar o download do Sentinel-2 à extensão toda do piloto
-  (distrito de Coimbra), com a mesma grelha/abordagem, agora que o
-  pipeline está validado
+- [x] Ler Ball et al. (2026) e Domingo et al. (2023) na íntegra —
+  métodos exatos confirmados em [literature.md](literature.md); conjunto
+  de features decidido (compósito anual à Ball et al., fenologia da
+  floração à Domingo et al. testada depois por ablação)
+  ([thesis/notes.md](../thesis/notes.md#conjunto-de-features-do-sentinel-2-na-rq1-compósito-anual-ball-et-al-fenologia-da-floração-como-extensão-por-ablação-domingo-et-al))
+- [ ] Sentinel-2 na RQ1: extrair o compósito anual (12 bandas + NDVI,
+  NDWI, NBR; ano 2023) nos mesmos pontos já usados para a TESSERA (não
+  um raster completo da extensão do piloto — fica muito mais caro sem
+  necessidade, já que a curva treina e avalia em pontos)
+  ([thesis/notes.md](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo),
+  [conjunto de features](../thesis/notes.md#conjunto-de-features-do-sentinel-2-na-rq1-compósito-anual-ball-et-al-fenologia-da-floração-como-extensão-por-ablação-domingo-et-al))
 - [ ] Rever a estrutura de cada capítulo de `thesis/document/text/`
   face ao relatório de referência, à medida que for escrito/revisto
   (não reescrever o que já existe de uma vez)
