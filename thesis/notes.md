@@ -145,6 +145,67 @@ nas Decisões, abaixo.
 ausências) já não se aplica tal como está escrito; se for reutilizado
 na defesa, tem de ser adaptado para o fundo partilhado.
 
+### A curva de redução de esforço da RQ1: o que levar ao orientador
+
+*2026-11-07, síntese minha para a próxima reunião, juntando quatro
+investigações feitas na mesma sessão. Reasoning completo de cada uma
+nas Decisões abaixo: [[curva-fundo-so-floresta]],
+"Redundância dentro dos polígonos de especialistas: diagnóstico (Passo
+A)" e "Por que os polígonos de especialistas são menos diversos entre
+si: é habitat, não geografia" — aqui só o resumo para apresentar.*
+
+> "Corri a curva completa de redução de esforço (0% a 100% de dados de
+> especialistas, em cima da base de ciência cidadã). O resultado:
+> Random Forest e Logistic Regression já estão praticamente no teto só
+> com ciência cidadã (Boyce ≈0,99) e ficam planos até 90% — só pioram a
+> 100%, quando a ciência cidadã é totalmente substituída. Antes de
+> aceitar isto, verifiquei se era erro ou artefacto: revi o código da
+> métrica, testei fuga de dados, e sobretudo repeti a curva toda contra
+> um fundo muito mais difícil, restrito a tipos de floresta — o
+> resultado manteve-se, até melhorou no Random Forest. A explicação que
+> encontrei é esta: os polígonos de especialistas, neste piloto, cobrem
+> sobretudo manchas de acácia já grandes e facilmente identificáveis
+> (55% caem dentro da própria classe 'floresta de acácias' da COS,
+> apesar de serem dados completamente independentes dela), enquanto a
+> ciência cidadã já cobre esse mesmo tipo de caso e também uma gama
+> muito maior de contextos — pinhal, eucaliptal, matos, beira de
+> estrada. Não é que os dados de especialistas não tenham valor; é que,
+> como foram amostrados, não preenchem uma lacuna que a ciência cidadã
+> já não cubra."
+
+**Números a ter à mão:**
+- Random Forest: ROC-AUC 0,879 (0%) → 0,878 (90%) → 0,801 (100%);
+  Boyce 0,993 → 0,983 → 0,917.
+- Sob fundo só de floresta: ROC-AUC sobe para 0,934/0,933/0,885 nos
+  mesmos três pontos — o resultado não é um fundo fácil.
+- Diversidade: ciência cidadã restrita aos blocos dos especialistas
+  mantém-se tão diversa (similaridade 0,618) como no distrito inteiro
+  (0,614); os especialistas, entre si, são muito mais homogéneos
+  (0,778) — não é geografia, é o tipo de habitat visado.
+
+**Perguntas/pontos a confirmar com ele, já registados como em aberto:**
+- Pode ser efeito de teto específico deste piloto (só uma região, só
+  TESSERA, fundo partilhado ainda não confirmado por ele) — não uma
+  conclusão definitiva sobre o valor dos dados de especialistas em
+  geral.
+- Esforço foi medido como % de polígonos, não por área nem custo real
+  de campo — pode valer a pena rediscutir a unidade.
+- Implicação prática, se houver nova recolha de campo: visar
+  habitats/locais ainda não cobertos pela ciência cidadã (p. ex. a
+  faixa a noroeste do distrito-piloto) pode valer mais do que mais
+  polígonos do mesmo tipo de mancha.
+
+**Onde:** notebooks completos e números detalhados em
+[`notebooks/07_foundation_models/effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb),
+[`forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb),
+[`expert_polygon_redundancy_check.ipynb`](../notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb),
+[`expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb);
+resumo também em
+[`docs/research_questions.md`](../docs/research_questions.md#rq1--foundation-models-vs-conventional-approaches).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Resultados, ainda
+placeholder) — esta síntese é para a reunião, não para o texto final.
+
 ## Decisões
 
 Uma entrada por decisão: data, o que decidi, porquê, e onde está
@@ -1689,6 +1750,155 @@ lida para "restringir o fundo à classe de habitat alvo" nesta tese).
   contra uma alternativa mais difícil.
 
 **Onde:** [`notebooks/07_foundation_models/forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Resultados/Metodologia,
+ainda placeholder).
+
+### Redundância dentro dos polígonos de especialistas: diagnóstico (Passo A)
+
+*2026-11-07, decisão minha (investigar), não confirmada pelo
+orientador. Seguimento da pergunta "o trabalho dos especialistas foi
+inútil? estaremos a perder alguma coisa?" — ver também
+[[curva-fundo-so-floresta]]. Descartadas, por agora: revisitar o
+multiclasse (reabriria uma decisão já fechada) e a RQ3 (fica para
+depois da entrega intermédia); descartada também a hipótese de
+correção de falsos positivos (exigiria repor os `classifica = 0`,
+já removidos por decisão anterior — ver
+[Expert reference polygons](../data/README.md#expert-reference-polygons-cleaned-derived)).*
+
+**O que decidi:** testar se a curva plana (0–90% sem ganho visível)
+vem de redundância dentro dos polígonos de especialistas — a mistura é
+por polígono, mas o treino continua a usar todos os píxeis de cada
+polígono incluído, e píxeis do mesmo polígono podem ser quase
+idênticos no espaço de embeddings (mesma mancha, mesmo ano). Três
+verificações, sem re-treinar nenhum classificador:
+1. Distribuição de píxeis por polígono.
+2. Decomposição de variância entre/dentro de polígono (estilo ANOVA)
+   com teste de permutação (baralhar que píxel pertence a que
+   polígono, mantendo os tamanhos dos grupos, 200 repetições) — para
+   separar "homogeneidade real da identidade do polígono" de
+   "homogeneidade geral da espécie".
+3. Similaridade de cosseno média, dentro do mesmo polígono vs. entre
+   polígonos diferentes vs. entre presenças de ciência cidadã (como
+   referência de observações genuinamente distintas).
+
+**Resultado:** redundância real e estatisticamente forte, mas os
+polígonos são pequenos demais, neste recorte, para isso explicar
+sozinho a curva plana.
+- Tamanho dos polígonos: mediana 1 píxel, média 1,9, **máximo 9
+  píxeis** — não há polígonos grandes a dominar o treino; mesmo assim,
+  63,8% dos píxeis vêm de polígonos com 2+ píxeis.
+- ICC = 0,881 (fração da variância total explicada pela identidade do
+  polígono), muito acima do nulo por permutação (média 0,525, 95º
+  percentil 0,538) — acima de 100% das 200 permutações. Confirma
+  redundância real da identidade do polígono, não só homogeneidade
+  geral da espécie.
+- Similaridade de cosseno: dentro do mesmo polígono 0,921 › entre
+  polígonos diferentes 0,778 › entre presenças de ciência cidadã
+  0,613. **O achado mais inesperado:** mesmo *entre* polígonos
+  diferentes (ignorando a redundância interna), os dados de
+  especialistas são mais homogéneos entre si (0,778) do que a ciência
+  cidadã é entre si (0,613) — os dados de especialistas cobrem, aqui,
+  uma gama mais estreita de condições do que a ciência cidadã já
+  cobre, possivelmente por estarem concentrados num habitat/zona mais
+  homogéneo do distrito-piloto.
+
+**Resposta provisória:** a redundância dentro do polígono existe e é
+estatisticamente real, mas como os polígonos são pequenos (máximo 9
+píxeis) o efeito prático sobre o tamanho "efetivo" do conjunto de
+treino é modesto (no máximo ~1 457 unidades efetivas em vez de 2 771
+píxeis, não uma redução drástica) — não parece suficiente para
+explicar sozinho a curva plana. A baixa diversidade *entre* polígonos
+pode ser tão ou mais relevante, mas fica como achado novo, não
+investigado mais a fundo aqui.
+
+**Fundamentação:** decomposição de variância entre/dentro de grupo
+(ANOVA de um fator) e teste de permutação são técnicas estatísticas
+padrão; não verifiquei uma citação específica para a sua aplicação a
+embeddings de sensoriamento remoto agrupados por polígono — raciocínio
+meu a partir dos números desta experiência.
+
+**Em aberto:**
+- Porque é que os polígonos de especialistas são, como grupo, menos
+  diversos entre si do que a ciência cidadã — pode ser cobertura
+  geográfica concentrada, não falta de valor dos dados.
+- Só testado no recorte-piloto (distrito de Coimbra); pode não
+  generalizar a um conjunto maior/mais disperso de polígonos.
+- Passo B (treinar com um só píxel representativo por polígono) ainda
+  por fazer, mas com expectativa moderada de efeito pequeno, dado o
+  tamanho reduzido dos polígonos.
+- Resultado ainda não confirmado pelo orientador.
+
+**Onde:** [`notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb`](../notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Resultados/Metodologia,
+ainda placeholder).
+
+### Por que os polígonos de especialistas são menos diversos entre si: é habitat, não geografia
+
+*2026-11-07, decisão minha (investigar), não confirmada pelo
+orientador. Segue diretamente do achado em aberto do diagnóstico
+anterior — ver acima.*
+
+**O que decidi:** testar as duas explicações possíveis para os
+polígonos de especialistas serem mais homogéneos entre si (cosseno
+0,778) do que a ciência cidadã é entre si (0,613): (1) concentração
+geográfica — cobrem uma área mais pequena; (2) concentração de
+habitat — caem sistematicamente num tipo de paisagem mais estreito.
+Teste direto: recalcular a similaridade da ciência cidadã **restrita
+só aos blocos de 10 km onde há especialistas**; se subir para perto de
+0,778, é geografia; se ficar perto de 0,613, é habitat.
+
+**Resultado — é habitat, não geografia:**
+- Ciência cidadã restrita aos 18 blocos com especialistas: similaridade
+  0,618 — praticamente igual ao valor no distrito inteiro (0,614), bem
+  longe dos 0,778 dos especialistas. Estar na mesma área não torna a
+  ciência cidadã tão homogénea quanto os especialistas.
+- Composição de uso do solo (COS 2023): **55,0% dos píxeis de
+  especialistas caem dentro de polígonos já classificados pela própria
+  COS como "floresta de acácias"**, contra só 18,1% da ciência cidadã.
+  A ciência cidadã espalha-se por pinhal (32,6%), eucaliptal (20,4%),
+  matos (8,5%), artificial (4,7%) e água (0,5%) — contextos quase
+  ausentes do lado dos especialistas (0,3% e 0,0% nos dois últimos).
+- Mapa: os especialistas formam alguns focos bem separados entre si
+  (daí a distância média entre pares ser *maior*, 18,4 km vs. 10,9 km
+  da ciência cidadã, apesar de cobrirem só 18 blocos contra 42) — não
+  uma zona pequena e concentrada, mas sim poucos locais, cada um muito
+  homogéneo internamente. A ciência cidadã cobre uma faixa contígua
+  bem mais ampla, incluindo uma região a noroeste do distrito sem
+  nenhuma presença de especialista.
+
+**Leitura:** os especialistas documentaram sobretudo manchas de acácia
+grandes e já reconhecíveis (sobrepostas à própria classe de uso do
+solo "acácia" da COS), enquanto a ciência cidadã já cobre esse mesmo
+tipo de contexto *e também* ocorrências mais marginais e variadas
+(árvores isoladas, orlas, perto de estradas). Isto explica a curva
+plana melhor do que a redundância de píxeis
+([[curva-fundo-so-floresta]]): não é que os dados de especialistas não
+tenham valor — é que, **como foram amostrados neste piloto**, não
+preenchem uma lacuna de diversidade que a ciência cidadã já não cubra.
+Resposta à pergunta "o trabalho deles foi inútil?": não — é a prova de
+que a ciência cidadã já tem boa cobertura do tipo de habitat que os
+especialistas também visaram; não diz nada sobre o valor dos
+especialistas para outros tipos de habitat, por delimitação de área, ou
+como validação externa. A sobreposição de 55% com a classe "floresta
+de acácias" da própria COS é coincidência ecológica — os dados de
+especialistas são completamente independentes da COS (confirmado por
+mim, 2026-11-07); não é um indício de circularidade entre as duas
+fontes.
+
+**Fundamentação:** raciocínio meu a partir dos números desta
+experiência; nenhuma literatura nova consultada.
+
+**Em aberto:**
+- Achado específico do recorte-piloto; não se sabe se um conjunto de
+  especialistas mais disperso (p. ex. cobrindo também a faixa noroeste
+  só com ciência cidadã) mudaria a conclusão da curva — implicação
+  prática para uma eventual recolha futura: visar habitats/locais
+  subrepresentados, não só mais do mesmo tipo.
+- Resultado ainda não confirmado pelo orientador.
+
+**Onde:** [`notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb).
 
 **Na tese:** ⏳ Ainda não escrita (capítulo de Resultados/Metodologia,
 ainda placeholder).

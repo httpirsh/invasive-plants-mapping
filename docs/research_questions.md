@@ -117,25 +117,79 @@ avoiding it by staging (see `thesis/notes.md` and
 **One-class algorithm: one-class SVM**, chosen 2026-11-06 over
 Isolation Forest by direct comparison on the citizen-science arm (see
 [`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb)
-and `thesis/notes.md`) — a first pass, not yet repeated for the expert
-arm or the full curve.
+and `thesis/notes.md`).
 **Presence-vs-background classifier: Random Forest**, chosen
 2026-11-06 over Logistic Regression by the same comparison on the
 citizen-science arm (ROC-AUC 0.842 vs. 0.878, Boyce 0.989 vs. 0.973 —
 neither dominates both metrics, Random Forest chosen for stability
 across spatial splits and stronger literature grounding; see
 [`notebooks/07_foundation_models/presence_background_citizen_science.ipynb`](../notebooks/07_foundation_models/presence_background_citizen_science.ipynb)
-and `thesis/notes.md`) — also a first pass, not yet repeated for the
-expert arm; the compact neural network candidate not tested yet. Both
-classifiers clearly outperform the one-class SVM on the citizen-science
-arm, consistent with the literature review's finding that true
-one-class methods tend to underperform presence-background ones.
+and `thesis/notes.md`); the compact neural network candidate not
+tested yet. Both classifiers clearly outperform the one-class SVM on
+the citizen-science arm, consistent with the literature review's
+finding that true one-class methods tend to underperform
+presence-background ones.
+**Both choices confirmed on the expert arm**, 2026-11-07 (100% expert
+point of the curve): one-class SVM ROC-AUC 0.911/Boyce 0.868, Random
+Forest ROC-AUC 0.990/Boyce 0.954, Logistic Regression ROC-AUC
+0.990/Boyce 0.879 — same ranking as citizen science, with a wider
+Random Forest vs. Logistic Regression gap on Boyce; see
+[`notebooks/07_foundation_models/expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb)
+and `thesis/notes.md`. All scores are markedly higher on this arm than
+on citizen science — not yet understood whether that reflects an
+easier separation problem (large homogeneous polygons vs. uniform
+background) rather than a real gap in how well either source
+supports mapping acacia; treat as not yet comparable across arms.
+Neither arm's result is confirmed by the supervisor.
+
+**Full curve run (0%–100%, 10-point steps), 2026-11-07:** one unified
+methodology (polygon-level nested mixing, one fixed spatial test set
+per seed reused at every level — see `thesis/notes.md`) replaces the
+two standalone endpoint runs above for reading a trend. **Random
+Forest and Logistic Regression are essentially flat from 0% to 90%
+expert, dropping only at 100%** (Random Forest ROC-AUC 0.879 → 0.878
+→ 0.801, Boyce 0.993 → 0.983 → 0.917 for 0%/90%/100%); **One-Class SVM
+is the exception, improving monotonically with added expert effort**
+(ROC-AUC 0.574 → 0.665 → 0.765 for 0%/90%/100%). Tentative reading: no
+amount of expert data short of fully replacing citizen science shows a
+visible benefit for the two stronger classifiers — a first pass, not a
+settled conclusion (ceiling effects and the single background/
+hyperparameter design are live caveats). See
+[`notebooks/07_foundation_models/effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb)
+and `thesis/notes.md` for the full reading and caveats.
+
+**Robustness check against a forest-only background, 2026-11-07:**
+re-ran the full curve with the negative class restricted to COS
+forest-type land cover (ruling out the ceiling-effect caveat above).
+The finding holds — Random Forest actually scores *higher* under the
+harder background, not lower — while One-Class SVM collapses to
+near-chance, suggesting its earlier scores were largely a
+background-composition artifact. See
+[`notebooks/07_foundation_models/forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb)
+and `thesis/notes.md` for the full numbers and caveats.
+
+**Why expert data doesn't move the curve, 2026-11-07:** two follow-up
+diagnostics point to **habitat concentration**, not pixel redundancy
+within polygons (real but modest — polygons are small, max 9 pixels).
+55% of expert pixels fall inside COS's own "acacia forest" class vs.
+only 18% of citizen-science presences, which spread across pine,
+eucalyptus, shrubland and even roadside contexts instead; restricting
+citizen science to only the blocks containing expert polygons does not
+raise its internal diversity, ruling out a purely geographic
+explanation. Expert data, as sampled in this pilot, mostly documents
+large, already-recognisable stands that citizen science already
+covers. See
+[`notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb`](../notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb),
+[`notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb)
+and `thesis/notes.md` for the full numbers and caveats.
 **Curve mechanics:** mixing is additive — the citizen-science base
 stays fixed, expert presences are added on top, so total N grows with
 each level; total N is reported alongside the mixing percentage so
-volume effects stay visible. Exact mixing levels and the spatial-block
-holdout strategy across the curve are still open — see
-[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
+volume effects stay visible. Exact mixing levels (0/10/…/100%,
+polygon-level, nested) and the spatial-block holdout strategy (one
+fixed test set per seed, reused at every level) are resolved — see
+[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
+for how the open question was closed.
 
 Experiment, run once per representation (TESSERA first; Sentinel-2
 deferred, see [Foundation Model Use](#foundation-model-use-adopted)),
@@ -170,7 +224,11 @@ data entirely) — see `thesis/notes.md` for the background design
     [Species Scope](#species-scope-proposed)).
   - **Clustered:** the district polygons fall in 15 cells of 10 km,
     so few independent spatial blocks are available to split training
-    and test.
+    and test. (The 2026-11-06 pilot embedding extent, joined against
+    all `classifica = 1` polygons rather than the district-only
+    subset, reaches 18 blocks — see
+    [`notebooks/07_foundation_models/expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb);
+    not yet reconciled into one number.)
   - **Background:** **decision (supervisor, 2026-11-04):** use only
     `classifica = 1`; the `classifica = 0` polygons are non-acacia
     areas that must not be used in this study (why they were dropped:

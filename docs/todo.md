@@ -51,20 +51,57 @@
   proposto como classificador por omissão para o resto da RQ1 (minha
   escolha, por agora, não confirmada pelo orientador)
   ([notebooks/07_foundation_models/presence_background_citizen_science.ipynb](../notebooks/07_foundation_models/presence_background_citizen_science.ipynb))
-- [ ] Implementar os dois classificadores da RQ1 para o **braço de
-  especialistas** (one-class SVM e presença-vs-fundo com Random
-  Forest) e depois para a curva de redução de esforço completa — só o
-  braço de ciência cidadã está feito nos dois métodos até agora
-  ([thesis/notes.md](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo))
+- [x] Implementar os dois classificadores da RQ1 para o **braço de
+  especialistas** — feito (2026-11-07): one-class SVM (ROC-AUC 0,911,
+  Boyce 0,868) e Random Forest (ROC-AUC 0,990, Boyce 0,954, melhor que
+  Logistic Regression no Boyce) confirmam as escolhas feitas no braço
+  de ciência cidadã; pontuações bem mais altas aqui, ainda por perceber
+  se é tarefa mais fácil ou vantagem real
+  ([notebooks/07_foundation_models/expert_arm_classifiers.ipynb](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb))
 - [ ] Implementar a zona-tampão de 20–30 m na **validação por divisão
   espacial** (spatial split) do lado dos especialistas, além dos
   blocos de 10 km — unidade assumida por decisão própria (2026-11-06),
   não confirmada pelo orientador
   ([thesis/notes.md](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km))
-- [ ] Desenhar a curva de redução de esforço da RQ1 (mistura aditiva,
-  já decidida; faltam os níveis exatos de mistura e o bloco espacial
-  de teste fixo em todos os níveis) — ver "Em aberto" em
-  [thesis/notes.md](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
+- [x] Desenhar e implementar a curva de redução de esforço completa da
+  RQ1 (0%, 10%, …, 100%) — feito (2026-11-07): mistura por polígono,
+  encaixada, bloco de teste espacial fixo por semente em toda a curva.
+  **Resultado:** Random Forest e Logistic Regression praticamente
+  planos do 0% ao 90%, só pioram a 100% (sem ciência cidadã no treino);
+  One-Class SVM melhora de forma monótona com mais especialistas, mas
+  fica sempre abaixo dos outros dois. Leitura provisória: nenhuma
+  quantidade parcial de dados de especialistas parece justificar o
+  custo de recolha, para já — a confirmar com o orientador, pode ser
+  efeito de teto
+  ([notebooks/07_foundation_models/effort_reduction_curve.ipynb](../notebooks/07_foundation_models/effort_reduction_curve.ipynb))
+- [x] Verificar se o resultado "plano" da curva é efeito de teto de um
+  fundo fácil — feito (2026-11-07): repetida a curva completa contra um
+  fundo só de tipos de floresta (exclui a classe COS de acácia); a
+  conclusão mantém-se, Random Forest até melhora sob o fundo mais
+  difícil; One-Class SVM piora muito, sugerindo que o seu desempenho
+  anterior era em parte artefacto da composição do fundo
+  ([notebooks/07_foundation_models/forest_only_background_check.ipynb](../notebooks/07_foundation_models/forest_only_background_check.ipynb))
+- [x] Diagnóstico de redundância dentro dos polígonos de especialistas
+  (Passo A) — feito (2026-11-07): redundância real e estatisticamente
+  forte (ICC 0,881, muito acima do nulo por permutação), mas polígonos
+  pequenos (máximo 9 píxeis) limitam o impacto prático; achado novo em
+  aberto — polígonos diferentes entre si já são mais homogéneos
+  (cosseno 0,778) do que a ciência cidadã é entre si (0,613)
+  ([notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb](../notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb))
+- [x] Explorar porque os polígonos de especialistas são menos diversos
+  entre si que a ciência cidadã — feito (2026-11-07): não é geografia
+  (ciência cidadã restrita aos mesmos blocos continua tão diversa como
+  no distrito inteiro), é habitat — 55% dos píxeis de especialistas
+  caem na própria classe "floresta de acácias" da COS, contra só 18%
+  na ciência cidadã, que cobre muito mais contextos (pinhal, eucaliptal,
+  matos, até estradas). Explica a curva plana melhor do que a
+  redundância de píxeis
+  ([notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb))
+- [ ] **Baixa prioridade, por agora:** Passo B (repetir a curva com um
+  só píxel representativo por polígono no treino) — a explicação da
+  baixa diversidade de habitat entre polígonos (achado acima) é mais
+  forte e direta; só vale a pena retomar isto se o orientador pedir ou
+  se a explicação de habitat não se confirmar
 - [ ] Rever o desenho da RQ3 que dependia de "outras plantas como
   classes vs. fundo ao acaso", agora que o multiclasse foi abandonado
   ([research_questions.md](research_questions.md#rq3--spatial-sampling-bias))
