@@ -71,6 +71,22 @@ Three more rules that follow from this:
 - If the same fact would need to change in two files when something
   changes, it is in the wrong place — move it to its one owning file
   and replace the other copy with a link.
+- **When a design item in `docs/research_questions.md` or
+  `docs/methodology.md` is superseded or changes, edit it in place —
+  don't leave the old description narrated in full "for completeness."**
+  Replace it with the current state, a one-line superseded note, and a
+  link to the full reasoning in `thesis/notes.md` (already recorded
+  there per the Decision Log rule). These two files hold current
+  status, not a run log: don't let a research question's write-up
+  accumulate every experiment's numbers and interpretation over
+  time — state the current result in one or two sentences and link to
+  `thesis/notes.md` and the notebook for the rest. When making this
+  kind of update, grep the whole file for every other mention of the
+  same item (the summary table at the top, cross-references from other
+  sections) and update all of them in the same pass — a superseded
+  design left intact in one spot while "superseded" is written in
+  another is the actual failure mode to avoid, not just forgetting the
+  word "superseded" itself.
 - `README.md` and `CLAUDE.md` both describe the top-level structure
   for different audiences (human vs. me); `README.md` is the source —
   `CLAUDE.md` does not repeat the folder tree, only how I should use
