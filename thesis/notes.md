@@ -145,67 +145,6 @@ nas Decisões, abaixo.
 ausências) já não se aplica tal como está escrito; se for reutilizado
 na defesa, tem de ser adaptado para o fundo partilhado.
 
-### A curva de redução de esforço da RQ1: o que levar ao orientador
-
-*2026-11-07, síntese minha para a próxima reunião, juntando quatro
-investigações feitas na mesma sessão. Reasoning completo de cada uma
-nas Decisões abaixo: [[curva-fundo-so-floresta]],
-"Redundância dentro dos polígonos de especialistas: diagnóstico (Passo
-A)" e "Por que os polígonos de especialistas são menos diversos entre
-si: é habitat, não geografia" — aqui só o resumo para apresentar.*
-
-> "Corri a curva completa de redução de esforço (0% a 100% de dados de
-> especialistas, em cima da base de ciência cidadã). O resultado:
-> Random Forest e Logistic Regression já estão praticamente no teto só
-> com ciência cidadã (Boyce ≈0,99) e ficam planos até 90% — só pioram a
-> 100%, quando a ciência cidadã é totalmente substituída. Antes de
-> aceitar isto, verifiquei se era erro ou artefacto: revi o código da
-> métrica, testei fuga de dados, e sobretudo repeti a curva toda contra
-> um fundo muito mais difícil, restrito a tipos de floresta — o
-> resultado manteve-se, até melhorou no Random Forest. A explicação que
-> encontrei é esta: os polígonos de especialistas, neste piloto, cobrem
-> sobretudo manchas de acácia já grandes e facilmente identificáveis
-> (55% caem dentro da própria classe 'floresta de acácias' da COS,
-> apesar de serem dados completamente independentes dela), enquanto a
-> ciência cidadã já cobre esse mesmo tipo de caso e também uma gama
-> muito maior de contextos — pinhal, eucaliptal, matos, beira de
-> estrada. Não é que os dados de especialistas não tenham valor; é que,
-> como foram amostrados, não preenchem uma lacuna que a ciência cidadã
-> já não cubra."
-
-**Números a ter à mão:**
-- Random Forest: ROC-AUC 0,879 (0%) → 0,878 (90%) → 0,801 (100%);
-  Boyce 0,993 → 0,983 → 0,917.
-- Sob fundo só de floresta: ROC-AUC sobe para 0,934/0,933/0,885 nos
-  mesmos três pontos — o resultado não é um fundo fácil.
-- Diversidade: ciência cidadã restrita aos blocos dos especialistas
-  mantém-se tão diversa (similaridade 0,618) como no distrito inteiro
-  (0,614); os especialistas, entre si, são muito mais homogéneos
-  (0,778) — não é geografia, é o tipo de habitat visado.
-
-**Perguntas/pontos a confirmar com ele, já registados como em aberto:**
-- Pode ser efeito de teto específico deste piloto (só uma região, só
-  TESSERA, fundo partilhado ainda não confirmado por ele) — não uma
-  conclusão definitiva sobre o valor dos dados de especialistas em
-  geral.
-- Esforço foi medido como % de polígonos, não por área nem custo real
-  de campo — pode valer a pena rediscutir a unidade.
-- Implicação prática, se houver nova recolha de campo: visar
-  habitats/locais ainda não cobertos pela ciência cidadã (p. ex. a
-  faixa a noroeste do distrito-piloto) pode valer mais do que mais
-  polígonos do mesmo tipo de mancha.
-
-**Onde:** notebooks completos e números detalhados em
-[`notebooks/07_foundation_models/effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb),
-[`forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb),
-[`expert_polygon_redundancy_check.ipynb`](../notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb),
-[`expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb);
-resumo também em
-[`docs/research_questions.md`](../docs/research_questions.md#rq1--foundation-models-vs-conventional-approaches).
-
-**Na tese:** ⏳ Ainda não escrita (capítulo de Resultados, ainda
-placeholder) — esta síntese é para a reunião, não para o texto final.
-
 ## Decisões
 
 Uma entrada por decisão: data, o que decidi, porquê, e onde está
@@ -1754,7 +1693,7 @@ lida para "restringir o fundo à classe de habitat alvo" nesta tese).
 **Na tese:** ⏳ Ainda não escrita (capítulo de Resultados/Metodologia,
 ainda placeholder).
 
-### Redundância dentro dos polígonos de especialistas: diagnóstico (Passo A)
+### Redundância dentro dos polígonos de especialistas: diagnóstico
 
 *2026-11-07, decisão minha (investigar), não confirmada pelo
 orientador. Seguimento da pergunta "o trabalho dos especialistas foi
@@ -1819,14 +1758,13 @@ embeddings de sensoriamento remoto agrupados por polígono — raciocínio
 meu a partir dos números desta experiência.
 
 **Em aberto:**
-- Porque é que os polígonos de especialistas são, como grupo, menos
+- ~~Porque é que os polígonos de especialistas são, como grupo, menos
   diversos entre si do que a ciência cidadã — pode ser cobertura
-  geográfica concentrada, não falta de valor dos dados.
+  geográfica concentrada, não falta de valor dos dados.~~ Resolvido —
+  ver "Por que os polígonos de especialistas são menos diversos entre
+  si: é habitat, não geografia", abaixo.
 - Só testado no recorte-piloto (distrito de Coimbra); pode não
   generalizar a um conjunto maior/mais disperso de polígonos.
-- Passo B (treinar com um só píxel representativo por polígono) ainda
-  por fazer, mas com expectativa moderada de efeito pequeno, dado o
-  tamanho reduzido dos polígonos.
 - Resultado ainda não confirmado pelo orientador.
 
 **Onde:** [`notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb`](../notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb).

@@ -41,3 +41,36 @@ como candidata a experiência; com o multiclasse abandonado (reunião
 2026-11-05), isto passa a "fundo de outras plantas vs. fundo ao
 acaso" — por rever antes ou durante esta reunião (ver
 [research_questions.md](../research_questions.md#rq3--spatial-sampling-bias)).
+
+## Resultados a apresentar: curva de redução de esforço da RQ1
+
+Corrida a curva completa de redução de esforço (0% a 100% de dados de
+especialistas sobre a base de ciência cidadã, metodologia fixa em
+todos os pontos). Random Forest e Logistic Regression já estão
+praticamente no teto só com ciência cidadã (Boyce ≈0,99) e ficam
+planos do 0% ao 90% — só pioram a 100%, quando a ciência cidadã é
+totalmente substituída. Verificado que não é erro nem artefacto de um
+fundo fácil (repetida a curva toda contra um fundo só de tipos de
+floresta — o resultado manteve-se, até melhorou no Random Forest).
+Explicação encontrada: os polígonos de especialistas, neste piloto,
+cobrem sobretudo manchas de acácia já grandes e facilmente
+identificáveis (55% caem dentro da própria classe "floresta de
+acácias" da COS, apesar de os dados serem completamente independentes
+dela), enquanto a ciência cidadã já cobre esse mesmo tipo de caso e
+também uma gama muito maior de contextos (pinhal, eucaliptal, matos,
+beira de estrada) — não é falta de valor dos dados de especialistas, é
+que, como foram amostrados, não preenchem uma lacuna que a ciência
+cidadã já não cubra. Detalhe completo em
+[thesis/notes.md](../../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
+e notebooks ligados a partir daí.
+
+- **Confirmar:** pode ser efeito de teto específico deste piloto (só
+  uma região, só TESSERA, fundo partilhado ainda não confirmado por
+  ele) — não uma conclusão definitiva sobre o valor dos dados de
+  especialistas em geral.
+- **Discutir:** esforço foi medido como % de polígonos, não por área
+  nem custo real de campo — rediscutir a unidade.
+- **Implicação prática** se houver nova recolha de campo: visar
+  habitats/locais ainda não cobertos pela ciência cidadã (p. ex. a
+  faixa a noroeste do distrito-piloto) pode valer mais do que mais
+  polígonos do mesmo tipo de mancha.

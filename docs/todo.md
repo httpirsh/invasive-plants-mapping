@@ -82,7 +82,7 @@
   anterior era em parte artefacto da composição do fundo
   ([notebooks/07_foundation_models/forest_only_background_check.ipynb](../notebooks/07_foundation_models/forest_only_background_check.ipynb))
 - [x] Diagnóstico de redundância dentro dos polígonos de especialistas
-  (Passo A) — feito (2026-11-07): redundância real e estatisticamente
+  — feito (2026-11-07): redundância real e estatisticamente
   forte (ICC 0,881, muito acima do nulo por permutação), mas polígonos
   pequenos (máximo 9 píxeis) limitam o impacto prático; achado novo em
   aberto — polígonos diferentes entre si já são mais homogéneos
@@ -97,11 +97,6 @@
   matos, até estradas). Explica a curva plana melhor do que a
   redundância de píxeis
   ([notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb))
-- [ ] **Baixa prioridade, por agora:** Passo B (repetir a curva com um
-  só píxel representativo por polígono no treino) — a explicação da
-  baixa diversidade de habitat entre polígonos (achado acima) é mais
-  forte e direta; só vale a pena retomar isto se o orientador pedir ou
-  se a explicação de habitat não se confirmar
 - [ ] Rever o desenho da RQ3 que dependia de "outras plantas como
   classes vs. fundo ao acaso", agora que o multiclasse foi abandonado
   ([research_questions.md](research_questions.md#rq3--spatial-sampling-bias))
