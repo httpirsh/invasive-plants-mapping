@@ -9,7 +9,7 @@
 | Prediction task | Adopted; segmentation mask: direction set 2026-11-04 (supervisor), rule to define |
 | Reference-data pipeline (proposal objective 1) | Proposed |
 | Temporal design: all iNaturalist observations treated as 2023 | Adopted 2026-10-21 |
-| Other plants as classes (multiclass) | **Superseded 2026-11-05** (supervisor, in person): multiclass dropped for both models; other-plant groups reused as a single background pool instead — see [Other Plants as Background](#other-plants-as-classes-adopted-direction) |
+| Other plants as classes (multiclass) | **Superseded 2026-11-05** (supervisor, in person): multiclass dropped for both models; RQ1's background is a uniform-random point pool, not other-plant data — see [RQ1](#rq1--foundation-models-vs-conventional-approaches) and [Other Plants as Classes](#other-plants-as-classes-adopted-direction) |
 | Expert reference data: *A. dealbata* polygons from the supervisor | Adopted 2026-10-20; year 2023 (confirmed 2026-10-28) |
 | Frozen embeddings instead of fine-tuning | Adopted 2026-10-21 (deviation from proposal); phase 1 uses TESSERA only, Sentinel-2 deferred (2026-11-05, supervisor) |
 | Species scope | Proposed (2026-10-20): *A. dealbata*, other *Acacia* left out |
@@ -102,123 +102,46 @@ performance and field-collection effort lies.
   literature precedent checked yet. Full decision and open points:
   [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
 
-**Redesigned 2026-11-05 (supervisor, in person):** the fixed "upper
-bound" arm below is replaced by an effort-reduction curve. Multiclass
-is dropped for both models (see [Other Plants as
-Background](#other-plants-as-classes-adopted-direction)).
+**Redesigned 2026-11-05 (supervisor, in person):** replaces the
+earlier fixed "upper bound" design with an effort-reduction curve
+(0–100% expert data mixed into the citizen-science base, 10-point
+steps, polygon-level nested mixing, one fixed spatial test set per
+seed reused at every level). Multiclass dropped for both models (see
+[Other Plants as Classes](#other-plants-as-classes-adopted-direction)).
 
-**Method (2026-11-06, my decision, revised twice the same day):** run
-true one-class / novelty detection **and** presence-vs-background **in
-parallel from the start**, not staged — literature found so far does
-not guarantee one-class wins, and every presence-only evaluation
-method found still needs background data, which weakens the case for
-avoiding it by staging (see `thesis/notes.md` and
-[`literature.md`](literature.md#one-class--positive-unlabeled-classification)).
-**One-class algorithm: one-class SVM**, chosen 2026-11-06 over
-Isolation Forest by direct comparison on the citizen-science arm (see
-[`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb)
-and `thesis/notes.md`).
-**Presence-vs-background classifier: Random Forest**, chosen
-2026-11-06 over Logistic Regression by the same comparison on the
-citizen-science arm (ROC-AUC 0.842 vs. 0.878, Boyce 0.989 vs. 0.973 —
-neither dominates both metrics, Random Forest chosen for stability
-across spatial splits and stronger literature grounding; see
-[`notebooks/07_foundation_models/presence_background_citizen_science.ipynb`](../notebooks/07_foundation_models/presence_background_citizen_science.ipynb)
-and `thesis/notes.md`); the compact neural network candidate not
-tested yet. Both classifiers clearly outperform the one-class SVM on
-the citizen-science arm, consistent with the literature review's
-finding that true one-class methods tend to underperform
-presence-background ones.
-**Both choices confirmed on the expert arm**, 2026-11-07 (100% expert
-point of the curve): one-class SVM ROC-AUC 0.911/Boyce 0.868, Random
-Forest ROC-AUC 0.990/Boyce 0.954, Logistic Regression ROC-AUC
-0.990/Boyce 0.879 — same ranking as citizen science, with a wider
-Random Forest vs. Logistic Regression gap on Boyce; see
-[`notebooks/07_foundation_models/expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb)
-and `thesis/notes.md`. All scores are markedly higher on this arm than
-on citizen science — not yet understood whether that reflects an
-easier separation problem (large homogeneous polygons vs. uniform
-background) rather than a real gap in how well either source
-supports mapping acacia; treat as not yet comparable across arms.
-Neither arm's result is confirmed by the supervisor.
+**Method (2026-11-06):** true one-class/novelty detection and
+presence-vs-background classification run in parallel, not staged —
+no presence-only evaluation method found avoids needing background
+data anyway. **One-class SVM** chosen over Isolation Forest, **Random
+Forest** chosen over Logistic Regression, both by direct comparison on
+the citizen-science arm; both rankings confirmed on the expert arm
+(2026-11-07). Full comparison and numbers:
+[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo),
+[`one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb),
+[`presence_background_citizen_science.ipynb`](../notebooks/07_foundation_models/presence_background_citizen_science.ipynb),
+[`expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb).
 
-**Full curve run (0%–100%, 10-point steps), 2026-11-07:** one unified
-methodology (polygon-level nested mixing, one fixed spatial test set
-per seed reused at every level — see `thesis/notes.md`) replaces the
-two standalone endpoint runs above for reading a trend. **Random
-Forest and Logistic Regression are essentially flat from 0% to 90%
-expert, dropping only at 100%** (Random Forest ROC-AUC 0.879 → 0.878
-→ 0.801, Boyce 0.993 → 0.983 → 0.917 for 0%/90%/100%); **One-Class SVM
-is the exception, improving monotonically with added expert effort**
-(ROC-AUC 0.574 → 0.665 → 0.765 for 0%/90%/100%). Tentative reading: no
-amount of expert data short of fully replacing citizen science shows a
-visible benefit for the two stronger classifiers — a first pass, not a
-settled conclusion (ceiling effects and the single background/
-hyperparameter design are live caveats). See
-[`notebooks/07_foundation_models/effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb)
-and `thesis/notes.md` for the full reading and caveats.
+**Status (2026-11-07, not yet confirmed by the supervisor):** full
+curve run on both arms. Random Forest and Logistic Regression are
+essentially flat across the whole curve, dropping only at 100% expert
+(no citizen science); One-Class SVM is the only one that improves as
+expert data is added, but stays below the other two throughout. Holds
+under a harder (forest-only) background. Two follow-up checks ruled
+out pixel redundancy and citizen-science label/GPS noise as
+explanations — habitat concentration (expert polygons sit mostly
+inside COS's own "acacia forest" class; citizen science spreads across
+far more habitats) explains it instead. Full numbers, caveats (ceiling
+effects, single background design) and the diagnostic notebooks:
+[`thesis/notes.md`](../thesis/notes.md#curva-de-redução-de-esforço-completa-0100-com-fundo-e-bloco-de-teste-fixos),
+[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb),
+[`forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb),
+[`expert_polygon_redundancy_check.ipynb`](../notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb),
+[`expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb),
+[`label_purity_check.ipynb`](../notebooks/07_foundation_models/label_purity_check.ipynb).
 
-**Robustness check against a forest-only background, 2026-11-07:**
-re-ran the full curve with the negative class restricted to COS
-forest-type land cover (ruling out the ceiling-effect caveat above).
-The finding holds — Random Forest actually scores *higher* under the
-harder background, not lower — while One-Class SVM collapses to
-near-chance, suggesting its earlier scores were largely a
-background-composition artifact. See
-[`notebooks/07_foundation_models/forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb)
-and `thesis/notes.md` for the full numbers and caveats.
-
-**Why expert data doesn't move the curve, 2026-11-07:** two follow-up
-diagnostics point to **habitat concentration**, not pixel redundancy
-within polygons (real but modest — polygons are small, max 9 pixels).
-55% of expert pixels fall inside COS's own "acacia forest" class vs.
-only 18% of citizen-science presences, which spread across pine,
-eucalyptus, shrubland and even roadside contexts instead; restricting
-citizen science to only the blocks containing expert polygons does not
-raise its internal diversity, ruling out a purely geographic
-explanation. Expert data, as sampled in this pilot, mostly documents
-large, already-recognisable stands that citizen science already
-covers. See
-[`notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb`](../notebooks/07_foundation_models/expert_polygon_redundancy_check.ipynb),
-[`notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb)
-and `thesis/notes.md` for the full numbers and caveats.
-
-**Label purity ruled out, 2026-11-07:** checked whether citizen-science
-presences are frequently off-target (GPS error, isolated/misidentified
-trees), which would add noise to every citizen-science result. Two
-cheap checks — agreement with nearby expert polygons (limited power,
-inconclusive), and TESSERA-embedding outlier detection (validated
-against that same expert ground truth) — found no large-scale problem;
-excluding the most outlier-like 5% of presences leaves the
-citizen-science-only result unchanged (ROC-AUC 0.842 → 0.843, Boyce
-0.992 → 0.995). See
-[`notebooks/07_foundation_models/label_purity_check.ipynb`](../notebooks/07_foundation_models/label_purity_check.ipynb)
-and `thesis/notes.md`.
-**Curve mechanics:** mixing is additive — the citizen-science base
-stays fixed, expert presences are added on top, so total N grows with
-each level; total N is reported alongside the mixing percentage so
-volume effects stay visible. Exact mixing levels (0/10/…/100%,
-polygon-level, nested) and the spatial-block holdout strategy (one
-fixed test set per seed, reused at every level) are resolved — see
-[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
-for how the open question was closed.
-
-Experiment, run once per representation (TESSERA first; Sentinel-2
-deferred, see [Foundation Model Use](#foundation-model-use-adopted)),
-same classifier(s), same held-out test set:
-
-```text
-0 % expert:    citizen-science presences only                  → one-class AND presence-vs-background classifier
-+X % expert:   citizen-science presences + a growing fraction
-               of expert presences (e.g. 10 %, 20 %, …)        → one-class AND presence-vs-background classifier
-100 % expert:  expert presences only                           → one-class AND presence-vs-background classifier
-```
-
-A background/negative sample is needed now for both the
-presence-vs-background classifier and for evaluating the one-class
-classifier (no presence-only evaluation method found avoids background
-data entirely) — see `thesis/notes.md` for the background design
-(uniform random points, not COS-stratified), still not decided.
+Run once per representation (TESSERA first; Sentinel-2 deferred, see
+[Foundation Model Use](#foundation-model-use-adopted)), same
+classifiers, same held-out spatial test set, at every curve level.
 
 - Candidate classifiers: Random Forest, Logistic Regression, compact
   neural network. **Grounded in:** Random Forest — Ball et al. (2026);
@@ -241,18 +164,12 @@ data entirely) — see `thesis/notes.md` for the background design
     smaller polygon set or a split bug — see
     [`notebooks/07_foundation_models/expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb)
     and `thesis/notes.md`.
-  - **Background:** **decision (supervisor, 2026-11-04):** use only
-    `classifica = 1`; the `classifica = 0` polygons are non-acacia
-    areas that must not be used in this study (why they were dropped:
+  - **Background:** `classifica = 0` polygons not used as negatives
+    (supervisor, 2026-11-04 — why:
     [`thesis/notes.md`](../thesis/notes.md#usar-os-dados-de-especialistas-com-limpeza)).
-    Needed now for the presence-vs-background arm and to evaluate the
-    one-class arm (both run in parallel, 2026-11-06). Not
-    COS-stratified points (supervisor, 2026-11-06 — COS maps coarse
-    patches, unreliable at pixel level); a first version (2 000
-    uniform random points, 50 m buffer around known presences) was
-    built 2026-11-06 to run the one-class comparison above, not yet
-    confirmed by the supervisor as the final, shared design —
-    [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
+    Shares the uniform-random background pool with the citizen-science
+    arm — see step 7 of the [Reference-Data
+    Pipeline](#reference-data-pipeline-proposed).
   - **Cleaning and year/method:** see the `data/README.md` entry
     linked above.
   - **Labels independent of citizen science:** iNaturalist did not
@@ -408,10 +325,12 @@ assume bias correction improves performance.
 **Pixel-level classification trained on points, applied
 wall-to-wall.** The classifier is trained on the 10 m pixel at each
 observation (Sentinel-2 features or foundation-model embedding), then
-applied to every pixel of the study area. Classes are *Acacia* plus
-groups of other plants (see [Other Plants as
-Classes](#other-plants-as-classes-adopted-direction)); the *Acacia*
-map is the predicted *Acacia* probability per pixel.
+applied to every pixel of the study area. The task is binary —
+*Acacia* presence vs. background — run both as true one-class/novelty
+detection and as a presence-vs-background classifier in parallel (see
+[RQ1](#rq1--foundation-models-vs-conventional-approaches)); the
+*Acacia* map is the predicted probability (or novelty score) per
+pixel.
 
 **Grounded in:** Brown et al. (2025) and the Cambridge TESSERA group —
 findings in `literature.md`.
@@ -428,14 +347,30 @@ findings in `literature.md`.
   confirm explicitly with him — see
   [`thesis/notes.md`](../thesis/notes.md#máscara-de-segmentação-sem-a-direção-da-câmara-testar-várias-abordagens)).
   The supervisor sees this as a central point of the thesis and suggests
-  trying several approaches; comparing them can be a result.
-  The task stays pixel classification; the mask changes how labels
-  and exclusions are built (see [Other Plants as
-  Classes](#other-plants-as-classes-adopted-direction)). Using the
-  camera direction or close-up vs. landscape photos was dropped (not
-  worth it, supervisor). Recommended reading: Rivier et al. (2024,
-  ICIP), who propagated sparse point labels to superpixels, "and
-  similar works" (supervisor; not read yet beyond the abstract).
+  trying several approaches; comparing them can be a result. The task
+  stays pixel classification; the mask changes how many pixels around
+  each observation count as *Acacia* training data. Using the camera
+  direction or close-up vs. landscape photos was dropped (not worth
+  it, supervisor). Recommended reading: Rivier et al. (2024, ICIP),
+  who propagated sparse point labels to superpixels, "and similar
+  works" (supervisor; not read yet beyond the abstract).
+  **Candidate methods (to compare):** region growing on TESSERA
+  embedding similarity from the observed pixel, with a maximum radius;
+  superpixels on Sentinel-2 or embeddings (as in Rivier et al., 2024 —
+  see [`literature.md`](literature.md#weak-supervision-from-point-labels)
+  for how their propagation rule works and how it differs from our
+  setting); COS 2023 "Florestas de acácias" polygons where the point
+  falls inside one (about 17% of 2021–2025 presences). Risks: the mask
+  may spread into similar non-*Acacia* vegetation (check a sample on
+  OrtoSat), and large patches give many more pixels than isolated
+  trees (may need balancing). Literature search (2026-11-03) found
+  this is an active technique in weakly-supervised remote-sensing
+  segmentation generally, but no paper combines it with sparse
+  citizen-science points and frozen foundation-model embeddings as
+  proposed here, so that specific combination stays a possible
+  contribution, not an applied practice. Gillespie et al. (2024) is
+  **not** a precedent for this rule — why, in
+  [`literature.md`](literature.md#citizen-science--remote-sensing--plant-mapping).
 - **Grid-cell presence/absence — not the training unit:** pixel
   predictions may later be aggregated to cells for evaluation and
   comparison with SDM-style outputs.
@@ -455,9 +390,9 @@ reported, and its effect is measured.
 | 4. Temporal design | Adopted | All observations treated as 2023, see [Temporal Design](#temporal-design-adopted) | See that section |
 | 5. Disturbance filter | Proposed (fixed) | Burned between observation and 2023 (ICNF 1975–2025): 6 *A. dealbata* presences (0.2%), 125 other plants (0.9%) | Riveiro et al. (2025): burned stands regrow, pixel no longer matches the label |
 | 6. Label purity | Checked (2026-11-07), no large-scale problem found | Expert-polygon agreement (limited power) and embedding-outlier detection found no evidence citizen-science presences are frequently off-target; see [RQ1](#rq1--foundation-models-vs-conventional-approaches) and `thesis/notes.md` | Ball et al. (2026) |
-| 7. Negative classes | Adopted direction | See [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | Phillips et al. (2009); see that section |
+| 7. Negative/background | Adopted (2026-11-06) | Uniform-random points, 50 m buffer around known presences, not COS-stratified — not yet confirmed by the supervisor as final. See [RQ1](#rq1--foundation-models-vs-conventional-approaches) and [`data/README.md`](../data/README.md) | Phillips et al. (2009) |
 | 8. Same pixel | Adopted (2026-10-29) | Pixel = 10 m cell in EPSG:32629. One presence per pixel, closest to 2023 (3 276 → 3 000). Conflicts: co-located other plants dropped, presence kept. Other plants: one per pixel, tallest group first, then closest to 2023 (16 720 → 13 554). Why: [`thesis/notes.md`](../thesis/notes.md#uma-observação-por-píxel-nos-conflitos-fica-a-presença) | Karasiak et al. (2022) |
-| 9. Other-plant classes | Proposed (2026-10-30, to confirm) | See [Other Plants as Classes](#other-plants-as-classes-adopted-direction) for the groups and counts | FAO LCCS (Di Gregorio & Jansen, 2000); GIFT (Weigelt et al., 2020; Denelle et al., 2023); Decreto-Lei 92/2019, Annex II; EPPO (2024); Ball et al. (2026) |
+| 9. Other-plant classes | **Superseded 2026-11-05** | Multiclass dropped; the cleaned, grouped other-plant dataset is kept only as a candidate background source for the RQ3 amplify/mitigate experiment (not yet run) — see [RQ3](#rq3--spatial-sampling-bias) and [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | FAO LCCS (Di Gregorio & Jansen, 2000); GIFT (Weigelt et al., 2020; Denelle et al., 2023); Decreto-Lei 92/2019, Annex II; EPPO (2024); Ball et al. (2026) |
 | 10. Observer balancing | Adopted (2026-11-03) | Main model: all of Observer A's observations (88% of the 3 000 presences); capping/removing is the RQ3 experiment, not preprocessing. Why: [`thesis/notes.md`](../thesis/notes.md#observer-a-todas-as-observações-no-modelo-principal) | Observer clustering (Cambridge TESSERA group); Phillips et al. (2009) |
 
 **Evaluation — cumulative ablation:** run the RQ1 setup after adding
@@ -500,105 +435,31 @@ scheduling decision, not a methodological one.
 
 ### Other Plants as Classes (adopted direction)
 
-**Superseded 2026-11-05 (supervisor, in person):** the multiclass
-structure described below is dropped for both models. Other-plant
-observations are no longer separate classifier output classes; the
-group pipeline is kept to build a single **background pool**, needed
-now for the presence-vs-background arm and for evaluating the
-one-class arm, run in parallel (2026-11-06 — see
-[RQ1](#rq1--foundation-models-vs-conventional-approaches)). The
-*target-group background* grounding (Phillips et al., 2009, below)
-still applies. Full decision:
+**Superseded 2026-11-05 (supervisor, in person):** multiclass is
+dropped for both models — other-plant observations are not separate
+classifier classes. RQ1's background in force is a uniform-random
+point pool, unrelated to other-plant data; see
+[RQ1](#rq1--foundation-models-vs-conventional-approaches) and
+[`data/README.md`](../data/README.md). Full decision and reasoning:
 [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
-The paragraphs below describe the original (now superseded) multiclass
-design; kept for the parts that still apply (the group pipeline, the
-counts, the grounding) rather than rewritten, to avoid losing that
-reasoning.
 
-iNaturalist is presence-only. Observations of *other plant species*
-were used as **classes of their own**, not as absences: an observation
-of eucalyptus is a presence of eucalyptus, not evidence that no
-*Acacia* is there. The model was multiclass (*Acacia* + groups of
-other plants) and learned to separate *Acacia* from the vegetation it
-is confused with.
-
-Other plants share the observers, platform and places of the
-*Acacia* presences, so the model learns *Acacia* vs. other vegetation,
-not visited vs. unvisited places.
-
-**Grounded in:** using other species recorded by the same observers as
-background (*target-group background*) comes from Phillips et al.
-(2009); using them as classes rather than background follows
-multi-species citizen-science models (Gillespie et al., 2024);
-grouping species into a few classes follows Ball et al. (2026).
-Findings: `literature.md`.
-
-Checked (all years, cleaned on both sides, before grouping into
-classes): 3 000 *A. dealbata* presences vs. 47 353 other-plant
-observations (~16:1); after the class steps below, 13 554 (~4.5:1). The dominant
-observer also records other plants (16 888 records, 36%), in 96.3% of
-the 1 km cells where they recorded *A. dealbata*. Other plants cover
-much more territory: only 18.6% of other-plant cells contain
-*A. dealbata*.
-
-**Expert model, same formulation (proposed, 2026-10-20; superseded
-2026-11-05):** in RQ1 the expert model was also planned as multiclass,
-with negatives labelled by the COS class they fall in instead of a
-single "not *Acacia*" class — superseded by the 2026-11-05 redesign
-above: both models are now presence-vs-background. The background for
-the expert arm is still planned as random points in COS 2023 vegetated
-classes (the expert `classifica = 0` polygons are not used, supervisor,
-2026-11-04), but as a single background pool, not per-class labels; a
-binary version was already the sensitivity check planned for the old
-design, so it is effectively what both arms now use directly. Grounded
-in Ball et al. (2026) for the original per-class idea; the background
-framing follows Phillips et al. (2009), as above.
-
-**Class groups (proposed 2026-10-30; kept 2026-11-05 as the pipeline
-that builds the background pool, not separate classifier classes):**
-8 groups, from sources rather than hand-made lists:
-aquatic, eucalyptus, pines and other conifers, oaks, other large
-invasives, other trees, shrubs, herbaceous. Non-vascular plants
-dropped; herbaceous and shrubs kept only where they are the top
-canopy layer in COS 2023 (FAO LCCS "uppermost canopy" rule). Final
-counts: herbaceous 4 229, large invasives 2 958, shrubs 2 790, other
-trees 1 663, oaks 802, aquatic 624, pines 319, eucalyptus 169. 23% of
-eucalyptus observations fall in COS acacia forest, so eucalyptus is
-the class most likely confused with *A. dealbata*. Full rules, sources
-per group, and why: [`thesis/notes.md`](../thesis/notes.md#outras-plantas-em-8-grupos-herbáceas-só-onde-são-a-camada-de-cima).
+**Why the other-plant data is still kept:** it remains a candidate
+background source for the RQ3 amplify/mitigate experiment (not yet
+run, not scheduled ahead of the RQ1 curve) — see
+[RQ3](#rq3--spatial-sampling-bias). The cleaned, grouped dataset (3 000
+*A. dealbata* vs. 13 554 other-plant observations after cleaning, in 8
+groups from GIFT growth forms, the national invasive list and the
+iNaturalist taxonomy) is documented in
+[`data/README.md`](../data/README.md); group rules and grounding:
+[`thesis/notes.md`](../thesis/notes.md#outras-plantas-em-8-grupos-herbáceas-só-onde-são-a-camada-de-cima).
+Grounded in Phillips et al. (2009) for other-species-as-background;
+Ball et al. (2026) for grouping into a few classes.
 
 Open:
 
-- Class imbalance (weighting or sampling).
 - Mixed pixels: a 10 m pixel may contain *Acacia* and another class.
-- **Patch mask instead of a fixed buffer (direction confirmed by the
-  supervisor, 2026-11-04; methods to compare):**
-  delimit the *Acacia* patch around each observation and use it to
-  (1) exclude other-plant points inside the patch and (2) take all
-  patch pixels as *Acacia* training pixels, not only the observed one.
-  Candidate methods: region growing on TESSERA embedding similarity
-  from the observed pixel (with a maximum radius); superpixels on
-  Sentinel-2 or embeddings (as in Rivier et al., 2024, recommended by
-  the supervisor, who propagated point labels to superpixels — read in
-  full, see [`literature.md`](literature.md#weak-supervision-from-point-labels)
-  for how their propagation rule works and how it differs from our
-  setting); COS 2023 "Florestas
-  de acácias" polygons where the point falls inside one (about 17% of
-  2021–2025 presences). Risks: the mask may spread into similar
-  non-*Acacia* vegetation (check a sample on OrtoSat), and large
-  patches give many more pixels than isolated trees (may need
-  balancing). Literature search (2026-11-03) found this is an active
-  technique in weakly-supervised remote-sensing segmentation (point or
-  seed labels expanded via superpixels/region growing), not something
-  unprecedented in general — but no paper combines it with sparse
-  citizen-science points and frozen foundation-model embeddings as
-  proposed here, so that specific combination stays a possible
-  contribution, not an applied practice. Gillespie et al. (2024),
-  already used elsewhere in this pipeline, is **not** a precedent for
-  this rule — why, in
-  [`literature.md`](literature.md#citizen-science--remote-sensing--plant-mapping).
-- All observers' other plants, or only the dominant observer's?
-- How *Acacia* metrics are reported against several classes.
+- All observers' other plants, or only the dominant observer's, if the
+  RQ3 candidate experiment above is run.
 
 ### Temporal Design (adopted)
 
