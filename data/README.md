@@ -191,8 +191,11 @@ obtained.
 
 ### QGIS overview (derived)
 
-- **File:** `interim/spatial/qgis_overview.gpkg`, to look at all the
-  cleaned data together in QGIS; not read by any notebook.
+- **File:** `interim/spatial/qgis/qgis_overview.gpkg`, to look at all
+  the cleaned data together in QGIS; not read by any notebook.
+  `interim/spatial/qgis/` holds every GeoPackage made only for visual
+  inspection in QGIS (not read back by code) — see also the
+  segmentation-mask sample below.
 - **Made by:** `notebooks/05_data_integration/qgis_overview.ipynb`.
 - **Layers (EPSG:3763):** `distrito_coimbra` (iNaturalist place 8422),
   `inat_dealbata` and `inat_outras_plantas` (the cleaned files in

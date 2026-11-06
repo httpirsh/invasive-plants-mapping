@@ -43,7 +43,7 @@
     um ponto por patch
     ([notebook](../notebooks/05_data_integration/segmentation_mask.ipynb))
   - [ ] Comparar visualmente as três candidatas no QGIS
-    (`data/interim/spatial/segmentation_mask_sample.gpkg` já tem as
+    (`data/interim/spatial/qgis/segmentation_mask_sample.gpkg` já tem as
     camadas `mask_cos`, `mask_tessera`, `mask_superpixels` e
     `sample_points`) e escolher — a contagem de píxeis sozinha não
     decide
