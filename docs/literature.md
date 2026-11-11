@@ -2,8 +2,8 @@
 
 A small set of directly relevant papers, **not** a systematic review.
 "Appears underexplored" claims reflect this reading list only and
-must be revisited after a broader search (see
-[Search Protocol](#search-protocol-planned)).
+must be revisited after a broader search (protocol in
+[`thesis/notes.md`](../thesis/notes.md#protocolo-de-pesquisa-da-literatura)).
 
 Several papers are now read in full (marked "Read" below); the rest
 still have summaries written with help from abstracts, publisher
@@ -22,8 +22,8 @@ Suggested reading order (papers that support the most decisions in
 [`methodology.md`](methodology.md) first): Ball 2026, Phillips 2009,
 Dimson 2023, Riveiro 2025, Gillespie 2024, Karasiak 2022; then
 Domingo 2023, Mouta 2021, Eskandari 2025, Martins 2016; then Brown
-2025, Feng 2025; then Zhu 2026, Yang 2026, the old-growth preprint;
-then Rivier 2023/2024, Raine et al. 2022, Liu et al. 2026, Zhang et
+2025, Feng 2025; then Zhu 2026, Yang 2026, Ratsakatika 2026, Meyer &
+Pebesma 2021; then Rivier 2023/2024, Raine et al. 2022, Liu et al. 2026, Zhang et
 al. 2025 (timberline) (segmentation-mask candidates); Zhang et al.
 2021 (WTS) and Wölk et al. 2026 lowest priority (unread/inaccessible,
 low confirmed relevance so far, not pursued further for now).
@@ -194,7 +194,7 @@ labels from points. GPS handling: keep only points with coordinate
 uncertainty ≤120 m, drop near-duplicates within 150 m; no snapping or
 correction of the coordinate itself. **Not a precedent for the
 "nearest vegetation area" rule** (see
-[`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction)):
+[`research_questions.md`](research_questions.md#prediction-task-adopted)):
 the point→pixel-neighbourhood link here is a fixed 256 m window
 around the point, not a rule that moves or expands the label based on
 what is actually at that location.
@@ -247,12 +247,12 @@ unpublished caveat above:
   instead of the exact pixel) — consistent with this thesis's choice
   to drop positional accuracy > 30 m (step 2 of the
   [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed))
-  and with the open patch-mask question in
-  [Other Plants as Classes](research_questions.md#other-plants-as-classes-adopted-direction).
+  and with the segmentation-mask question in
+  [Prediction Task](research_questions.md#prediction-task-adopted).
 - One observer made 85% of *A. dealbata* records — close to the
   dominant-observer bias found independently in this thesis's own
   pilot (83% overall, 85% in 2021–2025; see
-  [RQ3](research_questions.md#rq3--spatial-sampling-bias)), over a
+  [RQ3](research_questions.md#rq3--spatial-sampling-concentration)), over a
   larger area. If it is the same observer, that is independent
   support that the bias is not an artefact of the smaller pilot.
 - Points cluster along roads/trails, consistent with the bias axes
@@ -261,11 +261,9 @@ unpublished caveat above:
   sources used in this thesis's [Species Scope](research_questions.md#species-scope-proposed)
   work.
 - **Contrast:** proposes using other-plant observations as negative
-  evidence against *Acacia* (to push probabilities down). This is the
-  opposite of the target-group-background choice made in
-  [Other Plants as Classes](research_questions.md#other-plants-as-classes-adopted-direction),
-  where other-plant observations are kept as their own positive
-  classes, not treated as absences.
+  evidence against *Acacia* (to push probabilities down). This thesis
+  does not use other-plant observations at all: its negative side is a
+  uniform-random background, not claimed absences.
 
 ### Citizen science + invasive plants + deep learning
 
@@ -295,8 +293,9 @@ source overlap only moderately; combining both gives more complete
 estimates. Whether the same bias axes hold in Portugal is untested.
 
 Relevance to the expert-reference comparison in RQ1: citizen-science
-and professional data have *inverse* biases, so the expert upper
-bound is not bias-free either — it is biased differently.
+and professional data have *inverse* biases, so the expert end of
+the effort-reduction curve is not bias-free either — it is biased
+differently.
 
 ### Conventional invasive plant mapping
 
@@ -381,167 +380,67 @@ of species recorded by similar methods as background, since they
 share the same bias. Across 226 species, target-group background
 improved average performance for every modelling method tested,
 with the largest gains where the presence records were most biased.
-Basis for using other plants as classes in
-[`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction).
+The adopted background is uniform-random, which this paper argues against; it is
+kept on empirical grounds (step 7 of the
+[Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed)).
 
 ### One-class / positive-unlabeled classification
 
-> Literature search for the RQ1 one-class staging decision
-> (try true one-class/novelty detection first, presence-vs-background
-> as fallback — see
+> Search done for the RQ1 method choice. True one-class methods were
+> then tested and dropped in favour of presence-vs-background (see
 > [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)).
-> **All entries below come from search snippets, abstracts or
-> secondary/citing-paper summaries — no full text was read, and two
-> attempts to fetch full PDFs (MDPI) were blocked (HTTP 403). Treat
-> quantitative figures as needing verification before citing in the
-> thesis.**
+> **Every entry comes from search snippets, abstracts or citing-paper
+> summaries; no full text was read. Verify any figure before citing.**
 
-**Phillips et al. (2009)** (above) **is presence-*background*, not
-true one-class:** it needs background points to fit at all (a ratio of
-two densities, by its own formulation). Several remote-sensing papers
-below nonetheless call MaxEnt applications "one-class classification"
-— the field's terminology is inconsistent between "no background data
-at all" (true one-class/novelty detection, this thesis's first
-attempt) and "no *labelled negatives*, but still uses
-unlabelled/background data" (presence-background, PU-learning).
+Terminology is inconsistent in this literature: "one-class" is used
+both for methods with no background data at all (true one-class,
+novelty detection) and for methods with no *labelled negatives* that
+still use unlabelled or background data (presence-background,
+PU-learning). Phillips et al. (2009) and MaxEnt are the second kind.
 
-**Li & Guo (2010).** A maximum entropy approach to one-class
-classification of remote sensing imagery. *Int. J. Remote Sensing*.
-DOI: 10.1080/01431161003702245 — *Abstract via aggregator*
+- **Deng, Li, Liu, Guo & Newsam (~2018).** One-class remote sensing
+  classification: one-class vs. binary classifiers. *Int. J. Remote
+  Sensing*. DOI: 10.1080/01431161.2017.1416697. The closest to this
+  thesis's framing: under a limited labelling budget,
+  Presence-and-Background Learning beat both plain one-class SVM and
+  the binary classifiers tested. The advantage comes from using
+  unlabelled data, not from avoiding it.
+- **Skowronek, Asner & Feilhauer (2017).** Performance of one-class
+  classifiers for invasive species mapping using airborne imaging
+  spectroscopy. *Ecological Informatics*, 37, 66–76. DOI:
+  10.1016/j.ecoinf.2016.11.005. Two invasives, 1 m airborne data;
+  MaxEnt, biased SVM and BRT (all presence-background); overall
+  accuracy 72–88%.
+- **Li, Guo & Elkan (2011).** A Positive and Unlabeled Learning
+  Algorithm for One-Class Classification of Remote-Sensing Data. *IEEE
+  TGRS*, 49(2), 717–725. DOI: 10.1109/TGRS.2010.2058578. PU-learning
+  outperformed biased SVM and one-class SVM on two aerial scenes.
+- **Li & Guo (2010).** A maximum entropy approach to one-class
+  classification of remote sensing imagery. *Int. J. Remote Sensing*.
+  DOI: 10.1080/01431161003702245. Reports MaxEnt beating one-class
+  SVM; contradicted by a 2016 comparison in *Remote Sensing Letters*
+  (DOI: 10.1080/2150704X.2016.1265689), where biased SVM came first
+  and "even the best overall approach still performs poorly in a
+  significant number of tasks".
+- **Rapinel & Hubert-Moy (2021).** Systematic review of one-class
+  vegetation classification, 2013–2020, 136 articles. Content not
+  retrieved.
+- **Goldenrod (*Solidago*), Sentinel-2 vs. PlanetScope, Poland (2024;
+  title and authorship not confirmed).** Random Forest outperformed
+  one-class SVM by 1–15 percentage points on dense stands; a related
+  study reportedly found a drop for patchy vegetation, relevant here
+  because citizen-science presences are often isolated trees.
+- **Zhu, Samat, Li, Xu, Li & Li (2025).** Adversarial
+  Positive-Unlabeled Learning-Based Invasive Plant Detection in Alpine
+  Wetland Using Jilin-1 and Sentinel-2 Imageries. *Remote Sensing*,
+  17(6), 1041. DOI: 10.3390/rs17061041. No figures retrieved.
 
-Applies MaxEnt to a single target class in 0.3 m aerial photography;
-needs only target-class samples; reports MaxEnt beating one-class SVM.
-Still a presence-*background* method (MaxEnt), not zero-background.
-Contradicted by the 2016 *Remote Sensing Letters* comparison below.
-
-**Rapinel & Hubert-Moy (2021)** (name corrected — this entry was
-previously, wrongly, attributed to "Zhao & Zhong"; see
-[`thesis/notes.md`](../thesis/notes.md#baseline-do-modelo-de-ciência-cidadã-pode-ser-one-class-pergunta-sobre-os-classifica--0-sem-resposta-direta)).
-Systematic review, 2013–2020, 136 articles on one-class vegetation
-classification. Could not retrieve the accuracy-assessment section's
-actual content (403 on MDPI).
-
-**Skowronek, Asner & Feilhauer (2017).** Performance of one-class
-classifiers for invasive species mapping using airborne imaging
-spectroscopy. *Ecological Informatics*, 37, 66–76.
-DOI: 10.1016/j.ecoinf.2016.11.005 — *Abstract via aggregator*
-
-Two invasives (*Phalaris aquatica*, *Centaurea solstitialis*), Jasper
-Ridge CA, airborne imaging spectroscopy (1 m), not satellite. Compared
-MaxEnt, biased SVM and BRT — all presence-background/PU-style, not
-zero-background one-class. Overall accuracy 72–88%; MaxEnt and BRT
-slightly ahead of biased SVM.
-
-**Li, Guo & Elkan (2011).** A Positive and Unlabeled Learning
-Algorithm for One-Class Classification of Remote-Sensing Data. *IEEE
-TGRS*, 49(2), 717–725. DOI: 10.1109/TGRS.2010.2058578 — *Abstract via
-aggregator*
-
-PU-learning: trains on positive + unlabeled data, estimates the
-labelling probability, adjusts the decision threshold. Outperformed
-biased SVM, one-class SVM and a Gaussian domain descriptor on two
-high-resolution aerial scenes. Still uses unlabelled/background
-pixels — PU-learning, not zero-background.
-
-**Li, Guo & Elkan (2021).** Positive-and-background learning with
-constraints (PBLC), extending the PUL→PBL lineage above to
-case-control sampling. *IEEE JSTARS*. DOI: 10.1109/JSTARS.2020.3025451
-— *Metadata/abstract only*
-
-**Deng, Li, Liu, Guo & Newsam (~2018).** One-class remote sensing
-classification: one-class vs. binary classifiers. *Int. J. Remote
-Sensing*. DOI: 10.1080/01431161.2017.1416697 — *Abstract via
-aggregator*
-
-**The most directly relevant paper found to this thesis's exact
-framing** (fixed labelling effort, one-class vs. background-using
-methods): with *ample, complete* training data, binary classifiers
-generally win; but under a *fixed/limited labelling budget*,
-Presence-and-Background Learning (PBL — a PU-style method using
-abundant unlabelled pixels) consistently beat both plain one-class SVM
-and the binary classifiers tested (BP-ANN, SVM, maximum-likelihood).
-The advantage comes from exploiting unlabelled/background data, not
-from avoiding it — does not support a *zero*-background method.
-
-**"In-depth comparisons of MaxEnt, biased SVM and one-class SVM."**
-*Remote Sensing Letters*, Dec 2016. DOI: 10.1080/2150704X.2016.1265689
-— *Abstract via aggregator*
-
-Found biased SVM outperforming one-class SVM and MaxEnt overall —
-**contradicts Li & Guo (2010)'s ranking**; also notes "even the best
-overall approach still performs poorly in a significant number of
-tasks." A separate 2017 *Remote Sensing* paper on *Spartina
-alterniflora* reportedly found MaxEnt and biased SVM performing
-equally — cited only secondhand here, not verified.
-
-**Mack (2017).** Applied One-Class Classification of Remote Sensing
-Data. PhD dissertation, Freie Universität Berlin (advisors Waske,
-Schmidtlein) — *Metadata only*
-
-Reportedly finds MaxEnt's potential performance poorer than biased
-SVM, consistent with the 2016 comparison above.
-
-**Mack, Roscher & Waske (2014).** Can I Trust My One-Class
-Classification? *Remote Sensing*, 6(9), 8779 — *Abstract only; full
-text blocked (403 on MDPI)*
-
-Proposes visualising/interpreting one-class classifier outputs during
-processing rather than relying on a single accuracy number, because
-OCC is "uncertain and hard to fully automate" without complete
-validation data. A qualitative/diagnostic complement, not a metric —
-relevant to the evaluation problem below.
-
-**Goldenrod (*Solidago*) vs. Sentinel-2/PlanetScope, Kampinos National
-Park, Poland (2024; likely "Sentinel-2 Versus PlanetScope Images for
-Goldenrod Invasive Plant Species Mapping," *Remote Sensing* 16(4):636
-— title/authorship not independently confirmed).** — *Search summary
-only*
-
-Random Forest "consistently outperformed" One-Class SVM by 1–15
-percentage points (best F1 0.98, multitemporal Sentinel-2). Caveat:
-this RF advantage was for goldenrod-*dominated* stands; a related UAV
-study from the same group reportedly found a substantial drop for
-patchy/fragmented/transitional vegetation — relevant since this
-thesis's *A. dealbata* citizen-science presences are often isolated
-trees, not dense stands.
-
-**Zhu, Samat, Li, Xu, Li & Li (2025).** Adversarial Positive-Unlabeled
-Learning-Based Invasive Plant Detection in Alpine Wetland Using
-Jilin-1 and Sentinel-2 Imageries. *Remote Sensing*, 17(6), 1041.
-DOI: 10.3390/rs17061041 — *Abstract/snippet only*
-
-Target: *Pedicularis kansuensis*, Bayinbuluk Grassland, Xinjiang.
-Adversarial PU-learning (dual-branch discriminator); claimed to beat
-traditional PUL methods. No quantitative figures retrieved for this
-specific paper (an earlier, separate PUL study on the same grassland
-reported F1 0.70–0.94, Sentinel-2 beating PlanetScope).
-
-**itsdm** (CRAN R package, Lei Song/Lyndon Estes). Presence-only SDM
-via Isolation Forest (plus Extended Isolation Forest, SCiForest
-variants), with a built-in `evaluate_po()` presence-only evaluation
-function — *Package docs only; no methods paper found; `evaluate_po()`
-internals not confirmed*
-
-A ready-made implementation if Isolation Forest is the concrete
-one-class method tried.
-
-**Risk-calculus synthesis (my own reading of the above, not itself a
-citation):** across every empirical comparison found, a *true*,
-zero-background one-class method (plain one-class SVM, or Isolation
-Forest used as pure anomaly detection) was the worst or near-worst
-performer in every case found. No counter-example turned up in this
-search. This does not prove it will fail for *A. dealbata*
-specifically (none of these studies match this setup — frozen
-foundation-model embeddings, sparse noisy citizen-science presences,
-Portugal) but it means the literature gives no positive reason found
-so far to expect the true one-class method to win outright.
+**Synthesis (my reading):** in every empirical comparison found, a
+true zero-background one-class method was the worst or near-worst
+performer, with no counter-example. None of these studies matches this
+setup, but the thesis's own tests later agreed with them.
 
 ### Evaluating presence-only models without confirmed absences
-
-> Relevant regardless of which one-class formulation is used — this
-> is the original open question from the `classifica = 0` follow-up
-> (see
-> [`thesis/notes.md`](../thesis/notes.md#baseline-do-modelo-de-ciência-cidadã-pode-ser-one-class-pergunta-sobre-os-classifica--0-sem-resposta-direta)).
 
 **Hirzel, Le Lay, Helfer, Randin & Guisan (2006).** Evaluating the
 ability of habitat suitability models to predict species presences.
@@ -558,8 +457,7 @@ plant species (Swiss Alps) against AUC/Kappa-style metrics —
 moderately-to-strongly correlated with them, fairly insensitive to
 prevalence. **Still needs background points**: it avoids needing
 *labelled absences*, not background data entirely. Implemented in R:
-`enmSdmX::evalContBoyce`, `tidysdm::boyce_cont`, `itsdm::evaluate_po`
-(above).
+`enmSdmX::evalContBoyce`, `tidysdm::boyce_cont`.
 
 **Li & Guo (2014).** Positive-background learning F-measures (F-pb,
 F-cpb). *IEEE TGRS*, 52(8), 4621–4632. DOI: 10.1109/TGRS.2013.2283082
@@ -572,12 +470,10 @@ F-measure/kappa. A 2023 follow-up (Hainan University) extended the
 idea to impervious-surface mapping (WorldView-3, Landsat 8). Also
 needs background data — same caveat as the Boyce index.
 
-**No method was found in this search that evaluates a presence-only
-model without needing *any* background or unlabelled sample at all.**
-This matters directly for the RQ1 one-class staging decision: even a
-zero-background *training* method will likely still need background
-data to *evaluate* well — see "Em aberto" in
-[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
+**No method was found that evaluates a presence-only model without
+any background or unlabelled sample.** Even a zero-background training
+method needs background data to be evaluated, which is why the shared
+background pool exists.
 
 ### Spatial validation
 
@@ -657,7 +553,7 @@ regression only (classification not tested), Random Forest only,
 simulated data, nearest-point distance only, and the threshold "comes
 with reservations". Implemented in the R package `CAST`. Method in
 the proposed RQ3 redesign (to confirm with the supervisor) — see
-[`research_questions.md`](research_questions.md#rq3--spatial-sampling-bias).
+[`research_questions.md`](research_questions.md#rq3--spatial-sampling-concentration).
 
 **Applied here:** this project's own empirical variogram
 result and what it was used for (not a paper finding) is logged in
@@ -692,7 +588,7 @@ PDF: [`literature/rivier_2024_superpixel_query_points.pdf`](literature/rivier_20
 Recommended by the supervisor for the segmentation mask:
 a rule linking each citizen-science point to the nearest vegetation
 area, with several approaches to compare (see
-[`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction)).
+[`research_questions.md`](research_questions.md#prediction-task-adopted)).
 — *Read (full text)*
 
 Trains a full segmentation network (DeepLabV3/U-Net/FCN, not a
@@ -820,49 +716,6 @@ point→patch label propagation) from our three mask candidates. **Low
 relevance**; do not use beyond this one-line characterisation unless
 the full text is found later.
 
-### Land cover classification and plant traits
-
-**Di Gregorio & Jansen (2000).** Land Cover Classification System
-(LCCS): Classification Concepts and User Manual. FAO, Rome. Appendix
-A read (fao.org/4/X0596E). — *Read (appendix)*
-
-The dominant life form is decided by the "uppermost canopy" layer;
-woody plants above 5 m are trees, below 5 m shrubs; sparse trees over
-a closed herbaceous layer (tree savannah) are not the dominant life
-form. Basis for keeping herbaceous iNaturalist observations only
-where herbs are the top layer, and for keeping the tallest group when
-several other plants share a pixel (see
-[`research_questions.md`](research_questions.md#other-plants-as-classes-adopted-direction)).
-
-**Weigelt, König & Kreft (2020)**, *J. Biogeography* 47, 16–43;
-**Denelle, Weigelt & Kreft (2023)**, *Methods Ecol. Evol.* 14,
-2738–2748. GIFT, Global Inventory of Floras and Traits. — *Database
-used; papers not read in full*
-
-Growth form, climber, maximum height and aquatic traits for most
-vascular plants, through an API. Used to group the other plants into
-classes (see `data/README.md`).
-
-**EPPO (2024).** Pest risk analysis for *Hakea sericea* and *Hakea
-decurrens* subsp. *physocarpa*. — *Search summary only, to read*
-
-All sampled invasive *Hakea* populations in Portugal are *H.
-decurrens* subsp. *physocarpa*, long recorded as *H. sericea*. Basis
-for counting it as the *H. sericea* of the national invasive list.
-
-**Wolf et al. (2022).** Citizen science plant observations encode
-global trait patterns. *Nature Ecology & Evolution* 6, 1850–1859. —
-*Abstract only*
-
-Trait maps from iNaturalist observations agree with vegetation plots
-up to r = 0.69, best where observations are dense and in biomes *not
-dominated by trees*. Consistent with citizen science under-recording
-the canopy layer.
-
-**Searched, not found:** no study handling understory
-citizen-science observations when using them to label satellite
-pixels. Possible methodological contribution (see Contribution).
-
 ## Data Sources Found in the Literature Search
 
 Not papers, but relevant:
@@ -926,7 +779,8 @@ Three specific questions not answered by any of the above:
 1. **Do foundation models amplify or mitigate citizen-science spatial
    bias** compared with conventional features? (RQ3)
 2. **How do foundation models behave when citizen-science data are
-   reduced by a documented filter** (oldest observations first) rather
+   reduced by a documented filter** (observations furthest from the
+   imagery year first) rather
    than at random? Existing label-efficiency work uses random
    reduction only (Ball 2026). (RQ2)
 3. **How much is lost by training on citizen science instead of
@@ -940,7 +794,7 @@ foundation models and citizen science.** Not "apply TESSERA to
 invasive plants", but a controlled study of how foundation-model
 representations behave under realistic citizen-science limitations
 (sparsity, spatial bias), against a conventional satellite baseline
-and an expert-reference upper bound.
+and increasing amounts of expert reference data.
 
 Two parts:
 
@@ -948,48 +802,11 @@ Two parts:
    citizen-science points into satellite reference data (the
    proposal's first objective; see
    [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed)) —
-   each step documented and justified from literature or data; the
-   quantitative cumulative ablation that would measure each step's
-   effect is an optional stretch goal, not a committed deliverable
-   (scope-reduction decision, 2026-11-10). One step with no precedent
-   found: matching what citizen scientists photograph (often
-   understory plants) to what the satellite sees (the top layer),
-   using plant traits and land cover.
+   each step documented and justified from literature or data. A
+   cumulative ablation measuring each step's effect is an optional
+   stretch goal. Candidate step with no precedent found: the
+   segmentation mask, which extends a citizen-science point to the
+   patch around it using frozen embeddings (see
+   [Prediction Task](research_questions.md#prediction-task-adopted)).
 2. **Empirical:** RQ1–RQ3 in
    [`research_questions.md`](research_questions.md).
-
-## Search Protocol (planned)
-
-**For the defense, not the manuscript:** this protocol is prep for
-explaining verbally how the literature was searched, if asked — the
-January report's related-work chapter follows the two reference
-examples' narrative-by-subtopic structure instead, with no systematic
-protocol written into the text, see
-[`thesis/notes.md`](../thesis/notes.md#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável).
-
-To replace "appears underexplored" with a documented claim:
-
-1. **Scopus and Web of Science**, query saved with date and result
-   counts:
-   ```text
-   ("invasive plant*" OR "alien plant*" OR "invasive species")
-   AND ("remote sensing" OR "Sentinel-2" OR "satellite")
-   AND ("citizen science" OR "iNaturalist" OR "crowdsourc*" OR "GBIF"
-        OR "foundation model*" OR "embedding*")
-   ```
-   Also run the pairwise combinations (foundation models + species;
-   citizen science + remote sensing) to show the three-way
-   intersection is small.
-2. **arXiv and bioRxiv** for 2025–2026: "AlphaEarth", "TESSERA",
-   "satellite embedding", combined with "species", "iNaturalist",
-   "invasive". Most closely related work is still preprints.
-3. **Screening:** title/abstract → full text, with counts at each
-   stage (PRISMA-style flow figure for the intermediate report).
-4. **Snowballing:** backward (references) and forward (citations) for
-   Ball 2026, Brown 2025, Feng 2025, Gillespie 2024, Dimson 2023.
-5. **Alerts:** Google Scholar alerts for "TESSERA embeddings",
-   "AlphaEarth" and "iNaturalist remote sensing"; follow the
-   Cambridge TESSERA group.
-6. **Extraction table** per paper: task, labels (curated / citizen
-   science), representation, validation (random / spatial),
-   bias treated?, temporal alignment treated?

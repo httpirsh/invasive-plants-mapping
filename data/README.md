@@ -92,7 +92,7 @@ obtained.
   buffer (own choice, no literature value found for the exact radius —
   see
   [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)).
-  Not COS-stratified (ruled out 2026-11-06, supervisor). Made by
+  Made by
   [`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb),
   regenerated only if this file is missing.
 - **Status:** first version of the background pool meant to be shared
@@ -203,62 +203,30 @@ obtained.
   expert polygons, with `use`), `areas_ardidas` (ICNF 1975–2025
   burned areas that intersect the district).
 
-### iNaturalist other plants, all years (Coimbra pilot)
+### Datasets with no active use
 
-Other-plant classes (see `docs/research_questions.md`).
+Kept on disk, not used by any current experiment. All were downloaded
+and processed by
+`notebooks/02_citizen_science/other_plants_observations.ipynb`, which
+documents every step.
 
-- **Source:** iNaturalist API (`api.inaturalist.org/v1/observations`)
-- **Access date:** 2026-10-17 (2021–2025); 2026-10-20 (other ranges)
-- **Query filters:** `place_id=8422` (Coimbra district), `taxon_id=47126`
-  (Plantae), `without_taxon_id=47452` (excluding *Acacia*), all
-  quality grades. Downloaded in three date ranges: `d2=2020-12-31`,
-  `d1=2021-01-01` + `d2=2025-12-31`, `d1=2026-01-01`.
-- **Temporal coverage:** 1976–2026 (observations without a date are
-  not returned by the date filters).
-- **License:** mixed, per observation (`license_code` column).
-- **Result:** 120,479 observations (11,924 before 2021; 85,543 in
-  2021–2025; 23,012 in 2026); 9,903 have obscured coordinates (user
-  or taxon geoprivacy), listed in the matching `*_obscured_ids.csv`
-  files and excluded in analysis.
-- **Files:** `raw/citizen_science/inaturalist_plantae_no_acacia_coimbra_{before_2021,2021_2025,from_2026}.csv`
-  and `..._obscured_ids.csv` per range. Also
-  `raw/citizen_science/inaturalist_taxa_ancestry.csv`: the iNaturalist
-  ancestors (`ancestor_ids`) of each taxon in the cleaned file, from
-  `api.inaturalist.org/v1/taxa`, accessed 2026-10-30; used to drop
-  non-vascular plants.
-- **Preprocessing:** none — one row per observation, same columns as
-  the *Acacia* pilot. Downloaded by
-  `notebooks/02_citizen_science/other_plants_observations.ipynb`.
-
-### GIFT plant traits (growth form, climber, height, aquatic)
-
-- **Source:** GIFT, Global Inventory of Floras and Traits, version 3.2
-  (2024-06-13), API `https://gift.uni-goettingen.de/api/extended/index3.2.php`
-- **Access date:** 2026-10-30
-- **References:** Weigelt, König & Kreft (2020), *J. Biogeography* 47,
-  16–43; Denelle, Weigelt & Kreft (2023), *Methods Ecol. Evol.* 14,
-  2738–2748. The GIFT site asks to cite the version used and the 2020
-  paper.
-- **License:** see GIFT terms; some contributors restrict access.
-- **Files:** `external/auxiliary/gift/gift_species.csv` (372 098
-  species: `work_ID`, `work_species`) and `gift_trait_<id>.csv` for
-  traits 1.2.1 (growth form: herb, shrub, tree, other), 1.4.1
-  (climber), 1.6.2 (maximum height, m), 1.7.1 (aquatic); columns
-  `work_ID`, `trait_value`, `agreement`.
-- **Preprocessing:** none. Downloaded and used in step 11 of
-  `notebooks/02_citizen_science/other_plants_observations.ipynb`.
-
-### National list of invasive species (Decreto-Lei 92/2019, Annex II)
-
-- **Source:** ICNF, "Lista Nacional de Espécies Invasoras" (Annex II
-  of Decreto-Lei n.º 92/2019, 10 July), PDF
-  https://www.icnf.pt/api/file/doc/cf455e5a84ab1d96
-- **Access date:** 2026-10-30
-- **File:** `external/auxiliary/icnf_invasive_list/lista_nacional_especies_invasoras_anexo_II_DL92_2019.pdf`
-- **Notes:** species marked "\*" are invasive only in Madeira and are
-  not used. 113 plant names for the mainland are read from the
-  "Plantas" section in step 11 of
-  `notebooks/02_citizen_science/other_plants_observations.ipynb`.
+- **iNaturalist other plants (Coimbra, 1976–2026):** iNaturalist API,
+  accessed 2026-10-17 and 2026-10-20; `place_id=8422`,
+  `taxon_id=47126`, `without_taxon_id=47452`, all quality grades;
+  mixed licenses (`license_code`). 120 479 observations in
+  `raw/citizen_science/inaturalist_plantae_no_acacia_coimbra_*.csv`,
+  with `*_obscured_ids.csv` and `inaturalist_taxa_ancestry.csv`
+  (accessed 2026-10-30). Cleaned and grouped copy (13 554
+  observations):
+  `interim/citizen_science/inat_other_plants_clean.csv`.
+- **GIFT plant traits, version 3.2:** API
+  `https://gift.uni-goettingen.de/api/extended/index3.2.php`, accessed
+  2026-10-30; cite Weigelt, König & Kreft (2020) and the version used.
+  Files in `external/auxiliary/gift/`.
+- **National list of invasive species (Decreto-Lei 92/2019, Annex
+  II):** ICNF PDF, https://www.icnf.pt/api/file/doc/cf455e5a84ab1d96,
+  accessed 2026-10-30. File in
+  `external/auxiliary/icnf_invasive_list/`.
 
 ### ICNF burned areas, 1975–2025
 
@@ -281,8 +249,8 @@ Other-plant classes (see `docs/research_questions.md`).
 
 ### *Acacia dealbata* expert reference polygons
 
-Expert reference data for the RQ1 upper bound (see
-`docs/research_questions.md`).
+Expert reference data for the RQ1 effort-reduction curve (see
+[`docs/research_questions.md`](../docs/research_questions.md#rq1--foundation-models-vs-conventional-approaches)).
 
 - **Source:** sent by the supervisor by email. Made from field visits
   and manual visual interpretation of OrtoSat 2023 (30 cm). The small
@@ -307,36 +275,24 @@ Expert reference data for the RQ1 upper bound (see
 
 ### iNaturalist observations, cleaned (derived)
 
-- **Files:** `interim/citizen_science/inat_dealbata_clean.csv` (3 000
-  *A. dealbata*) and `interim/citizen_science/inat_other_plants_clean.csv`
-  (13 554 other plants).
+- **File:** `interim/citizen_science/inat_dealbata_clean.csv` (3 000
+  *A. dealbata* presences).
 - **Made by:** part 2 of
-  `notebooks/02_citizen_science/acacia_observations.ipynb` and
-  `notebooks/02_citizen_science/other_plants_observations.ipynb`.
+  `notebooks/02_citizen_science/acacia_observations.ipynb`.
 - **Steps:** dropped observations without a date and with obscured
   coordinates; main observer anonymised (`observer` = "Observer A" /
   "Others", no username kept); `burned` flag (fire between the
   observation and 2023, ICNF) and `burned_same_year` (ambiguous
-  cases). *Acacia* file: only *A. dealbata* kept (species and
-  subspecies) (2026-10-29). Both files: only research grade
-  (2026-10-29). The other-plants download already excludes the whole
-  genus *Acacia*. Both files: positional accuracy above 30 m dropped;
-  missing values kept and marked (`accuracy_missing`) (2026-10-29).
-  Same 10 m pixel (`pixel`, EPSG:32629 grid, `src/grid.py`): one
-  presence per pixel, the closest in date to 2023 (`n_obs_in_pixel`
-  keeps how many there were); other plants in a presence's pixel
-  dropped (2026-10-29). Other-plants file (2026-10-30, to confirm
-  with the supervisor): non-vascular plants dropped; species grouped
-  into 8 classes (`group`) from GIFT growth forms, the national
-  invasive list and the iNaturalist taxonomy; COS 2023 class added
-  (`cos2023`, level-4 code); herbaceous plants kept only in COS
-  classes where herbs are the top layer; one observation per pixel,
-  the tallest group first, then the closest in date to 2023.
+  cases); only *A. dealbata* kept (species and subspecies); only
+  research grade; positional accuracy above 30 m dropped, missing
+  values kept and marked (`accuracy_missing`); same 10 m pixel
+  (`pixel`, EPSG:32629 grid, `src/grid.py`): one presence per pixel,
+  the closest in date to 2023 (`n_obs_in_pixel` keeps how many there
+  were).
 - **Columns:** `id`, `observed_on`, `year`, `taxon_id`, `taxon_name`,
   `taxon_rank`, `latitude`, `longitude`, `positional_accuracy`,
   `quality_grade`, `accuracy_missing`, `observer`, `pixel`,
-  `n_obs_in_pixel` (presences only), `group` and `cos2023` (other
-  plants only), `burned`, `burned_same_year`.
+  `n_obs_in_pixel`, `burned`, `burned_same_year`.
 
 ### Expert reference polygons, cleaned (derived)
 
@@ -367,9 +323,8 @@ Expert reference data for the RQ1 upper bound (see
 | **Sentinel-1** | Possible second conventional sensor (RQ1–RQ3) | Not obtained |
 | **OrtoSat 30 cm** (Pleiades-Neo, RGB+NIR, continental Portugal, Apr–Oct 2023, CC BY 4.0) | Possible validation reference | Full resolution restricted to public-administration entities; only WMS confirmed public. University access unconfirmed |
 | **AlphaEarth embeddings** | Second foundation model (RQ1) | Access terms unconfirmed |
-| **Roads/trails, accessibility** (e.g. OpenStreetMap) | RQ3 bias covariates | Not downloaded |
 | **CAOP administrative boundaries** | Study-area clipping | Not downloaded (bounding boxes used) |
-| **A second, distinct region** | RQ3 geographic comparison | Candidate found (2026-11-04), not chosen — see below |
+| **A second, distinct region** | Only if the RQ3 design to confirm is not accepted | Candidate found, not chosen — see below |
 
 Scope (proposed, not decided): start with Coimbra as a pilot, extend
 to continental Portugal once the pipeline works. GBIF (which
@@ -378,32 +333,15 @@ iNaturalist API.
 
 ### Candidate second region for RQ3 (found, not chosen)
 
-Checked 2026-11-04, while the segmentation-mask work took priority in
-`docs/todo.md`: the 398 `classifica = 1` expert polygons outside tile
-TNE (`raw/expert_reference/notTNE_18MAY2026_6.gpkg`) are not spread
-evenly — DBSCAN (5 km radius, min. 5 polygons) on their centroids
-finds three clusters of 165 polygons total within ~15 km of each
-other, reverse-geocoded (Nominatim/OSM) to the Covilhã–Fundão area,
-Castelo Branco district (MGRS tile **29TPE**, adjacent to Coimbra's
-29TNE — confirmed via an Earth Search STAC point query). A quick
-iNaturalist bounding-box count (39.95–40.40°N, -7.60–-7.30°E, not yet
-cleaned the way the Coimbra pilot was) found **57 research-grade
-*A. dealbata* observations** there (Coimbra pilot has 3 000 after
-cleaning, so this is a much smaller pool) and >10 000 other-plant
-observations.
-
-This is a real, data-backed candidate — expert ground truth and some
-citizen-science presence both exist, in a different MGRS tile — but it
-is not a decision: the citizen-science pool is small, nothing has been
-cleaned or downloaded there the way the Coimbra data was, and RQ3's
-design ("train with all/capped/without the dominant observer, test on
-other observers' records and regions") assumed a test region with its
-own citizen-science records to hold out, which 57 observations may or
-may not support. Picking the actual second region is the supervisor's
-call (he supplied the expert data and knows this area), so this is
-raised as a question in
-[`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md)
-rather than decided here.
+Checked 2026-11-04. The 398 `classifica = 1` expert polygons outside
+tile TNE (`raw/expert_reference/notTNE_18MAY2026_6.gpkg`) include
+three clusters of 165 polygons in total, within about 15 km of each
+other, in the Covilhã–Fundão area (Castelo Branco district, MGRS tile
+29TPE; DBSCAN on centroids, 5 km radius, min. 5 polygons). A quick
+iNaturalist count in that bounding box (39.95–40.40°N, -7.60–-7.30°E,
+not cleaned) found 57 research-grade *A. dealbata* observations.
+Nothing was downloaded or cleaned there. Queued as a question in
+[`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md).
 
 ## Template
 

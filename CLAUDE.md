@@ -55,7 +55,7 @@ is a bug to fix, not a convenience. This is the single reference for
 |---|---|---|---|
 | `README.md` | Human-facing project overview (for anyone opening the repo, not just me) | Research question (one line), project structure, setup steps | Design reasoning, decisions, tasks, literature — link to `docs/` |
 | `CLAUDE.md` (this file) | My own operating instructions | Conventions, workflow rules, this file-purpose table | Research content, decisions, tasks |
-| `docs/research_questions.md` | Current state of the RQs and shared cross-RQ design | Adopted/open status per item, the rule/spec itself, resulting counts needed to read the pipeline, bare citation names | Full reasoning or justifying numbers (→ `thesis/notes.md`), dataset provenance (→ `data/README.md`), a paper's findings beyond its name (→ `docs/literature.md`) |
+| `docs/research_questions.md` | How the current RQs and the shared cross-RQ design work, and nothing else | Adopted/open status per item, the rule/spec itself, resulting counts needed to read the pipeline, bare citation names | Past or superseded versions and anything dropped (→ `thesis/notes.md`), full reasoning or justifying numbers (→ `thesis/notes.md`), dataset provenance (→ `data/README.md`), a paper's findings beyond its name (→ `docs/literature.md`) |
 | `docs/methodology.md` | Current state of methodological questions not yet tied to one RQ | Same as above: short state + bare citations | Same exclusions as above |
 | `docs/literature.md` | The literature review | One summary per paper (what it found, how it's used), the gap, the contribution | Decision reasoning that isn't about the paper itself (→ `thesis/notes.md`) |
 | `docs/meetings/YYYY-MM-DD.md` | Chronological record of one supervisor meeting or message exchange | Questions asked and answers received, in the order they happened | Tasks that follow from an answer (→ `docs/todo.md` once settled), the full decision reasoning (→ `thesis/notes.md`) |
@@ -71,22 +71,26 @@ Three more rules that follow from this:
 - If the same fact would need to change in two files when something
   changes, it is in the wrong place — move it to its one owning file
   and replace the other copy with a link.
-- **When a design item in `docs/research_questions.md` or
-  `docs/methodology.md` is superseded or changes, edit it in place —
-  don't leave the old description narrated in full "for completeness."**
-  Replace it with the current state, a one-line superseded note, and a
-  link to the full reasoning in `thesis/notes.md` (already recorded
-  there per the Decision Log rule). These two files hold current
-  status, not a run log: don't let a research question's write-up
-  accumulate every experiment's numbers and interpretation over
-  time — state the current result in one or two sentences and link to
-  `thesis/notes.md` and the notebook for the rest. When making this
-  kind of update, grep the whole file for every other mention of the
-  same item (the summary table at the top, cross-references from other
-  sections) and update all of them in the same pass — a superseded
-  design left intact in one spot while "superseded" is written in
-  another is the actual failure mode to avoid, not just forgetting the
-  word "superseded" itself.
+- **`docs/research_questions.md` and `docs/methodology.md` describe
+  only how the questions and the design work now.** No past versions,
+  no "superseded", "dropped", "rejected" or "previously" notes, no
+  sections kept for something that is no longer used, and no history
+  of how an item got to its current form. When an item changes, replace
+  it in place and delete the old text; the old version and the
+  reasoning for the change belong only in `thesis/notes.md` (Decision
+  Log rule). The same applies to results: state the current result in
+  one or two sentences and link to `thesis/notes.md` and the notebook,
+  never a run log of every experiment.
+  - There is one version of each item. When I adopt a new wording or
+    design that the supervisor has not answered yet, it replaces the
+    old one here, marked "to confirm with the supervisor"; the version
+    he approved stays recorded in `thesis/notes.md` and in the meeting
+    queue.
+  - When making this kind of update, grep the whole file for every
+    other mention of the same item (the summary table at the top,
+    cross-references from other sections) and update all of them in
+    the same pass, then grep for leftover history words (superseded,
+    dropped, rejected, abandoned, no longer, previously, formerly).
 - `README.md` and `CLAUDE.md` both describe the top-level structure
   for different audiences (human vs. me); `README.md` is the source —
   `CLAUDE.md` does not repeat the folder tree, only how I should use
@@ -311,16 +315,7 @@ hipóteses"); it is a writing guide, not a source to cite.
   objectives written in the past tense.
 
 The current formulation lives in
-[`docs/research_questions.md`](docs/research_questions.md#proposed-formulation-question-objectives-hypotheses).
-
-## Current Stage
-
-Initial setup and exploration. Priorities, in order: understand the
-problem and literature → understand the citizen science data →
-understand the satellite data → integrate the two → establish a
-simple baseline → investigate foundation models → design controlled
-experiments. Do not skip ahead to a final model before earlier stages
-are understood.
+[`docs/research_questions.md`](docs/research_questions.md#main-question-and-objectives).
 
 ## When Helping
 
@@ -331,6 +326,10 @@ are understood.
   the most sophisticated option is not automatically the best choice.
 - Don't fabricate citations or paper results; distinguish established
   findings from your own suggestions.
+- Do not skip ahead to a final model before the earlier stages
+  (data, baseline, validation) are understood. The current state of
+  the work is in `docs/todo.md` and `docs/research_questions.md`, not
+  here.
 - Before a substantial change: check the current repository state and
   relevant docs first, avoid duplicating existing functionality, and
   make the smallest sensible change.
