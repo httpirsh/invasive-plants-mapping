@@ -5,14 +5,17 @@ A small set of directly relevant papers, **not** a systematic review.
 must be revisited after a broader search (see
 [Search Protocol](#search-protocol-planned)).
 
-No paper has been read in full yet. All summaries were written with
-help from abstracts, publisher pages and quick skims, and must be
-checked against the paper before citing details in the thesis. Each
-paper has a status:
+Several papers are now read in full (marked "Read" below); the rest
+still have summaries written with help from abstracts, publisher
+pages and quick skims only, and must be checked against the paper
+before citing details in the thesis. Each paper has a status:
 
+- **Read** — full text read, summary confirmed against it.
 - **To read** — summary not yet confirmed by reading the paper.
 - **To find** — only seen in a reference list; the paper itself has
   not been located.
+- **Not read** — full text located but inaccessible (e.g. paywalled or
+  blocked); summary is from a secondary source only, not to be cited.
 
 Suggested reading order (papers that support the most decisions in
 [`research_questions.md`](research_questions.md) and
@@ -20,7 +23,10 @@ Suggested reading order (papers that support the most decisions in
 Dimson 2023, Riveiro 2025, Gillespie 2024, Karasiak 2022; then
 Domingo 2023, Mouta 2021, Eskandari 2025, Martins 2016; then Brown
 2025, Feng 2025; then Zhu 2026, Yang 2026, the old-growth preprint;
-then Rivier 2023/2024.
+then Rivier 2023/2024, Raine et al. 2022, Liu et al. 2026, Zhang et
+al. 2025 (timberline) (segmentation-mask candidates); Zhang et al.
+2021 (WTS) and Wölk et al. 2026 lowest priority (unread/inaccessible,
+low confirmed relevance so far, not pursued further for now).
 
 ## Papers
 
@@ -123,15 +129,31 @@ Random forests on AlphaEarth embeddings for irrigated cropland (China,
 USA). Reported (by a citing paper) as high accuracy with stable
 transfer between years but weaker generalisation across regions.
 
-**Anonymous / authors to check (2026).** Geospatial embeddings detect
-old-growth forests but buffered spatial validation narrows their
-advantage over Sentinel features. arXiv:2609.28194. — *To read*
+**Ratsakatika, Zotta, Keshav & Lines (2026).** Geospatial embeddings
+detect old-growth forests but buffered spatial validation narrows
+their advantage over Sentinel features. arXiv:2609.28194 (preprint,
+v1, 23 Sep 2026). — *Abstract and the area-of-applicability sections
+(2.9, 3.5, 4.6) read; the rest not yet*
 
-From the title: with buffered spatial validation, the embedding
-advantage over Sentinel features narrows. **Priority read for RQ3 and
-the validation design** — it is the closest existing result to the
-question of whether foundation-model gains survive spatial
-separation.
+Old-growth forest mapping over 211 893 ha of Romania's Southern
+Carpathians, expert-informed labels, AlphaEarth, TESSERA v2 and
+Sentinel-1/2 features added to a topographic/access baseline,
+spatially blocked validation with and without 10 km train–test
+buffers. Unbuffered, TESSERA reaches PR-AUC 0.84 and beats
+Sentinel-1/2 by +0.08 [+0.05, +0.11]; with a 10 km buffer the
+advantage narrows to +0.04 [−0.01, +0.11], consistent with no
+difference. The closest existing result to the question of whether
+foundation-model gains survive spatial separation.
+
+Also computes the area of applicability (Meyer & Pebesma, 2021 — see
+[Spatial validation](#spatial-validation)) for its deployed model:
+98.4% of forest inside the study area is within it, 65.0% across the
+whole Carpathians, and the area outside is read as where new labels
+would contribute most. Done for one model only, not compared between
+feature sets, and the authors state that applicability "refers to
+feature-space support rather than model accuracy, which was not
+tested outside the AOI or verified in the field" — the part a test
+against independent reference data would add.
 
 ### EO foundation models in related applications
 
@@ -610,6 +632,33 @@ holdout) was at least as robust as buffered leave-one-out, which was
 comparatively sensitive to the buffer size chosen. Introduces the R
 package `spatialsample`.
 
+**Meyer & Pebesma (2021).** Predicting into unknown space? Estimating
+the area of applicability of spatial prediction models. *Methods in
+Ecology and Evolution*, 12(9), 1620–1633. DOI:
+[10.1111/2041-210X.13650](https://doi.org/10.1111/2041-210X.13650)
+(journal details from a library listing, not checked on the
+publisher) — *arXiv version (2005.07939) read through an automated
+text extraction, not page by page*
+
+Defines a dissimilarity index (DI): distance in predictor space from a
+location to its nearest training point, with predictors standardised
+and weighted by variable importance, divided by the mean pairwise
+distance among training points; for training points, the nearest
+point outside their own cross-validation fold. The area of
+applicability (AOA) is where DI stays below a threshold taken from
+the training data's own cross-validated DI. Tested on simulated
+responses over Europe (Random Forest, 19 bioclimatic predictors),
+including a spatially clustered training scenario with
+leave-cluster-out validation: inside the AOA, prediction error is
+comparable to the cross-validation error; outside it is considerably
+higher (case study RMSE 0.07 inside vs. 0.38 outside), and DI
+correlates with true absolute error (r = 0.71). Stated limits:
+regression only (classification not tested), Random Forest only,
+simulated data, nearest-point distance only, and the threshold "comes
+with reservations". Implemented in the R package `CAST`. Method in
+the proposed RQ3 redesign (to confirm with the supervisor) — see
+[`research_questions.md`](research_questions.md#rq3--spatial-sampling-bias).
+
 **Applied here:** this project's own empirical variogram
 result and what it was used for (not a paper finding) is logged in
 [`thesis/notes.md`](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km),
@@ -669,9 +718,11 @@ light-classifier approach adopted here, see
 Strongly Supervised Learning Framework for Remote Sensing Land Cover
 Classification Using Segmentation Models. *Remote Sensing*, 13(3),
 394. DOI: [10.3390/rs13030394](https://doi.org/10.3390/rs13030394)
-— *Not read (full text blocked on MDPI, HAL and ResearchGate mirrors;
-characterisation below is from a search-engine summary only, not
-verified first-hand — do not cite its numbers)*
+— *Not read (full text blocked on MDPI, HAL — hal-03717196, behind a
+bot-protection wall — and ResearchGate mirrors, confirmed still
+blocked on a second attempt; characterisation below is from a
+search-engine summary only, not verified first-hand — do not cite its
+numbers)*
 
 Reportedly uses SVM-labelled high-confidence pixels as seeds, then
 seeded region growing plus a fully-connected CRF to iteratively grow
@@ -679,6 +730,95 @@ the labelled set, validated on Sentinel-2 imagery. Potentially another
 candidate for the patch-mask rule (region growing from a point,
 analogous to growing from a TESSERA-embedding seed), but needs the
 actual text read before it can ground anything.
+
+**Zhang, Kumar, Hoffman, Ivanov, Wang, Sheshukov, Zhou, Montesano &
+Liu (2025).** A Region-Growing Segmentation Approach to Delineating
+Timberline from Satellite-Derived Tree Fractional Cover Products.
+*Remote Sensing*, 17(12), 2002.
+DOI: [10.3390/rs17122002](https://doi.org/10.3390/rs17122002) —
+*Read (full text, open access)*
+
+Found while checking a candidate title; no relation to Zhang, Tang,
+Corpetti & Zhao (2021) above beyond a shared surname. Seeded region
+growing over a single satellite-derived raster band (tree fractional
+cover, CGLS, 100 m): seeds are pixels representative of each
+continuous forest patch (densest cover or patch boundary), the region
+grows by a fixed global threshold (fCover > 0.3), and the output
+boundary is the timberline. **The strongest accessible precedent found
+so far for candidate 1 (region growing)** — a real, read, open-access
+case of seeded region growing delineating vegetation extent from a
+satellite product, replacing Zhang et al. (2021) above as the live
+anchor for this candidate, which stays unread/blocked. Not a perfect
+fit: grows over one interpretable scalar band with a fixed threshold,
+not high-dimensional embeddings with a similarity-to-seed criterion,
+and has no sparse point-label or citizen-science-noise angle at all —
+so it supports the general technique (region growing to delineate
+vegetation extent from satellite data), not our specific point-label
+setting.
+
+**Raine, Marchant, Kusy, Maire & Fischer (2022).** Point Label Aware
+Superpixels for Multi-species Segmentation of Underwater Imagery.
+*IEEE Robotics and Automation Letters*, 7(3), 8291–8298.
+DOI: [10.1109/LRA.2022.3187836](https://doi.org/10.1109/LRA.2022.3187836),
+arXiv:2202.13487. — *Read (full text, HTML)*
+
+Found searching for papers citing Rivier et al. (2024) /
+addressing the same problem, in response to the supervisor's "and
+similar works" pointer (no second direct remote-sensing precedent for
+superpixel label propagation turned up this way — see Wölk et al.
+below). **Not remote sensing** — underwater photo-quadrats of coral,
+not satellite imagery — but a closer analogue than Rivier on one axis:
+it is **species-level**, propagating sparse ecologist point labels to
+multi-species segmentation, the same structure as our *A. dealbata*
+point-to-patch problem. Superpixels are computed on features from a
+Superpixel Sampling Network encoder, not raw pixels; their own ablation
+shows feature-based superpixels clearly beat raw-LAB ones (89.6–92.6 vs.
+64.1 pixel accuracy) — direct support for building superpixels on
+TESSERA embeddings rather than raw Sentinel-2 bands, our candidate 2.
+Unlabeled superpixels take the class of the **most feature-similar
+labeled superpixel**, not masked out of the loss as in Rivier — a
+different, explicit design choice to consider instead of just
+inheriting Rivier's rule. Point density tested (200–300/image) is still
+far above our few citizen-science points per tile, same gap as Rivier.
+Explicitly notes prior point-supervision work "assumes points lie
+centrally within objects" — a caveat directly relevant to citizen-science
+points, which are often off-target (phone GPS near a road or trail, not
+the plant itself).
+
+**Liu, Wang, Xu, Shi & Xing (2026).** Tighnari v2: Mitigating Label
+Noise and Distribution Shift in Multimodal Plant Distribution
+Prediction via Mixture of Experts and Weakly Supervised Learning.
+arXiv:[2602.08282](https://arxiv.org/abs/2602.08282). Experiments on
+GeoLifeCLEF 2025 (11 255 species). — *Read (full text, HTML)*
+
+Found searching for a precedent for candidate 3 (COS-polygon label
+extension). Pools *multiple* presence-only point records that fall
+inside the same fixed 640 m × 640 m Sentinel patch as joint labels for
+that patch — the mirror operation of our rule (we extend *one* point's
+label outward to an existing polygon; they pool *many* points' labels
+inward onto a fixed grid cell). Confirms area-based aggregation of
+sparse presence-only points against satellite imagery is an active,
+current technique (2026) in this general problem family, but is **not
+a direct precedent** for extending a label via an independent,
+pre-existing auxiliary land-cover polygon (as opposed to a fixed grid
+or a model-derived region) — reinforces, rather than changes, what
+`research_questions.md` already says about candidate 3 being a
+possible contribution, not an applied practice.
+
+**Wölk, Degenhardt, Hellmundt & Fu (2026).** Uncertainty-Aware
+Annotation for Reliable Tree Cover Monitoring from Satellite Imagery.
+ACM GoodIT 2026 (Best Paper Award), Madagascar tree-cover case study.
+— *To find (only a university press release found; no PDF or DOI
+landing page with full text located)*
+
+The one paper citing Rivier et al. (2024) found to be topically
+close, while searching for the supervisor's unnamed "similar works."
+From the press release only: lets annotators flag ambiguous objects as
+"uncertain" and uses auxiliary models to estimate class probabilities
+for those — **a different problem** (annotation uncertainty, not
+point→patch label propagation) from our three mask candidates. **Low
+relevance**; do not use beyond this one-line characterisation unless
+the full text is found later.
 
 ### Land cover classification and plant traits
 
@@ -804,17 +944,28 @@ and an expert-reference upper bound.
 
 Two parts:
 
-1. **Methodological:** a documented, evaluated pipeline that turns
+1. **Methodological:** a documented, justified pipeline that turns
    citizen-science points into satellite reference data (the
    proposal's first objective; see
-   [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed)). One step with no precedent found:
-   matching what citizen scientists photograph (often understory
-   plants) to what the satellite sees (the top layer), using plant
-   traits and land cover.
+   [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed)) —
+   each step documented and justified from literature or data; the
+   quantitative cumulative ablation that would measure each step's
+   effect is an optional stretch goal, not a committed deliverable
+   (scope-reduction decision, 2026-11-10). One step with no precedent
+   found: matching what citizen scientists photograph (often
+   understory plants) to what the satellite sees (the top layer),
+   using plant traits and land cover.
 2. **Empirical:** RQ1–RQ3 in
    [`research_questions.md`](research_questions.md).
 
 ## Search Protocol (planned)
+
+**For the defense, not the manuscript:** this protocol is prep for
+explaining verbally how the literature was searched, if asked — the
+January report's related-work chapter follows the two reference
+examples' narrative-by-subtopic structure instead, with no systematic
+protocol written into the text, see
+[`thesis/notes.md`](../thesis/notes.md#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável).
 
 To replace "appears underexplored" with a documented claim:
 

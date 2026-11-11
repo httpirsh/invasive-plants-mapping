@@ -36,9 +36,13 @@ grade); Ball et al. (2026) (label impurity); Karasiak et al. (2022)
 
 - Random splits alone are not acceptable: nearby observations make
   train and test sets too similar.
-- Candidates: spatial blocking, grouped K-fold, geographically
-  separated test regions (needed for RQ3), with attention to spatial
-  leakage and autocorrelation.
+- **Adopted: spatial block holdout, 10 km blocks** (5 spatial splits,
+  used throughout the RQ1 notebooks so far), with attention to spatial
+  leakage and autocorrelation. Geographically separated test regions
+  are the same idea at a larger scale, needed specifically for RQ3
+  (distinct regions, not yet available); grouped K-fold remains a
+  fallback if the 10 km blocks prove too few once RQ3 regions are
+  added.
 - **Expert-polygon side needs a buffer, not just block holdout
   (supervisor, recalled — see
   [`thesis/notes.md`](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)):**
@@ -48,11 +52,20 @@ grade); Ball et al. (2026) (label impurity); Karasiak et al. (2022)
   decision, not confirmed by the supervisor)** — the empirical
   variogram and Karasiak's own software both point to pixels
   (200–300 m) instead, but this was not pursued further. Not yet
-  implemented in the actual train/test split.
+  implemented in the actual train/test split. **Deferred past the
+  January report (scope decision, agreed in conversation,
+  2026-11-10):** stated as a known, identified limitation of the
+  current RQ1 result in the report, not fixed before it.
 - Open: an independent validation reference not drawn from the same
-  citizen-science source (candidates: COS 2023, OrtoSat). Without it,
-  biased training data evaluated on equally biased test data hides
-  the bias.
+  citizen-science source. Without it, biased training data evaluated
+  on equally biased test data hides the bias. Narrowed to the COS 2023
+  *Acacia* class only — an OrtoSat sample checked by hand was also
+  considered and dropped, same manual-interpretation effort the
+  supervisor called inefficient for multiclass training labels, see
+  [`research_questions.md`](research_questions.md#other-open-points)
+  and
+  [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
+  Not attempted before the January report — deferred to the work plan.
 
 **Grounded in:** Karasiak et al. (2021/2022) and Le Rest et al. (2014)
 (buffer/spatial-leakage requirement, buffer = autocorrelation range,
@@ -65,8 +78,9 @@ confirmed — see `literature.md`.
 ## Baseline
 
 The simplest credible approach: Sentinel-2 spectral-temporal features
-→ conventional classifier, not multiclass — run as both true one-class
-and presence-vs-background in parallel (see
+→ conventional classifier, not multiclass — presence-vs-background,
+the method carried forward for this arm (one-class SVM tested and
+dropped, see below) (see
 [RQ1](research_questions.md#rq1--foundation-models-vs-conventional-approaches)
 and [Other Plants as
 Background](research_questions.md#other-plants-as-classes-adopted-direction)).
@@ -83,12 +97,17 @@ environment). See
 [Foundation Model Use](research_questions.md#foundation-model-use-adopted)
 and [`thesis/notes.md`](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo).
 
-**One-class method: one-class SVM (my decision, by direct
-comparison, not Isolation Forest)** — see
+**One-class method: tested, then dropped for future arms
+(scope-reduction decision, 2026-11-10).** One-class SVM (chosen over
+Isolation Forest by direct comparison) consistently lost to
+presence-vs-background on both arms tested so far (citizen science and
+expert), with the gap widening under a harder background check. Not
+re-run by default on the Sentinel-2 arm or further curve extensions —
+kept only as an already-tested, documented result. See
 [`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb)
-and [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
-for the comparison and its caveats (citizen-science arm only so far,
-background not yet supervisor-confirmed).
+and
+[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
+for the comparison and full reasoning.
 
 Feature set, for whenever this arm resumes (my proposal,
 agreed in conversation, not yet supervisor-confirmed): Ball et al.
@@ -97,11 +116,13 @@ with Domingo et al. (2023) flowering-phenology features added later as
 an ablation, not built
 together upfront — see
 [`thesis/notes.md`](../thesis/notes.md#conjunto-de-features-do-sentinel-2-na-rq1-compósito-anual-ball-et-al-fenologia-da-floração-como-extensão-por-ablação-domingo-et-al).
-Also open: exact background design
-confirmation (a first version — uniform random points, 50 m buffer —
-was built to run the comparison above, not yet supervisor-confirmed as
-final), and whether it is shared across both label sources and every
-point of the effort-reduction curve — see
+Background design: uniform random points, 50 m buffer, kept (not
+switched to COS-stratified) — see
+[`docs/research_questions.md`](research_questions.md#reference-data-pipeline-proposed)
+and [`thesis/notes.md`](../thesis/notes.md#rq1-fundo-uniforme-nao-cos)
+for the reasoning; still not supervisor-confirmed as final. Shared
+across both label sources and every point of the effort-reduction
+curve — see
 [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
 
 **Grounded in:** Sentinel-2 at 10 m for *Acacia* — Mouta et al. (2021);
@@ -112,11 +133,12 @@ Findings: `literature.md`.
 
 ## Foundation Models
 
-Open:
-
-- Which model(s): TESSERA (accessible, MIT), AlphaEarth (access
-  unconfirmed), other.
-- Whether to also test fusion (embeddings + conventional features).
+**Model (adopted, Phase 1): TESSERA only.** AlphaEarth (access
+unconfirmed) and fusion (embeddings + conventional features) are
+explicitly out of scope for the January report — fusion needs the
+Sentinel-2 arm, already deferred, and AlphaEarth's access was never
+confirmed; neither can advance regardless. Both move to the work plan
+as later, unstarted possibilities, not open decisions blocking January.
 
 **Grounded in:** TESSERA (Feng et al., 2025) and AlphaEarth (Brown et
 al., 2025) compared by Ball et al. (2026); fusion motivated by the
@@ -124,21 +146,33 @@ same paper's classifier-dependent result — see `literature.md`.
 
 ## Evaluation
 
-Candidate metrics: precision, recall, F1, ROC-AUC, PR-AUC — final
-choice depends on class balance and the cost of false positives vs.
-false negatives. Never report a metric without stating what was
-evaluated, on which data, and under which split.
+**Metrics (adopted): ROC-AUC and the continuous Boyce index** (Hirzel
+et al., 2006), used throughout the RQ1 notebooks so far. Precision,
+recall and F1 are no longer candidates: their grounding (Ball et al.,
+2026) was for a multiclass setting ("macro F1 exposes rare classes,
+relevant with several plant classes"), which no longer applies now
+that multiclass was abandoned and *A. dealbata* is the only target
+class — see
+[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
+Never report a metric without stating what was evaluated, on which
+data, and under which split.
 
-**Grounded in:** Ball et al. (2026) reported weighted and macro F1
-(macro F1 exposes rare classes, relevant with several plant classes);
-Gillespie et al. (2024) reported AUC; Domingo et al. (2023) and
-Martins et al. (2016) reported overall accuracy.
+**Grounded in:** Hirzel et al. (2006) (continuous Boyce index,
+presence-only evaluation without confirmed absences — see
+`literature.md`); Gillespie et al. (2024) reported AUC.
 
 ## Error Analysis
 
 Go beyond aggregate metrics: where and why do models fail? Candidate
 dimensions: region, land-cover context (COS), observation density,
-observer, quality of the citizen-science record.
+observer, quality of the citizen-science record. Not attempted before
+the January report — deferred to the work plan: the region dimension
+needs RQ3 (deferred), the land-cover dimension needs the segmentation
+mask comparison (deferred), so a systematic pass isn't possible yet
+with only one region and one arm run. The habitat-concentration finding
+already written up for RQ1 (see
+[`research_questions.md`](research_questions.md#rq1--foundation-models-vs-conventional-approaches))
+stands in as an informal error explanation for the January report.
 
 ## Final Map
 

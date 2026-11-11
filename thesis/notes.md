@@ -259,6 +259,12 @@ iNaturalist enviesados para estradas e zonas perturbadas; Zhu et al.
 outras regiões; Phillips et al. (2009) para corrigir o enviesamento
 com observações dos mesmos observadores.
 
+**Atualização (2026-11-11):** a pergunta mantém-se, mas proponho
+mudar a forma de a medir — ver
+[RQ3: proposta de redesenho](#rq3-proposta-redesenho-diagnostico-primeiro).
+Por confirmar com o orientador; até lá o desenho aprovado é o que
+vale.
+
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq3--spatial-sampling-bias).
 
 **Na tese:** ✅ Parcial — o enunciado da RQ3 e a estatística do
@@ -1183,17 +1189,101 @@ texto completo lido):**
   específico encontrado na literatura para o raio.
 - ~~A RQ3 tinha como candidata "outras plantas como classes vs. fundo ao
   acaso"; sem classes próprias, isto passa a "fundo de outras plantas
-  vs. fundo ao acaso" — por rever.~~ — revisto: a
-  experiência não dependia do multiclasse, só precisa do fundo de
-  outras plantas existir como opção, o que continua a acontecer. O que
-  mudou é que o fundo principal já construído para a RQ1 é aleatório
-  uniforme, não o de outras plantas — por isso os dois fundos passam a
-  mapear diretamente para a pergunta de amplificar/mitigar da RQ3
-  (aleatório expõe mais o viés, o de outras plantas corrige-o em
-  parte). Ver
-  [`docs/research_questions.md`](../docs/research_questions.md#rq3--spatial-sampling-bias).
-  Proposta minha, por confirmar com o orientador; a experiência em si
-  continua por correr.
+  vs. fundo ao acaso" — por rever.~~ — revisto, depois descartado por
+  completo (ver "Atualização (simplificação do projeto, 2026-11-10)"
+  abaixo).
+
+**Atualização (simplificação, 2026-11-10):** a mesma razão de
+eficiência (ponto 1, acima) também risca uma amostra verificada à mão
+no OrtoSat como referência de validação independente da RQ1 — é o
+mesmo tipo de interpretação visual manual, só que a uma escala menor
+(amostra de validação, não todo o treino). Fica só a comparação com a
+classe *Acacia* da COS 2023 (produto já classificado, sem interpretação
+manual) como candidata a validação independente — ver
+[`docs/research_questions.md`](../docs/research_questions.md#other-open-points).
+
+**Porque a COS é independente, mesmo do lado dos especialistas:**
+questionei inicialmente se os polígonos de especialistas poderiam já
+estar correlacionados com a COS (por exemplo, se a equipa tivesse
+usado a COS para escolher onde ir ao terreno), o que tornaria a
+validação circular. A proveniência documentada
+([`data/README.md`](../data/README.md#acacia-dealbata-expert-reference-polygons),
+confirmada pelo orientador em 2026-10-28) não aponta nessa direção:
+os polígonos vêm de visitas de campo e interpretação visual manual do
+OrtoSat 2023 (prova­velmente segmentação não supervisionada da imagem,
+feita por um estudante, com cada segmento depois classificado à mão) —
+um processo próprio, sobre uma imagem diferente da usada para produzir
+a COS, não derivado da classificação da COS. A concentração de 54% dos
+polígonos dentro da classe "Florestas de acácias" da COS (achado já
+registado, ver "Curva de redução de esforço completa") é, portanto,
+mais provavelmente um sinal ecológico genuíno (a acácia concentra-se
+mesmo nesse habitat) do que um artefacto do método de recolha.
+
+**Atualização (simplificação do projeto, 2026-11-10): one-class SVM
+descartado para braços futuros.** O ponto 5 acima decidiu correr
+one-class SVM e presença-vs-fundo em paralelo, desde a primeira
+experiência. Com os dois braços testados até agora (ciência cidadã e
+especialistas), o resultado é consistente e já tem margem grande: o
+one-class SVM perde para os dois classificadores presença-vs-fundo nas
+duas métricas, nos dois braços (ciência cidadã: ROC-AUC 0,654/Boyce
+0,816 vs. Random Forest 0,842/0,989; especialistas: 0,911/0,868 vs.
+0,990/0,954 — ver ["Braço de
+especialistas"](#braço-de-especialistas-one-class-svm-e-random-forest-confirmados-100-especialistas)
+acima). A [verificação de robustez sob um fundo só de
+floresta](#curva-de-redução-de-esforço-sob-um-fundo-só-de-floresta-verificação-de-robustez)
+reforça ainda mais isto: sob esse fundo mais difícil, o desempenho do
+one-class SVM cai para perto do acaso (ROC-AUC 0,515, Boyce negativo a
+0% de especialistas), sugerindo que a sua competitividade parcial na
+curva original vinha em boa parte de reconhecer "isto não é vegetação"
+e não de aprender algo específico da acácia — o Random Forest, pelo
+contrário, melhora sob esse mesmo fundo mais difícil. Combinado com a
+pesquisa de literatura já feita (nenhum caso encontrado onde um método
+one-class puro bateu um método com fundo, ver
+["Atualização (pesquisa de
+literatura)"](#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
+acima), não há razão para continuar a tratá-lo como candidato em pé de
+igualdade.
+
+**Decidido:** o one-class SVM não volta a ser testado por omissão em
+braços futuros (retoma do Sentinel-2, extensões da curva da RQ2/RQ3) —
+fica só como resultado já testado e documentado (duas vezes, com
+margem clara nas duas), consistente com a secção "Writing Abandoned
+Methodologies" do `CLAUDE.md`: testado, motivo concreto encontrado
+(sem supervisão negativa, sensível à composição do fundo), descartado
+em favor do Random Forest, que se mantém como classificador único daqui
+para a frente. Se um resultado futuro parecer genuinamente inesperado
+(p. ex. o Random Forest a piorar de repente), o one-class SVM pode ser
+reaberto como diagnóstico pontual — não por omissão. Isto é uma decisão
+de simplificação de âmbito (menos candidatos para defender), não um
+novo achado empírico — o achado (one-class perde) já estava
+estabelecido.
+
+**Atualização (simplificação do projeto, 2026-11-10): eixo "fundo de
+outras plantas vs. fundo aleatório" descartado por completo da RQ3.**
+A RQ3 tinha duas experiências candidatas: (a) o observador dominante
+(capado/removido) e (b) comparar a RQ3 sob um fundo de outras plantas
+vs. um fundo aleatório, como forma de expor mais ou menos o viés
+espacial (aleatório expõe mais, o de outras plantas corrige em parte,
+por Phillips et al., 2009). A (b) nunca passou de proposta minha, por
+confirmar, "não agendada antes da curva da RQ1" — e mantê-la viva
+como candidata obriga a continuar a justificar e manter todo o
+conjunto de outras plantas (8 grupos GIFT, lista nacional de
+invasoras, regra das herbáceas), que já estava "Superseded" no pipeline
+principal desde o abandono do multiclasse e só sobrevivia por causa
+desta candidata. **Decidido:** deixar cair a (b) por completo; a RQ3
+fica só com a (a) (observador dominante), já bem fundamentada (Dimson
+et al., 2023; grupo TESSERA de Cambridge; Phillips et al., 2009 — maior
+ganho de correção de viés onde a amostra é mais enviesada, o que se
+aplica a um único observador dominante), usando o fundo aleatório já
+construído e usado na RQ1, sem precisar de um segundo fundo. O dataset
+de outras plantas (13 554 observações limpas, 8 grupos) continua
+documentado em
+[`data/README.md`](../data/README.md#inaturalist-observations-cleaned-derived),
+mas deixa de ser um candidato ativo a defender — fica como dado
+histórico do multiclasse abandonado. Decisão de simplificação de
+âmbito (menos um eixo experimental e um dataset a justificar), não um
+novo achado; a RQ3 em si mantém-se aprovada pelo orientador, só o
+desenho interno encolhe.
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq1--foundation-models-vs-conventional-approaches)
 (RQ1 reescrita) e
@@ -1212,7 +1302,292 @@ completo — ao escrever o capítulo de Metodologia, incluir um parágrafo
 breve (não uma secção) explicando porque foi abandonado (custo de
 construir ausências confirmadas à mão; literatura sem vantagem clara
 do one-class puro sem fundo, ver "Atualização" acima), como
-justificação do desenho final, não como histórico extenso.
+justificação do desenho final, não como histórico extenso. O mesmo
+parágrafo (ou um complemento curto, por "Writing Abandoned
+Methodologies" do `CLAUDE.md`) deve referir também o one-class SVM
+como segunda metodologia abandonada: testado duas vezes, perdeu nas
+duas, motivo concreto (sem supervisão negativa, sensível à composição
+do fundo) — ver "Atualização (simplificação do projeto, 2026-11-10)"
+acima.
+
+### Simplificações adicionais de âmbito: RQ2, validação, afinação de foundation models (2026-11-10)
+
+*Decisão minha, confirmada em conversa. Pedido explícito do
+utilizador: simplificar em geral, mesmo em coisas já fechadas, não só
+antes de janeiro.*
+
+**O que decidi:**
+1. **RQ2:** tirar a frase "combinado com os outros critérios
+   candidatos (quality grade, precisão posicional) — combinação exata
+   em aberto". Não havia na verdade combinação por decidir: quality
+   grade e precisão posicional já são passos fixos e adotados do
+   pipeline geral (passos 2 e 3,
+   [`research_questions.md`](../docs/research_questions.md#reference-data-pipeline-proposed)),
+   aplicados antes de qualquer RQ correr. O único filtro específico da
+   RQ2 é a recência (distância a 2023).
+2. **Validação:** "Candidatos: spatial blocking, grouped K-fold,
+   regiões geograficamente separadas" passa a "Adotado: spatial block
+   holdout, blocos de 10 km" — já é o método usado em todas as
+   experiências feitas até agora (ciência cidadã, especialistas,
+   verificações de robustez), não uma escolha ainda em aberto. Grouped
+   K-fold e regiões geograficamente separadas ficam só como o que a
+   RQ3 especificamente ainda vai precisar (regiões distintas), não
+   como alternativas ainda em disputa para o resto.
+3. **Foundation Model Use:** tirar a frase "extensão possível, se
+   houver tempo e acesso aos pesos: afinar a TESSERA, ou treinar uma
+   MLP pequena sobre as embeddings". Contradizia o desenho já adotado
+   (embeddings congeladas + classificador leve, com razões que não
+   mudam) e a decisão já tomada de descartar a rede neuronal compacta
+   como candidata — uma MLP pequena sobre embeddings é essencialmente
+   a mesma ideia.
+
+**Porquê:** redução de complexidade do projeto em geral (pedido
+explícito do utilizador), não só para a entrega de janeiro. Nenhum dos
+três pontos muda um resultado já obtido — são documentação que ainda
+descrevia como "em aberto" ou "possível" coisas já decididas noutro
+sítio, ou já incompatíveis com decisões entretanto tomadas.
+
+**Fundamentação:** não há literatura nova — é sincronização da
+documentação com decisões e práticas já estabelecidas nesta mesma
+sessão e nos notebooks já correntes.
+
+**Onde:**
+[`docs/research_questions.md`](../docs/research_questions.md#rq2--data-efficiency)
+(RQ2);
+[`docs/methodology.md`](../docs/methodology.md#validation) (validação);
+[`docs/research_questions.md`](../docs/research_questions.md#foundation-model-use-adopted)
+(foundation models).
+
+**Na tese:** ⏳ Ainda não escrita — nenhum destes pontos tem texto
+próprio ainda no manuscrito.
+
+### RQ3: desbaste espacial e capar/remover o observador dominante não são redundantes — mantidas as três condições (2026-11-10)
+
+*Decisão minha, confirmada em conversa. Simplificação proposta e
+verificada antes de aplicar, não aplicada às cegas.*
+
+**O que decidi:** manter o desenho original de três condições de
+treino da RQ3 — (1) observações originais, (2) desbastadas
+espacialmente, (3) observador dominante capado/removido. Considerei
+juntar (2) e (3) numa só condição (ambas motivadas pelos mesmos
+achados do grupo TESSERA de Cambridge e por Dimson et al., 2023), mas
+a verificação empírica mostrou que não são redundantes.
+
+**Porquê:** antes de cortar, verifiquei a sobreposição real entre o
+que cada condição remove, em
+`data/interim/citizen_science/inat_dealbata_clean.csv` (3 000
+presenças, 2 647 do Observador A = 88,2%). Simulei um desbaste
+espacial guloso (ordem aleatória, remove um ponto se estiver a menos
+da distância mínima de um ponto já mantido) a 50/100/200/300 m — o
+intervalo de autocorrelação espacial já referido em
+[`docs/methodology.md`](../docs/methodology.md#validation).
+Resultado: dos pontos removidos pelo desbaste, ~94% são do Observador
+A em todos os limiares (o desbaste ataca sobretudo ele, como
+esperado) — mas mesmo no limiar mais agressivo (300 m), o conjunto que
+sobra ainda tem 70,5% de Observador A (contra 88,2% de base), longe de
+se aproximar da condição "sem o Observador A" (0%). Ou seja, o
+desbaste espacial reduz a densidade de pontos do Observador A mas não
+elimina a sua presença no conjunto de treino, enquanto capar/remover o
+observador elimina-a por completo — são mecanismos diferentes
+(densidade espacial vs. identidade do observador), relevantes
+sobretudo se a hipótese "amplifica" vier de o modelo aprender um
+padrão específico deste observador (só desapareceria removendo-o, não
+só desbastando). Juntar as duas condições custaria uma distinção real
+entre duas hipóteses da RQ3, não só complexidade de apresentação —
+por isso não se enquadra no pedido de simplificar sem retirar
+contribuições.
+
+**Fundamentação:** verificação própria, não literatura nova — o
+racional de que as duas condições são motivadas pelos mesmos achados
+já estava fundamentado (ver
+[RQ3](../docs/research_questions.md#rq3--spatial-sampling-bias)); o
+que faltava verificar era se, na prática, produzem o mesmo conjunto de
+treino, o que a verificação acima responde que não.
+
+**Onde:** verificação feita ad-hoc nesta sessão (script Python
+temporário, não guardado no repositório — reprodutível a partir da
+descrição acima); desenho da RQ3 inalterado em
+[`docs/research_questions.md`](../docs/research_questions.md#rq3--spatial-sampling-bias).
+
+**Atualização (2026-11-11):** na
+[proposta de redesenho](#rq3-proposta-redesenho-diagnostico-primeiro),
+ainda por confirmar com o orientador, a condição "capado/removido"
+passa a ser a comparação com o mesmo número de pontos, e o desbaste
+fica como correção condicional. A conclusão desta entrada (não são a
+mesma coisa) mantém-se.
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia/RQ3, ainda
+placeholder). Boa candidata a "Writing Abandoned Methodologies" não
+como metodologia abandonada, mas como prova de pensamento crítico: uma
+simplificação proposta, verificada com dados, e rejeitada com razão
+concreta.
+
+### RQ3: proposta de redesenho — diagnosticar primeiro se a concentração da amostragem prejudica o modelo {#rq3-proposta-redesenho-diagnostico-primeiro}
+
+*Proposta minha (a confirmar com o orientador) — muda o desenho de uma
+pergunta que ele aprovou, por isso não é adotada antes de ele
+responder. Na fila da
+[próxima reunião](../docs/meetings/proxima-reuniao.md).*
+
+**O que decidi (como proposta):** manter a pergunta da RQ3 (os
+embeddings amplificam ou atenuam o efeito do enviesamento espacial,
+comparados com features convencionais do Sentinel-2?), mas mudar a
+forma de a medir:
+
+0. **Enunciado proposto:** "Os foundation models de observação da
+   Terra amplificam ou atenuam o efeito da concentração espacial das
+   observações de ciência cidadã, em comparação com features
+   convencionais de satélite, quando o modelo é avaliado longe de onde
+   houve amostragem?" Muda "enviesamento" para "concentração" e
+   "regiões geograficamente distintas" para "longe de onde houve
+   amostragem". Hipóteses: **amplifica** (os embeddings guardam
+   contexto da paisagem, o modelo aprende a zona amostrada e piora
+   mais do que o Sentinel-2 fora dela); **atenua** (descrevem melhor a
+   planta, piora menos); **sem efeito** (nenhum piora — hipótese que
+   o desenho aprovado não previa). Para a experiência 2:
+   **profundidade** (os pontos do observador dedicado dão um modelo
+   igual ou melhor) contra **largura** (os dos outros dão um modelo
+   melhor longe). As experiências mostram o resultado, não o
+   mecanismo.
+1. **Experiência 1 — diagnóstico.** Treinar com a ciência cidadã e
+   avaliar nos polígonos de especialistas (referência independente),
+   comparando o desempenho perto e longe de onde houve amostragem,
+   para TESSERA e para Sentinel-2. "Longe" mede-se em distância
+   geográfica ao ponto de treino mais próximo: os mesmos polígonos
+   ficam nas mesmas faixas para as duas representações, por isso a
+   comparação é direta. Grupo "longe" principal: os polígonos do
+   mesmo ficheiro e mosaico (TNE) a mais de 1 km de qualquer ponto de
+   ciência cidadã; os do resto do país (notTNE) ficam como extensão
+   opcional.
+2. **Experiência 2 — um observador dedicado contra muitos
+   ocasionais, com o mesmo número de pontos:** 353 pontos do
+   Observador A (subamostragens repetidas) contra os 353 dos outros,
+   testados perto e longe. Substitui a condição "Observador A
+   capado/removido" do desenho aprovado.
+3. **Produto — mapa de confiança:** dissemelhança ao treino no espaço
+   das features (*area of applicability*, Meyer & Pebesma, 2021)
+   aplicada a toda a área, para dizer onde o mapa final é apoiado
+   pelos dados de treino e onde extrapola (liga a
+   [Final Map](../docs/methodology.md#final-map)). Só como produto,
+   não como eixo da comparação entre representações.
+4. **Fica de fora:** a camada de estradas e trilhos (servia os eixos
+   de acessibilidade do desenho aprovado; nunca descarregada) e a
+   segunda região de iNaturalist (Covilhã–Fundão, 57 observações). O
+   desbaste espacial fica como única correção, e só se a experiência
+   1 mostrar degradação.
+
+**Porquê:**
+- O desenho aprovado parte do princípio de que o Observador A é um
+  enviesamento a corrigir, mas nunca o medimos. A fiabilidade dele
+  (rótulos) já foi verificada e está bem; o que é facto é só a
+  concentração espacial. Medido em
+  `data/interim/citizen_science/inat_dealbata_clean.csv` (grelha de
+  10 km em EPSG:3763, minha, não necessariamente a dos notebooks): os
+  2 647 pontos dele ocupam 18 de 43 blocos, os 353 dos outros ocupam
+  os 43; em contrapartida, 82% dos polígonos de especialistas dentro
+  da área da ciência cidadã estão a menos de 500 m de um ponto dele
+  (66% para os outros). Ou seja: concentrado numa zona, e dentro dela
+  cobre melhor do que todos os outros juntos. Se essa concentração
+  prejudica o modelo fora da zona é a pergunta em aberto.
+- O desenho aprovado avalia "nos registos dos outros observadores"
+  (353 pontos, da mesma fonte). Os polígonos de especialistas são
+  independentes do iNaturalist.
+- Há dados para o teste sem uma segunda região de iNaturalist.
+  Polígonos por distância ao ponto de ciência cidadã mais próximo
+  (0–1 / 1–5 / 5–20 / >20 km): TNE dentro do distrito 1 677 / 120 /
+  52 / 0; TNE fora do distrito 3 / 50 / 115 / 55; notTNE 0 / 0 / 23 /
+  375. Ou seja, "perto" = 1 680 polígonos, "longe" no mesmo ficheiro
+  = 392, mais 398 no resto do país. Dos outros observadores, 118
+  pontos ficam fora dos blocos do Observador A.
+- Em quilómetros perde-se a distinção entre "é longe" e "a paisagem é
+  diferente"; aceito, porque a comparação entre representações fica
+  direta e o mapa de confiança cobre parte dessa leitura.
+- Qualquer resultado é informativo: sem degradação, um observador
+  dedicado chega (liga à curva plana da RQ1); com degradação, há
+  motivo para testar as correções.
+
+**Em aberto (a definir antes de correr):**
+- Enunciado: o proposto acima só substitui o aprovado se o orientador
+  concordar.
+- **Tamanho dos polígonos — o principal risco do desenho.** Os de
+  perto são minúsculos (mediana 0,008 ha no distrito, cerca de um
+  píxel) e os de longe 20 a 40 vezes maiores (0,26 ha no TNE fora do
+  distrito, 0,16 ha no notTNE). Manchas maiores são mais fáceis, o
+  que pode esconder degradação. Comparar dentro de classes de
+  tamanho, e ver se sobram polígonos suficientes em cada uma.
+- "Perto" é onde o modelo treinou (especialistas e Observador A
+  visitaram os mesmos sítios), por isso o valor de perto é um limite
+  otimista, não uma estimativa limpa.
+- ROC-AUC e Boyce precisam de pontos de fundo também nas faixas de
+  longe, fora do distrito.
+- Fixar antes de correr o que conta como "amplifica" e como "atenua"
+  (p. ex. diferença perto–longe maior no TESSERA ou no Sentinel-2).
+- Risco de teto como na RQ1; os pontos dos outros observadores fora da
+  zona são o teste mais difícil de reserva.
+- Custo: embeddings TESSERA e Sentinel-2 fora da caixa do piloto (hoje
+  só cobrem os pontos do piloto) — não verificado. A comparação com
+  Sentinel-2 depende do braço Sentinel-2, adiado.
+- Mapa de confiança: Meyer & Pebesma só testaram regressão com Random
+  Forest; aqui serve só de indicação de suporte, não de exatidão.
+
+**Fundamentação:** Meyer & Pebesma (2021) para o método; Ratsakatika
+et al. (2026, preprint) aplicam-no a um modelo com embeddings mas
+declaram como limitação que a exatidão fora da área não foi testada —
+o que esta proposta faria. Não encontrei precedente com ciência
+cidadã concentrada num observador (pesquisa rápida, não revisão) —
+possível contributo. Resumos e o que foi de facto lido:
+[`docs/literature.md`](../docs/literature.md#spatial-validation). As
+contagens são verificação minha, feita ad-hoc (script não guardado).
+
+**Onde:**
+[`docs/research_questions.md`](../docs/research_questions.md#rq3--spatial-sampling-bias).
+
+**Na tese:** ⏳ Ainda não escrita (plano de trabalho/Metodologia). O
+enunciado da RQ3 na introdução não muda.
+
+### Formulação das perguntas como pergunta → objetivo geral → objetivos específicos → hipóteses {#formulacao-pergunta-objetivos-hipoteses}
+
+*Proposta minha (a confirmar com o orientador) — reescreve enunciados
+que ele aprovou; os aprovados valem até ele responder. Na fila da
+[próxima reunião](../docs/meetings/proxima-reuniao.md).*
+
+**O que decidi (como proposta):** reescrever a pergunta principal e
+as três RQ na estrutura de um guia de escrita de teses (tesify.pt):
+pergunta com verbo interrogativo, variáveis e contexto delimitado; um
+objetivo geral; cinco objetivos específicos no infinitivo e
+mensuráveis; hipóteses em par nula/alternativa. A estrutura passa a
+regra permanente em `CLAUDE.md` ("Formulating Research Questions"). O
+texto da formulação está em
+[`docs/research_questions.md`](../docs/research_questions.md#proposed-formulation-question-objectives-hypotheses)
+(em inglês, como o resto desse ficheiro e a tese) e em português no
+ponto da reunião.
+
+**Porquê:** os enunciados atuais não tinham objetivos nem hipóteses
+escritos de forma falsificável; a pergunta principal não dizia a
+espécie, a área nem o termo de comparação. O conteúdo das perguntas
+não muda, só a forma — com duas exceções: a RQ3 usa a redação da
+[proposta de redesenho](#rq3-proposta-redesenho-diagnostico-primeiro),
+e a RQ2 deixa de dizer "mais fiáveis", porque a fiabilidade já é
+tratada antes, no processo de limpeza (passos 2 e 3).
+
+**Em aberto:**
+- A hipótese H₁b da RQ1 (o desempenho aumenta com a fração de dados
+  de especialistas) foi escrita depois de a curva com TESSERA já ter
+  saído plana, compatível com H₀b — dizê-lo na tese.
+- Hipóteses de trabalho, não testes estatísticos formais (só cinco
+  divisões espaciais); confirmar com o orientador, e escrever o
+  critério de decisão de cada uma antes de correr.
+
+**Fundamentação:** guia de escrita (site comercial), não literatura
+científica — serve para a forma, não é para citar.
+
+**Onde:**
+[`docs/research_questions.md`](../docs/research_questions.md#proposed-formulation-question-objectives-hypotheses);
+`CLAUDE.md`.
+
+**Na tese:** ⏳ Ainda não aplicada — os enunciados em
+[`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
+são os aprovados; só mudam se o orientador concordar.
 
 ### Estrutura do documento: seguir um relatório de referência de outro aluno, onde for aplicável
 
@@ -1278,13 +1653,49 @@ o exemplo passa a ser a referência certa para o género de documento
 todo (não só os capítulos iniciais), incluindo a parte de Work
 Plan/Risk Assessment que antes parecia não aplicável.
 
-**Onde:** [`thesis/guidance_example/1768249601_Entrega_intermedia-1.pdf`](guidance_example/1768249601_Entrega_intermedia-1.pdf).
+**Atualização (segundo exemplo e lugar do "Search Protocol",
+2026-11-10):** acrescentei um segundo exemplo —
+[`thesis/guidance_example/Tese_Intermedia____Claudia_Torres.pdf`](guidance_example/Tese_Intermedia____Claudia_Torres.pdf)
+(Cláudia dos Reis Torres, "Model Governance Framework for Auditable ML
+Deployment", Mestrado em Engenharia Informática, especialização em
+IA, DEI/FCTUC, orientada por Ricardo Pereira e Cláudio Correia, janeiro
+de 2026) — também um relatório intermédio (Capítulo 3 "State of the
+Art", sem capítulo de Resultados). Revi como os dois tratam o estado
+da arte: ambos escrevem uma revisão **narrativa por subtema**, não um
+protocolo de pesquisa sistemática documentado — a Cláudia divide
+"State of the Art: Model Governance" em subsecções conceptuais
+(Documentação, Abordagens, Frameworks, Principais Desafios), o Gonçalo
+divide "State of Art" por subtema técnico (reconhecimento automático
+de códigos, VLMs); cada um fecha com um parágrafo curto de síntese (a
+Cláudia "3.5 Conclusions", o Gonçalo "2.5 Overall Analysis"). Nenhum
+descreve bases de dados pesquisadas, *queries* guardadas, contagens de
+triagem, diagrama PRISMA, *snowballing* ou tabela de extração.
+
+**Decidi (a partir disto):** o capítulo de estado da arte/trabalho
+relacionado do meu documento (`2-related-work.tex`) segue esta mesma
+estrutura — revisão narrativa organizada por subtema, terminando numa
+síntese curta — em vez do protocolo de pesquisa sistemática. O
+"Search Protocol (planned)" que está em
+[`docs/literature.md`](../docs/literature.md#search-protocol-planned)
+(Scopus/Web of Science, PRISMA, *snowballing*, tabela de extração)
+fica como preparação para a defesa (explicar verbalmente como procurei
+literatura, se o júri perguntar), não para escrever no documento em
+si. **Porquê:** os dois exemplos são do mesmo departamento, já
+avaliados, e nenhum segue um protocolo sistemático formal no texto —
+não há sinal de que esse nível de formalidade seja esperado por
+escrito num relatório intermédio.
+
+**Onde:** [`thesis/guidance_example/1768249601_Entrega_intermedia-1.pdf`](guidance_example/1768249601_Entrega_intermedia-1.pdf),
+[`thesis/guidance_example/Tese_Intermedia____Claudia_Torres.pdf`](guidance_example/Tese_Intermedia____Claudia_Torres.pdf);
+[`docs/literature.md`](../docs/literature.md#search-protocol-planned).
 
 **Na tese:** ✅ Parcial — `1-introduction.tex` já existe e mapeia
 razoavelmente para os capítulos 1–2 do exemplo (ver "Comparação"
-acima); os restantes capítulos (2–5) ainda por escrever/rever à luz
-desta referência, agora sabendo que o destino de dezembro é um
-relatório intermédio, não a tese final.
+acima); `2-related-work.tex` ainda por escrever à luz desta estrutura
+(revisão narrativa por subtema, sem o Search Protocol); os restantes
+capítulos (3–5) ainda por escrever/rever à luz desta referência, agora
+sabendo que o destino de janeiro é um relatório intermédio, não a tese
+final.
 
 ### Identidade da tese confirmada: título, mestrado, orientadores, idioma e data da entrega
 
@@ -1416,7 +1827,16 @@ referência barata de calcular.
 decisão de alcance, não de mérito: o objetivo desta passagem era
 confirmar que o braço presença-vs-fundo funciona e escolher um
 classificador para levar à curva completa, não esgotar os três
-candidatos.
+candidatos. **Atualização (simplificação, 2026-11-10): passa de "por
+testar mais tarde" a descartada como candidata.** Três classificadores
+em paralelo é mais do que o relatório de janeiro (e provavelmente a
+tese) precisam defender; o Random Forest já tem razão suficiente para
+ser a escolha única (estável nas duas métricas, cinco citações de
+apoio), e a Logistic Regression já cobre o papel de referência barata
+de comparação. Não há pedido do orientador para testar uma rede
+neuronal aqui (ao contrário da máscara de segmentação, que ele pediu
+explicitamente para testar em várias abordagens) — decisão minha, não
+confirmada pelo orientador.
 
 **Resultado também confirma a literatura:** os dois classificadores
 presença-vs-fundo têm desempenho muito superior ao one-class SVM
@@ -1433,7 +1853,8 @@ está incluída como referência linear simples, não por recomendação de
 um artigo específico.
 
 **Em aberto:** confirmar com o orientador; afinação de hiperparâmetros
-fica para mais tarde; testar a rede neuronal compacta. ~~Repetir a
+fica para mais tarde; ~~testar a rede neuronal compacta~~ —
+descartada como candidata, ver atualização acima. ~~Repetir a
 comparação no braço de especialistas~~ — feito, ver
 [Braço de especialistas: one-class SVM e Random Forest confirmados (100% especialistas)](#braço-de-especialistas-one-class-svm-e-random-forest-confirmados-100-especialistas)
 abaixo: a escolha mantém-se, com um desempenho ainda mais claro a
@@ -1506,7 +1927,10 @@ fundamentadas no braço de ciência cidadã se mantêm aqui.
 
 **Em aberto:** confirmar com o orientador (fundo partilhado, Random
 Forest por omissão, e agora também a adaptação dos blocos de teste);
-testar a rede neuronal compacta; perceber se o salto de desempenho
+~~testar a rede neuronal compacta~~ — descartada como candidata, ver
+["Classificador presença-vs-fundo (ciência cidadã): Random Forest, por
+agora"](#classificador-presença-vs-fundo-ciência-cidadã-random-forest-por-agora)
+acima; perceber se o salto de desempenho
 reflete uma tarefa mais fácil (hipótese acima) antes de comparar os
 dois braços como se fossem diretamente equivalentes; níveis
 intermédios da curva (mistura aditiva) ainda por fazer.
@@ -1613,8 +2037,10 @@ números desta experiência, sem literatura nova consultada.
   fundo fácil.
 - Esforço medido só como % de polígonos, não ponderado por área ou por
   custo real de campo (deslocação, dificuldade de acesso).
-- Rede neuronal compacta ainda não testada; só TESSERA, Sentinel-2 por
-  fazer; fundo partilhado ainda não confirmado pelo orientador.
+- ~~Rede neuronal compacta ainda não testada~~ — descartada como
+  candidata (ver "Classificador presença-vs-fundo (ciência cidadã):
+  Random Forest, por agora", acima); só TESSERA, Sentinel-2 por fazer;
+  fundo partilhado ainda não confirmado pelo orientador.
 - Confirmar com o orientador antes de tratar isto como resposta final
   à pergunta do equilíbrio custo/desempenho.
 
@@ -2097,3 +2523,161 @@ de Saragoça) — ver `docs/literature.md` para o resumo de cada um.
 
 **Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
 placeholder).
+
+### RQ2: recência definida como distância a 2023, não ordem cronológica estrita {#rq2-recência-distância-a-2023}
+
+*Decisão minha, pedida e delegada por mim em conversa — não
+confirmada pelo orientador. Retirada de propósito da fila da próxima
+reunião (estava lá, ver
+[2026-11-04.md](../docs/meetings/2026-11-04.md#2-outras-perguntas)):
+fica só aqui. Fechada como decisão minha (ver atualização abaixo,
+2026-11-10), não como pergunta pendente para ele.*
+
+**O que decidi:** para o filtro de redução da RQ2, "mais recente"
+passa a significar menor distância absoluta ao ano de referência
+2023 (`|ano_observação − 2023|`), não ordem cronológica estrita.
+Observações de 2024–2026 contam como tão "recentes" quanto as
+simetricamente próximas antes de 2023; o filtro remove primeiro as
+observações mais distantes de 2023, em qualquer direção.
+
+**Porquê:**
+1. **Coerência com o resto do desenho temporal:** o motivo do filtro é
+   o risco de desencontro entre a observação e a imagem de 2023 por
+   mudança de uso do solo — e esse risco é simétrico no tempo: uma
+   observação de 1992 arrisca a mancha ter sido desmatada antes de
+   2023; uma de 2026 arrisca a mancha só ter aparecido depois de 2023
+   (colonização nova). A suposição de persistência já adotada
+   (Riveiro et al., 2025) e o filtro de perturbação (passo 5 do
+   pipeline) já tratam mudança de uso do solo nas duas direções, não só
+   para trás — a leitura por distância segue a mesma lógica já
+   fundamentada, não introduz um princípio novo.
+2. **Argumento empírico, já calculado no repositório, sem nova
+   literatura:** a verificação de confundimento em
+   `acacia_observations.ipynb` mostra que a leitura por distância a
+   2023 mantém a quota do Observador A mais estável entre níveis de
+   retenção (~88–89%) do que a ordem cronológica estrita (cai a 73,7%
+   no corte mais agressivo, ≥2023). Uma leitura que produz um
+   confundimento mais estável isola melhor o que a RQ2 quer medir
+   (efeito da quantidade de dados) do efeito de composição (que
+   observador domina a cada corte) — reduz, não elimina, um
+   confundimento já identificado como real.
+
+**Atualização (simplificação do projeto, 2026-11-10): fechada como
+decisão minha, não mantida como duas leituras em aberto a estudar.**
+Manter "distância a 2023" e "ordem cronológica estrita" como duas
+candidatas vivas, "a estudar e rever com mais calma", era complexidade
+sem benefício esperado: a verificação de confundimento acima já tinha
+dado uma resposta clara (distância a 2023 mantém a quota do
+Observador A mais estável), não falta nenhuma análise nova que mude
+essa conclusão. Passa a decisão minha assente — ainda não confirmada
+pelo orientador (não é pergunta pendente, não foi posta a ele), mas já
+não "em estudo": só volta a ser revista se ele comentar sem ter sido
+perguntado, ou se surgir razão concreta para tal, caso em que esta
+entrada é atualizada, não substituída por uma nova.
+
+**Em aberto:**
+- Não confirmado pelo orientador — decisão minha, não pergunta
+  pendente (ver atualização acima).
+- Níveis concretos de retenção (quantos pontos manter a cada corte)
+  ainda por fixar a partir das contagens já no documento — ver
+  [`docs/todo.md`](../docs/todo.md).
+
+**Fundamentação:** nenhuma literatura nova lida especificamente para
+esta escolha operacional; segue o raciocínio já fundamentado para o
+desenho temporal (Riveiro et al., 2025; Ball et al., 2026 — ver
+[Temporal
+Design](../docs/research_questions.md#temporal-design-adopted)). O
+argumento de confundimento é meu, a partir dos números já no
+repositório, não de literatura.
+
+**Onde:** `notebooks/02_citizen_science/acacia_observations.ipynb`.
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia, ainda
+placeholder).
+
+### RQ1: fundo partilhado mantém-se pontos aleatórios uniformes, não passa a estratificado pela COS {#rq1-fundo-uniforme-nao-cos}
+
+*Decisão minha, pedida e delegada por mim em conversa — não
+confirmada pelo orientador; decidido também não acrescentar a pergunta
+à fila da próxima reunião (razão abaixo).*
+
+**O que decidi:** o fundo partilhado da RQ1 (ciência cidadã e
+especialistas) mantém-se pontos aleatórios uniformes com zona-tampão
+de 50 m — não passa a estratificado pelas classes da COS 2023.
+
+**Porquê:** a [verificação de robustez já feita com um fundo restrito
+a tipos de floresta ecologicamente
+equivalentes](#curva-de-redução-de-esforço-sob-um-fundo-só-de-floresta-verificação-de-robustez)
+(exclui artificial, agricultura, água/solo nu e a própria classe
+"floresta de acácias") já testa o essencial do que um fundo
+estratificado pela COS testaria: um fundo mais difícil, sem classes
+obviamente não-vegetação a facilitar a separação. Resultado já obtido:
+a conclusão principal da curva (Random Forest/Logistic Regression
+planos, pouco ganho com dados parciais de especialistas) mantém-se e
+até melhora sob o fundo difícil; só o One-Class SVM piora muito
+(ROC-AUC quase ao acaso, Boyce negativo a 0% de especialistas),
+mostrando que o desempenho aparente *desse método* dependia em parte
+de um fundo fácil — não o Random Forest, já escolhido como
+classificador principal da RQ1. Como o ranking qualitativo entre
+métodos não muda (SVM continua abaixo de RF/LR, agora com margem
+maior), estratificar formalmente pela COS tem valor marginal esperado
+baixo para a conclusão já reportada, ao custo de mais uma camada de
+desenho (definir estratos/proporções) numa fase em que o âmbito já foi
+reduzido para a entrega de janeiro.
+
+**Correção a registar:** a tabela do pipeline
+(`docs/research_questions.md`, passo 7) atribui o fundo aleatório
+uniforme a "Grounded in: Phillips et al. (2009)" — mas Phillips et al.
+(2009) defende o oposto: fundo de "target-group" (enviesado como as
+próprias presenças), não fundo uniforme ao acaso; é precisamente o
+fundamento já citado para a alternativa "fundo de outras plantas" na
+RQ3. A fundamentação real de manter o fundo uniforme é a verificação
+de robustez empírica acima, não esta citação — vou corrigir a
+atribuição no documento.
+
+**Porque não acrescentei a pergunta à fila da próxima reunião:** a
+verificação de robustez já de-risca a maior parte da preocupação que
+motivaria a pergunta (fundo fácil a inflar o resultado principal); as
+perguntas já na fila (recência da RQ2, interpretação da máscara de
+segmentação) pesam mais — a máscara é o ponto que o próprio orientador
+marcou como central da tese, a recência muda a composição dos dados
+reportados. Acrescentar esta como pergunta formal diluiria o foco da
+reunião num ponto já substancialmente respondido pelos dados.
+Permanece disponível para mencionar na defesa se for perguntado, com a
+verificação de robustez como resposta já pronta.
+
+**Em aberto:**
+- Continua "não confirmado pelo orientador" como desenho final.
+- O agrupamento dos códigos COS em "tipo floresta" (usado só para o
+  teste de robustez, não para o fundo adotado) é escolha minha, não
+  confirmada.
+- A ressalva sobre o One-Class SVM (desempenho parcialmente artefacto
+  do fundo fácil) deve ser dita explicitamente sempre que os números
+  desse método forem reportados.
+
+**Atualização (simplificação do projeto, 2026-11-10): política para os
+quatro diagnósticos de robustez, daqui para a frente.** A mesma lógica
+desta entrada (mais uma camada de desenho tem valor marginal esperado
+baixo numa fase de âmbito já reduzido) generaliza-se aos quatro
+diagnósticos já feitos para explicar a curva plana (fundo só de
+floresta, aqui; redundância dos polígonos de especialistas; pureza dos
+rótulos; diversidade geográfica dos especialistas). **Decidido:** não
+voltar a correr os quatro por omissão em cada braço/experiência nova
+(p. ex. ao retomar o Sentinel-2, ou nas extensões da curva para RQ2/RQ3)
+— só se o resultado dessa experiência parecer genuinamente inesperado
+(como aconteceu aqui, motivado pela pergunta da Íris), tal como já
+decidido para o one-class SVM (ver ["Multiclasse
+abandonado"](#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo),
+atualização de 2026-11-10). Isto não desfaz os quatro resultados já
+obtidos, só evita repeti-los por rotina em experiências futuras sem um
+motivo concreto para desconfiar do resultado.
+
+**Fundamentação:** não é uma citação nova — é a leitura dos resultados
+já obtidos na verificação de robustez de fundo só de floresta
+(raciocínio meu a partir desses números, não literatura adicional).
+
+**Onde:**
+[`notebooks/07_foundation_models/forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia/Resultados,
+ainda placeholder).

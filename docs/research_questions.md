@@ -4,8 +4,9 @@
 |---|---|
 | Main question | Adopted |
 | RQ1 | Adopted (approved by the supervisor, as the thesis's core); redesigned (supervisor, in person) as an effort-reduction curve — see [RQ1](#rq1--foundation-models-vs-conventional-approaches) |
-| RQ3 | Adopted (approved by the supervisor) |
+| RQ3 | Adopted (approved by the supervisor); redesign of how it is measured proposed, to confirm — see [RQ3](#rq3--spatial-sampling-bias) |
 | RQ2 (recency-based filter, no random removal) | Adopted |
+| Formulation as question → objectives → hypotheses | Proposed (mine), to confirm — see [Proposed Formulation](#proposed-formulation-question-objectives-hypotheses) |
 | Prediction task | Adopted; segmentation mask: direction set (supervisor), rule to define |
 | Reference-data pipeline (proposal objective 1) | Proposed |
 | Temporal design: all iNaturalist observations treated as 2023 | Adopted |
@@ -53,6 +54,53 @@ more data-efficient representations, but their advantage may be
 limited by the quality, quantity and spatial distribution of
 citizen-science data. The thesis asks *under what conditions* they are
 useful, not only whether they are better.
+
+## Proposed Formulation (question, objectives, hypotheses)
+
+**Mine, to confirm with the supervisor (2026-11-11) — the approved
+wordings in the sections above and below stand until he answers.**
+Same content, rewritten as question → general objective → specific
+objectives → hypotheses. Why and caveats:
+[`thesis/notes.md`](../thesis/notes.md#formulacao-pergunta-objetivos-hipoteses).
+
+Common context: *Acacia dealbata*, Coimbra district, 2023 imagery,
+research-grade iNaturalist observations, TESSERA vs. Sentinel-2
+features; performance measured with ROC-AUC and the continuous Boyce
+index under 10 km spatial block holdout.
+
+**Main question:** To what extent do Earth Observation foundation
+models, trained with citizen-science observations, allow *Acacia
+dealbata* to be mapped with less dependence on expert reference data
+than conventional satellite features?
+
+**General objective:** to assess under which conditions of quantity,
+source and spatial distribution of reference data foundation models
+are useful for mapping *A. dealbata* from citizen science.
+
+**Specific objectives:**
+
+1. To build and document the process that turns citizen-science point
+   observations into reference data for satellite classification.
+2. To compare the performance of TESSERA-based and Sentinel-2-based
+   models, and to measure the gain from adding expert data from 0% to
+   100% (RQ1).
+3. To measure how performance changes as observations are reduced,
+   removing those most distant from 2023 first (RQ2).
+4. To measure the difference in performance between locations near
+   and far from the sampled area, for both representations (RQ3).
+5. To produce the *A. dealbata* map of the study area, with a
+   confidence map.
+
+| | Question | Hypotheses |
+|---|---|---|
+| RQ1 | To what extent do TESSERA representations improve *A. dealbata* mapping over Sentinel-2 features when trained on citizen science, and how much performance is gained by progressively adding expert data? | H₀a: no performance difference between TESSERA and Sentinel-2 models. H₁a: the TESSERA model performs better. H₀b: adding expert data does not change performance. H₁b: performance increases with the fraction of expert data. |
+| RQ2 | What is the effect of reducing citizen-science observations, removing those most distant from 2023 first, on the performance of TESSERA models compared with Sentinel-2 models? | H₀: the performance difference between TESSERA and Sentinel-2 stays the same as observations are reduced. H₁: the TESSERA model loses less performance than the Sentinel-2 model. |
+| RQ3 | Do foundation models amplify or mitigate the effect of the spatial concentration of citizen-science observations, compared with conventional features, when the model is evaluated away from where sampling took place? | H₀: the near–far performance difference is the same for TESSERA and Sentinel-2. H₁: it differs (larger drop for TESSERA = amplify; smaller = mitigate). Observer comparison — H₀: at equal sample size, no difference between training on the dedicated observer and on the others. H₁: performance differs away from the sampled area. |
+
+Working hypotheses, not formal statistical tests (five spatial
+splits); the decision criterion for each is to be written before the
+experiment runs. H₁b was written after the TESSERA curve had already
+come out flat (compatible with H₀b).
 
 ## Secondary Questions
 
@@ -139,15 +187,31 @@ effects, single background design) and the diagnostic notebooks:
 [`expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb),
 [`label_purity_check.ipynb`](../notebooks/07_foundation_models/label_purity_check.ipynb).
 
+**One-class SVM dropped for future arms (scope-reduction decision,
+2026-11-10):** confirmed losing to Random Forest and Logistic
+Regression on both arms tested so far, with the gap widening under the
+forest-only background check above. Not re-run by default on the
+Sentinel-2 arm or further curve extensions — kept only as an
+already-tested, documented result. **Same decision for the four
+robustness diagnostics above:** re-run them for a future arm only if
+that arm's result looks genuinely unexpected, not by default for every
+new arm/representation. Full reasoning:
+[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo),
+[`thesis/notes.md`](../thesis/notes.md#rq1-fundo-uniforme-nao-cos).
+
 Run once per representation (TESSERA done; Sentinel-2 deferred, see
 [Foundation Model Use](#foundation-model-use-adopted)), same
 classifiers, same held-out spatial test set, at every curve level.
 
-- Candidate classifiers: Random Forest, Logistic Regression, compact
-  neural network. **Grounded in:** Random Forest — Ball et al. (2026);
-  Yang et al. (2026); Mouta et al. (2021); Domingo et al. (2023);
-  Eskandari et al. (2025). Compact neural network — Ball et al.
-  (2026). Findings: `literature.md`.
+- **Classifier (adopted): Random Forest**, carried forward on both
+  arms (citizen science and expert); Logistic Regression kept only as
+  a cheap reported baseline, not an equal competing candidate; compact
+  neural network dropped as a candidate (simplification decision, not
+  tested) — see
+  [`thesis/notes.md`](../thesis/notes.md#classificador-presença-vs-fundo-ciência-cidadã-random-forest-por-agora).
+  **Grounded in:** Random Forest — Ball et al. (2026); Yang et al.
+  (2026); Mouta et al. (2021); Domingo et al. (2023); Eskandari et al.
+  (2025). Findings: `literature.md`.
 - **Expert reference labels (adopted):** *A. dealbata* polygons
   sent by the supervisor. Provenance, attributes and counts:
   [`data/README.md`](../data/README.md#acacia-dealbata-expert-reference-polygons).
@@ -169,7 +233,12 @@ classifiers, same held-out spatial test set, at every curve level.
     [`thesis/notes.md`](../thesis/notes.md#usar-os-dados-de-especialistas-com-limpeza)).
     Shares the uniform-random background pool with the citizen-science
     arm — see step 7 of the [Reference-Data
-    Pipeline](#reference-data-pipeline-proposed).
+    Pipeline](#reference-data-pipeline-proposed). **Kept as
+    uniform-random, not COS-stratified (mine, not yet confirmed by the
+    supervisor):** the already-run forest-only-background robustness
+    check stands in for what COS-stratification would test; full
+    reasoning (and a One-Class SVM caveat it surfaces) in
+    [`thesis/notes.md`](../thesis/notes.md#rq1-fundo-uniforme-nao-cos).
   - **Cleaning and year/method:** see the `data/README.md` entry
     linked above.
   - **Labels independent of citizen science:** iNaturalist did not
@@ -202,19 +271,27 @@ burned, built over). Removing them first reduces quantity in a
 documented, realistic way, and reports *which* observations are
 removed and *why*.
 
-- **Filter:** observations ordered by date, oldest removed first,
-  combined with the other candidate criteria (quality grade,
-  positional accuracy). Exact combination open.
+- **Filter:** observations ordered by date, oldest removed first. The
+  only RQ2-specific filter — quality grade and positional accuracy are
+  already fixed, global pipeline steps applied before any RQ runs (see
+  [Reference-Data Pipeline](#reference-data-pipeline-proposed), steps
+  2 and 3), not an open combination to decide here.
 - **Levels:** keep the most recent N observations, for decreasing N.
   By year alone the levels are coarse — keeping 2019 onwards retains
   99.4% of presences, 2021 onwards 85.5%, 2023 onwards 36.6% (3 000
   cleaned *A. dealbata* presences) — so levels are set by date, not
   year. Fix levels after checking the real counts.
-- **Open:** whether observations after 2023 (2024–2026: 1 009
-  presences) count as "more recent", or whether recency is distance
-  to 2023. **Not just wording (checked):** the two readings
-  give different observer compositions at the same retention level —
-  see the limitation below.
+- **Recency = distance to 2023, not strict chronological order
+  (mine, not yet confirmed by the supervisor; closed as my own working
+  decision, scope-reduction decision, 2026-11-10 — no longer kept open
+  as two live candidate readings).** Observations after 2023
+  (2024–2026: 1 009 presences) count as recent as symmetrically-close
+  ones before 2023; the filter removes the most temporally distant
+  observations first, in either direction. **Not just wording
+  (checked):** the two readings give different observer compositions
+  at the same retention level — see the limitation below. Full
+  reasoning:
+  [`thesis/notes.md`](../thesis/notes.md#rq2-recência-distância-a-2023).
 - **Limitation (checked, see
   `notebooks/02_citizen_science/acacia_observations.ipynb`):** without
   a random-removal baseline, each level changes quantity *and*
@@ -263,38 +340,54 @@ react to it *differently* is untested. Two competing hypotheses:
   surroundings better, so the model relies less on where observers
   went.
 
-Design notes:
+**Proposed redesign (mine, to confirm with the supervisor,
+2026-11-11) — the approved design below stands until he answers.**
+Same question, measured differently: first diagnose whether the
+concentration of sampling hurts the model, instead of assuming the
+dominant observer is a bias to correct. Proposed wording and H₀/H₁:
+[Proposed Formulation](#proposed-formulation-question-objectives-hypotheses).
+Expected mechanisms: **amplify**
+(embeddings carry landscape context, so the model learns the sampled
+area and degrades more than Sentinel-2 away from it), **mitigate**
+(embeddings describe the plant better, so it degrades less), **no
+effect** (neither degrades; concentration is not a problem here). For
+the observer comparison: **depth** (the dedicated observer's points
+give an equal or better model) vs. **breadth** (the other observers'
+points give a better model away from the sampled area). The
+experiments show the outcome, not the mechanism. Two experiments and one product:
+(1) train on citizen science, evaluate on the expert polygons
+(independent reference) near vs. far from the nearest training point,
+in geographic distance, for both representations — 1 680 polygons
+within 1 km, 392 farther in the same source file, 398 more elsewhere
+in the country as an optional extension; (2) one dedicated observer
+vs. many occasional ones at equal sample size (353 points each),
+replacing the capped/removed condition; (3) a feature-space
+dissimilarity map (area of applicability, Meyer & Pebesma, 2021) as a
+confidence layer for the final map only. Dropped under the proposal:
+the road/trail layer and a second iNaturalist region. Spatial
+thinning runs only if (1) finds degradation. What is measured so far
+is concentration, not harm: Observer A's points occupy 18 of 43
+10 km blocks. Main risk: far polygons are 20–40 times larger than
+near ones. Reasoning, counts and open points:
+[`thesis/notes.md`](../thesis/notes.md#rq3-proposta-redesenho-diagnostico-primeiro).
 
-- Evaluated with geographically separated test regions (see
-  [Validation](methodology.md#validation)).
+Design notes (approved design):
+
+- Evaluated with geographically separated test regions, spatial block
+  holdout (see [Validation](methodology.md#validation)).
 - A single reference year keeps observation year from correlating
   with geography.
-- The background affects the bias being measured: the other-plant
-  background pool shares the presences' observers and places (same
-  citizen-science pipeline), so it partly absorbs their spatial bias
-  rather than exposing it; a uniform-random background does not share
-  that bias, so it should expose more of it. Results must state which
-  background was used.
-- **Reviewed (mine; reasonable proposal, not yet confirmed
-  by the supervisor):** the candidate experiment — other-plant
-  background pool vs. random background — does not actually depend on
-  the dropped multiclass design; it only needs the other-plant pool to
-  exist as *a* background source, which it still does (group pipeline,
-  kept for this purpose — see [Other Plants as
-  Background](#other-plants-as-classes-adopted-direction)). What
-  changed is which background RQ1 adopted as its main, shared one:
-  the background actually built and used so far for the
-  presence-vs-background classifier and the one-class evaluation is
-  **uniform-random points** (not yet confirmed by the supervisor as
-  final — see [RQ1](#rq1--foundation-models-vs-conventional-approaches)
-  and [`data/README.md`](../data/README.md)), not the other-plant
-  pool. So the two candidate backgrounds map onto the amplify/mitigate
-  question directly: random background is the "bias-exposed" condition
-  (closer to what RQ3 wants to measure), the other-plant/target-group
-  pool is the "bias-corrected" condition (per Phillips et al., 2009).
-  Running RQ3 under both and comparing the amplify/mitigate reading is
-  still a candidate experiment, now stated independently of multiclass;
-  not yet run, and not scheduled ahead of the RQ1 curve.
+- **Background: uniform-random points, the same shared pool as RQ1**
+  (scope-reduction decision, 2026-11-10). A second candidate experiment
+  — comparing RQ3 under this background vs. an other-plant/target-group
+  background (Phillips et al., 2009) — was dropped: it depended on
+  keeping the whole other-plant dataset (8 groups) alive as an active
+  design candidate, for a comparison never scheduled ahead of the RQ1
+  curve. The other-plant dataset remains documented
+  ([`data/README.md`](../data/README.md#inaturalist-observations-cleaned-derived))
+  as historical data from the abandoned multiclass design, not an
+  active candidate. Full reasoning:
+  [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
 - **Real bias case — the dominant observer.** One person made 83% of
   all observations (85% in 2021–2025; 98% of the 2021 peak). Candidate
   experiment: train with all observations vs. capped vs. without that
@@ -313,8 +406,13 @@ Design notes:
   observer.
 
 Experiment — compare training sets: (1) original observations,
-(2) spatially thinned, (3) dominant observer capped/removed. Build
-bias axes from distance to roads/trails (e.g. OpenStreetMap) and
+(2) spatially thinned, (3) dominant observer capped/removed. Checked
+2026-11-10 whether (2) and (3) are redundant (thinning mostly removes
+the dominant observer's points anyway) — they are not: thinning at up
+to 300 m still leaves 70.5% Observer A share, far from (3)'s 0%; kept
+as three separate conditions. See
+[`thesis/notes.md`](../thesis/notes.md#rq3-desbaste-espacial-e-caparremover-o-observador-dominante-não-são-redundantes-mantidas-as-três-condições-2026-11-10).
+Build bias axes from distance to roads/trails (e.g. OpenStreetMap) and
 check they hold in the study area rather than assuming them. Do not
 assume bias correction improves performance.
 
@@ -327,10 +425,11 @@ wall-to-wall.** The classifier is trained on the 10 m pixel at each
 observation (Sentinel-2 features or foundation-model embedding), then
 applied to every pixel of the study area. The task is binary —
 *Acacia* presence vs. background — run both as true one-class/novelty
-detection and as a presence-vs-background classifier in parallel (see
+detection and as a presence-vs-background classifier in parallel on
+the arms tested so far (citizen science, expert); one-class SVM
+dropped for future arms, Random Forest carried forward alone (see
 [RQ1](#rq1--foundation-models-vs-conventional-approaches)); the
-*Acacia* map is the predicted probability (or novelty score) per
-pixel.
+*Acacia* map is the predicted probability per pixel.
 
 **Grounded in:** Brown et al. (2025) and the Cambridge TESSERA group —
 findings in `literature.md`.
@@ -351,26 +450,80 @@ findings in `literature.md`.
   stays pixel classification; the mask changes how many pixels around
   each observation count as *Acacia* training data. Using the camera
   direction or close-up vs. landscape photos was dropped (not worth
-  it, supervisor). Recommended reading: Rivier et al. (2024, ICIP),
-  who propagated sparse point labels to superpixels, "and similar
-  works" (supervisor; not read yet beyond the abstract).
-  **Candidate methods (to compare):** region growing on TESSERA
-  embedding similarity from the observed pixel, with a maximum radius;
-  superpixels on Sentinel-2 or embeddings (as in Rivier et al., 2024 —
-  see [`literature.md`](literature.md#weak-supervision-from-point-labels)
-  for how their propagation rule works and how it differs from our
-  setting); COS 2023 "Florestas de acácias" polygons where the point
-  falls inside one (about 17% of 2021–2025 presences). Risks: the mask
-  may spread into similar non-*Acacia* vegetation (check a sample on
-  OrtoSat), and large patches give many more pixels than isolated
-  trees (may need balancing). Literature search found
-  this is an active technique in weakly-supervised remote-sensing
-  segmentation generally, but no paper combines it with sparse
-  citizen-science points and frozen foundation-model embeddings as
-  proposed here, so that specific combination stays a possible
-  contribution, not an applied practice. Gillespie et al. (2024) is
-  **not** a precedent for this rule — why, in
-  [`literature.md`](literature.md#citizen-science--remote-sensing--plant-mapping).
+  it, supervisor). **For the January report (scope decision, agreed in
+  conversation, 2026-11-10):** present the three candidates below,
+  identified and grounded in literature, comparison planned — no rule
+  chosen and no new code run before the report; picking one and
+  running the comparison is deferred past it. Recommended reading:
+  Rivier et al. (2024, ICIP),
+  who propagated sparse point labels to superpixels — read in full,
+  see `literature.md`. "And similar works" (supervisor, unnamed): a
+  citation search found only one topically-close paper citing Rivier
+  (Wölk et al., 2026 — a different problem, annotation uncertainty,
+  not point→patch propagation; low relevance) and no second direct
+  precedent for superpixel label propagation on satellite imagery;
+  treat the "similar works" pointer as still largely unidentified, not
+  as a gap in my reading of Rivier itself.
+  **Candidate methods (to compare), with how much direct literature
+  support each has (uneven, say so plainly):**
+  - **Region growing** on TESSERA embedding similarity from the
+    observed pixel, with a maximum radius. **Still the thinnest
+    literature anchor of the three, but strengthened:** a search
+    specifically for embedding/feature-similarity region growing (not
+    raw-pixel) found no remote-sensing precedent; only the classical
+    pixel-value region-growing algorithm (Adams & Bischof, 1994 — not
+    read, known via its SAGA-GIS implementation) and an inaccessible
+    2020 conference abstract ("Deep Seeded Region Growing," SVM seeds,
+    not foundation-model embeddings). Zhang et al. (2025, *Remote
+    Sensing*), read in full, is the strongest accessible precedent
+    found so far for the general technique: seeded region growing over
+    a satellite-derived tree fractional cover raster to delineate
+    timberline, with a fixed global threshold, not embeddings or a
+    similarity-to-seed criterion, and no point-label/citizen-science
+    angle at all — so it grounds region growing as a real way to
+    delineate vegetation extent from satellite data, not our specific
+    point-label setting. Still grounded mainly by analogy: classical
+    region growing's general logic, plus the feature-space-over-raw-pixel
+    argument confirmed below for superpixels.
+  - **Superpixels** on TESSERA embeddings (as in Rivier et al., 2024 —
+    see [`literature.md`](literature.md#weak-supervision-from-point-labels)
+    for their propagation rule and how it differs from our setting).
+    **Strengthened:** Raine et al. (2022, *IEEE RA-L*), read in full —
+    a species-level analogue (sparse ecologist point labels →
+    multi-species coral segmentation), confirms superpixels computed on
+    *learned features* clearly beat raw-pixel superpixels in their
+    ablation (pixel accuracy 89.6–92.6 vs. 64.1), and offers a different
+    fill rule for point-free superpixels (nearest feature-similarity
+    class) than Rivier's mask-out-of-loss — a design choice worth
+    stating explicitly, not just inheriting Rivier's. Both papers'
+    point densities (10–300/image) are still far denser than our few
+    citizen-science points per tile — a gap that applies to this
+    candidate however it's built. Raine et al. also flags that prior
+    point-supervision work "assumes points lie centrally within
+    objects" — worth checking against citizen-science points, which are
+    often off-target (phone GPS near a road/trail, not the plant).
+  - **COS 2023 "Florestas de acácias" polygons** where the point falls
+    inside one (about 17% of 2021–2025 presences). Closest literature
+    found is Liu et al. (2026, arXiv:2602.08282, GeoLifeCLEF 2025),
+    read in full — but it pools *many* presence-only points inward onto
+    a fixed grid cell, the mirror of our rule (extending *one* point's
+    label outward to an existing polygon); confirms area-based
+    aggregation of sparse presence data is an active, current technique
+    in this genre of problem, but is not a direct precedent for
+    extending a label via an independent, pre-existing auxiliary map
+    (not a model-derived region). No direct precedent for that specific
+    move was found, reinforcing rather than changing what's said below.
+  - Risks: the mask may spread into similar non-*Acacia* vegetation
+    (check a sample on OrtoSat), and large patches give many more
+    pixels than isolated trees (may need balancing). Literature search
+    found the general idea of propagating sparse points to a region is
+    an active technique in weakly-supervised remote-sensing
+    segmentation, but no paper combines it with sparse citizen-science
+    points and frozen foundation-model embeddings as proposed here, so
+    that specific combination stays a possible contribution, not an
+    applied practice. Gillespie et al. (2024) is **not** a precedent for
+    this rule — why, in
+    [`literature.md`](literature.md#citizen-science--remote-sensing--plant-mapping).
 - **Grid-cell presence/absence — not the training unit:** pixel
   predictions may later be aggregated to cells for evaluation and
   comparison with SDM-style outputs.
@@ -390,9 +543,9 @@ reported, and its effect is measured.
 | 4. Temporal design | Adopted | All observations treated as 2023, see [Temporal Design](#temporal-design-adopted) | See that section |
 | 5. Disturbance filter | Proposed (fixed) | Burned between observation and 2023 (ICNF 1975–2025): 6 *A. dealbata* presences (0.2%), 125 other plants (0.9%) | Riveiro et al. (2025): burned stands regrow, pixel no longer matches the label |
 | 6. Label purity | Checked, no large-scale problem found | Expert-polygon agreement (limited power) and embedding-outlier detection found no evidence citizen-science presences are frequently off-target; see [RQ1](#rq1--foundation-models-vs-conventional-approaches) and `thesis/notes.md` | Ball et al. (2026) |
-| 7. Negative/background | Adopted | Uniform-random points, 50 m buffer around known presences, not COS-stratified — not yet confirmed by the supervisor as final. See [RQ1](#rq1--foundation-models-vs-conventional-approaches) and [`data/README.md`](../data/README.md) | Phillips et al. (2009) |
+| 7. Negative/background | Adopted | Uniform-random points, 50 m buffer around known presences, not COS-stratified — not yet confirmed by the supervisor as final. See [RQ1](#rq1--foundation-models-vs-conventional-approaches) and [`data/README.md`](../data/README.md) | Empirical (forest-only robustness check); Phillips et al. (2009) supports the opposite choice (target-group background) — misattributed here, see [`thesis/notes.md`](../thesis/notes.md#rq1-fundo-uniforme-nao-cos) |
 | 8. Same pixel | Adopted | Pixel = 10 m cell in EPSG:32629. One presence per pixel, closest to 2023 (3 276 → 3 000). Conflicts: co-located other plants dropped, presence kept. Other plants: one per pixel, tallest group first, then closest to 2023 (16 720 → 13 554). Why: [`thesis/notes.md`](../thesis/notes.md#uma-observação-por-píxel-nos-conflitos-fica-a-presença) | Karasiak et al. (2022) |
-| 9. Other-plant classes | **Superseded** | Multiclass dropped; the cleaned, grouped other-plant dataset is kept only as a candidate background source for the RQ3 amplify/mitigate experiment (not yet run) — see [RQ3](#rq3--spatial-sampling-bias) and [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | FAO LCCS (Di Gregorio & Jansen, 2000); GIFT (Weigelt et al., 2020; Denelle et al., 2023); Decreto-Lei 92/2019, Annex II; EPPO (2024); Ball et al. (2026) |
+| 9. Other-plant classes | **Superseded** | Multiclass dropped; the RQ3 background experiment that was the dataset's last active use was also dropped (2026-11-10) — the cleaned, grouped other-plant dataset stays only as historical data from the abandoned multiclass design, no active use — see [Other Plants as Classes](#other-plants-as-classes-adopted-direction) | FAO LCCS (Di Gregorio & Jansen, 2000); GIFT (Weigelt et al., 2020; Denelle et al., 2023); Decreto-Lei 92/2019, Annex II; EPPO (2024); Ball et al. (2026) |
 | 10. Observer balancing | Adopted | Main model: all of Observer A's observations (88% of the 3 000 presences); capping/removing is the RQ3 experiment, not preprocessing. Why: [`thesis/notes.md`](../thesis/notes.md#observer-a-todas-as-observações-no-modelo-principal) | Observer clustering (Cambridge TESSERA group); Phillips et al. (2009) |
 
 **Evaluation — cumulative ablation:** run the RQ1 setup after adding
@@ -400,8 +553,16 @@ each step and report the change in performance. This shows which
 steps matter, turning preprocessing into a result. Grounded in Ball et
 al. (2026) — applies the same idea to each data preparation step.
 
-Open: whether this stays a methodological contribution (own chapter
-and ablation) or becomes an explicit research question.
+**Deferred (scope decision, agreed in conversation, 2026-11-10):** not
+attempted before the January report — documenting and justifying each
+step (done above) is enough for the intermediate deliverable. **Made
+an optional stretch goal, not a committed deliverable, going forward
+(scope-reduction decision, 2026-11-10):** the thesis's methodological
+contribution rests on the documented, justified pipeline above, not on
+this quantitative ablation — see
+[`docs/literature.md`](literature.md#contribution). Still open: whether
+it then becomes its own chapter/ablation or an explicit research
+question, if pursued at all.
 
 ### Foundation Model Use (adopted)
 
@@ -420,10 +581,6 @@ Reasons:
 **Grounded in:** Ball et al. (2026); Yang et al. (2026); Brown et al.
 (2025) — all used frozen embeddings with a light classifier on top;
 findings in `literature.md`.
-
-Possible extension, if time and weights allow: fine-tune TESSERA, or
-train a small MLP head on the embeddings, and compare with the frozen
-setup.
 
 **Phase 1: TESSERA only (decision, supervisor, in
 person).** The RQ1 effort-reduction curve (see
@@ -449,23 +606,19 @@ point pool, unrelated to other-plant data; see
 [`data/README.md`](../data/README.md). Full decision and reasoning:
 [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
 
-**Why the other-plant data is still kept:** it remains a candidate
-background source for the RQ3 amplify/mitigate experiment (not yet
-run, not scheduled ahead of the RQ1 curve) — see
-[RQ3](#rq3--spatial-sampling-bias). The cleaned, grouped dataset (3 000
-*A. dealbata* vs. 13 554 other-plant observations after cleaning, in 8
-groups from GIFT growth forms, the national invasive list and the
-iNaturalist taxonomy) is documented in
-[`data/README.md`](../data/README.md); group rules and grounding:
+**No longer an active candidate for anything (scope-reduction decision,
+2026-11-10):** the other-plant background experiment for RQ3 (comparing
+it against a random background) was dropped — see
+[RQ3](#rq3--spatial-sampling-bias) and
+[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
+The cleaned, grouped dataset (3 000 *A. dealbata* vs. 13 554
+other-plant observations after cleaning, in 8 groups from GIFT growth
+forms, the national invasive list and the iNaturalist taxonomy) stays
+documented in
+[`data/README.md`](../data/README.md#inaturalist-observations-cleaned-derived)
+as historical data from the abandoned multiclass design; group rules
+and grounding (Phillips et al., 2009; Ball et al., 2026):
 [`thesis/notes.md`](../thesis/notes.md#outras-plantas-em-8-grupos-herbáceas-só-onde-são-a-camada-de-cima).
-Grounded in Phillips et al. (2009) for other-species-as-background;
-Ball et al. (2026) for grouping into a few classes.
-
-Open:
-
-- Mixed pixels: a 10 m pixel may contain *Acacia* and another class.
-- All observers' other plants, or only the dominant observer's, if the
-  RQ3 candidate experiment above is run.
 
 ### Temporal Design (adopted)
 
@@ -535,7 +688,11 @@ Besides those marked above:
 
 - Study area: the Coimbra district for now (all data cover it);
   other regions later (needed for RQ3).
-- Independent validation: COS 2023 *Acacia* class and/or a sample
-  checked on OrtoSat 2023; must not overlap spatially with the expert
-  reference polygons used for training (RQ1).
+- Independent validation: COS 2023 *Acacia* class comparison only;
+  must not overlap spatially with the expert reference polygons used
+  for training (RQ1). A sample checked by hand on OrtoSat 2023 was
+  also considered and dropped — same manual visual-interpretation
+  effort the supervisor called inefficient for building multiclass
+  training labels, see
+  [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
 - Baseline features and metrics — see [`methodology.md`](methodology.md).

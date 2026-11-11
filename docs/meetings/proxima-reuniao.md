@@ -14,9 +14,6 @@
   [2026-11-05.md](2026-11-05.md#por-perguntar-não-chegou-a-ser-discutido-nesta-reunião)).
 - **Uma planta por píxel, fica a mais alta:** concorda? Já aplicado no
   pipeline, a confirmar (mesma origem).
-- **Filtro da RQ2:** "mais recentes" quer dizer 2024–2026, ou as mais
-  próximas de 2023? (origem:
-  [2026-11-04.md](2026-11-04.md#2-outras-perguntas)).
 - **invasoras.pt:** se as presenças de ciência cidadã ficarem poucas,
   faz sentido juntar observações dessa plataforma? Quem a gere? (origem:
   [2026-11-04.md](2026-11-04.md#presenças-de-a-dealbata-7-943--3-000),
@@ -26,6 +23,53 @@
   de *A. dealbata* como segunda região? (origem:
   [2026-11-04.md](2026-11-04.md#3-para-informar);
   [`data/README.md`](../../data/README.md#candidate-second-region-for-rq3-found-not-chosen)).
+- **RQ3 — mudar a forma de medir (proposta minha):** a pergunta
+  mantém-se, mas em vez de partir do princípio de que o observador
+  dominante é um enviesamento a corrigir, diagnosticar primeiro:
+  (1) treinar com ciência cidadã e avaliar nos polígonos de
+  especialistas perto e longe do ponto de treino mais próximo, para
+  TESSERA e Sentinel-2; (2) 353 pontos do observador dominante contra
+  os 353 dos outros; mapa de confiança por dissemelhança só como
+  produto; desbaste só se houver degradação; sem camada de estradas.
+  Concorda? Se sim, a segunda região (ponto acima) deixa de ser
+  necessária: há 392 polígonos do TNE a mais de 1 km de qualquer
+  observação, e 398 no resto do país. Risco a discutir: os polígonos
+  de longe são 20 a 40 vezes maiores do que os de perto. *Literatura:* Meyer & Pebesma (2021), método;
+  Ratsakatika et al. (2026, preprint) usam-no com embeddings mas
+  declaram que a exatidão fora da área não foi testada; não encontrei
+  precedente com ciência cidadã concentrada num observador (pesquisa
+  rápida) — possível contributo. **E o enunciado:** proponho "Os foundation
+  models de observação da Terra amplificam ou atenuam o efeito da
+  concentração espacial das observações de ciência cidadã, em
+  comparação com features convencionais de satélite, quando o modelo
+  é avaliado longe de onde houve amostragem?" — "concentração" em vez
+  de "enviesamento", porque é o que de facto medimos (o observador
+  dominante é fiável e cobre bem a zona dele), e uma terceira
+  hipótese além de amplifica/atenua: sem efeito (origem:
+  [thesis/notes.md](../../thesis/notes.md#rq3-proposta-redesenho-diagnostico-primeiro)).
+- **Formulação das perguntas (proposta minha):** reescrevi a pergunta
+  principal e as três RQ como pergunta → objetivo geral → objetivos
+  específicos → hipóteses (H₀/H₁). Concorda com a forma e com os
+  enunciados? Hipóteses de trabalho ou testes estatísticos formais?
+  - *Principal:* em que medida os foundation models de observação da
+    Terra, treinados com observações de ciência cidadã, permitem
+    mapear *Acacia dealbata* com menor dependência de dados de
+    referência de especialistas do que as features convencionais de
+    satélite?
+  - *RQ1:* em que medida as representações do TESSERA melhoram o
+    mapeamento face às features do Sentinel-2, quando treinadas com
+    ciência cidadã, e quanto desempenho se ganha ao acrescentar
+    progressivamente dados de especialistas?
+  - *RQ2:* qual o efeito da redução das observações, removendo
+    primeiro as mais distantes de 2023, no desempenho dos modelos com
+    TESSERA face aos modelos com Sentinel-2? (sai "mais fiáveis": já
+    é tratado na limpeza)
+  - *RQ3:* ver o ponto acima.
+  - Objetivos e hipóteses completos:
+    [research_questions.md](../research_questions.md#proposed-formulation-question-objectives-hypotheses).
+  *Literatura:* nenhuma — é forma de redação, a partir de um guia de
+  escrita de teses, não uma decisão metodológica (origem:
+  [thesis/notes.md](../../thesis/notes.md#formulacao-pergunta-objetivos-hipoteses)).
 - **Apresentação da Lucie Radová:** faz sentido falar com ela? (origem:
   [2026-11-04.md](2026-11-04.md#3-para-informar)).
 - **Máscara de segmentação — "considerar a área de vegetação mais
@@ -33,14 +77,17 @@
   volta da observação, ou só levar o ponto para dentro da vegetação
   mais próxima. Estou a assumir a primeira leitura para já (origem:
   [thesis/notes.md](../../thesis/notes.md#máscara-de-segmentação-sem-a-direção-da-câmara-testar-várias-abordagens)).
-
-## Também relevante para esta conversa
-
-A RQ3 dependia de "outras plantas como classes vs. fundo ao acaso"
-como candidata a experiência; com o multiclasse abandonado (reunião
-2026-11-05), isto passa a "fundo de outras plantas vs. fundo ao
-acaso" — por rever antes ou durante esta reunião (ver
-[research_questions.md](../research_questions.md#rq3--spatial-sampling-bias)).
+- **Validação independente da RQ1 (classe *Acacia* da COS 2023):**
+  plano é comparar as previsões da RQ1 com a classe "Florestas de
+  acácias" da COS 2023, como referência que não vem nem da ciência
+  cidadã nem dos polígonos de especialistas. Confirmar que os
+  polígonos de especialistas foram mesmo feitos sem apoio da COS
+  (visitas de campo + segmentação/interpretação visual do OrtoSat,
+  como já descrito por ele) e que esta comparação faz sentido como
+  validação independente, mesmo com 54% dos polígonos já a cair dentro
+  dessa classe da COS (origem:
+  [`data/README.md`](../../data/README.md#acacia-dealbata-expert-reference-polygons);
+  [thesis/notes.md](../../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)).
 
 ## Resultados a apresentar: curva de redução de esforço da RQ1
 

@@ -214,6 +214,15 @@ waiting to be asked:
   files — propagating a decision means short pointers in most files
   and the full write-up in exactly one.
 
+## Thesis Manuscript: Never Edit Without Being Told
+
+Never create, edit or delete anything in `thesis/document/` (chapter
+text, bibliography, figures, structure) unless I explicitly ask for
+that change in that session. Agreeing on a decision, a new wording or
+a new research-question formulation is not permission to write it
+into the manuscript — record it in `thesis/notes.md` with its **Na
+tese** status and wait.
+
 ## Thesis Manuscript Sync
 
 Whenever text is added or changed in `thesis/document/` (a chapter,
@@ -236,6 +245,73 @@ if a design changed) or complete a previously "⏳" entry. Do not treat
 this as reason to rewrite the entry's own reasoning or delete it —
 `thesis/notes.md` stays the full decision log regardless of what has
 been written into the manuscript yet.
+
+## Writing Abandoned Methodologies
+
+For an intermediate defense, the jury looks for evidence of critical
+thinking behind the path taken — abandoned methodologies are some of
+the strongest proof of that. When writing the manuscript
+(`thesis/document/`) or defense talking points (`thesis/notes.md` →
+**Para dizer**):
+
+- Keep the focus on adopted methodologies (roughly 70-80% of the
+  space/time); abandoned ones are a complement, not the center.
+- For each abandoned approach worth mentioning: what was tried, one
+  concrete and objective reason it did not work, and what came next.
+- Frame it as a reasoned decision and a learning step, never as a
+  failure — e.g. "tested X, found it did not fit Y, so moved to Z."
+- Only include abandoned approaches that had real impact on the
+  project's direction. Skip anything dropped within a day with no
+  lasting consequence.
+- If space is tight, group every abandoned approach into one
+  paragraph/slide or a short timeline of methodological evolution,
+  rather than a full write-up per approach.
+- Good structure: adopted methodologies → brief note on what was
+  discarded and why → how that shaped the direction going forward.
+- This also pre-empts "why didn't you use X?" questions from the jury,
+  and sharpens the justification for what was adopted, since the
+  choice makes more sense by contrast.
+- It is fine to leave an abandoned approach out entirely if it was
+  irrelevant or time is very tight — but keep the reasoning ready
+  (already in `thesis/notes.md`) in case it comes up.
+
+The abandoned-methodology reasoning itself already lives in
+`thesis/notes.md` (e.g. multiclass abandoned, Isolation Forest vs.
+one-class SVM) per the Decision Log rule above — this section is about
+how much of it surfaces in the manuscript/defense, not where it is
+recorded.
+
+## Formulating Research Questions
+
+Whenever a research question, objective or hypothesis is written or
+revised (design docs, `thesis/notes.md`, the manuscript), use this
+structure. It comes from a thesis-writing guide I chose
+(tesify.pt, "Como definir pergunta de investigação, objetivos e
+hipóteses"); it is a writing guide, not a source to cite.
+
+- **Question:** interrogative verb ("to what extent" for degree, "in
+  what way" for mechanism, "what is the effect of" for comparison) +
+  main variables + delimited context (species, area, period, data).
+  It must be empirically answerable with the data and time available.
+- **General objective:** the question turned into action, in one
+  statement.
+- **Specific objectives:** three to five, in the infinitive, with
+  measurable verbs (characterise, measure, compare, identify,
+  propose) — never vague ones (understand, explore, address). Each
+  passes SMART (specific, measurable, achievable, relevant,
+  time-bound), together they cover the general objective, and each
+  maps to a chapter or section.
+- **Hypotheses:** neutral and falsifiable, written as a null (H₀) and
+  an alternative (H₁), directional only when one direction is
+  expected, each stating how it is measured. Write them before
+  running the experiment; if a result is already known, say so.
+- **Mistakes to avoid:** a question that is really a topic;
+  objectives that do not follow from the question; more than five
+  specific objectives; hypotheses with no defined measurement;
+  objectives written in the past tense.
+
+The current formulation lives in
+[`docs/research_questions.md`](docs/research_questions.md#proposed-formulation-question-objectives-hypotheses).
 
 ## Current Stage
 
