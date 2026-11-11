@@ -81,6 +81,18 @@ result on its own:
 
 Scope is reassessed as experiments progress.
 
+### Risks shared by the three questions
+
+Each question also lists its own risks.
+
+- **The metrics may not separate the models.** The Boyce index is
+  near 0.99 for every model so far, and presence-background ROC-AUC
+  has no known upper bound here, so "no difference" could come from
+  the metric rather than the models.
+- **The Sentinel-2 arm is on hold.** The main question, RQ1 and RQ3
+  are comparisons with Sentinel-2; without it they show that TESSERA
+  works, not that it works better.
+
 ### RQ1 — Foundation models vs. conventional approaches
 
 **Question:** To what extent do TESSERA representations improve
@@ -122,6 +134,13 @@ The Sentinel-2 arm has not run yet (see
 caveats:
 [`thesis/notes.md`](../thesis/notes.md#curva-de-redução-de-esforço-completa-0100-com-fundo-e-bloco-de-teste-fixos);
 notebooks in `notebooks/07_foundation_models/`.
+
+**Risks:**
+
+- The flat curve may be specific to this pilot (one region, TESSERA
+  only) or to the metrics, not a finding about expert data in general.
+- Expert polygons fall in only 18 blocks of 10 km, so there are few
+  independent spatial splits.
 
 **Grounded in:** the representation comparison follows Ball et al.
 (2026) and the atoll ecosystem study (2026); not yet tested for
@@ -191,10 +210,15 @@ harm.
   of pixels each adds per observation.
 - **Leakage:** mask pixels that fall in a test block or on a
   background point are removed.
-- **Main risk:** no difference even at 150 presences.
 - **Open:** the decision criterion for the hypothesis, to write before
   running; whether the supervisor's "nearest vegetation area" means
   extending the label to the patch (the reading assumed here).
+
+**Risks:**
+
+- No difference between conditions, even at 150 presences.
+- The mask may spread into similar non-*Acacia* vegetation and add
+  wrong labels.
 
 **Grounded in:** superpixel propagation of point labels follows the
 idea of Rivier et al. (2024); Raine et al. (2022) supports computing
@@ -247,7 +271,13 @@ The experiments show the outcome, not the mechanism.
 - **Correction:** spatial thinning runs only if experiment 1 finds
   degradation.
 - **Background:** the uniform-random pool shared with RQ1.
-- **Main risk:** far polygons are 20–40 times larger than near ones.
+
+**Risks:**
+
+- Far polygons are 20–40 times larger than near ones, so near and far
+  differ in patch size as well as distance.
+- Large patches are easy to detect, so performance may be high both
+  near and far and show nothing.
 
 **Grounded in:** the amplify/mitigate question comes from work
 reporting weaker spatial transfer of embeddings — Zhu et al. (2026),
