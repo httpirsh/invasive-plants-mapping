@@ -778,11 +778,10 @@ Three specific questions not answered by any of the above:
 
 1. **Do foundation models amplify or mitigate citizen-science spatial
    bias** compared with conventional features? (RQ3)
-2. **How do foundation models behave when citizen-science data are
-   reduced by a documented filter** (observations furthest from the
-   imagery year first) rather
-   than at random? Existing label-efficiency work uses random
-   reduction only (Ball 2026). (RQ2)
+2. **Does extending a citizen-science point label to the patch around
+   it, using frozen embeddings, change mapping performance?** Existing
+   point-to-patch work uses dense point grids and trained segmentation
+   networks (Rivier 2024; Raine 2022). (RQ2)
 3. **How much is lost by training on citizen science instead of
    expert reference data**, with the same representation and test
    set? (RQ1)
@@ -804,9 +803,9 @@ Two parts:
    [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed)) —
    each step documented and justified from literature or data. A
    cumulative ablation measuring each step's effect is an optional
-   stretch goal. Candidate step with no precedent found: the
-   segmentation mask, which extends a citizen-science point to the
-   patch around it using frozen embeddings (see
-   [Prediction Task](research_questions.md#prediction-task-adopted)).
+   stretch goal. The segmentation mask, which extends a
+   citizen-science point to the patch around it using frozen
+   embeddings, has no precedent found and is tested as
+   [RQ2](research_questions.md#rq2--extending-point-labels-to-patches).
 2. **Empirical:** RQ1–RQ3 in
    [`research_questions.md`](research_questions.md).

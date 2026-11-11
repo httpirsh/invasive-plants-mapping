@@ -20,7 +20,7 @@ this document:
 
 | Proposal | Addressed by |
 |---|---|
-| Obj. 1 / work plan 3 — transform point observations into usable EO reference data, accounting for uncertainty and quality | [Reference-Data Pipeline](#reference-data-pipeline-proposed): a measured methodological contribution, not just preprocessing |
+| Obj. 1 / work plan 3 — transform point observations into usable EO reference data, accounting for uncertainty and quality | [Reference-Data Pipeline](#reference-data-pipeline-proposed): a measured methodological contribution, not just preprocessing; RQ2 (extending each point to the patch around it) |
 | Obj. 2 — use foundation models to compensate for limited, noisy citizen-science data | RQ1, RQ2 |
 | Obj. 3 — assess to what extent citizen science supports accurate, species-level mapping | RQ1 (comparison with expert reference data), [Species Scope](#species-scope-proposed) |
 | Work plan 4 — fine-tune foundation models; analyse accuracy, limitations, transferability | [Foundation Model Use](#foundation-model-use-adopted) (frozen embeddings, a justified deviation); RQ3 (performance away from the sampled area) |
@@ -35,9 +35,9 @@ models, trained with citizen-science observations, allow *Acacia
 dealbata* to be mapped with less dependence on expert reference data
 than conventional satellite features?
 
-**General objective:** to assess under which conditions of quantity,
-source and spatial distribution of reference data foundation models
-are useful for mapping *A. dealbata* from citizen science.
+**General objective:** to assess under which conditions of source,
+label extent and spatial distribution of reference data foundation
+models are useful for mapping *A. dealbata* from citizen science.
 
 **Specific objectives:**
 
@@ -46,8 +46,9 @@ are useful for mapping *A. dealbata* from citizen science.
 2. To compare the performance of TESSERA-based and Sentinel-2-based
    models, and to measure the gain from adding expert data from 0% to
    100% (RQ1).
-3. To measure how performance changes as observations are reduced,
-   removing those most distant from 2023 first (RQ2).
+3. To measure how performance changes when the label of each
+   observation is extended to the vegetation patch around it, with all
+   observations and with few (RQ2).
 4. To measure the difference in performance between locations near
    and far from the sampled area, for both representations (RQ3).
 5. To produce the *A. dealbata* map of the study area, with a
@@ -75,7 +76,7 @@ result on its own:
 | Scenario | Delivers | Answers |
 |---|---|---|
 | RQ1 only | Reference-data pipeline + Sentinel-2 vs. TESSERA, along the expert effort-reduction curve | Proposal objectives 1 and 3, part of 2 — already a thesis |
-| RQ1 + RQ2 | The above + behaviour under data reduction | Objective 2 in full. Low extra cost: same pipeline, model and test set |
+| RQ1 + RQ2 | The above + the effect of extending point labels to patches | Objective 1 in full, and the "limited data" part of objective 2. Same pipeline, model and test set; TESSERA only |
 | RQ1 + RQ2 + RQ3 | The above + performance away from the sampled area, and a confidence map | Transferability (work plan 4). Most expensive and most exposed to time |
 
 Scope is reassessed as experiments progress.
@@ -155,45 +156,54 @@ the supervisor; provenance and counts in
   blocks, and both sources inherit a similar spatial coverage.
 - **Open:** how the sites were chosen.
 
-### RQ2 — Data efficiency
+### RQ2 — Extending point labels to patches
 
-**Question:** What is the effect of reducing citizen-science
-observations, removing those most distant from 2023 first, on the
-performance of TESSERA models compared with Sentinel-2 models?
+*Question and design are mine, to confirm with the supervisor
+([`thesis/notes.md`](../thesis/notes.md#rq2-proposta-mascara)). The
+segmentation mask itself is his: central, try several approaches.*
 
-**Hypotheses:** H₀: the performance difference between TESSERA and
-Sentinel-2 stays the same as observations are reduced. H₁: the TESSERA
-model loses less performance than the Sentinel-2 model.
+**Question:** To what extent does extending the label of each
+citizen-science observation to the vegetation patch around it change
+the performance of *A. dealbata* mapping, compared with training on
+the observed pixel only?
 
-**Why this design:** all observations are treated as 2023 (see
-[Temporal Design](#temporal-design-adopted)), so observations far from
-2023 are the most likely to no longer match the 2023 imagery (cleared,
-burned, built over, or not yet established). Removing them first
-reduces quantity in a documented, realistic way.
+**Hypotheses:** H₀: performance is the same with and without the mask.
+H₁: it differs — more pixels per observation may help, and wrong
+pixels (the mask spreading into similar non-*Acacia* vegetation) may
+harm.
 
-- **Filter: recency, defined as distance to 2023** (mine, not
-  confirmed by the supervisor). Observations are removed starting with
-  those most distant in time from 2023, in either direction;
-  2024–2026 observations (1 009 presences) count as recent as
-  symmetrically close ones before 2023. It is the only RQ2-specific
-  filter: quality grade, positional accuracy and the disturbance
-  filter are fixed pipeline steps. Why:
-  [`thesis/notes.md`](../thesis/notes.md#rq2-recência-distância-a-2023).
-- **Levels:** keep the N observations closest to 2023, for decreasing
-  N. By year alone the levels are coarse — 2019 onwards retains 99.4%
-  of the 3 000 presences, 2021 onwards 85.5%, 2023 onwards 36.6% — so
-  levels are set by date. Still to fix from the real counts.
-- **Limitation:** there is no random-removal baseline, so each level
-  changes quantity *and* composition (age, observers, places) at once;
-  RQ2 measures their joint effect. Observer A's share stays near
-  88–89% across retention levels and is reported at each level
-  (`notebooks/02_citizen_science/acacia_observations.ipynb`).
-- The final map always uses all data; RQ2 is a test, not a cleaning
-  step.
-- **Grounded in:** training with decreasing fractions of labels
-  follows Ball et al. (2026, random reduction). Removing the
-  observations furthest from the imagery year first is this thesis's
-  own step, motivated by the same paper's cross-year result.
+**Design:**
+
+- **Three training conditions:** the observed pixel only; **region
+  growing** on TESSERA embedding similarity from the observed pixel,
+  with a maximum radius; **superpixels** computed on TESSERA
+  embeddings.
+- **Two data levels:** all 3 000 presences, and a random subsample of
+  150 (5%). The RQ1 curve is at the ceiling with all data, so the
+  small level is where the mask can show an effect: it tests whether
+  the mask compensates for having few observations.
+- **Only the training labels change.** Test set, background pool,
+  Random Forest, 10 km blocks and five seeds are those of RQ1. TESSERA
+  only: the question is about the labels, not the representation.
+- **One fixed parameter set per rule**, justified and stated as a
+  limitation; no calibration. Values still to choose.
+- **Comparison between the two rules is descriptive**, with the number
+  of pixels each adds per observation.
+- **Leakage:** mask pixels that fall in a test block or on a
+  background point are removed.
+- **Main risk:** no difference even at 150 presences.
+- **Open:** the decision criterion for the hypothesis, to write before
+  running; whether the supervisor's "nearest vegetation area" means
+  extending the label to the patch (the reading assumed here).
+
+**Grounded in:** superpixel propagation of point labels follows the
+idea of Rivier et al. (2024); Raine et al. (2022) supports computing
+superpixels on learned features rather than raw pixels. Region growing
+on a satellite product: Zhang et al. (2025); no remote-sensing
+precedent found for growing on embedding similarity. No paper found
+combines point-to-patch propagation with sparse citizen-science points
+and frozen embeddings, so that combination is a possible contribution.
+Summaries: [`literature.md`](literature.md#weak-supervision-from-point-labels).
 
 ### RQ3 — Spatial sampling concentration
 
@@ -260,37 +270,11 @@ per pixel.
 **Grounded in:** Brown et al. (2025) and the Cambridge TESSERA group —
 findings in `literature.md`.
 
-**Segmentation mask (supervisor: central, try several approaches).**
-A rule to consider the nearest vegetation area to each observation;
-the concrete rule is mine to define. Working reading (mine, to confirm
-with him): extend the point's label to the patch around it. The task
-stays pixel classification; the mask changes how many pixels around
-each observation count as *Acacia* training data.
-
-Three candidates, each with uneven literature support (summaries in
-[`literature.md`](literature.md#weak-supervision-from-point-labels)):
-
-- **Region growing** on TESSERA embedding similarity from the observed
-  pixel, with a maximum radius. Thinnest anchor: no remote-sensing
-  precedent found for growing on embedding similarity; Zhang et al.
-  (2025) grounds seeded region growing on a satellite product in
-  general.
-- **Superpixels** on TESSERA embeddings, following the idea of Rivier
-  et al. (2024). Raine et al. (2022) supports computing superpixels on
-  learned features rather than raw pixels.
-- **COS 2023 "Florestas de acácias" polygons** where the point falls
-  inside one (about 17% of 2021–2025 presences). No direct precedent
-  found for extending a label through an existing auxiliary map.
-
-Risks: the mask may spread into similar non-*Acacia* vegetation, and
-large patches give many more pixels than isolated trees. No paper
-found combines point-to-patch propagation with sparse citizen-science
-points and frozen embeddings, so that combination is a possible
-contribution, not an applied practice.
-
-Choosing a rule and comparing with and without the mask are still to
-do. Tests so far and reasoning:
-[`thesis/notes.md`](../thesis/notes.md#máscara-de-segmentação-testar-várias-abordagens).
+**Segmentation mask:** whether the label of each observation is
+extended to the patch around it is tested in
+[RQ2](#rq2--extending-point-labels-to-patches). The task stays pixel
+classification; the mask changes how many pixels around each
+observation count as *Acacia* training data.
 
 Grid-cell presence/absence is not the training unit: pixel predictions
 may later be aggregated to cells for evaluation.
@@ -366,8 +350,9 @@ Data constraints:
 
 Assumption: *Acacia* stands persist for years, so an observation is
 evidence of presence in 2023 unless the site was disturbed. The risk
-grows with the distance in time from 2023; the RQ2 filter removes
-the most distant observations first.
+grows with the distance in time from 2023, but 99.4% of the 3 000
+presences lie within four years of it; the effect of that distance is
+not tested.
 
 Why 2023 and not a later year: 728 *A. dealbata* presences (24.3%) lie in areas
 burned in 2025; 2023 imagery still shows the observed vegetation.
@@ -376,13 +361,12 @@ Safeguard: **disturbance filter**, step 5 of the
 [Reference-Data Pipeline](#reference-data-pipeline-proposed).
 
 **Grounded in:** a single reference year follows Ball et al. (2026,
-cross-year degradation — see [RQ2](#rq2--data-efficiency)) and the
+cross-year degradation) and the
 atoll ecosystem study (2026, single year of AlphaEarth). Persistence
 follows Riveiro et al. (2025). Treating many years as one reference
 year follows from both plus Ball et al. (2026)'s conclusion that the
 bottleneck is reference-data availability: using all observations
-keeps the most data at a fixed year; the RQ2 filter then tests the
-cost of those furthest from it. Findings: `literature.md`.
+keeps the most data at a fixed year. Findings: `literature.md`.
 
 ### Species Scope (proposed)
 

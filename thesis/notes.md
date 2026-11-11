@@ -377,8 +377,9 @@ escritos de forma falsificável, e a pergunta principal não dizia a
 espécie, a área nem o termo de comparação. O conteúdo não muda, só a
 forma, com duas exceções: a RQ3 usa a redação da
 [proposta de redesenho](#rq3-proposta-redesenho-diagnostico-primeiro),
-e a RQ2 deixa de dizer "mais fiáveis", porque a fiabilidade já é
-tratada no processo de limpeza (passos 2 e 3).
+e a RQ2 passa a ser a da
+[proposta da máscara de segmentação](#rq2-proposta-mascara), que
+substitui a pergunta da redução de dados.
 
 **Enunciados aprovados (registados aqui desde 2026-11-11, quando
 `docs/research_questions.md` passou a mostrar só a formulação nova,
@@ -418,40 +419,103 @@ científica. Serve para a forma, não é para citar.
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
 são os aprovados.
 
-### RQ2: recência definida como distância a 2023 {#rq2-recência-distância-a-2023}
+### RQ2: proposta — a máscara de segmentação passa a ser a pergunta {#rq2-proposta-mascara}
 
-*Decisão minha, fechada em 2026-11-10. Não confirmada pelo orientador
-e não é pergunta pendente para ele.*
+*Proposta minha, de 2026-11-11 (a confirmar com o orientador).
+Substitui uma pergunta que ele aprovou; a aprovada está em
+[Formulação das perguntas](#formulacao-pergunta-objetivos-hipoteses) e
+vale até ele responder. Substitui também a minha decisão de 2026-11-10
+("recência = distância a 2023").*
 
-**O que decidi:** no filtro de redução da RQ2, "mais recente" significa
-menor distância absoluta a 2023 (`|ano_observação − 2023|`).
-Observações de 2024–2026 contam como tão recentes quanto
-as simetricamente próximas antes de 2023; o filtro remove primeiro as
-mais distantes, em qualquer direção.
+**O que decidi (como proposta):**
 
-**Porquê:**
-1. **Coerência com o desenho temporal.** O filtro existe pelo risco de
-   desencontro entre a observação e a imagem de 2023, e esse risco é
-   simétrico: uma observação de 1992 arrisca a mancha ter sido
-   desmatada antes de 2023; uma de 2026 arrisca a mancha só ter
-   aparecido depois.
-2. **Confundimento mais estável.** A verificação em
-   `acacia_observations.ipynb` mostra que a quota do Observador A se
-   mantém em cerca de 88–89% entre níveis de retenção. Isola melhor o
-   efeito da quantidade de dados do efeito da composição; reduz o
-   confundimento, não o elimina.
+- **Enunciado:** "Em que medida estender o rótulo de cada observação
+  de ciência cidadã à mancha de vegetação à sua volta altera o
+  desempenho do mapeamento de *A. dealbata*, em comparação com treinar
+  só no píxel observado?"
+- **Hipóteses:** H₀: o desempenho é igual com e sem máscara. H₁: é
+  diferente. Nos dois sentidos de propósito: mais píxeis por
+  observação podem ajudar, e píxeis errados podem prejudicar.
+- **Três condições de treino:** só o píxel observado, crescimento de
+  região e superpíxeis, as duas regras sobre os embeddings TESSERA.
+  Duas regras chegam para as "várias abordagens" que o orientador
+  pediu: decisão minha, fechada, não é pergunta para ele.
+- **Dois níveis de dados:** as 3 000 presenças e uma subamostra ao
+  acaso de 150 (5%).
+- **Só muda o treino.** Teste, fundo, Random Forest, blocos de 10 km e
+  cinco sementes são os da RQ1. Só com TESSERA.
+- **Um conjunto de parâmetros fixo por regra**, fundamentado e
+  declarado como limitação, sem calibração.
+- **Comparação entre as duas regras descritiva**, com o número de
+  píxeis que cada uma acrescenta por observação.
+- **Fica de fora:** a redução de dados como pergunta, a regra dos
+  polígonos da COS, e a comparação das máscaras com os polígonos de
+  especialistas.
 
-**Em aberto:** níveis concretos de retenção, a fixar a partir das
-contagens já calculadas (ver [`docs/todo.md`](../docs/todo.md)).
+**Porquê substituir a pergunta da redução de dados:**
 
-**Fundamentação:** sem literatura nova; segue o raciocínio do desenho
-temporal (Riveiro et al., 2025; Ball et al., 2026). O argumento de
-confundimento é meu.
+1. **O filtro de recência não se aguentava.** A ±1 ano de 2023 estão
+   47,1% das presenças, a ±2 anos 82,2%, a ±3 anos 94,5% e a ±4 anos
+   99,4%; só 19 estão a mais de 4 anos, e o filtro de perturbação
+   encontrou 6 ardidas. "Remover as mais distantes" seria remover
+   2019–2020. Além disso misturava quantidade e composição (a quota do
+   Observador A cai de 88% para 72% aos 10% dos dados e 63% aos 5%) e
+   dava uma só curva, sem repetições.
+2. **A redução ao acaso contribuía pouco.** Resolvia os problemas do
+   ponto 1, mas a curva da RQ1 está no teto, por isso o resultado
+   provável era "não muda até níveis muito baixos", e repetia Ball et
+   al. (2026).
+3. **A máscara já era obrigatória e não pertencia a nenhuma
+   pergunta.** O orientador disse que é central. Vai no sentido
+   contrário de reduzir dados: tira mais de cada observação, que é o
+   que a proposta pede (objetivo 1 e a parte de "dados limitados" do
+   objetivo 2). O trabalho total diminui, e a RQ2 deixa de depender do
+   braço Sentinel-2.
 
-**Onde:** `notebooks/02_citizen_science/acacia_observations.ipynb`;
-[`docs/research_questions.md`](../docs/research_questions.md#rq2--data-efficiency).
+**Porquê este desenho:**
 
-**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia).
+- **Nível de 150 presenças:** com todos os dados o modelo já está no
+  teto, e a máscara serve para tirar mais de cada observação; é com
+  poucas que pode mostrar efeito. Um nível com propósito, não uma
+  curva.
+- **Sem a regra da COS:** só cobre cerca de 17% dos pontos, é a que
+  tem menos apoio na literatura e fica circular com a validação
+  independente, que usa a mesma classe da COS.
+- **Sem comparar com os polígonos de especialistas:** 70% dos 1 925
+  polígonos na zona das observações são mais pequenos do que um píxel
+  de 10 m (mediana 80 m²); cerca de 400 têm mais de 1 000 m² e
+  concentram 94% da área. Só 22 pontos de ciência cidadã caem dentro
+  de um polígono (17 polígonos), o que dá uma ilustração e não uma
+  medida.
+- **Só TESSERA:** as duas regras são calculadas sobre os embeddings, e
+  a pergunta é sobre os rótulos, não sobre a representação.
+
+**Em aberto:**
+- Os valores dos parâmetros de cada regra (os do teste com 30 pontos
+  não estão fundamentados).
+- O critério de decisão da hipótese, a escrever antes de correr.
+- Risco de resultado nulo mesmo com 150 presenças.
+- Fuga entre treino e teste: cortar os píxeis da máscara que caiam num
+  bloco de teste ou sobre um ponto de fundo.
+- A proximidade a 2023 fica como limitação declarada no desenho
+  temporal, não testada.
+
+**Fundamentação:** Rivier et al. (2024) e Raine et al. (2022) para os
+superpíxeis; Zhang et al. (2025) para o crescimento de região. Não
+encontrei trabalho que junte propagação de ponto para mancha, pontos
+de ciência cidadã e embeddings congelados: possível contributo. Não
+fiz pesquisa nova para esta proposta; resumos em
+[`docs/literature.md`](../docs/literature.md#weak-supervision-from-point-labels).
+As contagens são verificação minha, ad-hoc (scripts não guardados),
+sobre `inat_dealbata_clean.csv` e `expert_polygons_clean.gpkg`.
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq2--extending-point-labels-to-patches);
+regras e testes iniciais em
+[Máscara de segmentação](#máscara-de-segmentação-testar-várias-abordagens).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia). O
+enunciado da RQ2 na introdução é o aprovado e não muda enquanto o
+orientador não responder.
 
 ## Decisões: dados de referência
 
@@ -649,9 +713,12 @@ definir por mim.*
     número de segmentos limita o tamanho por construção. A propagação
     por voto maioritário (a proposta real de Rivier et al.) não foi
     exercitada: a amostra tem um ponto por patch.
-- **Para janeiro:** apresentar as três candidatas, fundamentadas, com
-  a comparação planeada. Escolher a regra e comparar com e sem máscara
-  fica para depois.
+- **Para janeiro:** apresentar as regras, fundamentadas, com a
+  comparação planeada. Comparar com e sem máscara fica para depois.
+- **Atualização (2026-11-11):** proponho que a máscara passe a ser a
+  RQ2, com duas regras (crescimento de região e superpíxeis); a dos
+  polígonos da COS sai da comparação. Ver
+  [proposta](#rq2-proposta-mascara).
 
 **Porquê:**
 - A coordenada do iNaturalist nem sempre cai em cima da planta.

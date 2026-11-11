@@ -16,12 +16,12 @@ plano de trabalho; sem novas experiências antes da entrega.
 - [ ] Rever a estrutura de cada capítulo face aos relatórios de
   referência, à medida que for escrito
   ([thesis/notes.md](../thesis/notes.md#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável)).
-- [ ] Máscara de segmentação: apresentar as três candidatas,
-  fundamentadas na literatura, com a comparação planeada
-  ([thesis/notes.md](../thesis/notes.md#máscara-de-segmentação-testar-várias-abordagens)).
+- [ ] Máscara de segmentação: apresentar as duas regras,
+  fundamentadas na literatura, com a comparação planeada na RQ2
+  ([thesis/notes.md](../thesis/notes.md#rq2-proposta-mascara)).
 - [ ] Ler Phillips et al. (2009) na íntegra.
-- [ ] Levar ao orientador as duas propostas em fila: redesenho da RQ3
-  e formulação das perguntas
+- [ ] Levar ao orientador as três propostas em fila: nova RQ2 (máscara
+  de segmentação), redesenho da RQ3 e formulação das perguntas
   ([próxima reunião](meetings/proxima-reuniao.md)).
 
 ## Depois da defesa intermédia
@@ -30,15 +30,12 @@ plano de trabalho; sem novas experiências antes da entrega.
   reduzir o custo da extração. Só Random Forest e Logistic Regression;
   os diagnósticos de robustez só se o resultado parecer inesperado
   ([thesis/notes.md](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo)).
-- [ ] Máscara de segmentação: comparar as três candidatas no QGIS
-  (`data/interim/spatial/qgis/segmentation_mask_sample.gpkg`), escolher
-  uma regra e comparar com e sem máscara.
 - [ ] Implementar a zona-tampão na validação espacial do lado dos
   especialistas
   ([thesis/notes.md](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)).
-- [ ] RQ2: fixar os níveis de retenção do filtro de recência a partir
-  das contagens já calculadas
-  ([thesis/notes.md](../thesis/notes.md#rq2-recência-distância-a-2023)).
+- [ ] RQ2 (máscara de segmentação): fixar os parâmetros de cada regra
+  e correr o desenho que o orientador confirmar
+  ([thesis/notes.md](../thesis/notes.md#rq2-proposta-mascara)).
 - [ ] RQ3: correr o desenho que o orientador confirmar
   ([thesis/notes.md](../thesis/notes.md#rq3-proposta-redesenho-diagnostico-primeiro)).
 - [ ] Validação independente da RQ1 com a classe *Acacia* da COS 2023

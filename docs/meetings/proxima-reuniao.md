@@ -77,6 +77,41 @@ contributo.
 Origem:
 [thesis/notes.md](../../thesis/notes.md#rq3-proposta-redesenho-diagnostico-primeiro).
 
+### RQ2: trocar a redução de dados pela máscara de segmentação
+
+Proponho que a RQ2 deixe de ser sobre reduzir as observações e passe
+a ser sobre a máscara de segmentação, que disse ser central e que não
+pertencia a nenhuma pergunta.
+
+- **Enunciado proposto:** "Em que medida estender o rótulo de cada
+  observação de ciência cidadã à mancha de vegetação à sua volta
+  altera o desempenho do mapeamento de *A. dealbata*, em comparação
+  com treinar só no píxel observado?"
+- **Hipóteses:** o desempenho é igual com e sem máscara, ou é
+  diferente. Nos dois sentidos: mais píxeis por observação podem
+  ajudar, píxeis errados podem prejudicar.
+- **Condições de treino:** só o píxel observado, crescimento de região
+  e superpíxeis, as duas regras sobre os embeddings TESSERA.
+- **Níveis de dados:** as 3 000 presenças e uma subamostra ao acaso
+  de 150.
+- **Resto igual à RQ1**, só com TESSERA; um conjunto de parâmetros
+  fixo por regra.
+- **Porque sai a redução de dados:** só 19 das 3 000 presenças estão a
+  mais de 4 anos de 2023, por isso o filtro de recência removeria
+  sobretudo 2019–2020; e a curva da RQ1 está no teto, por isso reduzir
+  ao acaso diria pouco e repetiria Ball et al. (2026).
+- **Fica de fora:** a regra dos polígonos da COS (cobre cerca de 17%
+  dos pontos e é circular com a validação independente).
+- **Risco a discutir:** não haver diferença mesmo com 150 presenças.
+
+*Literatura:* Rivier et al. (2024) e Raine et al. (2022) para os
+superpíxeis; Zhang et al. (2025) para o crescimento de região. Não
+encontrei trabalho que junte propagação de ponto para mancha, ciência
+cidadã e embeddings congelados: possível contributo.
+
+Origem:
+[thesis/notes.md](../../thesis/notes.md#rq2-proposta-mascara).
+
 ### Formulação das perguntas
 
 Reescrevi a pergunta principal e as três RQ como pergunta → objetivo
@@ -92,10 +127,8 @@ estatísticos formais?
   mapeamento face às features do Sentinel-2, quando treinadas com
   ciência cidadã, e quanto desempenho se ganha ao acrescentar
   progressivamente dados de especialistas?
-- **RQ2:** qual o efeito da redução das observações, removendo
-  primeiro as mais distantes de 2023, no desempenho dos modelos com
-  TESSERA face aos modelos com Sentinel-2? Sai "mais fiáveis", que já
-  é tratado na limpeza.
+- **RQ2:** o enunciado proposto acima (substitui a pergunta da
+  redução de dados).
 - **RQ3:** o enunciado proposto acima.
 
 Objetivos e hipóteses completos:
