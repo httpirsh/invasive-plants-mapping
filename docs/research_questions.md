@@ -164,9 +164,10 @@ agreement between seeds is not independent evidence.
 
 Values per level, paired differences, the Boyce index and caveats:
 [`thesis/notes.md`](../thesis/notes.md#simplificacao-desenho-2026-11-13);
-notebook
-[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb);
-files in `results/rq2_per_source_check/`.
+script
+[`experiments/effort_reduction_curve/run.py`](../experiments/effort_reduction_curve/run.py);
+tables in `results/effort_reduction_curve/`; figure and reading in
+[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
 
 **Not measured:** the curve with Sentinel-2 features (not planned: see RQ4);
 the curve diagnostics (forest-only background, redundancy, label

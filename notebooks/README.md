@@ -40,4 +40,9 @@ Run order: `02_citizen_science/acacia_observations` →
 `07_foundation_models/expert_polygon_geographic_diversity` →
 `07_foundation_models/label_purity_check`.
 
+`07_foundation_models/effort_reduction_curve` and
+`07_foundation_models/forest_only_background_check` only read results:
+run `experiments/effort_reduction_curve/run.py` before them, the second
+time with `--background forest_only`.
+
 When to move code into `src/` instead: [`src/README.md`](../src/README.md).

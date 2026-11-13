@@ -1559,6 +1559,18 @@ escolha minha. Esta verificação não substitui o fundo partilhado.
 
 **Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia).
 
+**Revisão (2026-11-13):** os valores do **Resultado** acima e o
+ponto 3 são da execução de 2026-11-07, anterior à janela 2021–2025 e
+ao fundo uniforme reconstruído; já não são os atuais. A conclusão
+mantém-se, com outros tamanhos: no Random Forest o ROC-AUC passa de
+0,902 para 0,950 a 0%, de 0,906 para 0,952 a 90% e de 0,854 para 0,919
+a 100%; na Logistic Regression o Boyce a 100% é 0,727 (não 0,567); no
+one-class SVM o ROC-AUC a 0% é 0,504 e o Boyce 0,197 (não negativo).
+O ponto 3 (0,842 → 0,796) não foi repetido com os dados atuais. A
+verificação passou a ser calculada pelo script da curva. Tabela
+completa e motivo:
+[Verificação com fundo só de floresta](#fundo-floresta-script-experiments).
+
 ### Diagnósticos da curva plana: redundância, habitat e pureza {#diagnosticos-curva-plana}
 
 *Decisão minha (investigar), não confirmada pelo orientador.*
@@ -1820,6 +1832,163 @@ por ordem de importância, o que também fica mais perto da numeração
 que o orientador aprovou. O conteúdo desta entrada não muda; a secção
 do notebook que aqui aparece como "secção 8" corresponde hoje às
 secções 4 a 7. Ver [Renumeração das perguntas](#renumeracao-perguntas-2026-11-13).
+
+### Curva de redução de esforço: o cálculo passa a script em `experiments/` {#curva-script-experiments}
+
+*Decisão minha, de 2026-11-13. É organização do repositório, segundo o
+critério de [`experiments/README.md`](../experiments/README.md); o
+desenho da curva não muda.*
+
+**O que decidi:**
+
+- **O cálculo da curva (RQ1) sai do notebook.** Passa a
+  `experiments/effort_reduction_curve/run.py`, com a configuração
+  fixa no topo (níveis, sementes 1 a 5, semente 0 da ordem dos
+  polígonos, 20% de blocos de teste, os dois classificadores) e o
+  código das secções 1 a 6 do notebook, sem alterar a lógica.
+- **Saída fixa:** `results/effort_reduction_curve/`, com as cinco
+  tabelas de antes, uma nova com o N nominal por nível
+  (`nominal_levels.csv`) e um `run.json` com a configuração, o commit
+  e os hashes das quatro entradas (presenças, polígonos, embeddings do
+  piloto e fundo). O anterior só registava as presenças e o fundo.
+- **O notebook só lê e desenha.**
+  `notebooks/07_foundation_models/effort_reduction_curve.ipynb` fica
+  com o propósito, as tabelas lidas dos resultados, a figura e a
+  leitura da curva. Ao abrir compara os hashes do `run.json` com os
+  ficheiros atuais e avisa se os resultados forem de outras entradas.
+- **A pasta anterior fica.** `results/rq2_per_source_check/` não foi
+  apagada nem alterada; tem um `OBSOLETE.md` e uma linha em
+  `results/README.md`. As entradas anteriores deste ficheiro que citam
+  esse caminho continuam válidas.
+
+**Porquê:** a curva é o resultado que vai para os docs e para a tese e
+volta a correr sempre que os dados mudam. Num notebook, o resultado
+depende de que células foram corridas e por que ordem; num script com
+entradas, sementes e pasta de saída fixas, uma tabela vem de uma só
+execução, como pede a regra de reprodutibilidade do `CLAUDE.md`.
+
+**O que verifiquei (2026-11-13):**
+
+- As cinco tabelas escritas pelo script são idênticas byte a byte às
+  de `results/rq2_per_source_check/`. Nenhum valor mudou.
+- A figura gerada pelo notebook a partir das tabelas novas tem o mesmo
+  hash da anterior.
+- As contagens que o notebook imprimia (46 blocos candidatos, 9 blocos
+  de teste por semente, 9 dos 18 blocos com polígonos num conjunto de
+  teste, 1 265 píxeis de teste distintos em 2 122) vêm agora do
+  `run.json` e são as mesmas.
+
+**Limites e o que fica de fora:**
+
+- `forest_only_background_check.ipynb` continua a ser um notebook com
+  o código da curva duplicado. É o candidato seguinte; não o movi.
+- Esse notebook compara o fundo de floresta com valores do fundo
+  uniforme escritos à mão numa célula (por exemplo 0,879 de ROC-AUC
+  global do Random Forest a 0%), que não são os da curva atual
+  (0,902). Não corrigi; os docs citam só os valores do fundo de
+  floresta (0,950 e 0,952), que são os atuais.
+- As contagens feitas à mão a 2026-11-13 (filtros; polígonos perto e
+  longe) continuam sem script.
+- `experiments/temporal_window_2021_2025/rerun.py` executava o
+  notebook antigo e lia variáveis dele; já estava partido e não lhe
+  toquei.
+
+**Fundamentação:** nenhuma literatura consultada; é prática de
+reprodutibilidade, raciocínio meu.
+
+**Onde:** [`experiments/effort_reduction_curve/run.py`](../experiments/effort_reduction_curve/run.py);
+`results/effort_reduction_curve/`;
+[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita. Se entrar, é uma frase sobre
+reprodutibilidade na Metodologia.
+
+**Revisão (2026-11-13, mais tarde no mesmo dia):** dois pontos desta
+entrada deixaram de ser verdade. O script passou a ter também o
+one-class SVM, numa tabela à parte (`one_class_per_seed.csv`), e uma
+opção para o fundo; as tabelas da curva continuam idênticas. E os
+dois primeiros limites ficaram resolvidos:
+`forest_only_background_check.ipynb` já não tem o código da curva
+duplicado nem valores escritos à mão. Ver
+[Verificação com fundo só de floresta](#fundo-floresta-script-experiments).
+
+### Verificação com fundo só de floresta: passa a ler duas execuções do script da curva {#fundo-floresta-script-experiments}
+
+*Decisão minha, de 2026-11-13. É organização do repositório, na
+sequência de [a curva passar a script](#curva-script-experiments); o
+desenho da verificação não muda.*
+
+**O que decidi:**
+
+- **Um script, dois fundos.**
+  `experiments/effort_reduction_curve/run.py` aceita
+  `--background uniform` (por omissão, a curva da RQ1, em
+  `results/effort_reduction_curve/`) ou `--background forest_only`
+  (a verificação, em `results/effort_reduction_curve_forest_only/`).
+  A única diferença entre as duas execuções é o ficheiro de fundo.
+- **O one-class SVM entra no script.** A verificação compara três
+  métodos e o script só tinha dois. O one-class SVM (`rbf`, `nu` 0,05)
+  treina nas mesmas presenças em cada nível, é avaliado só no teste
+  global e fica numa tabela à parte (`one_class_per_seed.csv`), nas
+  duas execuções. As tabelas da curva não o incluem.
+- **O notebook só lê e desenha.**
+  `forest_only_background_check.ipynb` deixou de ter o código da curva
+  duplicado: lê as duas pastas, verifica os hashes das entradas,
+  monta a comparação e guarda a figura em
+  `results/effort_reduction_curve_forest_only/`.
+- **O texto de leitura do notebook ficou como estava**, de
+  2026-11-07, com uma nota no início com os valores atuais.
+
+**Porquê:** o notebook comparava o fundo de floresta com valores do
+fundo uniforme escritos à mão numa célula, que eram de uma curva
+anterior. Com as duas execuções a saírem do mesmo script e das mesmas
+entradas, os dois lados da comparação são sempre da mesma versão dos
+dados.
+
+**O que verifiquei (2026-11-13):**
+
+- **Fundo uniforme:** as seis tabelas e a figura de
+  `results/effort_reduction_curve/` ficaram idênticas byte a byte às
+  anteriores. Só o `run.json` mudou (tem dois campos novos).
+- **Fundo de floresta:** os valores do script são iguais, às três
+  casas decimais, aos que o notebook mostrava antes (33 linhas:
+  3 métodos, 11 níveis).
+- **Mudou a comparação**, como esperado, porque o lado do fundo
+  uniforme passou a ser o da curva atual.
+
+**Valores atuais (teste global, média de 5 sementes, fundo uniforme →
+fundo de floresta):**
+
+| Método | Métrica | 0% | 90% | 100% |
+|---|---|---|---|---|
+| Random Forest | ROC-AUC | 0,902 → 0,950 | 0,906 → 0,952 | 0,854 → 0,919 |
+| Random Forest | Boyce | 0,995 → 0,995 | 0,993 → 0,988 | 0,969 → 0,902 |
+| Logistic Regression | ROC-AUC | 0,893 → 0,958 | 0,924 → 0,962 | 0,873 → 0,905 |
+| Logistic Regression | Boyce | 0,966 → 0,938 | 0,971 → 0,906 | 0,841 → 0,727 |
+| One-class SVM | ROC-AUC | 0,574 → 0,504 | 0,693 → 0,650 | 0,831 → 0,814 |
+| One-class SVM | Boyce | 0,668 → 0,197 | 0,918 → 0,655 | 0,885 → 0,534 |
+
+**O que isto muda nas entradas anteriores:** os valores da entrada da
+verificação de 2026-11-07 (por exemplo 0,879 → 0,934 no Random Forest
+a 0%, Boyce de 0,567 na Logistic Regression a 100%, Boyce de −0,039 no
+one-class SVM a 0%) são dessa execução, anterior à janela 2021–2025 e
+ao fundo uniforme reconstruído. O sentido de cada conclusão é o mesmo
+com os valores atuais: a curva do Random Forest continua plana e com
+ROC-AUC mais alto no fundo de floresta, e o one-class SVM continua a
+perder com esse fundo. O Boyce do one-class SVM a 0% já não é
+negativo, mas varia muito entre sementes (desvio-padrão 0,723).
+
+**Limites:** a leitura continua a ser no teste global; a verificação
+separada por fonte das presenças de teste não foi lida, embora o
+script já escreva essas tabelas para o fundo de floresta.
+
+**Fundamentação:** nenhuma literatura consultada; raciocínio meu.
+
+**Onde:** [`experiments/effort_reduction_curve/run.py`](../experiments/effort_reduction_curve/run.py);
+`results/effort_reduction_curve_forest_only/`;
+[`forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia).
 
 ## Decisões: validação e Sentinel-2
 
