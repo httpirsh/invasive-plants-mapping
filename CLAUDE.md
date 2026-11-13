@@ -167,12 +167,14 @@ triggers the "Downstream impact" check (Core Principle).
 
 Folder purpose and when to extract to `src/`:
 [`notebooks/README.md`](notebooks/README.md),
-[`src/README.md`](src/README.md). Notebook-output stripping setup:
-[`README.md`](README.md#setup). My own rule, not stated elsewhere:
-name notebooks by what they do (e.g. `02_data_quality.ipynb`), never
-`test.ipynb` / `final.ipynb` / `analysis2.ipynb`; don't create `.py`
-files in `src/` just to look more "professional" before code is
-actually reused.
+[`src/README.md`](src/README.md). Where a new analysis goes
+(`notebooks/` vs `experiments/`): see
+[`experiments/README.md`](experiments/README.md). Notebook-output
+stripping setup: [`README.md`](README.md#setup). My own rule, not
+stated elsewhere: name notebooks by what they do (e.g.
+`02_data_quality.ipynb`), never `test.ipynb` / `final.ipynb` /
+`analysis2.ipynb`; don't create `.py` files in `src/` just to look
+more "professional" before code is actually reused.
 
 ## Reproducibility
 
