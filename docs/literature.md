@@ -211,7 +211,7 @@ against independent reference data would add.
 
 ### EO foundation models in related applications
 
-Listed to show RQ3 alone is not novel.
+Listed to show RQ4 alone is not novel.
 
 **Silva & Gonçalves (2026).** Evaluating AlphaEarth and TESSERA
 Geospatial Embeddings for Machine Learning-Based Burned Area Mapping
@@ -341,7 +341,7 @@ independent test set).
 
 Its agencies sampled different places from the citizen scientists;
 here experts and the dominant observer visited the same places, so it
-is an analogy for the expert end of the RQ2 curve, not direct
+is an analogy for the expert end of the RQ1 curve, not direct
 evidence.
 
 ### Conventional invasive plant mapping
@@ -458,7 +458,7 @@ against (step 7 of the
 
 ### One-class / positive-unlabeled classification
 
-> Search done for the RQ2 method choice. True one-class methods were
+> Search done for the RQ1 method choice. True one-class methods were
 > then tested and dropped in favour of presence-vs-background (see
 > [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)).
 
@@ -716,7 +716,7 @@ DOI: [10.1109/ICIP51287.2024.10647646](https://doi.org/10.1109/ICIP51287.2024.10
 arXiv:2309.05490.
 PDF: [`literature/rivier_2024_superpixel_query_points.pdf`](literature/rivier_2024_superpixel_query_points.pdf).
 Recommended by the supervisor for the segmentation mask (see
-[RQ1](research_questions.md#rq1--from-point-observations-to-reference-data)).
+[RQ2](research_questions.md#rq2--from-point-observations-to-reference-data)).
 — *Read*
 
 Trains a full segmentation network (DeepLabV3, U-Net, FCN) from sparse
@@ -792,7 +792,7 @@ growing at Sentinel-2 scale, but as iterative self-training with a
 trained multi-class model.
 
 **No paper read grows a region on feature similarity to the seed or
-limits its radius**, the two elements of the RQ1 region-growing rule.
+limits its radius**, the two elements of the RQ2 region-growing rule.
 
 ## Data Sources Found in the Literature Search
 
@@ -802,7 +802,7 @@ Not papers, but relevant:
   dataset by the Centre for Functional Ecology, University of
   Coimbra (invasoras.pt), published on GBIF. Different platform and
   observer pool from iNaturalist: candidate extra presences or a
-  cross-platform test for RQ4. See
+  cross-platform test for RQ3. See
   [Species Scope](research_questions.md#species-scope-proposed).
 
 ## What Has Already Been Done
@@ -855,28 +855,33 @@ underexplored:
 
 Four specific questions not answered by any of the above:
 
-1. **Do foundation models amplify or mitigate citizen-science spatial
-   bias** compared with conventional features? (RQ3)
+1. **How much is lost by training on citizen science instead of
+   expert reference data**, with the same representation and test
+   set? (RQ1)
 2. **Does extending a citizen-science point label to the patch around
    it, using frozen embeddings, change mapping performance?** Existing
    point-to-patch work uses many correctly placed points per image and
-   trained segmentation networks (Rivier 2024; Raine 2022). (RQ1)
-3. **How much is lost by training on citizen science instead of
-   expert reference data**, with the same representation and test
-   set? (RQ2)
+   trained segmentation networks (Rivier 2024; Raine 2022). (RQ2)
+3. **Does a model trained on spatially concentrated citizen-science
+   observations lose performance away from the sampled area?** (RQ3)
+   Whether foundation models amplify or mitigate that effect, compared
+   with conventional features, is also unanswered and is not tested in
+   this thesis.
 4. **Do foundation-model embeddings improve on conventional
    Sentinel-2 features when the labels are citizen-science points for
    an invasive plant?** Ball et al. (2026) make the comparison with
-   curated tree-species labels. (RQ3)
+   curated tree-species labels. (RQ4)
 
 ## Contribution
 
-**Data-efficient and bias-aware invasive plant mapping using EO
-foundation models and citizen science.** Not "apply TESSERA to
-invasive plants", but a controlled study of how foundation-model
-representations behave under realistic citizen-science limitations
-(sparsity, spatial bias), against a conventional satellite baseline
-and increasing amounts of expert reference data.
+**Citizen science as a substitute for expert reference data in
+invasive plant mapping with EO foundation models.** Not "apply TESSERA
+to invasive plants", but a controlled study of how far
+citizen-science observations, turned into reference data, can replace
+expert reference data: with increasing amounts of expert data, with
+point labels extended to patches, away from the sampled area, and
+against a conventional satellite baseline. Wording mine, to confirm
+with the supervisor.
 
 Two parts:
 
@@ -889,6 +894,7 @@ Two parts:
    stretch goal. The segmentation mask, which extends a
    citizen-science point to the patch around it using frozen
    embeddings, has no precedent found and is tested in
-   [RQ1](research_questions.md#rq1--from-point-observations-to-reference-data).
+   [RQ2](research_questions.md#rq2--from-point-observations-to-reference-data),
+   together with the effect of the grade and accuracy filters.
 2. **Empirical:** RQ1–RQ4 in
    [`research_questions.md`](research_questions.md).

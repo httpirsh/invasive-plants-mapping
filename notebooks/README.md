@@ -30,6 +30,7 @@ Run order: `02_citizen_science/acacia_observations` →
 `04_satellite/tessera_spatial_autocorrelation` →
 `05_data_integration/qgis_overview` →
 `05_data_integration/segmentation_mask` →
+`05_data_integration/background_pools` →
 `07_foundation_models/one_class_method_selection` →
 `07_foundation_models/presence_background_citizen_science` →
 `07_foundation_models/expert_arm_classifiers` →

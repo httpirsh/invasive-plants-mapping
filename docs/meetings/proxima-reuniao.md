@@ -4,7 +4,7 @@
 > em [`thesis/notes.md`](../../thesis/notes.md#decisões); a reunião
 > anterior está em [`2026-11-05.md`](2026-11-05.md).
 
-## Resultados a apresentar: curva de redução de esforço (RQ2)
+## Resultados a apresentar: curva de redução de esforço (RQ1)
 
 Corri a curva completa (0% a 100% de polígonos de especialistas sobre
 a base de ciência cidadã, só com TESSERA, presenças de 2021–2025),
@@ -72,32 +72,35 @@ de trabalho ou testes estatísticos formais?
   de foundation models de observação da Terra, podem substituir os
   dados de referência de especialistas no mapeamento de *Acacia
   dealbata* no distrito de Coimbra?
-- **RQ1 (dos pontos aos dados de referência):** em que medida os
-  filtros de qualidade aplicados às observações de ciência cidadã, e a
-  extensão do rótulo de cada observação do píxel observado à mancha de
-  vegetação à sua volta, alteram o desempenho do mapeamento?
-- **RQ2 (substituição):** em que medida um modelo treinado só com
+- **RQ1 (substituição):** em que medida um modelo treinado só com
   observações de ciência cidadã atinge o desempenho de modelos
   treinados com dados de referência de especialistas?
-- **RQ3 (representação):** em que medida os embeddings do TESSERA
+- **RQ2 (dos pontos aos dados de referência):** em que medida os
+  filtros de grau e de precisão aplicados às observações de ciência
+  cidadã, e a extensão do rótulo de cada observação do píxel observado
+  à mancha de vegetação à sua volta, alteram o desempenho do
+  mapeamento?
+- **RQ3 (transferibilidade):** em que medida o desempenho do modelo
+  treinado com ciência cidadã desce dos locais perto da área amostrada
+  para os locais longe dela?
+- **RQ4 (representação):** em que medida os embeddings do TESSERA
   melhoram o mapeamento face às features do Sentinel-2, quando
   treinados com dados de ciência cidadã limpos, com todas as
   observações e com poucas?
-- **RQ4 (transferibilidade):** em que medida o desempenho do modelo
-  treinado com ciência cidadã desce dos locais perto da área amostrada
-  para os locais longe dela?
 - **O que muda face ao que aprovou:** a pergunta principal passa a
   ser sobre a ciência cidadã substituir os dados de especialistas, em
   vez da comparação TESSERA contra Sentinel-2; a pergunta da curva e a
-  da comparação de representações separam-se (RQ2 e RQ3); a máscara e
-  os filtros passam a ter pergunta própria (RQ1).
-- **Prioridade:** RQ2, RQ1 e RQ4 só precisam do TESSERA; a RQ3
-  precisa do Sentinel-2 e fica para o fim.
+  da comparação de representações separam-se (RQ1 e RQ4); a máscara e
+  os filtros passam a ter pergunta própria (RQ2).
+- **Numeração:** cada pergunta só usa o que as anteriores definem.
+  RQ1, RQ2 e RQ3 só precisam do TESSERA; a RQ4 é a única que depende
+  do braço Sentinel-2, que está parado, e por isso vem no fim.
 - **Como meço as hipóteses:** pela diferença de ROC-AUC emparelhada
   por semente (média, desvio-padrão, número de sementes com o mesmo
-  sinal), sem limiar de decisão. O Boyce é só reportado.
+  sinal). Reporto a diferença e não decido por limiar, porque há cinco
+  sementes e elas reutilizam blocos. O Boyce é só reportado.
 - **Fica de fora, como limitação declarada:** não testo se os
-  foundation models compensam o ruído dos rótulos (a RQ3 usa só dados
+  foundation models compensam o ruído dos rótulos (a RQ4 usa só dados
   limpos), nem se o modelo separa a *A. dealbata* das outras acácias
   (trabalho futuro).
 
@@ -108,31 +111,38 @@ Objetivos e hipóteses completos:
 forma de um guia de escrita de teses, não uma decisão metodológica.
 
 Origem:
+[thesis/notes.md](../../thesis/notes.md#renumeracao-perguntas-2026-11-13);
 [thesis/notes.md](../../thesis/notes.md#reformulacao-quatro-perguntas);
 versão anterior da formulação em
 [thesis/notes.md](../../thesis/notes.md#formulacao-pergunta-objetivos-hipoteses).
 
-### RQ1: máscara de segmentação e filtros de qualidade
+### RQ2: máscara de segmentação e filtros de grau e de precisão
 
 Proponho que a máscara de segmentação, que disse ser central e que
-não pertencia a nenhuma pergunta, seja o centro da RQ1, junto com o
-efeito dos filtros de qualidade.
+não pertencia a nenhuma pergunta, seja o centro da RQ2, junto com o
+efeito dos filtros de grau e de precisão.
 
 - **Hipóteses:** o desempenho é igual com e sem máscara, ou é
   diferente. Nos dois sentidos: mais píxeis por observação podem
   ajudar, píxeis errados podem prejudicar. O mesmo par para os
-  filtros: igual ou diferente com e sem filtros de qualidade.
+  filtros: igual ou diferente com e sem os dois filtros.
 - **Condições de treino da máscara:** só o píxel observado,
   crescimento de região e superpíxeis, as duas regras sobre os
   embeddings TESSERA.
-- **Condições de treino dos filtros:** todos os filtros, ou sem os
-  filtros de qualidade (coordenadas escondidas, precisão, grau de
-  qualidade). A janela 2021–2025 fica igual nas duas. Sem ablação
-  passo a passo, e só com todas as observações.
+- **Configuração da máscara, uma por regra, fixada antes de correr:**
+  crescimento de região com semelhança de cosseno de pelo menos 0,90
+  ao píxel observado, 4 vizinhos e no máximo 50 m; superpíxeis SLIC
+  com tamanho médio de 25 píxeis. Valores meus, sem fonte.
+- **Condições de treino dos filtros:** com ou sem os filtros de grau
+  *research* e de precisão até 30 m. A condição sem filtros junta 1 120
+  píxeis que já têm embedding guardado. As observações de coordenadas
+  escondidas ficam fora das duas. A janela 2021–2025 fica igual nas
+  duas. Sem ablação passo a passo, e só com todas as observações.
 - **Níveis de dados da máscara:** as 2 465 presenças e uma subamostra
   ao acaso de 150.
-- **Resto igual à curva (RQ2)**, só com TESSERA; um conjunto de
-  parâmetros fixo por regra.
+- **Resto igual à curva (RQ1)**, só com TESSERA.
+- **Por correr:** a máscara precisa de uma extração de janelas
+  TESSERA à volta das observações, que ainda não aprovei.
 - **Porque não é uma pergunta sobre reduzir as observações:** todas as
   presenças estão a 2 anos ou menos de 2023, por isso um filtro de
   recência teria pouco para ordenar; e a curva está perto do teto,
@@ -146,23 +156,25 @@ efeito dos filtros de qualidade.
 superpíxeis; Zhang et al. (2021) para o crescimento de região (crescem
 pela confiança de um classificador, não por semelhança à semente). Não
 encontrei trabalho que junte propagação de ponto para mancha, ciência
-cidadã e embeddings congelados: possível contributo. A comparação com
-e sem filtros é adaptada das ablações de um fator de Ball et al.
-(2026).
+cidadã e embeddings congelados: possível contributo. Nenhum artigo
+lido dá valores utilizáveis para a configuração da máscara. A
+comparação com e sem filtros é adaptada das ablações de um fator de
+Ball et al. (2026).
 
 Origem:
 [thesis/notes.md](../../thesis/notes.md#rq2-proposta-mascara);
-[thesis/notes.md](../../thesis/notes.md#reformulacao-quatro-perguntas).
+[thesis/notes.md](../../thesis/notes.md#renumeracao-perguntas-2026-11-13).
 
-### RQ4: medir a concentração espacial só com perto contra longe
+### RQ3: medir a concentração espacial só com perto contra longe
 
 Em vez de partir do princípio de que o observador dominante é um
 enviesamento a corrigir, diagnosticar primeiro se a concentração da
 amostragem prejudica o modelo.
 
-- **Experiência:** treinar com ciência cidadã (TESSERA) e avaliar nos
-  polígonos de especialistas, perto e longe do ponto de treino mais
-  próximo.
+- **Experiência:** treinar com ciência cidadã (TESSERA) e avaliar em
+  todos os píxeis de especialistas, perto (até 1 km) e longe (mais de
+  1 km, dentro do distrito) do ponto de treino mais próximo. As cinco
+  sementes variam os blocos de teste, como na curva.
 - **Produto:** mapa de confiança por dissemelhança aos dados de
   treino.
 - **Hipótese:** o desempenho é igual perto e longe, ou é mais baixo
@@ -170,16 +182,20 @@ amostragem prejudica o modelo.
   facto medimos: o observador dominante é fiável e cobre bem a zona
   dele.
 - **A pergunta que aprovou** (os foundation models amplificam ou
-  atenuam o efeito, face às features convencionais) passa a ser a
-  segunda hipótese da RQ3, porque precisa do Sentinel-2: a mesma
-  experiência repetida com as features do Sentinel-2.
+  atenuam o efeito, face às features convencionais) fica de fora:
+  exigiria repetir esta experiência com o Sentinel-2, também nos
+  píxeis de especialistas. A RQ4 compara as representações só nos
+  dois níveis de dados.
 - **Fica de fora, como trabalho futuro:** a comparação entre o
   observador dominante e os outros, o desbaste espacial, a camada de
   estradas e a segunda região.
-- **Dados:** há 429 polígonos do TNE a mais de 1 km de qualquer
-  observação.
-- **Risco a discutir:** os polígonos de longe são 20 a 40 vezes
-  maiores do que os de perto.
+- **Dados:** 1 645 polígonos a 1 km ou menos de uma observação e 206
+  polígonos do distrito a mais de 1 km, entre 1,0 e 8,2 km (contagem
+  de 2026-11-13, feita ad hoc, sem script).
+- **Risco a discutir:** perto e longe diferem também no tamanho dos
+  polígonos (mediana de 77 m² perto e 2 788 m² longe) e um pouco na
+  ocupação do solo, por isso reporto a diferença sem atribuir a causa
+  à distância.
 
 *Literatura:* Meyer & Pebesma (2021) para o mapa de confiança;
 Ratsakatika et al. (2026, preprint) usam-no com embeddings mas
@@ -189,10 +205,23 @@ rápida): possível contributo.
 
 Origem:
 [thesis/notes.md](../../thesis/notes.md#rq3-proposta-redesenho-diagnostico-primeiro);
-[thesis/notes.md](../../thesis/notes.md#simplificacao-desenho-2026-11-13).
+[thesis/notes.md](../../thesis/notes.md#renumeracao-perguntas-2026-11-13).
 
 ## Para informar
 
+- **Numeração das perguntas e limitações (não bloqueante):** as
+  perguntas estão numeradas de modo que cada uma só usa o que as
+  anteriores definem: RQ1 curva de redução de esforço, RQ2 dos pontos
+  aos dados de referência, RQ3 transferibilidade, RQ4 TESSERA contra
+  Sentinel-2. A leitura de "área de vegetação mais próxima" como
+  extensão do rótulo à mancha continua por confirmar (está nas
+  Perguntas). Limitações que declaro:
+  não testo se os foundation models compensam o ruído dos rótulos, e a
+  incerteza de cada observação só entra pelo filtro de precisão e pela
+  máscara, não no modelo.
+  *Literatura:* nenhuma; é organização das perguntas e âmbito.
+  Origem:
+  [thesis/notes.md](../../thesis/notes.md#renumeracao-perguntas-2026-11-13).
 - **Janela temporal das observações (não bloqueante):** uso só
   observações do iNaturalist de 2021–2025, todas tratadas como
   representativas do povoamento de 2023. 2026 fica de fora porque o
@@ -220,7 +249,7 @@ Origem:
   observação, ou só levar o ponto para dentro da vegetação mais
   próxima? Estou a assumir a primeira leitura (origem:
   [thesis/notes.md](../../thesis/notes.md#máscara-de-segmentação-testar-várias-abordagens)).
-- **Validação independente da curva (RQ2):** o plano é comparar as
+- **Validação independente da curva (RQ1):** o plano é comparar as
   previsões com a classe "Florestas de acácias" da COS 2023, como
   referência que não vem da ciência cidadã nem dos polígonos de
   especialistas. Confirmar que os polígonos foram feitos sem apoio da

@@ -10,30 +10,40 @@ Cada entrada segue a mesma forma: quem decidiu, **O que decidi**,
 
 ## Para dizer
 
+*Numeração: os pontos desta secção usam as quatro perguntas atuais
+(a confirmar com o orientador; ver
+[Renumeração das perguntas](#renumeracao-perguntas-2026-11-13)). O
+manuscrito ainda tem as três perguntas que ele aprovou.*
+
 ### Perguntas ambiciosas
 
 *Sugestão dos orientadores para a defesa.*
 
-> "Tenho noção de que as perguntas são ambiciosas. Num cenário ideal,
-> com todo o tempo do mundo, chegaria à RQ3. Por isso estão ordenadas
-> por prioridade: a RQ1 é o núcleo e tem de ficar completa; a RQ2
-> reutiliza o mesmo pipeline e é o passo seguinte; a RQ3 é a mais
-> exigente e fica para o fim. Vou ajustando consoante o que os dados e
-> o tempo permitirem."
+> "Tenho noção de que as perguntas são ambiciosas. Por isso estão
+> ordenadas de modo que cada uma só usa o que as anteriores definem: a
+> RQ1 é o núcleo e já está medida; a RQ2 e a RQ3 reutilizam o modelo
+> e os dados da RQ1, só com TESSERA; a RQ4 é a única que depende do
+> Sentinel-2 e fica para o fim. Vou ajustando consoante o que os dados
+> e o tempo permitirem."
 
 Porque esta ordem se defende:
-- A RQ1 sozinha já responde à proposta (objetivos 1 e 3, parte do 2):
-  é uma tese completa.
-- A RQ2 custa pouco a mais: é a RQ1 com menos dados, com o mesmo modelo
-  e o mesmo teste.
-- A RQ3 é a mais cara: precisa de regiões diferentes (só tenho
-  Coimbra) e das experiências com o observador dominante.
+- A RQ1 sozinha já responde ao objetivo principal da proposta e ao
+  objetivo 3: é um resultado completo.
+- A RQ2 responde ao objetivo 1 da proposta. A parte dos filtros corre
+  com os embeddings já guardados; a máscara precisa de uma extração de
+  janelas TESSERA.
+- A RQ3 responde à transferibilidade (plano de trabalho 4) dentro do
+  distrito, só com TESSERA.
+- A RQ4 é a mais cara: precisa do braço Sentinel-2, parado pelo custo
+  da extração. Se não correr, perco só a última pergunta.
 
-Cenários em [Priority and scope](../docs/research_questions.md#priority-and-scope).
+Cenários em [Scope](../docs/research_questions.md#scope).
 
-**Na tese:** ✅ Esta ordem de prioridade já está em
+**Na tese:** ✅ Parcial. A ordem de prioridade das três perguntas
+aprovadas está em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
-(secção Research Questions).
+(secção Research Questions); a ordem das quatro perguntas ainda não
+foi aplicada.
 
 ### Introdução para um júri de informática
 
@@ -67,13 +77,13 @@ resolver.
 | Problema | Em termos de informática | Onde é tratado |
 |---|---|---|
 | Enviesamento espacial: as observações concentram-se perto de estradas e trilhos (Dimson et al., 2023) | Sampling bias / dataset bias | RQ3 |
-| Poucos observadores: 83% das observações de uma só pessoa | Dados de treino pouco diversos | RQ3 |
+| Poucos observadores: 90% das 2 465 presenças são de uma só pessoa | Dados de treino pouco diversos | RQ3 |
 | Só presenças, sem ausências (Phillips et al., 2009) | Positive-unlabeled learning | Presença vs. fundo (pontos aleatórios) |
-| Rótulos com ruído: localização imprecisa, píxeis mistos (Ball et al., 2026) | Label noise | Pipeline de preparação dos dados (objetivo 1) |
-| Poucos dados | Data efficiency / few labels | RQ2 |
+| Rótulos com ruído: localização imprecisa, píxeis mistos (Ball et al., 2026) | Label noise | Pipeline de preparação dos dados; RQ2 (filtros de grau e de precisão, máscara) |
+| Poucos dados | Data efficiency / few labels | Nível de 150 presenças na RQ2 e na RQ4 |
 | Observações de anos diferentes das imagens (Ball et al., 2026) | Desfasamento temporal entre dados e rótulos | Ano único 2023; filtro de fogo |
 | Pontos vizinhos parecidos inflacionam a exatidão (Karasiak et al., 2022) | Data leakage / autocorrelação | Validação espacial |
-| Pior desempenho noutras regiões (Yang et al., 2026) | Distribution shift | RQ3 |
+| Pior desempenho noutras regiões (Yang et al., 2026) | Distribution shift | RQ3, só dentro do distrito |
 
 Ideia para a defesa: um diagrama do pipeline (observação no
 iNaturalist → píxel → embedding → classificador → mapa) antes das
@@ -81,7 +91,8 @@ perguntas de investigação.
 
 **Na tese:** ✅ Os conceitos base e a tabela de problemas já estão em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
-(abertura do capítulo e secção Motivation). O diagrama do pipeline
+(abertura do capítulo e secção Motivation); a tabela do manuscrito
+usa a numeração das três perguntas aprovadas. O diagrama do pipeline
 ainda não foi feito. A Introdução ainda cita `zhu2026` para a linha
 das outras regiões; a entrada da bibliografia tem o autor errado (é
 Stewart et al.) e a fonte certa para essa linha é Yang et al. (2026).
@@ -116,10 +127,11 @@ Abandoned Methodologies".*
   representação. Segue Ball et al. (2026), Yang et al. (2026) e Brown
   et al. (2025). Ver
   [Foundation Model Use](../docs/research_questions.md#foundation-model-use-adopted).
-- **RQ3: assumir que o observador dominante é um enviesamento.** Só
-  conta se o orientador aceitar o redesenho. Questionei a premissa,
-  medi (ele é fiável e concentrado numa zona, não necessariamente um
-  problema) e propus diagnosticar primeiro. Ver
+- **RQ3: assumir que o observador dominante é um enviesamento** (a
+  confirmar com o orientador). Questionei a premissa, medi (ele é
+  fiável e concentrado numa zona, não necessariamente um problema) e
+  passei a medir primeiro se a concentração prejudica o modelo, perto
+  contra longe. Ver
   [proposta de redesenho](#rq3-proposta-redesenho-diagnostico-primeiro).
 
 **Na tese:** ⏳ Ainda não escrita. Ao escrever a Metodologia, um
@@ -177,9 +189,14 @@ Agrupadas por tema:
 - [Documento e entrega](#decisões-documento-e-entrega)
 
 Numeração das perguntas: as entradas anteriores a 2026-11-13 usam a
-numeração antiga (RQ1 curva e comparação, RQ2 máscara, RQ3
-concentração). A correspondência com a atual está em
-[Reformulação em quatro perguntas](#reformulacao-quatro-perguntas).
+numeração aprovada pelo orientador (RQ1 curva e comparação, RQ2
+redução de dados ou máscara, RQ3 concentração). Quatro entradas de
+2026-11-13 usam uma numeração intermédia (RQ1 pontos, RQ2 curva),
+assinalada em cada uma por um bloco "Revisão". A correspondência com
+a atual está em
+[Renumeração das perguntas](#renumeracao-perguntas-2026-11-13), cujo
+texto usa ainda RQ3 para a comparação com o Sentinel-2 e RQ4 para a
+transferibilidade; o bloco "Revisão" dessa entrada troca as duas.
 
 ## Decisões: âmbito e perguntas
 
@@ -263,7 +280,7 @@ Até o orientador responder, o desenho aprovado é este. Desde
 2026-11-11, `docs/research_questions.md` mostra só a proposta, marcada
 "a confirmar"; se ele não a aceitar, repõe-se este desenho.
 
-**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq4--transferability-away-from-the-sampled-area).
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq3--transferability-away-from-the-sampled-area).
 
 **Na tese:** ✅ Parcial. O enunciado da RQ3 e a estatística do
 observador dominante já estão em
@@ -378,7 +395,7 @@ Não encontrei precedente com ciência cidadã concentrada num observador
 [`docs/literature.md`](../docs/literature.md#spatial-validation). As
 contagens são verificação minha, ad-hoc (script não guardado).
 
-**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq4--transferability-away-from-the-sampled-area).
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq3--transferability-away-from-the-sampled-area).
 
 **Na tese:** ⏳ Ainda não escrita. O enunciado da RQ3 na introdução
 não muda enquanto o orientador não responder.
@@ -544,7 +561,7 @@ contributo. Não fiz pesquisa nova para esta proposta; resumos em
 As contagens são verificação minha, ad-hoc (scripts não guardados),
 sobre `inat_dealbata_clean.csv` e `expert_polygons_clean.gpkg`.
 
-**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq1--from-point-observations-to-reference-data);
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq2--from-point-observations-to-reference-data);
 regras e testes iniciais em
 [Máscara de segmentação](#máscara-de-segmentação-testar-várias-abordagens).
 
@@ -626,6 +643,17 @@ curva e comparação, RQ2 máscara, RQ3 concentração).
 
 **Na tese:** ⏳ Ainda não aplicada. A Introdução tem os enunciados
 aprovados pelo orientador, que não mudam enquanto ele não responder.
+
+**Revisão (2026-11-13, mais tarde no mesmo dia):** a numeração das
+perguntas mudou. O que nesta entrada é a "RQ1" (dos pontos aos dados
+de referência) passa a ser a RQ2, e a "RQ2" (curva de redução de
+esforço) passa a ser a RQ1; a RQ3 e a RQ4 não mudam. Passei a numerar
+por ordem de importância, o que também fica mais perto da numeração
+que o orientador aprovou. Mudou também a hipótese dos filtros: deixa
+de ser "passos 1 a 3" e passa a ser só os filtros de grau e de
+precisão (passos 2 e 3), para não exigir embeddings novos. O critério
+de decisão comum já tinha sido retirado na entrada seguinte. Ver
+[Renumeração das perguntas](#renumeracao-perguntas-2026-11-13).
 
 ### Simplificação do desenho: uma só pergunta com Sentinel-2, sem limiar de decisão {#simplificacao-desenho-2026-11-13}
 
@@ -715,6 +743,190 @@ Diferenças emparelhadas por semente, face a 0%:
 
 **Na tese:** ⏳ Ainda não aplicada (Introdução com os enunciados
 aprovados; Metodologia e Resultados preliminares por escrever).
+
+**Revisão (2026-11-13, mais tarde no mesmo dia):** a numeração das
+perguntas mudou. O que nesta entrada é a "RQ1" (dos pontos aos dados
+de referência) passa a ser a RQ2, e a "RQ2" (curva de redução de
+esforço) passa a ser a RQ1; a RQ3 e a RQ4 não mudam. Passei a numerar
+por ordem de importância, o que também fica mais perto da numeração
+que o orientador aprovou. Mudaram também dois pontos desta entrada. No
+ponto 3, os filtros da RQ2 passam a ser só os de grau e de precisão,
+com os embeddings já guardados, por isso deixam de exigir extração
+nova. No ponto 2, a experiência perto contra longe fica definida com
+"longe" só dentro do distrito e com contagens novas. Ver
+[Renumeração das perguntas](#renumeracao-perguntas-2026-11-13).
+
+### Renumeração das perguntas por ordem de importância; desenho das RQ2 e RQ4 fechado {#renumeracao-perguntas-2026-11-13}
+
+*Decisão minha, de 2026-11-13, por mérito do desenho: proposta (a
+confirmar com o orientador). Ajusta a
+[reformulação em quatro perguntas](#reformulacao-quatro-perguntas) e a
+[simplificação do desenho](#simplificacao-desenho-2026-11-13), do
+mesmo dia. Os enunciados que ele aprovou valem até ele responder.*
+
+**O que decidi:**
+
+- **Numeração por ordem de importância.** A pergunta principal, o
+  objetivo geral e o conteúdo das quatro perguntas mantêm-se; os
+  objetivos específicos 1 e 2 trocam com as perguntas.
+
+  | Aprovada pelo orientador | Numeração da manhã de 2026-11-13 | Nova |
+  |---|---|---|
+  | RQ1, parte da curva de redução de esforço | RQ2 | **RQ1** |
+  | RQ2, redução de dados por filtro (a máscara é proposta minha de 2026-11-11, sem resposta) | RQ1 | **RQ2** |
+  | RQ1, parte TESSERA contra Sentinel-2 | RQ3 (H₀a) | **RQ3** (H₀a) |
+  | RQ3, concentração espacial da amostragem | RQ4, e RQ3 (H₀b) | **RQ4**, e **RQ3** (H₀b) |
+
+- **O que se reporta, numa frase comum a todas as hipóteses:** a
+  diferença emparelhada por semente (média, desvio-padrão, sementes
+  com o mesmo sinal). Reporta-se a diferença e não se decide por
+  limiar, porque há cinco sementes e elas reutilizam blocos. Cada
+  hipótese fica marcada como escrita antes ou depois do resultado: só
+  a H₁ da RQ1 é posterior.
+- **1. H₀b da RQ2, "filtros de grau e de precisão".** Só os passos 2
+  e 3 do pipeline (precisão até 30 m e grau *research*), na versão que
+  não exige embeddings novos. A condição "sem filtros" junta os 1 120
+  píxeis que já têm embedding guardado; as 2 observações sem embedding
+  saem dessa condição. As 12 observações de coordenadas escondidas
+  ficam sempre fora, por isso o passo 1 não é medido.
+- **2. Máscara (H₀a da RQ2):** depende de extrair as janelas TESSERA
+  à volta das observações, que não estão guardadas. Essa extração fica
+  por aprovar antes de correr; não extraí nada.
+- **3. RQ4:** "longe" são só os polígonos do distrito a mais de 1 km;
+  as presenças de teste são todos os píxeis de especialistas, que
+  nunca treinam o modelo só de ciência cidadã. As cinco sementes
+  variam os blocos de teste, como na RQ1, sem mecanismo novo.
+- **4. Contagens da RQ4:** 1 645 polígonos perto e 206 longe (ver
+  Contagens). Os valores 1 643 e 429 saem dos docs de desenho. A RQ4
+  reporta a diferença sem atribuir a causa à distância.
+- **5. Configuração da máscara, uma por regra, fixada antes de correr
+  e sem afinar nos resultados:**
+  - Crescimento de região: semelhança de cosseno ao píxel observado de
+    pelo menos 0,90; 4 vizinhos; no máximo 5 píxeis (50 m) do píxel
+    observado em cada eixo, ou seja, no máximo 121 píxeis.
+  - Superpíxeis: SLIC numa janela de 41 × 41 píxeis, tamanho médio de
+    25 píxeis (67 segmentos), `compactness` 0,1.
+  - A conectividade é a do código do notebook (4 vizinhos). A entrada
+    [Máscara de segmentação](#máscara-de-segmentação-testar-várias-abordagens)
+    diz "8 vizinhos"; vale o notebook, e essa entrada fica como está.
+- **6. Regra das hipóteses no `CLAUDE.md`:** "neutral and falsifiable"
+  passa a admitir hipóteses enunciadas como diferença reportada,
+  quando não se decide por limiar.
+- **Leitura de "área de vegetação mais próxima":** extensão do rótulo
+  à mancha de vegetação, por confirmar com o orientador.
+
+**Porquê:**
+
+- **Numeração:** a substituição dos dados de especialistas é o centro
+  da proposta de tese e o único resultado já medido, por isso é a
+  RQ1. A curva volta a ter o número que tem no manuscrito, nas
+  entradas antigas deste ficheiro e nos nomes dos dados
+  (`rq1_pilot`, `rq1_background`).
+- **H₀b sem embeddings novos:** a extração de 20 de outubro foi feita
+  antes dos filtros de grau e de precisão, por isso quase todos os
+  píxeis que esses filtros retiram já têm embedding. As observações
+  de coordenadas escondidas têm a posição baralhada pela plataforma;
+  medir esse passo exigiria embeddings novos em sítios errados.
+- **"Longe" só no distrito:** os 221 polígonos do TNE fora do distrito
+  não têm embedding guardado.
+- **Todos os píxeis de especialistas como teste:** se o teste ficasse
+  só nos blocos de teste, quase não haveria polígonos "perto", porque
+  os pontos de ciência cidadã desses blocos saem do treino.
+- **50 m e 25 píxeis:** 50 m é a zona de exclusão do fundo à volta das
+  presenças, por isso a regra do crescimento de região não rotula
+  como acácia um píxel que possa ser sorteado como fundo; fica muito
+  abaixo dos 300–500 m a que o variograma dos embeddings estabiliza.
+  25 píxeis é a mesma escala (50 m × 50 m). O limiar 0,90 e a
+  `compactness` 0,1 vêm do teste com 30 pontos, onde só vi contagens
+  de píxeis, não desempenho.
+
+**Contagens (2026-11-13, feitas ad hoc sobre os ficheiros existentes,
+sem script guardado):**
+
+- **Filtros, na janela 2021–2025:** 4 145 observações de
+  *A. dealbata*; saem 12 de coordenadas escondidas, 1 437 pelo grau
+  (1 334 *casual*, 103 *needs_id*) e 116 pela precisão; ficam 2 580.
+  As 1 553 dos dois filtros acrescentam 1 122 píxeis aos 2 465; 1 120
+  têm embedding válido no conjunto `tessera_v1.1_2023_rq1_pilot`.
+- **Perto e longe:** distância de cada polígono à presença mais
+  próxima das 2 465. Até 1 km: 1 645 polígonos (1 643 no distrito).
+  A mais de 1 km no distrito: 206, entre 1,0 e 8,2 km (mediana
+  4,8 km). A mais de 1 km no TNE fora do distrito: 221. Com embedding
+  guardado: 1 252 polígonos perto (1 982 píxeis) e 205 longe (789
+  píxeis).
+- **Diferença para os valores anteriores:** a contagem antiga (1 643
+  perto, 429 longe no mesmo ficheiro) vinha de um script não guardado.
+  A de hoje dá 1 645 e 427 no mesmo ficheiro; não sei a causa da
+  diferença.
+- **Tamanho e ocupação do solo, no distrito:** área mediana de 77 m²
+  perto e 2 788 m² longe. Classe da COS 2023: "floresta de acácias"
+  55,6% perto e 59,2% longe; pinhal 23,7% e 10,2%. As contagens por
+  semente (só com os pontos de treino) ainda não foram feitas.
+
+**O que se perde:** a medição do passo das coordenadas escondidas; os
+polígonos de fora do distrito na RQ4, onde "longe" não passa de
+8,2 km. Continuam como limitações declaradas: não testo se os
+foundation models compensam o ruído dos rótulos, e a incerteza de cada
+observação só entra pelo filtro de precisão e pela máscara, não no
+modelo.
+
+**Fundamentação:** nenhuma literatura nova consultada. Os valores da
+máscara, o corte de 1 km e o desenho das sementes da RQ4 são
+raciocínio meu, sem fonte: Rivier et al. (2024) não dão um parâmetro
+utilizável neste caso e Zhang et al. (2021) crescem pela confiança de
+um classificador, sem raio máximo (resumos em
+[`docs/literature.md`](../docs/literature.md#weak-supervision-from-point-labels)).
+
+**Em aberto:** aprovar a extração das janelas TESSERA para a máscara;
+as contagens de perto e longe por semente; a resposta do orientador à
+reformulação e à leitura de "área de vegetação mais próxima".
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
+[`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md).
+Os resultados da curva (RQ1) continuam em
+`results/rq2_per_source_check/`, que mantém o nome da numeração da
+manhã.
+
+**Na tese:** ⏳ Ainda não aplicada. A Introdução tem os enunciados
+aprovados pelo orientador, que não mudam enquanto ele não responder.
+
+**Revisão (2026-11-13, ao fim do dia).** Decisão minha, por mérito do
+desenho: proposta (a confirmar com o orientador).
+
+- **O que mudou:** a RQ3 e a RQ4 trocam de número, e a comparação com
+  o Sentinel-2 fica reduzida a uma hipótese.
+
+  | Nesta entrada | Agora |
+  |---|---|
+  | RQ3, TESSERA contra Sentinel-2 (H₀a e H₀b) | **RQ4**, só com a comparação direta nos dois níveis de dados (todas as presenças e 150) |
+  | RQ4, transferibilidade | **RQ3**, com o mesmo desenho (decisões 3 e 4 acima) |
+
+  Os objetivos específicos 3 e 4 trocam com as perguntas. A RQ1 e a
+  RQ2 não mudam.
+- **O que saiu:** a segunda hipótese da comparação de representações
+  (a queda de perto para longe ser igual com TESSERA e com
+  Sentinel-2). A curva de redução de esforço também não é repetida
+  com o Sentinel-2.
+- **Critério da numeração:** deixa de ser a ordem de importância. Cada
+  pergunta só usa o que as anteriores definem, e a única que depende
+  do Sentinel-2 vem no fim.
+- **Porquê:** quero o Sentinel-2 o mais tarde possível, porque o braço
+  está parado pelo custo da extração. Assim a RQ1, a RQ2 e a RQ3
+  fazem-se e escrevem-se só com o TESSERA, e se o Sentinel-2 nunca
+  correr perco só a última pergunta. Na ordem anterior a RQ3 tinha uma
+  hipótese que dependia de uma experiência só definida na RQ4. Tirar
+  essa hipótese evita extrair Sentinel-2 também nos píxeis de
+  especialistas.
+- **O que se perde:** a parte "amplificam ou atenuam" da pergunta
+  sobre concentração espacial que o orientador aprovou deixa de ser
+  testada; a RQ3 mede a queda só com o TESSERA. Sem a RQ4 a tese não
+  pode afirmar que os foundation models melhoram face às features
+  convencionais, só descrever o desempenho com eles.
+- **Fundamentação:** nenhuma literatura nova consultada; é organização
+  das perguntas e âmbito.
+- **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
+  [`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md).
+- **Na tese:** ⏳ Ainda não aplicada, como o resto desta entrada.
 
 ## Decisões: dados de referência
 
@@ -958,7 +1170,7 @@ dominante. O grupo de Cambridge, que a tabela do pipeline citava,
 descreve agrupamento de locais, não de observadores.
 
 **Onde:** tabela do pipeline, passo 9;
-[RQ3](../docs/research_questions.md#rq4--transferability-away-from-the-sampled-area).
+[RQ3](../docs/research_questions.md#rq3--transferability-away-from-the-sampled-area).
 
 **Na tese:** ✅ Parcial. A estatística do Observer A já está na
 Introdução (que diz 88%; o valor é 90%, por atualizar); a decisão fica
@@ -1017,6 +1229,86 @@ não é inédita, mas esta combinação mantém-se como possível contributo.
 **Na tese:** ✅ Parcial. Referida como candidato a contributo na
 Introdução (secção Contributions); o desenho e a comparação ficam para
 a Metodologia.
+
+### Ficheiros derivados: manifesto de `data/processed/` e construção do fundo num só sítio {#manifesto-ficheiros-derivados}
+
+*Decisão minha, de 2026-11-13. É organização do repositório, não uma
+escolha metodológica: o desenho do fundo não muda.*
+
+**O que decidi:**
+
+- **Manifesto.** `data/processed_manifest.csv` tem uma linha por
+  ficheiro de `data/processed/` (67: os dois fundos e os 65 blocos do
+  piloto), com o hash do ficheiro, a data, quem o construiu, as
+  entradas na forma `caminho@sha256`, a semente e os parâmetros.
+- **Um só sítio constrói os fundos:**
+  `notebooks/05_data_integration/background_pools.ipynb`, com o código
+  em `src/background.py`. Saiu dos notebooks de modelação
+  (`one_class_method_selection` e `forest_only_background_check`), que
+  só construíam o ficheiro se ele não existisse.
+- **Regra de reconstrução.** O notebook volta sempre a sortear os
+  pontos a partir das entradas atuais. Se forem os guardados, mantém
+  os embeddings e só atualiza o manifesto. Se forem outros, pára: são
+  precisos embeddings novos, o que é uma leitura remota e só corre
+  com uma opção que eu ligo.
+- **Quem lê o fundo verifica primeiro.** Os sete notebooks que usam um
+  fundo carregam-no com `load_background`, que compara o hash do
+  ficheiro e o de cada entrada com o manifesto e pára se algum não
+  bater.
+
+**Porquê:** a 2026-11-13 descobri que o fundo uniforme tinha a zona de
+exclusão feita à volta das 3 000 presenças de todos os anos, quando as
+presenças já eram as 2 465 de 2021–2025
+([Fundo uniforme reconstruído](#fundo-uniforme-reconstruido-2465)).
+Nenhum notebook deu por isso, porque "só construir se não existir"
+reutiliza o ficheiro seja qual for a entrada. A regra "Derived files"
+do `CLAUDE.md` proíbe isso; esta é a forma de a cumprir.
+
+**O que verifiquei (2026-11-13):**
+
+- **Fundo uniforme:** os 2 000 pontos sorteados outra vez com a
+  semente 42 e as entradas atuais são exatamente os guardados.
+- **Fundo só de floresta:** igual, com a semente 0.
+- Por isso nenhum dos dois foi reescrito: os hashes são os mesmos de
+  antes (`4bb2ee42…` e `2211909f…`) e não houve extração nem
+  download.
+- **Curva (RQ1):** voltei a correr `effort_reduction_curve.ipynb` com
+  o carregamento novo. Os sete ficheiros de
+  `results/rq2_per_source_check/` ficaram idênticos byte a byte aos
+  anteriores. Nenhum valor mudou.
+- **Números citados nos docs:** os da curva, o 0,874 contra 0,836 e os
+  do fundo de floresta (0,950 e 0,952) batem com os resultados e as
+  saídas atuais.
+
+**Limites:**
+
+- Os blocos do piloto foram lidos a 2026-10-20 por um notebook que já
+  não existe; as entradas ficam como desconhecidas. Cada embedding
+  pertence a um píxel e não depende das presenças escolhidas, por isso
+  o manifesto regista só o hash atual.
+- O ficheiro dos polígonos é um GeoPackage, cujos bytes podem mudar ao
+  ser reescrito com o mesmo conteúdo. Nesse caso a verificação pára, e
+  correr `background_pools.ipynb` resolve em segundos, sem extração.
+- Os outros seis notebooks ficaram com a célula de carregamento nova e
+  as saídas das execuções de 2026-11-13 (depois das 03:50), feitas com
+  as mesmas entradas; não voltei a corrê-los.
+- Ficam de fora: os downloads de dados brutos "só se não existir"
+  (não dependem das presenças), os ficheiros de `data/interim/` (os
+  notebooks reescrevem-nos sempre; entram no manifesto como entradas),
+  `results/tables/rq2_sample_150_seed0.csv` (a tratar quando a RQ2
+  correr) e `experiments/temporal_window_2021_2025/rerun.py`, que lê
+  um ficheiro de presenças que já não existe.
+
+**Fundamentação:** nenhuma literatura consultada; é prática de
+reprodutibilidade, raciocínio meu.
+
+**Onde:** [`data/processed_manifest.csv`](../data/processed_manifest.csv);
+[`background_pools.ipynb`](../notebooks/05_data_integration/background_pools.ipynb);
+`src/background.py`; `src/manifest.py`;
+[`data/README.md`](../data/README.md#tessera-embeddings--rq1-background-pool-2026-11-13).
+
+**Na tese:** ⏳ Ainda não escrita. Se entrar, é uma frase sobre
+reprodutibilidade na Metodologia.
 
 ## Decisões: RQ1, desenho e resultados
 
@@ -1097,7 +1389,7 @@ Para o one-class: pesquisa por resumos, sem texto completo lido (ver
 [`docs/literature.md`](../docs/literature.md#one-class--positive-unlabeled-classification)).
 A mistura aditiva é raciocínio meu.
 
-**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq2--citizen-science-as-a-substitute-for-expert-data);
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq1--citizen-science-as-a-substitute-for-expert-data);
 [`docs/meetings/2026-11-05.md`](../docs/meetings/2026-11-05.md);
 [`one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb).
 
@@ -1441,6 +1733,14 @@ feita pela secção 8 de
 
 **Na tese:** ⏳ Ainda não escrita (Metodologia).
 
+**Revisão (2026-11-13, mais tarde no mesmo dia):** a numeração das
+perguntas mudou. O que nesta entrada é a "RQ1" (dos pontos aos dados
+de referência) passa a ser a RQ2, e a "RQ2" (curva de redução de
+esforço) passa a ser a RQ1; a RQ3 e a RQ4 não mudam. Passei a numerar
+por ordem de importância, o que também fica mais perto da numeração
+que o orientador aprovou. O conteúdo desta entrada não muda. Ver
+[Renumeração das perguntas](#renumeracao-perguntas-2026-11-13).
+
 ### RQ2: curva por fonte das presenças de teste, critério e leitura do resultado {#rq2-curva-por-fonte}
 
 *Decisão minha, de 2026-11-13 (a confirmar com o orientador). RQ2 na
@@ -1463,7 +1763,7 @@ feita pela secção 8 de
 - Deixar de descrever a curva como "plana" sem mais.
 
 **O que deu (valores em
-[`docs/research_questions.md`](../docs/research_questions.md#rq2--citizen-science-as-a-substitute-for-expert-data)):**
+[`docs/research_questions.md`](../docs/research_questions.md#rq1--citizen-science-as-a-substitute-for-expert-data)):**
 - No teste global, o Random Forest ganha cerca de 0,005 de ROC-AUC
   logo aos 10%–20% de polígonos e não sobe mais. Aos 90% não cumpre o
   critério; aos 20%–50% cumpre. O resultado depende do nível
@@ -1511,6 +1811,15 @@ redundância, pureza) não foram separados por fonte.
 descrevem as corridas com todos os anos ou com o fundo antigo.
 
 **Na tese:** ⏳ Ainda não escrita (Resultados preliminares).
+
+**Revisão (2026-11-13, mais tarde no mesmo dia):** a numeração das
+perguntas mudou. O que nesta entrada é a "RQ1" (dos pontos aos dados
+de referência) passa a ser a RQ2, e a "RQ2" (curva de redução de
+esforço) passa a ser a RQ1; a RQ3 e a RQ4 não mudam. Passei a numerar
+por ordem de importância, o que também fica mais perto da numeração
+que o orientador aprovou. O conteúdo desta entrada não muda; a secção
+do notebook que aqui aparece como "secção 8" corresponde hoje às
+secções 4 a 7. Ver [Renumeração das perguntas](#renumeracao-perguntas-2026-11-13).
 
 ## Decisões: validação e Sentinel-2
 

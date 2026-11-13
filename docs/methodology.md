@@ -70,7 +70,7 @@ use random splits.
 The simplest credible approach: Sentinel-2 spectral-temporal features
 with the same presence-vs-background Random Forest used for the
 embeddings (see
-[RQ3](research_questions.md#rq3--foundation-models-vs-conventional-features)).
+[RQ4](research_questions.md#rq4--foundation-models-vs-conventional-features)).
 It answers *how well can this be done without foundation models?*
 
 - **Status: on hold.** TESSERA ran first (supervisor). Extracting
@@ -96,7 +96,7 @@ It answers *how well can this be done without foundation models?*
 Domingo et al. (2023). Flowering-season features — Domingo et al.
 (2023); Martins et al. (2016). Presence vs. random pseudo-absences
 evaluated with ROC — Mouta et al. (2021). Random Forest — see
-[RQ2](research_questions.md#rq2--citizen-science-as-a-substitute-for-expert-data).
+[RQ1](research_questions.md#rq1--citizen-science-as-a-substitute-for-expert-data).
 
 ## Foundation Models
 
@@ -141,10 +141,10 @@ Phillips et al. (2009) (AUC against background has a maximum below 1).
 Go beyond aggregate metrics: where and why do models fail? Candidate
 dimensions: region, land-cover context (COS), observation density,
 observer, quality of the citizen-science record. Not started: the
-region dimension needs RQ4 and the land-cover dimension needs the
-segmentation-mask comparison of RQ1. The habitat-composition finding
+region dimension needs RQ3 and the land-cover dimension needs the
+segmentation-mask comparison of RQ2. The habitat-composition finding
 of
-[RQ2](research_questions.md#rq2--citizen-science-as-a-substitute-for-expert-data)
+[RQ1](research_questions.md#rq1--citizen-science-as-a-substitute-for-expert-data)
 stands in as an informal error explanation for now.
 
 ## Final Map
@@ -153,8 +153,8 @@ Document the area mapped, how pixel probabilities become a map, any
 threshold used, and uncertainty where available. Interpret the map in
 light of the validation results and known data limitations. A
 confidence layer based on dissimilarity to the training data is part
-of RQ4 (to confirm; see
-[RQ4](research_questions.md#rq4--transferability-away-from-the-sampled-area)). Not started.
+of RQ3 (to confirm; see
+[RQ3](research_questions.md#rq3--transferability-away-from-the-sampled-area)). Not started.
 
 **Grounded in:** Ratsakatika et al. (2026) mapped the area of
 applicability of Meyer & Pebesma (2021) alongside the predictions of a

@@ -99,6 +99,7 @@ is a bug to fix, not a convenience. This is the single reference for
 | `docs/todo.md` | Confirmed, settled tasks only | Concrete tasks, each with its source | Open questions, ideas not yet settled — see "What goes in `docs/todo.md`" below |
 | `docs/literature/` | Paper PDFs | The files themselves | Notes (→ `docs/literature.md`) |
 | `data/README.md` | Dataset provenance and processing | Source, access date, license, coverage, preprocessing steps, resulting files/columns, for every dataset | Why a dataset or filter was chosen (→ `thesis/notes.md`), research design that uses the dataset (→ `docs/research_questions.md`) |
+| `data/processed_manifest.csv` | Record of what each derived file in `data/processed/` was built from | One row per file: hash, build date, builder, inputs with their hashes, seed, parameters; written only by the notebook that builds the file | Why a file is built that way (→ `data/README.md`, `thesis/notes.md`) |
 | `thesis/notes.md` | Decision log and defense prep | Full reasoning behind every decision (**Decisões**), talking points for the defense (**Para dizer**), and each entry's **Na tese** manuscript-sync status (see "Thesis Manuscript Sync" below) | Dataset provenance (→ `data/README.md`), the current adopted state on its own (→ `docs/research_questions.md`/`methodology.md`) |
 | `thesis/document/` | The actual LaTeX manuscript (synced with Overleaf, see `README.md`) | Chapter prose and the bibliography | Decision reasoning (→ `thesis/notes.md`), task tracking (→ `docs/todo.md`) |
 | `notebooks/README.md`, `src/README.md`, `experiments/README.md`, `results/README.md` | Local orientation for that folder | What the folder is for, naming/run-order conventions; in `results/README.md`, also one line per obsolete `results/` folder | Research content, decisions — these folders hold code/outputs, not explanations |
@@ -357,7 +358,9 @@ not a source to cite.
   identify, propose) — never vague ones (understand, explore,
   address). Each follows from the question, passes SMART, and maps to
   a chapter or section; together they cover the general objective.
-- **Hypotheses:** neutral and falsifiable, written as a null (H₀) and
+- **Hypotheses:** neutral and falsifiable (or, when results are
+  reported as differences and not decided by a threshold, stated as a
+  reported difference), written as a null (H₀) and
   an alternative (H₁), directional only when one direction is
   expected, each stating how it is measured. Write them before
   running the experiment; if a result is already known, say so. Also

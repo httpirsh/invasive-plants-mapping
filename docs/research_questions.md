@@ -20,16 +20,16 @@ this document:
 
 | Proposal | Addressed by |
 |---|---|
-| Main objective — reduce the dependency on costly reference data | Main question; RQ2 (citizen science against expert reference data) |
-| Obj. 1 / work plan 3 — transform point observations into usable EO reference data, accounting for uncertainty and quality | [Reference-Data Pipeline](#reference-data-pipeline-proposed); RQ1 (effect of the quality filters and of extending each point to the patch around it) |
-| Obj. 2 — use foundation models to compensate for limited, noisy citizen-science data | RQ3, for limited data and away from the sampled area: both representations are trained on cleaned data, so compensation for label noise is not tested |
-| Obj. 3 — assess to what extent citizen science supports accurate, species-level mapping | RQ2; [Species Scope](#species-scope-proposed) |
-| Work plan 4 — fine-tune foundation models; analyse accuracy, limitations, transferability | [Foundation Model Use](#foundation-model-use-adopted) (frozen embeddings, a justified deviation); RQ4 (performance away from the sampled area) |
+| Main objective — reduce the dependency on costly reference data | Main question; RQ1 (citizen science against expert reference data) |
+| Obj. 1 / work plan 3 — transform point observations into usable EO reference data, accounting for uncertainty and quality | [Reference-Data Pipeline](#reference-data-pipeline-proposed); RQ2 (effect of the grade and accuracy filters and of extending each point to the patch around it). Uncertainty is covered only through the positional-accuracy filter and the mask: the uncertainty of each observation does not enter the model |
+| Obj. 2 — use foundation models to compensate for limited, noisy citizen-science data | RQ4, for limited data: both representations are trained on cleaned data, so compensation for label noise is not tested |
+| Obj. 3 — assess to what extent citizen science supports accurate, species-level mapping | RQ1; [Species Scope](#species-scope-proposed) |
+| Work plan 4 — fine-tune foundation models; analyse accuracy, limitations, transferability | [Foundation Model Use](#foundation-model-use-adopted) (frozen embeddings, a justified deviation); RQ3 (performance away from the sampled area, within the district) |
 
 ## Main Question and Objectives
 
-*Wording mine, to confirm with the supervisor
-([`thesis/notes.md`](../thesis/notes.md#reformulacao-quatro-perguntas)).*
+*Wording and numbering mine, to confirm with the supervisor
+([`thesis/notes.md`](../thesis/notes.md#renumeracao-perguntas-2026-11-13)).*
 
 **Main question:** To what extent can citizen-science observations,
 turned into reference data and represented by Earth Observation
@@ -43,18 +43,18 @@ mapping *A. dealbata* in the Coimbra district.
 
 **Specific objectives:**
 
-1. To build and document the process that turns citizen-science point
-   observations into reference data, and to measure how its quality
-   filters and the extension of each label to the surrounding
-   vegetation patch change performance (RQ1).
-2. To measure the performance gained by adding 10% to 90% of the
+1. To measure the performance gained by adding 10% to 90% of the
    expert polygons to a citizen-science base, to compare it with the
    expert-only case (100%), and to report the performance of the
-   citizen-science-only model on expert reference data (RQ2).
-3. To compare TESSERA-based and Sentinel-2-based models, with all
-   observations, with few, and away from the sampled area (RQ3).
-4. To measure the difference in performance between locations near
-   and far from the sampled area (RQ4).
+   citizen-science-only model on expert reference data (RQ1).
+2. To build and document the process that turns citizen-science point
+   observations into reference data, and to measure how its grade and
+   accuracy filters and the extension of each label to the surrounding
+   vegetation patch change performance (RQ2).
+3. To measure the difference in performance between locations near
+   and far from the sampled area (RQ3).
+4. To compare TESSERA-based and Sentinel-2-based models, with all
+   observations and with few (RQ4).
 5. To produce the *A. dealbata* map of the study area, with a
    confidence map. Whether the model separates *A. dealbata* from
    other *Acacia* species is not tested and is left as future work.
@@ -65,30 +65,31 @@ Sentinel-2 features; performance measured with ROC-AUC and the
 continuous Boyce index under 10 km spatial block holdout.
 
 **Hypotheses** are stated under each question as a null (H₀) and an
-alternative (H₁). They are working hypotheses, not formal statistical
-tests: there are five spatial splits, and they reuse blocks.
+alternative (H₁), each marked as written before or after its result
+was seen. They are working hypotheses, not formal statistical tests.
 
-**How every hypothesis is measured:** by the per-seed difference in
-ROC-AUC between the two conditions (same test blocks), reported as its
-mean, its standard deviation and the number of seeds in which it has
-the same sign. No decision threshold is applied. The Boyce index is
-reported next to it. Each question names the two conditions compared.
+**What is reported for every hypothesis:** the per-seed difference in
+ROC-AUC between the two conditions (same test blocks): its mean, its
+standard deviation and the number of seeds in which it has the same
+sign, with the Boyce index next to it. The difference is reported and
+no decision threshold is applied, because there are five seeds and
+they reuse blocks. Each question names the two conditions compared.
 
 ## Secondary Questions
 
-The questions are numbered in the order of the proposal's objectives.
+Each question uses only what the questions before it define; the one
+that depends on Sentinel-2 comes last.
 
-### Priority and scope
+### Scope
 
-RQ2, RQ1 and RQ4 need only TESSERA; RQ3 needs the Sentinel-2 arm and
-runs last. Each stage is a complete result on its own:
+Each question is a complete result on its own:
 
-| Scenario | Delivers | Answers |
-|---|---|---|
-| RQ2 only | Reference-data pipeline + the effort-reduction curve | Main objective and objective 3 |
-| RQ2 + RQ1 | The above + the effect of the quality filters and of extending point labels to patches | Objective 1 |
-| RQ2 + RQ1 + RQ4 | The above + performance away from the sampled area, and a confidence map | Transferability (work plan 4) |
-| All four | The above + TESSERA against Sentinel-2 | Objective 2, for limited data. Most exposed to time |
+| Question | Delivers | Answers, in the thesis proposal | Depends on |
+|---|---|---|---|
+| RQ1 | The effort-reduction curve | Main objective and obj. 3 | TESSERA only; measured |
+| RQ2 | The reference-data pipeline, and the effect of its grade and accuracy filters and of extending point labels to patches | Obj. 1 | TESSERA only; the mask needs an extraction of TESSERA windows, to approve before running |
+| RQ3 | Performance away from the sampled area, and a confidence map | Work plan 4 (transferability) | TESSERA only |
+| RQ4 | TESSERA against Sentinel-2 | Obj. 2, for limited data | The Sentinel-2 arm, on hold |
 
 Scope is reassessed as experiments progress.
 
@@ -107,85 +108,10 @@ Each question also lists its own risks.
   pixels on either side of a block border can be close, which can
   inflate scores (Karasiak et al., 2022; Ratsakatika et al., 2026).
   See [`methodology.md`](methodology.md#validation).
-- **The Sentinel-2 arm is on hold.** RQ3 cannot be answered without
-  it; RQ1, RQ2 and RQ4 do not depend on it.
+- **The Sentinel-2 arm is on hold.** RQ4 cannot be answered without
+  it; RQ1, RQ2 and RQ3 do not depend on it.
 
-### RQ1 — From point observations to reference data
-
-*Question and design are mine, to confirm with the supervisor
-([`thesis/notes.md`](../thesis/notes.md#reformulacao-quatro-perguntas);
-mask design:
-[`thesis/notes.md`](../thesis/notes.md#rq2-proposta-mascara)). The
-segmentation mask itself is his: central, try several approaches.*
-
-**Question:** To what extent do the quality filters applied to
-citizen-science observations, and the extension of each label from the
-observed pixel to the vegetation patch around it, change the
-performance of *A. dealbata* mapping?
-
-**Hypotheses:**
-
-- H₀a: performance is the same with pixel-only and patch labels. H₁a:
-  it differs — more pixels per observation may help, and wrong pixels
-  (the mask spreading into similar non-*Acacia* vegetation) may harm.
-  *Compared:* each mask rule against pixel-only training, at each data
-  level.
-- H₀b: performance is the same with unfiltered and filtered
-  observations. H₁b: it differs. *Compared:* training on unfiltered
-  observations against training on filtered ones, with all
-  observations.
-
-**Design:**
-
-- **Label extent, three training conditions:** the observed pixel
-  only; **region growing** on TESSERA embedding similarity from the
-  observed pixel, with a maximum radius; **superpixels** computed on
-  TESSERA embeddings.
-- **Quality filters, two training conditions:** all filters applied,
-  or none of the quality filters (steps 1 to 3 of the
-  [Reference-Data Pipeline](#reference-data-pipeline-proposed):
-  obscured coordinates, positional accuracy, quality grade). The
-  2021–2025 window, the species and one presence per pixel are the
-  same in both. No step-by-step ablation.
-- **Two data levels for the mask:** all 2 465 presences, and a random
-  subsample of 150 (6%). The small level is where a difference can
-  show, since the RQ2 curve is near its ceiling with all data. The
-  filter comparison runs with all observations only.
-- **Only the training labels change.** Test set (the filtered one),
-  background pool, Random Forest, 10 km blocks and five seeds are
-  those of RQ2. TESSERA only: the question is about the labels, not
-  the representation.
-- **One fixed parameter set per mask rule**, justified and stated as a
-  limitation; no calibration. Values still to choose.
-- **Comparison between the two mask rules is descriptive**, with the
-  number of pixels each adds per observation.
-- **Leakage:** mask pixels and unfiltered observations that fall in a
-  test block or on a background point are removed.
-- **Open:** whether the supervisor's "nearest vegetation area" means
-  extending the label to the patch (the reading assumed here).
-
-**Risks:**
-
-- No difference between conditions, even at 150 presences.
-- The mask may spread into similar non-*Acacia* vegetation and add
-  wrong labels.
-- The unfiltered condition needs TESSERA embeddings for the
-  observations the filters remove, which are not extracted yet.
-
-**Grounded in:** superpixel propagation of point labels follows the
-idea of Rivier et al. (2024); Raine et al. (2022) compute superpixels
-on learned features, with a modest gain over colour-based ones. Both
-use many correctly placed points per image. Region growing to densify
-point labels at Sentinel-2 scale: Zhang et al. (2021), who grow on
-classifier confidence; no precedent found for growing on embedding
-similarity to the seed or for a maximum radius. No paper found
-combines point-to-patch propagation with sparse citizen-science points
-and frozen embeddings, so that combination is a possible contribution.
-The filtered-against-unfiltered comparison is adapted from the
-one-factor ablations of Ball et al. (2026). Summaries:
-[`literature.md`](literature.md#weak-supervision-from-point-labels).
-
-### RQ2 — Citizen science as a substitute for expert data
+### RQ1 — Citizen science as a substitute for expert data
 
 *Question and wording mine, to confirm with the supervisor; the curve
 design is his
@@ -196,12 +122,14 @@ citizen-science observations reach the performance of models trained
 with expert reference data?
 
 **Hypotheses:** H₀: adding expert data does not change performance.
-H₁: performance increases with the fraction of expert data.
-*Compared:* 90% against 0% of the expert polygons. The pooled test set
-(citizen-science and expert presences together) is the main one, as in
-the curve design; the expert presences alone are a second analysis,
-reported next to it. H₁ was written after the curve had been observed
-to be flat, so this is not a pre-registered test.
+H₁: performance increases with the fraction of expert data. H₁ was
+written after the curve had been observed, so this is not a
+pre-registered test.
+
+**Reported:** 90% against 0% of the expert polygons. The pooled test
+set (citizen-science and expert presences together) is the main one,
+as in the curve design; the expert presences alone are a second
+analysis, reported next to it.
 
 **Design (supervisor):** an effort-reduction curve. Expert data are
 added on top of a fixed citizen-science base, from 0% to 100% in
@@ -216,7 +144,7 @@ seeds. Reasoning:
 classifier and Logistic Regression is reported as a second one. Why:
 [`thesis/notes.md`](../thesis/notes.md#rq2-curva-por-fonte).
 
-**Result (TESSERA, 2021–2025 presences; not yet confirmed by the
+**Measured (TESSERA, 2021–2025 presences; not yet confirmed by the
 supervisor):** the answer depends on the classifier and on the test
 presences. On the pooled test set, Random Forest gains about 0.005
 ROC-AUC with the first 10% to 20% of expert polygons and no more after
@@ -239,6 +167,10 @@ Values per level, paired differences, the Boyce index and caveats:
 notebook
 [`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb);
 files in `results/rq2_per_source_check/`.
+
+**Not measured:** the curve with Sentinel-2 features (not planned: see RQ4);
+the curve diagnostics (forest-only background, redundancy, label
+purity) split by source of the test presences.
 
 **Risks:**
 
@@ -282,42 +214,201 @@ the supervisor; provenance and counts in
   blocks, and both sources inherit a similar spatial coverage.
 - **Open:** how the sites were chosen.
 
-### RQ3 — Foundation models vs. conventional features
+### RQ2 — From point observations to reference data
 
 *Question and design are mine, to confirm with the supervisor
-([`thesis/notes.md`](../thesis/notes.md#reformulacao-quatro-perguntas)).*
+([`thesis/notes.md`](../thesis/notes.md#renumeracao-perguntas-2026-11-13);
+mask design:
+[`thesis/notes.md`](../thesis/notes.md#rq2-proposta-mascara)). The
+segmentation mask itself is his: central, try several approaches.*
+
+**Question:** To what extent do the grade and accuracy filters applied
+to citizen-science observations, and the extension of each label from
+the observed pixel to the vegetation patch around it, change the
+performance of *A. dealbata* mapping?
+
+**Hypotheses (written before running; no performance result exists
+for either):**
+
+- H₀a: performance is the same with pixel-only and patch labels. H₁a:
+  it differs — more pixels per observation may help, and wrong pixels
+  (the mask spreading into similar non-*Acacia* vegetation) may harm.
+- H₀b: performance is the same with and without the grade and accuracy
+  filters. H₁b: it differs.
+
+**Reported:** for H₀a, each mask rule against pixel-only training, at
+each data level; for H₀b, training without the two filters against
+training with them, with all observations.
+
+**Design:**
+
+- **Label extent, three training conditions:** the observed pixel
+  only; **region growing** on TESSERA embedding similarity from the
+  observed pixel; **superpixels** computed on TESSERA embeddings. The
+  supervisor's "nearest vegetation area" is read as extending the
+  label to the vegetation patch (to confirm with the supervisor).
+- **One configuration per mask rule, fixed before running and not
+  tuned on the results:**
+
+  | Rule | Configuration |
+  |---|---|
+  | Region growing | Cosine similarity to the observed pixel ≥ 0.90; 4-connected growth; at most 5 pixels (50 m) from the observed pixel along each axis, so at most 121 pixels |
+  | Superpixels | SLIC on a 41 × 41 pixel window of embeddings; mean size 25 pixels (0.25 ha), so 67 segments per window; compactness 0.1; the label goes to the superpixel that holds the observed pixel |
+
+- **Grade and accuracy filters, two training conditions:** both
+  applied (the 2 465 presence pixels), or neither (steps 2 and 3 of
+  the [Reference-Data Pipeline](#reference-data-pipeline-proposed):
+  positional accuracy and quality grade). In the 2021–2025 window the
+  two filters remove 1 553 observations, which add 1 122 pixels; 1 120
+  of these have a stored TESSERA embedding and form the unfiltered
+  condition, and the 2 observations without one are left out of it.
+  Observations with obscured coordinates (step 1; 12 in the window)
+  are excluded from both conditions, so step 1 is not measured. The
+  2021–2025 window, the species and one presence per pixel are the
+  same in both. No step-by-step ablation.
+- **Two data levels for the mask:** all 2 465 presences, and a random
+  subsample of 150 (6%). The small level is where a difference can
+  show, since the RQ1 curve is near its ceiling with all data. The
+  filter comparison runs with all observations only.
+- **Only the training labels change.** Test set (the filtered one),
+  background pool, Random Forest, 10 km blocks and five seeds are
+  those of RQ1. TESSERA only: the question is about the labels, not
+  the representation.
+- **Comparison between the two mask rules is descriptive**, with the
+  number of pixels each adds per observation.
+- **Leakage:** mask pixels and unfiltered observations that fall in a
+  test block or on a background point are removed.
+- **Status:** not run. The filter comparison needs no new embeddings.
+  The mask comparison needs the TESSERA windows around the
+  observations, which are not stored: that extraction is to approve
+  before running. Measured so far: the counts of each pipeline step,
+  and the patch sizes of both rules on a sample of 30 observations
+  with other parameter values (pixel counts only).
+
+**Risks:**
+
+- No difference between conditions, even at 150 presences.
+- The mask may spread into similar non-*Acacia* vegetation and add
+  wrong labels.
+- The mask configuration is not calibrated; a different one could give
+  a different answer.
+
+**Grounded in:** superpixel propagation of point labels follows the
+idea of Rivier et al. (2024); Raine et al. (2022) compute superpixels
+on learned features, with a modest gain over colour-based ones. Both
+use many correctly placed points per image. Region growing to densify
+point labels at Sentinel-2 scale: Zhang et al. (2021), who grow on
+classifier confidence; no precedent found for growing on embedding
+similarity to the seed or for a maximum radius. No paper found
+combines point-to-patch propagation with sparse citizen-science points
+and frozen embeddings, so that combination is a possible contribution.
+The mask configuration is my own reasoning, with no source found: no
+paper read gives a value usable here. The 50 m limit is the exclusion
+distance of the background pool around presences (step 7 of the
+pipeline), and 25 pixels is the same 50 m scale. The
+filtered-against-unfiltered comparison is adapted from the one-factor
+ablations of Ball et al. (2026). Summaries:
+[`literature.md`](literature.md#weak-supervision-from-point-labels);
+reasoning and counts:
+[`thesis/notes.md`](../thesis/notes.md#renumeracao-perguntas-2026-11-13).
+
+### RQ3 — Transferability away from the sampled area
+
+*The supervisor approved a question on spatial sampling concentration;
+this wording and design are mine, to confirm with him
+([`thesis/notes.md`](../thesis/notes.md#renumeracao-perguntas-2026-11-13)).*
+
+**Question:** To what extent does the performance of the
+citizen-science-trained model drop from locations near the sampled
+area to locations far from it?
+
+**Hypotheses (written before running):** H₀: no difference in
+performance between near and far locations. H₁: performance is lower
+far from the sampled area. Known beforehand from RQ1: the
+citizen-science-only model reaches 0.976 ROC-AUC on expert presences
+overall.
+
+**Reported:** far against near expert polygons. The difference is
+reported without attributing its cause to distance (see Risks).
+
+**Design:**
+
+- **Starting point:** one observer made 90% of the 2 465 presences,
+  and their points occupy 18 of 42 blocks of 10 km. That is
+  concentration; whether it harms the model is what is measured.
+- **Model:** in each seed, the citizen-science-only (0%) model of RQ1:
+  the same draw of test blocks, trained on the citizen-science
+  presences and background points outside them, with TESSERA.
+- **Seeds:** the five seeds vary the test blocks, as in RQ1, and with
+  them the training set and the test background.
+- **Test set:** all expert pixels, none of which trains this model,
+  against the background points of the seed's test blocks.
+- **Near and far:** distance from each expert polygon to the nearest
+  citizen-science training presence; near is up to 1 km, far is beyond
+  1 km, inside the district only.
+- **Counts:** measured to the 2 465 presences, 1 645 polygons are near
+  and 206 polygons in the district are far, between 1.0 and 8.2 km.
+  Stored embeddings cover 1 252 near polygons (1 982 pixels) and 205
+  far ones (789 pixels). Count of
+  2026-11-13, made ad hoc and not saved in a script; the counts per
+  seed are not made yet.
+- **Product:** a feature-space dissimilarity map (area of
+  applicability) as a confidence layer for the final map.
+- **Status:** not run. No part of this question uses Sentinel-2:
+  whether foundation models amplify or mitigate the effect, against
+  conventional features, is not tested.
+
+**Risks:**
+
+- Near and far polygons differ in more than distance. In the district
+  the median far polygon is about 36 times larger than the median near
+  one (2 788 m² against 77 m²), and the land cover differs somewhat
+  (pine forest holds 23.7% of near polygons and 10.2% of far ones;
+  COS 2023 "Florestas de acácias" 55.6% and 59.2%).
+- Large patches are easy to detect, so performance may be high both
+  near and far and show nothing.
+- "Far" is at most 8.2 km from a citizen-science presence, so the
+  result does not speak for other regions.
+
+**Grounded in:** clustering of citizen-science records in a few
+places: Cambridge TESSERA group. Embedding-based models lost accuracy
+in another region in Yang et al. (2026). The dissimilarity map follows Meyer &
+Pebesma (2021), tested there on regression only, so its use with a
+classifier on embeddings is an extension. No precedent found for
+citizen science concentrated in one observer. The 1 km cut and the
+use of every expert pixel as test data are my own reasoning, with no
+source found.
+
+### RQ4 — Foundation models vs. conventional features
+
+*Question and design are mine, to confirm with the supervisor
+([`thesis/notes.md`](../thesis/notes.md#renumeracao-perguntas-2026-11-13)).*
 
 **Question:** To what extent do TESSERA embeddings improve
 *A. dealbata* mapping over Sentinel-2 features when trained on cleaned
 citizen-science data, with all observations and with few?
 
-**Hypotheses:**
+**Hypotheses (written before running):** H₀: no performance
+difference between TESSERA and Sentinel-2 models, at either data
+level. H₁: the TESSERA model performs better, with a larger difference
+at the small data level.
 
-- H₀a: no performance difference between TESSERA and Sentinel-2
-  models, at either data level. H₁a: the TESSERA model performs
-  better, with a larger difference at the small data level.
-  *Compared:* TESSERA against Sentinel-2 at each data level.
-- H₀b: the near–far difference of
-  [RQ4](#rq4--transferability-away-from-the-sampled-area) is the same
-  for TESSERA and Sentinel-2. H₁b: it differs — a larger drop for
-  TESSERA means it amplifies the effect of spatial sampling
-  concentration, a smaller one that it mitigates it. No mechanism is
-  assumed: TESSERA embeddings are computed per pixel and do not encode
-  the surrounding landscape (Feng et al., 2026). *Compared:* the
-  near–far difference of one representation against the other's.
+**Reported:** TESSERA against Sentinel-2 at each data level.
 
 **Design:**
 
 - **Only the representation changes.** Same Random Forest, test set,
-  background pool, 10 km blocks and five seeds as RQ2; all
+  background pool, 10 km blocks and five seeds as RQ1; all
   representations come from the same reference year.
 - **Two data levels:** all 2 465 presences and the random subsample of
-  150 used in RQ1.
-- **Away from the sampled area:** the RQ4 experiment repeated with
-  Sentinel-2 features.
+  150 used in RQ2.
+- **Citizen-science training data only.** The effort-reduction curve
+  of RQ1 and the near–far comparison of RQ3 are not repeated with
+  Sentinel-2.
 - **Cleaned data only.** Whether embeddings compensate for label noise
   is not tested.
-- **Status: not run.** The Sentinel-2 arm is on hold (see
+- **Status: not run, nothing measured.** The whole question depends on
+  the Sentinel-2 arm, which is on hold (see
   [Foundation Model Use](#foundation-model-use-adopted)); its feature
   set is decided, see [`methodology.md`](methodology.md#baseline).
 
@@ -332,55 +423,7 @@ citizen-science data, with all observations and with few?
 yet tested for invasive plants with citizen-science labels. Silva &
 Gonçalves (2026) is a Portuguese case where the Sentinel-2 baseline
 beat TESSERA. No source read for the choice of 150 presences as the
-small level. H₀b is motivated by Yang et al. (2026), where
-embedding-based models lost accuracy in another region (with no
-conventional baseline in that test), and Ratsakatika et al. (2026),
-where the TESSERA advantage over Sentinel features narrowed under a
-10 km buffer without reversing; no work read shows embeddings
-transferring worse than conventional features.
-
-### RQ4 — Transferability away from the sampled area
-
-*The supervisor approved a question on spatial sampling concentration;
-this wording and design are mine, to confirm with him
-([`thesis/notes.md`](../thesis/notes.md#simplificacao-desenho-2026-11-13)).*
-
-**Question:** To what extent does the performance of the
-citizen-science-trained model drop from locations near the sampled
-area to locations far from it?
-
-**Hypotheses:** H₀: no difference in performance between near and far
-locations. H₁: performance is lower far from the sampled area.
-*Compared:* far against near expert polygons. What the five seeds vary
-is fixed with the design, before the experiment runs.
-
-The experiment shows the outcome, not the mechanism.
-
-**Design:**
-
-- **Starting point:** one observer made 90% of the 2 465 presences,
-  and their points occupy 18 of 42 blocks of 10 km. That is
-  concentration; whether it harms the model is what is measured.
-- **Experiment:** train on citizen science with TESSERA and evaluate
-  on the expert polygons (independent reference), near vs. far from
-  the nearest training point in geographic distance. 1 643 polygons
-  lie within 1 km and 429 farther, in the same source file.
-- **Product:** a feature-space dissimilarity map (area of
-  applicability) as a confidence layer for the final map.
-- **Background:** the uniform-random pool shared with RQ2.
-
-**Risks:**
-
-- Far polygons are 20–40 times larger than near ones, so near and far
-  differ in patch size as well as distance.
-- Large patches are easy to detect, so performance may be high both
-  near and far and show nothing.
-
-**Grounded in:** clustering of citizen-science records in a few
-places: Cambridge TESSERA group. The dissimilarity map follows Meyer &
-Pebesma (2021), tested there on regression only, so its use with a
-classifier on embeddings is an extension. No precedent found for
-citizen science concentrated in one observer.
+small level.
 
 ## Shared Design (RQ1–RQ4)
 
@@ -397,7 +440,7 @@ per pixel.
 
 **Segmentation mask:** whether the label of each observation is
 extended to the patch around it is tested in
-[RQ1](#rq1--from-point-observations-to-reference-data). The task stays pixel
+[RQ2](#rq2--from-point-observations-to-reference-data). The task stays pixel
 classification; the mask changes how many pixels around each
 observation count as *Acacia* training data.
 
@@ -408,8 +451,10 @@ may later be aggregated to cells for evaluation.
 
 Answers the proposal's first objective. The steps that turn
 iNaturalist points into labelled pixels are treated as a
-**methodological contribution**: each step is documented, counts are
-reported, and its effect is measured.
+**methodological contribution**: each step is documented and its
+counts are reported. The effect of the grade and accuracy filters
+(steps 2 and 3) is measured in
+[RQ2](#rq2--from-point-observations-to-reference-data).
 
 | Step | Status | Notes | Grounded in |
 |---|---|---|---|
@@ -428,14 +473,14 @@ observations run first (1, species, 3, 2, 4), then step 8, then step
 5; counts at every step:
 [`data/README.md`](../data/README.md#inaturalist-observations-cleaned-derived).
 
-**Effect of the filters:** RQ1 compares training with and without
-the quality filters (steps 1 to 3), as two conditions.
+**Effect of the filters:** RQ2 compares training with and without
+the grade and accuracy filters (steps 2 and 3), as two conditions.
 
-**Cumulative ablation (optional):** run the RQ2 setup after adding
+**Cumulative ablation (optional):** run the RQ1 setup after adding
 each step and report the change in performance (adapted from the
 one-factor ablations of Ball et al., 2026). Not a committed
 deliverable: the methodological contribution rests on the documented,
-justified pipeline above and on RQ1 (see
+justified pipeline above and on RQ2 (see
 [`literature.md`](literature.md#contribution)).
 
 ### Foundation Model Use (adopted)
@@ -453,13 +498,13 @@ Reasons:
   embeddings in its own paper (Feng et al., 2026).
 - With few, noisy labels, fine-tuning risks fitting the noise.
 - The same classifier on every representation isolates the effect of
-  the representation (RQ3).
+  the representation (RQ4).
 
 **Grounded in:** Ball et al. (2026); Yang et al. (2026); Brown et al.
 (2025) — all used frozen embeddings with a light classifier on top;
 Feng et al. (2026) for fine-tuning; findings in `literature.md`.
 
-**Phasing (supervisor): TESSERA first, Sentinel-2 after.** The RQ2
+**Phasing (supervisor): TESSERA first, Sentinel-2 after.** The RQ1
 curve ran first with TESSERA embeddings. The Sentinel-2 arm is on
 hold: extracting it at the labelled points turned out to cost about as
 much as the full raster (see

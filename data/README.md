@@ -73,7 +73,9 @@ obtained.
 - **Preprocessing:** points snapped to the centre of their 10 m pixel
   on the TESSERA grid before reading. Made by an RQ1 pilot notebook
   removed on 2026-10-20 (experiments paused until the exploratory
-  analysis is done); kept because reading them takes ~2 h.
+  analysis is done); kept because reading them takes ~2 h. The hash of
+  each block is in [`processed_manifest.csv`](processed_manifest.csv);
+  the inputs of that notebook are not known.
 
 ### TESSERA embeddings — RQ1 background pool (2026-11-13)
 
@@ -95,11 +97,16 @@ obtained.
   buffer (own choice, no literature value found for the exact radius —
   see
   [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)).
-  Made by
-  [`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb),
-  regenerated only if this file is missing.
+  Built by
+  [`notebooks/05_data_integration/background_pools.ipynb`](../notebooks/05_data_integration/background_pools.ipynb),
+  which samples the points again on every run: if they are the stored
+  ones the embeddings are kept, otherwise new embeddings have to be
+  read. Inputs, seed and hashes are in
+  [`processed_manifest.csv`](processed_manifest.csv). The current file
+  was written on 2026-11-13 by `one_class_method_selection.ipynb`,
+  with the same code.
 - **Status:** the background pool shared across the whole
-  effort-reduction curve (RQ2); not yet confirmed by
+  effort-reduction curve (RQ1); not yet confirmed by
   the supervisor as final.
 
 ### TESSERA embeddings — forest-only background pool (2026-11-13)
@@ -118,11 +125,14 @@ obtained.
 - **File:** `processed/embeddings/tessera_v1.1_2023_rq1_background/background_points_forest_only.npz`
   (same fields as the uniform pool, plus `cos_group` = land-cover
   group of each point; all 2 000 valid, no NaN rows).
-- **Preprocessing:** made by
-  [`notebooks/07_foundation_models/forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb),
-  regenerated only if this file is missing.
+- **Preprocessing:** built by
+  [`notebooks/05_data_integration/background_pools.ipynb`](../notebooks/05_data_integration/background_pools.ipynb),
+  under the same rule as the uniform pool; inputs, seed and hashes are
+  in [`processed_manifest.csv`](processed_manifest.csv). The current
+  file was written on 2026-11-13 by
+  `forest_only_background_check.ipynb`, with the same code.
 - **Status:** used only as a harder background in the robustness
-  check of the effort-reduction curve (RQ2).
+  check of the effort-reduction curve (RQ1).
 
 ### TESSERA embeddings — patch access (2026-11-03)
 
@@ -274,8 +284,8 @@ documents every step.
 
 ### *Acacia dealbata* expert reference polygons
 
-Expert reference data for the RQ2 effort-reduction curve (see
-[`docs/research_questions.md`](../docs/research_questions.md#rq2--citizen-science-as-a-substitute-for-expert-data)).
+Expert reference data for the RQ1 effort-reduction curve (see
+[`docs/research_questions.md`](../docs/research_questions.md#rq1--citizen-science-as-a-substitute-for-expert-data)).
 
 - **Source:** sent by the supervisor by email. Made from field visits
   and manual visual interpretation of OrtoSat 2023 (30 cm). The small
@@ -332,7 +342,10 @@ Expert reference data for the RQ2 effort-reduction curve (see
   `quality_grade`, `accuracy_missing`, `observer`, `pixel`,
   `n_obs_in_pixel`, `burned`, `burned_same_year`.
 - **Embeddings:** 2 464 of the 2 465 presences have a valid embedding
-  in the RQ1 pilot set above.
+  in the RQ1 pilot set above. The same set holds a valid embedding for
+  1 120 of the 1 122 pixels added by the 1 553 presences of 2021–2025
+  that fail the research-grade or the 30 m accuracy filter (count of
+  2026-11-13, made ad hoc and not saved in a script).
 - **Read by:** the notebooks downstream of the cleaning
   (`03_expert_reference/expert_polygons`,
   `04_satellite/tessera_embeddings`,
@@ -365,19 +378,19 @@ Expert reference data for the RQ2 effort-reduction curve (see
 
 | Source | Use | Status |
 |---|---|---|
-| **Sentinel-2**, full pilot extent | Conventional baseline (RQ3); precedent: Mouta et al. (2021) | Pilot obtained via AWS Earth Search STAC, no account needed, for a small test strip only (see "Sentinel-2 L2A, TESSERA grid, 2023" above) — extend to the full Coimbra pilot extent |
-| **Sentinel-1** | Possible second conventional sensor (RQ3) | Not obtained |
+| **Sentinel-2**, full pilot extent | Conventional baseline (RQ4); precedent: Mouta et al. (2021) | Pilot obtained via AWS Earth Search STAC, no account needed, for a small test strip only (see "Sentinel-2 L2A, TESSERA grid, 2023" above) — extend to the full Coimbra pilot extent |
+| **Sentinel-1** | Possible second conventional sensor (RQ4) | Not obtained |
 | **OrtoSat 30 cm** (Pleiades-Neo, RGB+NIR, continental Portugal, Apr–Oct 2023, CC BY 4.0) | Possible validation reference | Full resolution restricted to public-administration entities; only WMS confirmed public. University access unconfirmed |
-| **AlphaEarth embeddings** | Second foundation model (RQ3) | Access terms unconfirmed |
+| **AlphaEarth embeddings** | Second foundation model (RQ4) | Access terms unconfirmed |
 | **CAOP administrative boundaries** | Study-area clipping | Not downloaded (bounding boxes used) |
-| **A second, distinct region** | Not planned; possible future work for RQ4 | Candidate found, not chosen — see below |
+| **A second, distinct region** | Not planned; possible future work for RQ3 | Candidate found, not chosen — see below |
 
 Scope (proposed, not decided): start with Coimbra as a pilot, extend
 to continental Portugal once the pipeline works. GBIF (which
 aggregates iNaturalist and other sources) is an alternative to the
 iNaturalist API.
 
-### Candidate second region for RQ4 (found, not chosen)
+### Candidate second region for RQ3 (found, not chosen)
 
 Checked 2026-11-04. The 398 `classifica = 1` expert polygons outside
 tile TNE (`raw/expert_reference/notTNE_18MAY2026_6.gpkg`) include
