@@ -26,20 +26,56 @@ When proposing an approach, label it clearly as one of:
 - **Established fact**
 - **Reasonable proposal**
 - **Open question**
+- **Own reasoning (no source found)**
 
 Do not silently turn a proposal into an established methodological
 decision.
 
-**Ground every decision in literature or sources.** Before proposing
-or applying a methodological decision (a filter, a threshold, a
-grouping, a rule), search for literature and data sources that support
-or contradict it, and base the proposal on what is found. Cite only
-what was actually read. The exception is something not yet done in
-the literature that could add value to the thesis: then say that no
-precedent was found and present it as a possible contribution, not as
-an established practice. If nothing relevant is found otherwise, say
-so explicitly and label the decision as my own reasoning, so the gap
-is visible.
+Explanations of a result (why something happened) are stated as fact
+only if checked in the data or taken from a source actually read.
+Otherwise label them as a hypothesis ("may reflect", "likely",
+"possible explanation, not tested").
+
+**Ground every decision in literature, sources, experiments and data.**
+Before proposing or applying a methodological decision (a filter, a
+threshold, a grouping, a rule), look for evidence that supports or
+contradicts it, in the places below, check what it would affect, and base
+the proposal on what is found:
+
+- **Literature and data sources:** search for them. Cite only what was
+  actually read.
+- **Experiments:** check whether an experiment already run in this project
+  (results, notebooks, logs) bears on the decision. If none does and a
+  cheap one could test it (for example, with vs. without the filter, or
+  sensitivity to the threshold), propose it, and run it only if it is cheap
+  and I approve (no new downloads without asking). Report the results as
+  they came out, including those that contradict the decision. Cite only
+  experiments that actually ran, with the file or run they come from. Write
+  the decision criterion before running; if it was written after seeing the
+  result, say so.
+- **Earlier decisions and the supervisor's record:** check
+  `thesis/notes.md`, the meeting files and `docs/thesis-proposal.md` for
+  what was already decided or asked on the same topic. If the new decision
+  contradicts one, say so and follow the Decision Log rule.
+- **The data:** look at the data the decision acts on (counts before and
+  after, distributions, what or who is removed) and report them with the
+  proposal. Say what the data cannot tell. Inspecting data that already
+  exists in the project (counts, distributions) is not an experiment and
+  does not need my approval; only new analyses and downloads do.
+- **Downstream impact:** before applying it, list which results, files and
+  docs depend on the decision and would need re-running or updating. Never
+  leave a stale number unmarked.
+
+If literature and experiments disagree, report both and do not pick one
+silently.
+
+The exception is something not yet done in the literature that could add
+value to the thesis: then say that no precedent was found and present it as
+a possible contribution, not as an established practice. If nothing relevant
+is found in the literature or in an experiment, say so explicitly and label
+the decision **Own reasoning (no source found)**, so the gap is visible.
+The label applies even when earlier decisions or data are relevant; the
+decision then also states what the earlier decisions and the data showed.
 
 ## Repository Map and File Purposes
 
@@ -55,6 +91,7 @@ is a bug to fix, not a convenience. This is the single reference for
 |---|---|---|---|
 | `README.md` | Human-facing project overview (for anyone opening the repo, not just me) | Research question (one line), project structure, setup steps | Design reasoning, decisions, tasks, literature — link to `docs/` |
 | `CLAUDE.md` (this file) | My own operating instructions | Conventions, workflow rules, this file-purpose table | Research content, decisions, tasks |
+| `docs/thesis-proposal.md` | Official project description (the thesis proposal) | Framing, objectives, work plan and conditions | Decisions (→ `thesis/notes.md`), tasks (→ `docs/todo.md`) |
 | `docs/research_questions.md` | How the current RQs and the shared cross-RQ design work, and nothing else | Adopted/open status per item, the rule/spec itself, resulting counts needed to read the pipeline, bare citation names | Past or superseded versions and anything dropped (→ `thesis/notes.md`), full reasoning or justifying numbers (→ `thesis/notes.md`), dataset provenance (→ `data/README.md`), a paper's findings beyond its name (→ `docs/literature.md`) |
 | `docs/methodology.md` | Current state of methodological questions not yet tied to one RQ | Same as above: short state + bare citations | Same exclusions as above |
 | `docs/literature.md` | The literature review | One summary per paper (what it found, how it's used), the gap, the contribution | Decision reasoning that isn't about the paper itself (→ `thesis/notes.md`) |
@@ -64,7 +101,7 @@ is a bug to fix, not a convenience. This is the single reference for
 | `data/README.md` | Dataset provenance and processing | Source, access date, license, coverage, preprocessing steps, resulting files/columns, for every dataset | Why a dataset or filter was chosen (→ `thesis/notes.md`), research design that uses the dataset (→ `docs/research_questions.md`) |
 | `thesis/notes.md` | Decision log and defense prep | Full reasoning behind every decision (**Decisões**), talking points for the defense (**Para dizer**), and each entry's **Na tese** manuscript-sync status (see "Thesis Manuscript Sync" below) | Dataset provenance (→ `data/README.md`), the current adopted state on its own (→ `docs/research_questions.md`/`methodology.md`) |
 | `thesis/document/` | The actual LaTeX manuscript (synced with Overleaf, see `README.md`) | Chapter prose and the bibliography | Decision reasoning (→ `thesis/notes.md`), task tracking (→ `docs/todo.md`) |
-| `notebooks/README.md`, `src/README.md`, `experiments/README.md`, `results/README.md` | Local orientation for that folder | What the folder is for, naming/run-order conventions | Research content, decisions — these folders hold code/outputs, not explanations |
+| `notebooks/README.md`, `src/README.md`, `experiments/README.md`, `results/README.md` | Local orientation for that folder | What the folder is for, naming/run-order conventions; in `results/README.md`, also one line per obsolete `results/` folder | Research content, decisions — these folders hold code/outputs, not explanations |
 
 Three more rules that follow from this:
 
@@ -115,6 +152,17 @@ Three more rules that follow from this:
   [`data/README.md`](data/README.md).
 - Do not commit large raw datasets to Git unless explicitly required.
 
+### Derived files
+
+Derived files must record their inputs (hash of the presences file,
+seed, parameters) and be rebuilt when the inputs change. A script must
+never silently reuse a derived file built from different inputs (for
+example, "build only if the file does not exist" is not allowed for
+files that depend on the presences). Keep a small versioned manifest
+of `data/processed/` (file, inputs, hash, date), because the folder
+itself is not versioned. A rebuild that changes a file's content
+triggers the "Downstream impact" check (Core Principle).
+
 ## Notebooks
 
 Folder purpose and when to extract to `src/`:
@@ -133,6 +181,15 @@ choices, model configuration, hyperparameters, random seeds where
 relevant, the train/validation/test (or spatial) split strategy, and
 the resulting metrics. Never report a metric without saying what was
 evaluated, on which data, and under which validation strategy.
+
+Every table reported in a doc or in the thesis must come from one
+single run. If two runs disagree, say so and decide which is canonical
+before writing text. Mark superseded result folders with an
+`OBSOLETE.md` instead of deleting them, and also record each obsolete
+`results/` folder in one line of `results/README.md`, because
+`.gitignore` does not version the `OBSOLETE.md`. A notebook with stale
+earlier sections must say at the top which section holds the current
+results.
 
 ## Git Commit Rules
 
@@ -172,9 +229,12 @@ once a real reply from the supervisor arrives.
   doc or figure).
 - Keep the status honest: a proposal stays "proposta (a confirmar
   com o orientador)" until confirmed.
-- If a decision changes or replaces an earlier one, update that entry
-  (and say what changed and why) instead of adding a contradicting
-  one.
+- If a decision changes or replaces an earlier one, keep the original
+  entry, add a dated "Revisão" block under it, and set the entry's
+  status to superseded with a pointer. Text and date never change; the
+  status and "Na tese" lines may be updated, and the "Revisão" block
+  must say what changed and why. Never rewrite, backdate or delete a
+  past entry.
 - In the meeting notes, every decision put to the supervisor names
   the literature or sources that support it (*Literatura:*), or says
   that none was found (and, if so, whether it could be a
@@ -211,7 +271,12 @@ waiting to be asked:
 - **Design docs** (`docs/research_questions.md`,
   `docs/methodology.md`, `data/README.md`): update status and content
   where it applies; remove the item from open questions once answered.
-- What the supervisor says counts as decided, even when phrased as a
+- A supervisor decision is recorded only with its source (the message
+  or the meeting file). If it rests on my recollection and not on a
+  reply, record it as "recordação minha, sem resposta do orientador"
+  and never write that the supervisor approved it.
+- What the supervisor says in a real reply (a message or a meeting,
+  with that source) counts as decided, even when phrased as a
   suggestion ("se calhar…"); only explicit offers ("se quiser…") need
   my choice, so ask about those.
 - Follow "Repository Map and File Purposes" above when updating these
@@ -252,67 +317,52 @@ been written into the manuscript yet.
 
 ## Writing Abandoned Methodologies
 
-For an intermediate defense, the jury looks for evidence of critical
-thinking behind the path taken — abandoned methodologies are some of
-the strongest proof of that. When writing the manuscript
-(`thesis/document/`) or defense talking points (`thesis/notes.md` →
-**Para dizer**):
+How much of an abandoned approach surfaces in the manuscript
+(`thesis/document/`) or the defense talking points (`thesis/notes.md`
+→ **Para dizer**); the reasoning itself stays in `thesis/notes.md`
+(Decision Log rule):
 
-- Keep the focus on adopted methodologies (roughly 70-80% of the
-  space/time); abandoned ones are a complement, not the center.
-- For each abandoned approach worth mentioning: what was tried, one
-  concrete and objective reason it did not work, and what came next.
+- Adopted methodologies take roughly 70-80% of the space/time, in
+  this order: adopted → brief note on what was discarded and why →
+  how that shaped the direction.
+- For each abandoned approach mentioned: what was tried, one concrete
+  and objective reason it did not work, and what came next.
 - Frame it as a reasoned decision and a learning step, never as a
   failure — e.g. "tested X, found it did not fit Y, so moved to Z."
-- Only include abandoned approaches that had real impact on the
-  project's direction. Skip anything dropped within a day with no
-  lasting consequence.
-- If space is tight, group every abandoned approach into one
-  paragraph/slide or a short timeline of methodological evolution,
-  rather than a full write-up per approach.
-- Good structure: adopted methodologies → brief note on what was
-  discarded and why → how that shaped the direction going forward.
-- This also pre-empts "why didn't you use X?" questions from the jury,
-  and sharpens the justification for what was adopted, since the
-  choice makes more sense by contrast.
-- It is fine to leave an abandoned approach out entirely if it was
-  irrelevant or time is very tight — but keep the reasoning ready
-  (already in `thesis/notes.md`) in case it comes up.
-
-The abandoned-methodology reasoning itself already lives in
-`thesis/notes.md` (e.g. multiclass abandoned, Isolation Forest vs.
-one-class SVM) per the Decision Log rule above — this section is about
-how much of it surfaces in the manuscript/defense, not where it is
-recorded.
+- Include only approaches that had real impact on the project's
+  direction; skip anything dropped within a day, and leave one out
+  entirely if it was irrelevant or time is very tight.
+- If space is tight, group them all into one paragraph/slide or a
+  short timeline instead of a write-up per approach.
 
 ## Formulating Research Questions
 
-Whenever a research question, objective or hypothesis is written or
-revised (design docs, `thesis/notes.md`, the manuscript), use this
-structure. It comes from a thesis-writing guide I chose
-(tesify.pt, "Como definir pergunta de investigação, objetivos e
-hipóteses"); it is a writing guide, not a source to cite.
+Use this structure whenever a research question, objective or
+hypothesis is written or revised (design docs, `thesis/notes.md`, the
+manuscript). It follows a writing guide I chose (tesify.pt, "Como
+definir pergunta de investigação, objetivos e hipóteses"), which is
+not a source to cite.
 
 - **Question:** interrogative verb ("to what extent" for degree, "in
   what way" for mechanism, "what is the effect of" for comparison) +
   main variables + delimited context (species, area, period, data).
-  It must be empirically answerable with the data and time available.
+  It must be empirically answerable with the data and time available,
+  not a topic.
 - **General objective:** the question turned into action, in one
   statement.
-- **Specific objectives:** three to five, in the infinitive, with
-  measurable verbs (characterise, measure, compare, identify,
-  propose) — never vague ones (understand, explore, address). Each
-  passes SMART (specific, measurable, achievable, relevant,
-  time-bound), together they cover the general objective, and each
-  maps to a chapter or section.
+- **Specific objectives:** three to five, never more, in the
+  infinitive, with measurable verbs (characterise, measure, compare,
+  identify, propose) — never vague ones (understand, explore,
+  address). Each follows from the question, passes SMART, and maps to
+  a chapter or section; together they cover the general objective.
 - **Hypotheses:** neutral and falsifiable, written as a null (H₀) and
   an alternative (H₁), directional only when one direction is
   expected, each stating how it is measured. Write them before
-  running the experiment; if a result is already known, say so.
-- **Mistakes to avoid:** a question that is really a topic;
-  objectives that do not follow from the question; more than five
-  specific objectives; hypotheses with no defined measurement;
-  objectives written in the past tense.
+  running the experiment; if a result is already known, say so. Also
+  fix, before running, the primary test set, the metric and the
+  comparison levels. Secondary analyses are reported next to the
+  primary one; do not relabel one as a "robustness check" if it
+  contradicts the primary result.
 
 The current formulation lives in
 [`docs/research_questions.md`](docs/research_questions.md#main-question-and-objectives).
@@ -333,3 +383,7 @@ The current formulation lives in
 - Before a substantial change: check the current repository state and
   relevant docs first, avoid duplicating existing functionality, and
   make the smallest sensible change.
+- One session at a time. Before editing a file, check its modification
+  time; if it changed since it was last read in this session, stop and
+  ask me. If derived files or notebooks changed that this session did
+  not touch, tell me before continuing.
