@@ -73,9 +73,23 @@ obtained.
 - **Preprocessing:** points snapped to the centre of their 10 m pixel
   on the TESSERA grid before reading. Made by an RQ1 pilot notebook
   removed on 2026-10-20 (experiments paused until the exploratory
-  analysis is done); kept because reading them takes ~2 h. The hash of
-  each block is in [`processed_manifest.csv`](processed_manifest.csv);
-  the inputs of that notebook are not known.
+  analysis is done), which is not in the Git history. The hash of each
+  block is in [`processed_manifest.csv`](processed_manifest.csv); the
+  inputs of that notebook are not known.
+- **Reproducibility (declared):** the set is used as extracted on
+  2026-10-20 and was not extracted again.
+  - *Choice of points:* cannot be derived again. Of the 29 021 points,
+    2 771 lie inside a cleaned expert polygon, 4 583 are the pixel of
+    an *Acacia* observation of the raw download (33 are both) and
+    21 700 are neither: the negatives of an earlier design, which no
+    current file explains. The list itself is versioned in
+    [`tessera_rq1_pilot_points.csv`](tessera_rq1_pilot_points.csv)
+    (block, `px`, `py`), written from the stored blocks on 2026-11-13.
+  - *Embeddings:* can be read again from that list (about 2 h) with
+    [`tessera_pilot_embeddings.ipynb`](../notebooks/04_satellite/tessera_pilot_embeddings.ipynb).
+    A full read was not done. A run of 2026-11-13, stopped after 14 of
+    the 65 blocks (3 360 points), returned arrays identical to the
+    stored ones; the other 51 blocks were not checked.
 
 ### TESSERA embeddings — RQ1 background pool (2026-11-13)
 
@@ -344,8 +358,8 @@ Expert reference data for the RQ1 effort-reduction curve (see
 - **Embeddings:** 2 464 of the 2 465 presences have a valid embedding
   in the RQ1 pilot set above. The same set holds a valid embedding for
   1 120 of the 1 122 pixels added by the 1 553 presences of 2021–2025
-  that fail the research-grade or the 30 m accuracy filter (count of
-  2026-11-13, made ad hoc and not saved in a script).
+  that fail the research-grade or the 30 m accuracy filter (counted in
+  [`design_counts.ipynb`](../notebooks/05_data_integration/design_counts.ipynb)).
 - **Read by:** the notebooks downstream of the cleaning
   (`03_expert_reference/expert_polygons`,
   `04_satellite/tessera_embeddings`,

@@ -96,7 +96,9 @@ usa a numeração das três perguntas aprovadas. O diagrama do pipeline
 ainda não foi feito. A Introdução ainda cita `zhu2026` para a linha
 das outras regiões; a entrada da bibliografia tem o autor errado (é
 Stewart et al.) e a fonte certa para essa linha é Yang et al. (2026).
-Por corrigir no manuscrito.
+Por corrigir no manuscrito. Duas outras linhas da tabela já não
+correspondem ao desenho (fundo e citação de Ball et al.); ver a
+[revisão de consistência](#revisao-consistencia-2026-11-13).
 
 ### Metodologias abandonadas
 
@@ -188,15 +190,24 @@ Agrupadas por tema:
 - [Validação e Sentinel-2](#decisões-validação-e-sentinel-2)
 - [Documento e entrega](#decisões-documento-e-entrega)
 
-Numeração das perguntas: as entradas anteriores a 2026-11-13 usam a
-numeração aprovada pelo orientador (RQ1 curva e comparação, RQ2
-redução de dados ou máscara, RQ3 concentração). Quatro entradas de
-2026-11-13 usam uma numeração intermédia (RQ1 pontos, RQ2 curva),
-assinalada em cada uma por um bloco "Revisão". A correspondência com
-a atual está em
-[Renumeração das perguntas](#renumeracao-perguntas-2026-11-13), cujo
-texto usa ainda RQ3 para a comparação com o Sentinel-2 e RQ4 para a
-transferibilidade; o bloco "Revisão" dessa entrada troca as duas.
+Numeração das perguntas. Cada entrada usa a numeração do momento em
+que foi escrita:
+
+| Tema | Aprovada pelo orientador | Manhã de 2026-11-13 | Meio do dia | Atual |
+|---|---|---|---|---|
+| Curva de redução de esforço | RQ1 (parte) | RQ2 | RQ1 | **RQ1** |
+| Dos pontos aos dados de referência | RQ2 (redução de dados ou máscara) | RQ1 | RQ2 | **RQ2** |
+| Transferibilidade / concentração | RQ3 | RQ4 | RQ4 | **RQ3** |
+| TESSERA contra Sentinel-2 | RQ1 (parte) | RQ3 | RQ3 | **RQ4** |
+
+- **Aprovada pelo orientador:** as entradas anteriores a 2026-11-13.
+- **Manhã de 2026-11-13:** quatro entradas desse dia (reformulação em
+  quatro perguntas, simplificação do desenho, fundo reconstruído,
+  curva por fonte), assinaladas por blocos "Revisão".
+- **Meio do dia:** o texto da
+  [Renumeração das perguntas](#renumeracao-perguntas-2026-11-13).
+- **Atual:** o bloco "Revisão" do fim do dia dessa entrada e as
+  entradas seguintes.
 
 ## Decisões: âmbito e perguntas
 
@@ -400,6 +411,12 @@ contagens são verificação minha, ad-hoc (script não guardado).
 **Na tese:** ⏳ Ainda não escrita. O enunciado da RQ3 na introdução
 não muda enquanto o orientador não responder.
 
+**Revisão (2026-11-13, revisão de consistência):** estado:
+substituída. O desenho desta proposta foi reduzido na
+[simplificação do desenho](#simplificacao-desenho-2026-11-13) à
+experiência perto contra longe e ao mapa de confiança, e a pergunta é
+hoje a RQ3 da [renumeração](#renumeracao-perguntas-2026-11-13). O texto acima fica como registo.
+
 ### Formulação das perguntas como pergunta → objetivo geral → objetivos específicos → hipóteses {#formulacao-pergunta-objetivos-hipoteses}
 
 *Proposta minha (a confirmar com o orientador). Reescreve enunciados
@@ -463,6 +480,13 @@ científica. Serve para a forma, não é para citar.
 **Na tese:** ⏳ Ainda não aplicada. Os enunciados em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
 são os aprovados.
+
+**Revisão (2026-11-13, revisão de consistência):** estado: a
+reescrita proposta nesta entrada foi substituída pela
+[reformulação em quatro perguntas](#reformulacao-quatro-perguntas) e
+pela [renumeração](#renumeracao-perguntas-2026-11-13). Os enunciados aprovados pelo orientador que esta entrada
+regista valem até ele responder, e a regra de formulação do
+`CLAUDE.md` mantém-se.
 
 ### RQ2: proposta — a máscara de segmentação passa a ser a pergunta {#rq2-proposta-mascara}
 
@@ -655,6 +679,10 @@ precisão (passos 2 e 3), para não exigir embeddings novos. O critério
 de decisão comum já tinha sido retirado na entrada seguinte. Ver
 [Renumeração das perguntas](#renumeracao-perguntas-2026-11-13).
 
+**Revisão (2026-11-13, ao fim do dia):** depois do bloco acima a RQ3
+e a RQ4 trocaram: a transferibilidade é a RQ3 e a comparação com o
+Sentinel-2 é a RQ4. Ver a [tabela de numeração](#decisões).
+
 ### Simplificação do desenho: uma só pergunta com Sentinel-2, sem limiar de decisão {#simplificacao-desenho-2026-11-13}
 
 *Decisão minha, de 2026-11-13 (a confirmar com o orientador). Ajusta
@@ -755,6 +783,13 @@ com os embeddings já guardados, por isso deixam de exigir extração
 nova. No ponto 2, a experiência perto contra longe fica definida com
 "longe" só dentro do distrito e com contagens novas. Ver
 [Renumeração das perguntas](#renumeracao-perguntas-2026-11-13).
+
+**Revisão (2026-11-13, ao fim do dia):** depois do bloco acima a RQ3
+e a RQ4 trocaram: a transferibilidade é a RQ3 e a comparação com o
+Sentinel-2 é a RQ4. Ver a [tabela de numeração](#decisões).
+No ponto 1, a segunda hipótese (a queda de perto para longe ser igual
+nas duas representações) saiu nessa troca; ver a Revisão do fim do dia
+na [renumeração](#renumeracao-perguntas-2026-11-13).
 
 ### Renumeração das perguntas por ordem de importância; desenho das RQ2 e RQ4 fechado {#renumeracao-perguntas-2026-11-13}
 
@@ -927,6 +962,159 @@ desenho: proposta (a confirmar com o orientador).
 - **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
   [`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md).
 - **Na tese:** ⏳ Ainda não aplicada, como o resto desta entrada.
+
+**Revisão (2026-11-13, depois da revisão de consistência).** Na
+decisão 3, as presenças de teste da RQ3 deixam de ser "todos os píxeis
+de especialistas": saem os 21 que são também píxel de uma presença de
+ciência cidadã. O resto da entrada não muda. Ver
+[Revisão de consistência](#revisao-consistencia-2026-11-13).
+
+**Revisão (2026-11-13, segunda parte da revisão de consistência).**
+Três correções ao texto acima, sem mudar o desenho:
+
+- **Variograma:** onde digo que os 50 m ficam "muito abaixo dos
+  300–500 m a que o variograma dos embeddings estabiliza", a leitura
+  certa é entre 500 m e 1 km (ver a Revisão na
+  [zona-tampão](#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)).
+  Os 50 m continuam muito abaixo.
+- **Limite de 50 m da máscara:** o limite de 5 píxeis é por eixo, por
+  isso os cantos da janela de 11 × 11 ficam a 71 m do píxel
+  observado. A frase "não rotula como acácia um píxel que possa ser
+  sorteado como fundo" só vale ao longo dos eixos; não contei quantos
+  pontos de fundo ficam entre 50 m e 71 m de uma presença.
+- **Resultados da curva:** estão em `results/effort_reduction_curve/`
+  e não em `results/rq2_per_source_check/`, que ficou marcada como
+  obsoleta ([script da curva](#curva-script-experiments)).
+
+### Revisão de consistência de 2026-11-13: ajustes ao desenho e limpeza {#revisao-consistencia-2026-11-13}
+
+*Decisão minha, de 2026-11-13: proposta (a confirmar com o
+orientador) no que toca ao desenho da RQ3 e da RQ2; o resto é limpeza
+do repositório.*
+
+**O que decidi:**
+
+- **RQ3, conjunto de teste:** ficam de fora os 21 píxeis de
+  especialistas que são também píxel de uma presença de ciência
+  cidadã. O teste fica com 1 251 polígonos perto (1 961 píxeis) e 205
+  longe (789 píxeis), com embedding guardado.
+- **RQ2, limitação declarada:** o fundo foi sorteado com zona de
+  exclusão de 50 m só à volta das presenças filtradas. Na condição sem
+  filtros, um ponto de fundo pode ficar a menos de 50 m de uma
+  presença acrescentada; não reconstruo o fundo por isso.
+- **RQ1, denominador:** o doc de desenho passa a dizer que as
+  percentagens da curva são sobre os 1 457 polígonos com pelo menos um
+  píxel com embedding, dos 1 849 do distrito.
+- **Números corrigidos nos docs de desenho:** 56% (não 54%) dos
+  polígonos do distrito em "Florestas de acácias"; Observador A em 15
+  de 39 blocos na grelha das experiências (EPSG:32629), em vez de 18
+  de 42 (EPSG:3763); 1 645 polígonos perto, dos quais 1 643 no
+  distrito; no passo 1 do pipeline, 43 são observações de *Acacia* de
+  todas as espécies; o variograma dos embeddings ainda sobe aos
+  400–500 m e estabiliza entre 500 m e 1 km.
+- **Scripts apagados:** os três de
+  `experiments/temporal_window_2021_2025/`. A pasta de resultados fica,
+  marcada como obsoleta.
+- **Notebooks marcados:** `other_plants_observations` como histórico e
+  fora da ordem de execução; `segmentation_mask` como protótipo, com
+  parâmetros diferentes dos da RQ2. Nenhum foi corrido de novo.
+- **`forest_only_background_check`, secção 5:** reescrita com os
+  valores das corridas de 2026-11-13.
+
+**Porquê:**
+
+- **21 píxeis:** uma presença de ciência cidadã no mesmo píxel tem o
+  mesmo embedding que o píxel de especialistas. Se ela treinar o
+  modelo, o teste "perto" inclui píxeis vistos no treino. Os 21 estão
+  todos no grupo "perto", em 15 polígonos.
+- **Fundo da RQ2:** reconstruir o fundo mudava a curva da RQ1 e exigia
+  embeddings novos; a regra de fuga já tira os pontos no mesmo píxel.
+- **Números:** os valores anteriores misturavam conjuntos (todos os
+  polígonos e só os do distrito) ou grelhas (EPSG:3763 e EPSG:32629).
+- **Scripts:** já não corriam. Liam
+  `inat_dealbata_clean_2021_2025.csv`, que não existe, e variáveis que
+  o notebook da curva deixou de ter.
+- **Notebooks:** o desenho atual usa fundo uniforme, não classes de
+  outras plantas, e as saídas do `other_plants_observations` são das
+  3 000 presenças de todos os anos.
+
+**O que os dados não dizem:** quantos pontos de fundo ficam de facto a
+menos de 50 m de uma presença sem filtro; não contei.
+
+**Fundamentação:** nenhuma literatura consultada. Raciocínio meu, sem
+fonte, sobre contagens feitas ad hoc nos ficheiros existentes, sem
+script guardado.
+
+**Em aberto:** a leitura do variograma no notebook e nas entradas da
+[zona-tampão](#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)
+e da [renumeração](#renumeracao-perguntas-2026-11-13) ainda diz
+300–500 m.
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
+[`docs/methodology.md`](../docs/methodology.md#validation);
+[`notebooks/README.md`](../notebooks/README.md);
+[`results/README.md`](../results/README.md).
+
+**Na tese:** ⏳ Ainda não escrita (Metodologia).
+
+**Revisão (2026-11-13, segunda parte).** O ponto em aberto (leitura do
+variograma) ficou fechado, e fiz mais o seguinte:
+
+- **Variograma:** corrigi a leitura no notebook e acrescentei Revisões
+  na [zona-tampão](#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)
+  e na [renumeração](#renumeracao-perguntas-2026-11-13).
+- **Pureza dos rótulos:** corrigi a célula do teste sem as presenças
+  isoladas e voltei a corrê-la; resultado na Revisão dos
+  [diagnósticos](#diagnosticos-curva-plana).
+- **Numeração:** a [tabela de numeração](#decisões) substitui o parágrafo que lá estava, e as
+  entradas com numeração intermédia ganharam uma Revisão.
+- **Origem do desenho da curva:** a ata de 2026-11-05 regista a ideia
+  do orientador (começar só com ciência cidadã e acrescentar
+  especialistas aos poucos, uma vez por representação, TESSERA
+  primeiro). A unidade de mistura, a ordem aninhada, o teste fixo e as
+  cinco sementes são meus. O `research_questions.md` dizia "Design
+  (supervisor)"; passou a separar as duas coisas.
+- **Fila da reunião:** acrescentei a "O que muda face ao que aprovou"
+  que a curva deixa de ser repetida com o Sentinel-2.
+- **Divergências do manuscrito** (não mexi no manuscrito):
+  - A tabela de problemas da Introdução diz que o fundo é "built from
+    other-species observations"; hoje são pontos aleatórios uniformes.
+  - A mesma tabela cita `ball2026` para "imprecise locations and
+    mixed pixels"; do que li, Ball et al. tratam parcelas com espécies
+    misturadas, não erro de posição.
+  - A secção Contributions fala de uma "cumulative ablation" dos
+    passos de limpeza; a RQ2 compara só com e sem os filtros de grau e
+    de precisão.
+  - A mesma secção dá como candidato a contributo o cruzamento entre
+    o que os observadores fotografam (plantas de sub-bosque) e o que
+    o satélite vê, um passo das outras plantas, sem uso ativo desde
+    2026-11-10. A máscara de segmentação não é referida.
+  - O capítulo de Resultados diz "no experiment has been run"; a
+    curva da RQ1 já correu.
+  - Em `references.bib`, `feng2025` está como documento de 2025 (o
+    TESSERA saiu no CVPR 2026) e `karasiak2022` como depósito HAL (o
+    artigo saiu na *Machine Learning*).
+
+**Na tese (atualizado na segunda parte):** ⏳ Ainda não escrita
+(Metodologia). As divergências acima ficam por corrigir quando eu
+pedir alterações ao manuscrito.
+
+**Revisão (2026-11-13, terceira parte).** Duas coisas que as partes
+anteriores davam como não contadas ou sem script.
+
+- **Contagens do desenho:** saem agora de
+  [`design_counts.ipynb`](../notebooks/05_data_integration/design_counts.ipynb),
+  que reproduz todos os valores citados no `research_questions.md`
+  (polígonos com embedding, o que os filtros retiram, perto e longe,
+  os 21 píxeis partilhados).
+- **Máscara, 50 m a 71 m:** 1 dos 2 000 pontos do fundo uniforme cai
+  dentro da janela de 11 × 11 de uma presença; nenhum no fundo só de
+  floresta. Decisão minha, proposta (a confirmar com o orientador): um
+  ponto de fundo que a máscara rotule como acácia sai do fundo dessa
+  condição, a aplicar quando a máscara correr. Sem literatura
+  consultada; raciocínio meu.
+- **Ficheiros derivados:** ver a Revisão em
+  [Ficheiros derivados](#manifesto-ficheiros-derivados).
 
 ## Decisões: dados de referência
 
@@ -1226,9 +1414,14 @@ não é inédita, mas esta combinação mantém-se como possível contributo.
 **Onde:** [`docs/meetings/2026-11-04.md`](../docs/meetings/2026-11-04.md);
 [`notebooks/05_data_integration/segmentation_mask.ipynb`](../notebooks/05_data_integration/segmentation_mask.ipynb).
 
-**Na tese:** ✅ Parcial. Referida como candidato a contributo na
-Introdução (secção Contributions); o desenho e a comparação ficam para
-a Metodologia.
+**Na tese:** ⏳ Ainda não escrita (Metodologia). A Introdução não
+refere a máscara; ver a [revisão de consistência](#revisao-consistencia-2026-11-13).
+
+**Revisão (2026-11-13, revisão de consistência):** a linha "Na tese"
+dizia que a máscara estava referida na secção Contributions da
+Introdução como candidato a contributo. Não está: o candidato que lá
+aparece é outro passo (plantas de sub-bosque contra o que o satélite
+vê). Corrigi a linha.
 
 ### Ficheiros derivados: manifesto de `data/processed/` e construção do fundo num só sítio {#manifesto-ficheiros-derivados}
 
@@ -1309,6 +1502,32 @@ reprodutibilidade, raciocínio meu.
 
 **Na tese:** ⏳ Ainda não escrita. Se entrar, é uma frase sobre
 reprodutibilidade na Metodologia.
+
+**Revisão (2026-11-13, ao fim do dia):** dois ficheiros que esta
+entrada deixava de fora ou com entradas desconhecidas.
+
+- **Amostra de 150 presenças:** já não fica "a tratar quando a RQ2
+  correr". É sorteada no fim do `acacia_observations.ipynb`, com
+  semente 0, sempre que o ficheiro das presenças é gravado. O ficheiro
+  que sai é igual ao que estava guardado, byte a byte.
+- **Embeddings do piloto: declarados, não extraídos de novo.** Comecei
+  a extraí-los outra vez para os tornar reproduzíveis e cancelei:
+  são cerca de 2 h de leitura remota para confirmar valores que já
+  tenho. Uso o conjunto tal como foi extraído a 2026-10-20.
+  - A escolha dos pontos não se pode refazer: o notebook original não
+    está no histórico do Git, e 21 700 dos 29 021 pontos (os negativos
+    do desenho antigo) não saem de nenhum ficheiro atual.
+  - A lista dos pontos passa a estar versionada
+    (`data/tessera_rq1_pilot_points.csv`), e há um notebook que relê
+    os embeddings a partir dela.
+  - Verificação parcial: os 14 blocos relidos antes de cancelar
+    (3 360 pontos) saíram idênticos aos guardados. Os outros 51 não
+    foram verificados. O critério que tinha escrito antes de correr
+    (aceitar só com os 65 idênticos) não chegou a ser aplicado, e o
+    manifesto fica como estava.
+- **Onde:** [`data/README.md`](../data/README.md#tessera-embeddings-2023-rq1-pilot-points);
+  [`tessera_pilot_embeddings.ipynb`](../notebooks/04_satellite/tessera_pilot_embeddings.ipynb).
+- **Na tese:** se entrar, é uma frase de limitação na Metodologia.
 
 ## Decisões: RQ1, desenho e resultados
 
@@ -1398,6 +1617,15 @@ está resumido em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex);
 o desenho operacional fica para a Metodologia, com um parágrafo breve
 sobre o multiclasse e o one-class abandonados.
+
+**Revisão (2026-11-13, revisão de consistência):** o ponto 3 (correr
+a experiência uma vez por representação, decisão do orientador) deixou
+de estar no desenho: na Revisão do fim do dia da [renumeração](#renumeracao-perguntas-2026-11-13) a curva deixa
+de ser repetida com o Sentinel-2. É decisão minha e contraria o que
+ele decidiu a 2026-11-05, por isso vale como proposta até ele
+responder; está na fila da
+[próxima reunião](../docs/meetings/proxima-reuniao.md), em "O que muda
+face ao que aprovou".
 
 ### Classificador presença-vs-fundo (ciência cidadã): Random Forest, por agora
 
@@ -1621,6 +1849,26 @@ permutação são técnicas padrão, a aplicação a embeddings é minha.
 
 **Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia).
 
+**Revisão (2026-11-13, revisão de consistência):** a célula do teste
+sem as presenças isoladas tinha um erro: tirava-as também do conjunto
+de teste, por isso as duas variantes não eram avaliadas nas mesmas
+presenças. Corrigi (o filtro só atua no treino) e voltei a correr, com
+as presenças de 2021–2025 e o fundo atual.
+
+- **Resultado:** ROC-AUC 0,835 com todas as presenças e 0,826 sem as
+  124 mais isoladas (5%) no treino. Diferença emparelhada por semente:
+  −0,009 (dp 0,014), negativa nas cinco sementes (−0,035 numa, cerca
+  de −0,003 nas outras). Boyce 0,981 e 0,983.
+- **Leitura:** tirar estas presenças não melhora o resultado, por isso
+  a conclusão mantém-se: a pureza não explica a curva. A pequena
+  descida pode vir de o teste ainda conter presenças sinalizadas, que
+  o modelo filtrado não viu (hipótese, não testada).
+- **Critério:** escrito antes de correr: manter a leitura se a
+  diferença média fosse menor que o seu desvio-padrão entre sementes.
+- **O que fica:** os valores 0,842 → 0,843 acima são da corrida com
+  todos os anos e com o erro. O sinal de "isolada" é calculado com
+  todas as presenças, incluindo as dos blocos de teste.
+
 ### Métricas: limites do índice de Boyce tal como está calculado {#metricas-limites-boyce}
 
 *Decisão minha, de 2026-11-11, depois de ler Hirzel et al. (2006) na
@@ -1753,6 +2001,14 @@ por ordem de importância, o que também fica mais perto da numeração
 que o orientador aprovou. O conteúdo desta entrada não muda. Ver
 [Renumeração das perguntas](#renumeracao-perguntas-2026-11-13).
 
+**Revisão (2026-11-13, ao fim do dia):** depois do bloco acima a RQ3
+e a RQ4 trocaram: a transferibilidade é a RQ3 e a comparação com o
+Sentinel-2 é a RQ4. Ver a [tabela de numeração](#decisões).
+A curva com o fundo novo está hoje em
+`results/effort_reduction_curve/`; `results/rq2_per_source_check/`
+ficou marcada como obsoleta
+([script da curva](#curva-script-experiments)).
+
 ### RQ2: curva por fonte das presenças de teste, critério e leitura do resultado {#rq2-curva-por-fonte}
 
 *Decisão minha, de 2026-11-13 (a confirmar com o orientador). RQ2 na
@@ -1832,6 +2088,15 @@ por ordem de importância, o que também fica mais perto da numeração
 que o orientador aprovou. O conteúdo desta entrada não muda; a secção
 do notebook que aqui aparece como "secção 8" corresponde hoje às
 secções 4 a 7. Ver [Renumeração das perguntas](#renumeracao-perguntas-2026-11-13).
+
+**Revisão (2026-11-13, ao fim do dia):** depois do bloco acima a RQ3
+e a RQ4 trocaram: a transferibilidade é a RQ3 e a comparação com o
+Sentinel-2 é a RQ4. Ver a [tabela de numeração](#decisões).
+O critério comum que esta entrada aplica foi retirado no ponto 5 da
+[simplificação do desenho](#simplificacao-desenho-2026-11-13): onde
+está "cumpre" ou "não cumpre", vale só a diferença reportada. Os
+resultados estão hoje em `results/effort_reduction_curve/`
+([script da curva](#curva-script-experiments)).
 
 ### Curva de redução de esforço: o cálculo passa a script em `experiments/` {#curva-script-experiments}
 
@@ -2039,6 +2304,21 @@ limitação conhecida, nos dois braços e não só no dos especialistas.
 **Na tese:** ✅ Parcial. A validação espacial é referida em resumo na
 Introdução; o desenho da zona-tampão fica para a Metodologia.
 
+**Revisão (2026-11-13, revisão de consistência):** li mal o
+variograma. Pela tabela do notebook, a semivariância quase não muda
+entre 200–300 m e 300–400 m (1,72 e 1,74), volta a subir aos
+400–500 m (2,00) e fica entre 2,0 e 2,2 a partir dos 500 m. Estabiliza
+entre 500 m e 1 km, não aos 300–500 m.
+
+- **Consequência:** aos 200–300 m a semivariância está a cerca de 80%
+  do patamar, e aos 20–30 m a cerca de 40%. O variograma deixa de
+  apoiar a leitura de "20/30" como píxeis; as duas leituras ficam
+  abaixo do alcance.
+- **A decisão não muda:** tampão por implementar, declarado como
+  limitação.
+- **Limites:** médias por classe de distância, sem modelo ajustado;
+  as duas primeiras classes têm 61 e 48 pares.
+
 ### Sentinel-2 bruto: via Earth Search (AWS), sem conta, alinhado à grelha da TESSERA
 
 *Decisão minha.*
@@ -2198,7 +2478,8 @@ espacial; a entrada `zhu2026` do manuscrito tem o autor errado.
 **Onde:** [`docs/literature.md`](../docs/literature.md).
 
 **Na tese:** ⏳ Ainda não aplicada. `references.bib` e a Introdução
-ainda têm `zhu2026` com o autor errado.
+ainda têm `zhu2026` com o autor errado; `feng2025` e `karasiak2022`
+estão com a versão anterior à publicação (ver a [revisão de consistência](#revisao-consistencia-2026-11-13)).
 
 ### Identidade da tese confirmada: título, mestrado, orientadores, idioma e data da entrega
 
@@ -2242,3 +2523,16 @@ intermédio.
 
 **Na tese:** ⏳ Ainda não escrita; é a própria entrega que está em
 causa.
+
+**Revisão (2026-11-13, revisão de consistência):** dois pontos do
+âmbito acima deixaram de corresponder ao que fiz.
+
+- **"Sem novas experiências nem código":** a 13 de novembro voltei a
+  correr a curva com as presenças de 2021–2025, passei-a a script e
+  reconstruí o fundo. A regra vale daqui em diante, com duas exceções
+  que aprovei no mesmo dia: voltar a correr a célula corrigida do
+  `label_purity_check` (feito) e repetir a curva depois de um commit,
+  para o `run.json` registar o commit certo.
+- **"RQ2 e RQ3 só no plano de trabalho":** na numeração atual são a
+  RQ2, a RQ3 e a RQ4; a RQ1 (curva, só TESSERA) é o resultado
+  preliminar. Ver a [tabela de numeração](#decisões).

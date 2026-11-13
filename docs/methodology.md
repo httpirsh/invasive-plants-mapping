@@ -43,8 +43,10 @@ reasoning, with no source found.
   given as "20/30"; assumed to be 20–30 m (my decision, not
   confirmed). The literature does not give a fixed value: the distance
   is estimated from the measured autocorrelation range, and
-  underestimating it is the unsafe direction. This project's variogram
-  of TESSERA embeddings levels off at 300–500 m. Not implemented yet:
+  underestimating it is the unsafe direction. In this project's
+  variogram of TESSERA embeddings the semivariance still rises at
+  400–500 m and levels off between 500 m and 1 km (binned means, no
+  model fitted). Not implemented yet:
   stated as a known limitation in the January report. Reasoning:
   [`thesis/notes.md`](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km).
 - **Known limitation: no buffer between training and test blocks.**

@@ -8,8 +8,10 @@ from scipy.stats import spearmanr
 
 
 def continuous_boyce(p_scores: np.ndarray, bg_scores: np.ndarray, n_bins: int = 10, window_frac: float = 0.1) -> float:
-    """Continuous Boyce index (Hirzel et al., 2006): rank correlation between a
-    moving window's score and the ratio of presences to background found there."""
+    """Boyce index (Hirzel et al., 2006) over `n_bins` adjacent windows of the observed
+    score range: rank correlation between each window's score and the ratio of presences
+    to background found there. Not the moving window over [0, 1] of the paper; limits in
+    docs/methodology.md (Evaluation)."""
     lo, hi = min(p_scores.min(), bg_scores.min()), max(p_scores.max(), bg_scores.max())
     window = window_frac * (hi - lo)
     centers = np.linspace(lo + window / 2, hi - window / 2, n_bins)

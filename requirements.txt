@@ -7,3 +7,9 @@ scikit-learn
 scikit-image
 jupyter
 geotessera
+scipy
+shapely
+requests
+odc-stac
+pystac-client
+rioxarray

@@ -46,3 +46,55 @@ def match_to_pixel(pixel_ids: pd.Series, pilot_df: pd.DataFrame, pilot_emb: np.n
     x, y, emb = pilot_df["x"].values[idx], pilot_df["y"].values[idx], pilot_emb[idx]
     valid = ~np.isnan(emb).any(axis=1)
     return x[valid], y[valid], emb[valid], n_matched
+
+
+# --- Rebuilding the RQ1 pilot embeddings -------------------------------------------------
+# The points of the pilot set are a fixed list (data/tessera_rq1_pilot_points.csv): the
+# notebook that chose them was removed on 2026-10-20 and part of them (old negatives)
+# cannot be derived again from the source files. See data/README.md.
+
+PILOT_POINTS = Path("data") / "tessera_rq1_pilot_points.csv"
+
+
+def pilot_points(root: Path) -> pd.DataFrame:
+    """The point list of the pilot set: block, px, py (pixel centres, EPSG:32629)."""
+    return pd.read_csv(root / PILOT_POINTS)
+
+
+def fetch_pilot_embeddings(root: Path, out_dir: Path, log=print) -> None:
+    """Read the TESSERA embedding of every point of the list (remote read, about 2 h) and
+    write one block_<x>_<y>.npz per block into out_dir. Blocks already in out_dir are kept,
+    so an interrupted run can be resumed; start from an empty folder for a full rebuild."""
+    import geopandas as gpd
+
+    from src.background import fetch_embeddings
+
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for block, pts in pilot_points(root).groupby("block", sort=True):
+        file = out_dir / f"block_{block}.npz"
+        if file.exists():
+            continue
+        px, py = pts["px"].to_numpy(np.float64), pts["py"].to_numpy(np.float64)
+        lonlat = gpd.GeoSeries(gpd.points_from_xy(px, py), crs=32629).to_crs(4326)
+        emb = fetch_embeddings(root, lonlat.x.values, lonlat.y.values).astype(np.float32)
+        np.savez(file, px=px, py=py, emb=emb)
+        log(f"{file.name}: {len(px)} points")
+
+
+def compare_pilot_embeddings(root: Path, pilot_dir: Path, other_dir: Path) -> pd.DataFrame:
+    """Per block: whether pilot_dir holds the points of the list, and whether the arrays of
+    other_dir are identical to those of pilot_dir (NaN in the same places)."""
+    rows = []
+    for block, pts in pilot_points(root).groupby("block", sort=True):
+        a_file, b_file = pilot_dir / f"block_{block}.npz", other_dir / f"block_{block}.npz"
+        row = {"block": block, "n_points": len(pts), "points_as_listed": False, "refetched": b_file.exists(),
+               "same_points": False, "same_embeddings": False}
+        if a_file.exists():
+            a = np.load(a_file)
+            row["points_as_listed"] = np.array_equal(a["px"], pts["px"]) and np.array_equal(a["py"], pts["py"])
+            if b_file.exists():
+                b = np.load(b_file)
+                row["same_points"] = np.array_equal(a["px"], b["px"]) and np.array_equal(a["py"], b["py"])
+                row["same_embeddings"] = a["emb"].shape == b["emb"].shape and np.array_equal(a["emb"], b["emb"], equal_nan=True)
+        rows.append(row)
+    return pd.DataFrame(rows)

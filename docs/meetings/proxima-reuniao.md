@@ -91,7 +91,10 @@ de trabalho ou testes estatísticos formais?
   ser sobre a ciência cidadã substituir os dados de especialistas, em
   vez da comparação TESSERA contra Sentinel-2; a pergunta da curva e a
   da comparação de representações separam-se (RQ1 e RQ4); a máscara e
-  os filtros passam a ter pergunta própria (RQ2).
+  os filtros passam a ter pergunta própria (RQ2). A curva de redução
+  de esforço deixa de ser repetida com o Sentinel-2: a 5 de novembro
+  ficou decidido correr a experiência uma vez por representação, e
+  agora a RQ4 compara as representações só nos dois níveis de dados.
 - **Numeração:** cada pergunta só usa o que as anteriores definem.
   RQ1, RQ2 e RQ3 só precisam do TESSERA; a RQ4 é a única que depende
   do braço Sentinel-2, que está parado, e por isso vem no fim.
@@ -171,9 +174,11 @@ Em vez de partir do princípio de que o observador dominante é um
 enviesamento a corrigir, diagnosticar primeiro se a concentração da
 amostragem prejudica o modelo.
 
-- **Experiência:** treinar com ciência cidadã (TESSERA) e avaliar em
-  todos os píxeis de especialistas, perto (até 1 km) e longe (mais de
-  1 km, dentro do distrito) do ponto de treino mais próximo. As cinco
+- **Experiência:** treinar com ciência cidadã (TESSERA) e avaliar nos
+  píxeis de especialistas, perto (até 1 km) e longe (mais de 1 km,
+  dentro do distrito) do ponto de treino mais próximo. Ficam de fora
+  do teste os 21 píxeis que são também píxel de uma presença de
+  ciência cidadã. As cinco
   sementes variam os blocos de teste, como na curva.
 - **Produto:** mapa de confiança por dissemelhança aos dados de
   treino.
@@ -189,7 +194,8 @@ amostragem prejudica o modelo.
 - **Fica de fora, como trabalho futuro:** a comparação entre o
   observador dominante e os outros, o desbaste espacial, a camada de
   estradas e a segunda região.
-- **Dados:** 1 645 polígonos a 1 km ou menos de uma observação e 206
+- **Dados:** 1 645 polígonos a 1 km ou menos de uma observação (1 643
+  no distrito) e 206
   polígonos do distrito a mais de 1 km, entre 1,0 e 8,2 km (contagem
   de 2026-11-13, feita ad hoc, sem script).
 - **Risco a discutir:** perto e longe diferem também no tamanho dos

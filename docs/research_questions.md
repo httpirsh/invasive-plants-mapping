@@ -113,8 +113,10 @@ Each question also lists its own risks.
 
 ### RQ1 — Citizen science as a substitute for expert data
 
-*Question and wording mine, to confirm with the supervisor; the curve
-design is his
+*Question and wording mine, to confirm with the supervisor. The idea
+of the curve is his
+([meeting of 2026-11-05](meetings/2026-11-05.md)); its details are
+mine, to confirm with him
 ([`thesis/notes.md`](../thesis/notes.md#rq2-curva-por-fonte)).*
 
 **Question:** To what extent does a model trained only on
@@ -131,11 +133,14 @@ set (citizen-science and expert presences together) is the main one,
 as in the curve design; the expert presences alone are a second
 analysis, reported next to it.
 
-**Design (supervisor):** an effort-reduction curve. Expert data are
+**Design (curve idea: supervisor; details: mine, to confirm with
+him):** an effort-reduction curve. Expert data are
 added on top of a fixed citizen-science base, from 0% to 100% in
 10-point steps; at 100% the citizen-science base is removed and
 training is expert-only. The mixing unit is the polygon, sampled in a
-nested order; one spatial test set per seed is reused at every level
+nested order; the percentages are of the 1 457 polygons that hold at
+least one pixel with a stored embedding, of the 1 849 in the district;
+one spatial test set per seed is reused at every level
 and always contains both sources; results are averaged over five
 seeds. Reasoning:
 [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
@@ -197,7 +202,7 @@ the supervisor; provenance and counts in
 [`data/README.md`](../data/README.md#acacia-dealbata-expert-reference-polygons).
 
 - In the Coimbra district: 1 849 polygons with `classifica = 1`
-  (244 ha); 54% fall in a COS 2023 "Florestas de acácias" polygon,
+  (244 ha); 56% fall in a COS 2023 "Florestas de acácias" polygon,
   most of the rest in pine, eucalyptus and other forest.
 - **Clustered:** they fall in only 18 blocks of 10 km, so few
   independent spatial blocks are available to split training and test.
@@ -262,7 +267,8 @@ training with them, with all observations.
   positional accuracy and quality grade). In the 2021–2025 window the
   two filters remove 1 553 observations, which add 1 122 pixels; 1 120
   of these have a stored TESSERA embedding and form the unfiltered
-  condition, and the 2 observations without one are left out of it.
+  condition, and the 2 observations without one are left out of it
+  (counts from [`design_counts.ipynb`](../notebooks/05_data_integration/design_counts.ipynb)).
   Observations with obscured coordinates (step 1; 12 in the window)
   are excluded from both conditions, so step 1 is not measured. The
   2021–2025 window, the species and one presence per pixel are the
@@ -293,6 +299,10 @@ training with them, with all observations.
   wrong labels.
 - The mask configuration is not calibrated; a different one could give
   a different answer.
+- The background pool was drawn with a 50 m exclusion zone around the
+  filtered presences only. In the unfiltered condition a background
+  point can lie within 50 m of an added presence; only a point on the
+  same pixel is removed.
 
 **Grounded in:** superpixel propagation of point labels follows the
 idea of Rivier et al. (2024); Raine et al. (2022) compute superpixels
@@ -306,7 +316,12 @@ and frozen embeddings, so that combination is a possible contribution.
 The mask configuration is my own reasoning, with no source found: no
 paper read gives a value usable here. The 50 m limit is the exclusion
 distance of the background pool around presences (step 7 of the
-pipeline), and 25 pixels is the same 50 m scale. The
+pipeline), and 25 pixels is the same 50 m scale. The limit holds along
+each axis: the corners of the 11 × 11 window lie 71 m from the
+observed pixel. One of the 2 000 background points lies inside the
+window of a presence ([`design_counts.ipynb`](../notebooks/05_data_integration/design_counts.ipynb));
+a background point that a mask labels as *Acacia* is taken out of the
+background of that condition (my rule, to apply when the mask runs). The
 filtered-against-unfiltered comparison is adapted from the one-factor
 ablations of Ball et al. (2026). Summaries:
 [`literature.md`](literature.md#weak-supervision-from-point-labels);
@@ -335,24 +350,29 @@ reported without attributing its cause to distance (see Risks).
 **Design:**
 
 - **Starting point:** one observer made 90% of the 2 465 presences,
-  and their points occupy 18 of 42 blocks of 10 km. That is
+  and their points occupy 15 of the 39 blocks of 10 km that hold
+  presences (EPSG:32629 grid, as in the experiments). That is
   concentration; whether it harms the model is what is measured.
 - **Model:** in each seed, the citizen-science-only (0%) model of RQ1:
   the same draw of test blocks, trained on the citizen-science
   presences and background points outside them, with TESSERA.
 - **Seeds:** the five seeds vary the test blocks, as in RQ1, and with
   them the training set and the test background.
-- **Test set:** all expert pixels, none of which trains this model,
-  against the background points of the seed's test blocks.
+- **Test set:** the expert pixels, against the background points of
+  the seed's test blocks. The 21 expert pixels that are also the pixel
+  of a citizen-science presence are left out, so no test pixel trains
+  this model.
 - **Near and far:** distance from each expert polygon to the nearest
   citizen-science training presence; near is up to 1 km, far is beyond
   1 km, inside the district only.
 - **Counts:** measured to the 2 465 presences, 1 645 polygons are near
-  and 206 polygons in the district are far, between 1.0 and 8.2 km.
-  Stored embeddings cover 1 252 near polygons (1 982 pixels) and 205
-  far ones (789 pixels). Count of
-  2026-11-13, made ad hoc and not saved in a script; the counts per
-  seed are not made yet.
+  (1 643 of them in the district) and 206 polygons in the district
+  are far, between 1.0 and 8.2 km.
+  With a stored embedding, and without the 21 shared pixels (all
+  near), the test set holds 1 251 near polygons (1 961 pixels) and 205
+  far ones (789 pixels). Counts from
+  [`design_counts.ipynb`](../notebooks/05_data_integration/design_counts.ipynb);
+  the counts per seed are not made yet.
 - **Product:** a feature-space dissimilarity map (area of
   applicability) as a confidence layer for the final map.
 - **Status:** not run. No part of this question uses Sentinel-2:
@@ -377,7 +397,7 @@ in another region in Yang et al. (2026). The dissimilarity map follows Meyer &
 Pebesma (2021), tested there on regression only, so its use with a
 classifier on embeddings is an extension. No precedent found for
 citizen science concentrated in one observer. The 1 km cut and the
-use of every expert pixel as test data are my own reasoning, with no
+use of the expert pixels as test data are my own reasoning, with no
 source found.
 
 ### RQ4 — Foundation models vs. conventional features
@@ -459,7 +479,7 @@ counts are reported. The effect of the grade and accuracy filters
 
 | Step | Status | Notes | Grounded in |
 |---|---|---|---|
-| 1. Remove obscured coordinates | Done | 43 presences removed | iNaturalist geoprivacy randomises these coordinates (platform documentation); Brown et al. (2025) and Gillespie et al. (2024) filter on location quality explicitly |
+| 1. Remove obscured coordinates | Done | 43 *Acacia* observations removed (all species) | iNaturalist geoprivacy randomises these coordinates (platform documentation); Brown et al. (2025) and Gillespie et al. (2024) filter on location quality explicitly |
 | 2. Positional accuracy | Adopted | Drop known accuracy > 30 m; keep missing values, marked `accuracy_missing`. Presences 3 441 → 3 276. Why 30 m (the COS test): [`thesis/notes.md`](../thesis/notes.md#precisão-da-localização-tirar-acima-de-30-m-manter-as-sem-valor) | Filtering on positional uncertainty: Brown et al. (2025), ≤10 m; Gillespie et al. (2024), ≤120 m. The 30 m value is from my own test |
 | 3. Quality grade | Adopted | Research grade only. Presences 5 242 → 3 441. Why: [`thesis/notes.md`](../thesis/notes.md#só-observações-research-nos-dois-lados) | Gillespie et al. (2024); Brown et al. (2025) |
 | 4. Observation years | Adopted | Keep observations from 2021–2025; every presence kept is treated as 2023. Presences 3 276 → 2 580. See [Temporal Design](#temporal-design-adopted) | See that section |

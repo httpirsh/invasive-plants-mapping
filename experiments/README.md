@@ -11,9 +11,6 @@ Subfolders are created when the first experiment is run.
   `--background forest_only` it writes the robustness check to
   `results/effort_reduction_curve_forest_only/`, read by
   `notebooks/07_foundation_models/forest_only_background_check.ipynb`.
-- `temporal_window_2021_2025/`: comparison of observation windows. Its
-  results folder is obsolete (see
-  [`results/README.md`](../results/README.md)).
 
 ## What goes here and what goes in `notebooks/`
 

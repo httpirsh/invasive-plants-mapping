@@ -23,7 +23,6 @@ dataset has one notebook: part 1 explores it (nothing changed), part 2
 cleans it and saves the result to `data/interim/`.
 
 Run order: `02_citizen_science/acacia_observations` →
-`02_citizen_science/other_plants_observations` →
 `03_expert_reference/expert_polygons` →
 `04_satellite/tessera_embeddings` →
 `04_satellite/sentinel2_download` →
@@ -44,5 +43,18 @@ Run order: `02_citizen_science/acacia_observations` →
 `07_foundation_models/forest_only_background_check` only read results:
 run `experiments/effort_reduction_curve/run.py` before them, the second
 time with `--background forest_only`.
+
+`05_data_integration/design_counts` only counts, from the stored
+files, what `docs/research_questions.md` cites; run it again when the
+presences, the polygons, the stored embeddings or a background pool
+change. `04_satellite/tessera_pilot_embeddings` checks the stored
+pilot embeddings against their point list and reads nothing remote
+unless `ALLOW_FETCH` is set.
+
+Out of the run order: `02_citizen_science/other_plants_observations`
+is historical (the design no longer uses other-plant classes); its
+output is read only by `05_data_integration/qgis_overview`.
+`05_data_integration/segmentation_mask` is a prototype whose
+parameters are not those fixed for RQ2.
 
 When to move code into `src/` instead: [`src/README.md`](../src/README.md).
