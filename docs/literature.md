@@ -5,28 +5,18 @@ A small set of directly relevant papers, **not** a systematic review.
 must be revisited after a broader search (protocol in
 [`thesis/notes.md`](../thesis/notes.md#protocolo-de-pesquisa-da-literatura)).
 
-Several papers are now read in full (marked "Read" below); the rest
-still have summaries written with help from abstracts, publisher
-pages and quick skims only, and must be checked against the paper
-before citing details in the thesis. Each paper has a status:
+Every entry was re-read on 2026-11-11 from the full text where it
+could be obtained. Each paper has a status:
 
-- **Read** — full text read, summary confirmed against it.
-- **To read** — summary not yet confirmed by reading the paper.
-- **To find** — only seen in a reference list; the paper itself has
-  not been located.
-- **Not read** — full text located but inaccessible (e.g. paywalled or
-  blocked); summary is from a secondary source only, not to be cited.
-
-Suggested reading order (papers that support the most decisions in
-[`research_questions.md`](research_questions.md) and
-[`methodology.md`](methodology.md) first): Ball 2026, Phillips 2009,
-Dimson 2023, Riveiro 2025, Gillespie 2024, Karasiak 2022; then
-Domingo 2023, Mouta 2021, Eskandari 2025, Martins 2016; then Brown
-2025, Feng 2025; then Zhu 2026, Yang 2026, Ratsakatika 2026, Meyer &
-Pebesma 2021; then Rivier 2023/2024, Raine et al. 2022, Liu et al. 2026, Zhang et
-al. 2025 (timberline) (segmentation-mask candidates); Zhang et al.
-2021 (WTS) and Wölk et al. 2026 lowest priority (unread/inaccessible,
-low confirmed relevance so far, not pursued further for now).
+- **Read** — full text read end to end; the summary is checked against
+  it. Figures were read from captions and text, not viewed, and
+  supplements were not read unless stated.
+- **Read (other version)** — a preprint or author version was read,
+  not the published article; numbers must not be cited as the
+  published paper's.
+- **Abstract only** — the full text is paywalled or blocked; the
+  summary is from the abstract and must not be cited for details.
+- **Unpublished** — a talk or a project page, not a paper.
 
 ## Papers
 
@@ -34,122 +24,186 @@ low confirmed relevance so far, not pursued further for now).
 
 **Brown et al. (2025).** AlphaEarth Foundations: An embedding field
 model for accurate and efficient global mapping from sparse label
-data. arXiv:2507.22291. — *To read*
+data. arXiv:2507.22291 (v2). — *Read (main text and supplement)*
 
-The AlphaEarth paper. Annual 64-dimensional embeddings at 10 m, used
-without re-training; reported to outperform other featurization
-approaches across mapping evaluations. **Directly relevant:** its
-biodiversity evaluation already uses GBIF research-grade iNaturalist
-observations, at genus level (including tree genera). So "embeddings +
-iNaturalist labels" is not new on its own; what is new is invasive
-plants, explicit bias evaluation and a conventional baseline under
-the same labels.
+The AlphaEarth paper. Annual 64-dimensional embeddings at 10 m
+(2017–2024), used without re-training; about 24% mean error reduction
+over other featurization approaches, with unreliable gains in the
+1-shot and 10-shot settings (S6.1). Transfer is by k-nearest
+neighbours or a linear probe (S4.1), not Random Forest.
 
-**Feng et al. (2025).** TESSERA: Temporal Embeddings of Surface
-Spectra for Earth Representation and Analysis.
-[PDF](https://anil.recoil.org/papers/2025-tessera.pdf) — *To read*
+- **Biodiversity evaluation:** one evaluation, "US trees", 39 tree
+  genera from GBIF research-grade iNaturalist observations (S3.3.7).
+  So "embeddings + iNaturalist labels" is not new on its own.
+- **Location filter, stated explicitly:** spatial uncertainty of at
+  most 10 m, coordinates with at least four decimals, at least 1.28 km
+  between points (S3.1–S3.2) — stricter than this thesis's 30 m.
+- **AlphaEarth was trained with GBIF text labels** (research-grade
+  observations 2017–2023, S1.12), a circularity caveat if it is ever
+  used with iNaturalist labels. TESSERA is not affected.
+- **Location alone predicts the labels well:** on US trees the
+  next-best method uses coordinates only (S6.2).
+- Embeddings are not pixel-independent: inference uses 1.28 km tiles
+  with spatial self-attention (S8.2). Only embeddings are released,
+  not weights.
+
+**Feng et al. (2026).** TESSERA: Temporal Embeddings of Surface
+Spectra for Earth Representation and Analysis. CVPR 2026,
+pp. 34818–34831; arXiv:2506.20380 (v7).
+[PDF](https://anil.recoil.org/papers/2025-tessera.pdf) — *Read (main
+text and supplement)*
 
 The TESSERA paper. Pixel-wise model on annual Sentinel-1 + Sentinel-2
-time series, 128-dimensional embeddings at 10 m. Evaluated on tree
-species (Germany), crops (Austria) and biomass. Code open (MIT);
-model weights on request; embeddings via GeoTessera. Needed as the
-primary reference for the chosen foundation model.
+time series, 128-dimensional embeddings at 10 m, distributed through
+GeoTessera. Evaluated on tree species (Germany), crops (Austria,
+France), biomass and canopy height, with MLP, U-Net and k-nearest
+neighbour heads; no species-occurrence or citizen-science task.
+
+- **Fine-tuning gives no benefit** over the frozen encoder (§5,
+  Fig. 6b) — the strongest support found for frozen embeddings.
+- **No spatial context:** pretraining is pixel-wise, with global
+  shuffling to break spatial autocorrelation (§3.3, A.9). The
+  embeddings do not encode the landscape around a pixel.
+- **Coverage stated in the paper:** 2017–2024 (A.4).
+- **Weights:** the paper says "open-source model weights"; the
+  repository README (checked 2026-11-11) says the checkpoint is
+  restricted to Cambridge members. Code licence (MIT) is from the
+  repository, not the paper.
+- Embeddings are built from a random sample of 40 valid dates per
+  year; accuracy drops where valid Sentinel-2 observations are few.
 
 **Ball et al. (2026).** Geospatial foundation models enable
 data-efficient tree species mapping in temperate mountain forests.
 *Science of Remote Sensing*, 14, 100466.
 DOI: [10.1016/j.srs.2026.100466](https://doi.org/10.1016/j.srs.2026.100466)
-— paywalled; methods confirmed from the authors' own code
-([`PatBall1/trentino-trees`](https://github.com/PatBall1/trentino-trees),
-`src/data_acquisition/s1s2annual.js` and `s1s2seasonal.js`), not the
-paper's prose, which I haven't read in full.
+(open access). — *Read (author manuscript from the Cambridge
+repository; supplement not read). Baseline details also checked in the
+authors' code,
+[`PatBall1/trentino-trees`](https://github.com/PatBall1/trentino-trees)*
 
 Compares TESSERA embeddings, AlphaEarth embeddings and conventional
-Sentinel-1 + Sentinel-2 features for 18 tree species/groups
-(parcel-level forest inventories) in Trentino, Italy.
+Sentinel-1 + Sentinel-2 features for 18 tree species/groups (about
+83 000 forest-inventory parcels) in Trentino, Italy. Embeddings are
+used without fine-tuning.
 
-**Conventional Sentinel-2 baseline, confirmed from source
-code:** Sentinel-2 SR (`COPERNICUS/S2_SR_HARMONIZED`),
-cloud/shadow-masked per scene (SCL classes 4/5/6/7 kept, 0/1/3/8/9/10/11
-dropped, plus QA60 opaque-cloud/cirrus bits), scenes with
-`CLOUDY_PIXEL_PERCENTAGE < 60` only. Two composite variants, both
-tested: **(a) annual** — single per-pixel median of all 12 bands
-(B01–B12, B8A) over the calendar year, plus NDVI, NDWI (McFeeters) and
-NBR computed on that median; **(b) seasonal** — the same but three
-separate medians (spring Mar–May, summer Jun–Aug, autumn Sep–Nov), each
-with its own NDVI/NDWI/NBR, i.e. 45 Sentinel-2 features. Sentinel-1
-VV/VH (dB, plus VV−VH and VV/VH) added the same way, annual or
-seasonal, as an optional second sensor. All exported on a fixed 10 m
-UTM grid. Which variant (annual vs. seasonal) is the one reported as
-"the" conventional baseline in the paper's headline numbers below is
-**not confirmed** — the repository exposes both as working scripts
-without saying which is primary.
+**Conventional baseline:** every baseline combines Sentinel-1 and
+Sentinel-2; there is no Sentinel-2-only baseline. Sentinel-2 SR
+(`COPERNICUS/S2_SR_HARMONIZED`), scenes under 60% cloud, masked with
+SCL (classes 4/5/6/7 kept) and QA60. Two variants: **annual** — one
+median of 12 bands (B01–B12, B8A) plus NDVI, NDWI (McFeeters) and NBR;
+**seasonal** — three medians (spring, summer, autumn; winter excluded
+because of snow), 45 Sentinel-2 features. Sentinel-1 VV, VH, VV−VH,
+VV/VH and incidence angle added the same way. Fixed 10 m UTM grid. The
+headline baseline is **seasonal** (Table 3).
 
-- Embeddings beat conventional composites (weighted F1 0.83 vs. 0.80;
-  macro F1 0.55 vs. 0.50).
-- Near-optimal accuracy with ~5% of training parcels.
-- A compact neural network was the best classifier, beating Random
-  Forest; linear classifiers on embeddings underperformed neural
-  networks on conventional composites.
-- Robust to moderate label impurity; soft labels (species
-  proportions) beat hard labels (macro F1 0.586–0.589).
-- Performance degraded across years (weighted F1 −9% TESSERA, −15%
-  AlphaEarth), hitting rare species hardest.
+- Embeddings beat the seasonal baseline: weighted F1 0.83 vs. 0.80,
+  macro F1 0.55 vs. 0.50 (TESSERA 0.827 / 0.551, AlphaEarth
+  0.833 / 0.537). The annual baseline is 0.745 / 0.414.
+- Near-optimal **weighted** F1 with about 5% of training parcels;
+  macro F1 at 5% is about 10 points below full data (§3.1).
+- A compact neural network was the best classifier. On TESSERA:
+  Logistic Regression macro F1 0.38, MLP 0.55, Random Forest 0.08
+  below the MLP (§3.2). Random Forest is included as a "widely
+  adopted nonlinear baseline … robust to noisy labels".
+- Robust to moderate label impurity, meaning mixed-species parcels,
+  not off-target points; soft labels beat hard labels (macro F1
+  0.586–0.589).
+- Performance degraded across years (2018 → 2019): weighted F1 −9%
+  TESSERA, −14% AlphaEarth. The authors warn it is one year-pair
+  confounded by a storm and "should not be generalised" (§4.5).
+- Inventory labels collected 2010–2021 are paired with 2018 imagery —
+  a precedent for treating multi-year labels as one reference year.
+- Main validation is parcel-level; a 5 km block check lowers macro F1
+  by 6–7 points with rankings preserved (§4.1).
 
 Conclusion: foundation models shift the bottleneck from feature
 engineering to the availability, quality and temporal alignment of
-reference data. Reference labels here are curated, not citizen
-science.
-
-Relevance beyond RQ1/RQ2: the cross-year degradation supports holding
-time constant ([Temporal Design](research_questions.md#temporal-design-adopted));
-the label-impurity result is relevant to the label-purity step of the
-[Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed).
+reference data. Labels are curated, not citizen science. **Not in the
+paper:** point data, a positional-accuracy threshold, or a cumulative
+preprocessing ablation (it runs one-factor ablations).
 
 ### Spatial transfer of embeddings
 
-Evidence that embedding advantages shrink outside the training
-region — the basis for RQ3's amplify-or-mitigate question.
+What these show is narrower than "embeddings transfer worse than
+conventional features": none of them compares the two under transfer
+and finds embeddings worse.
 
-**Zhu et al. (2026).** Earth Embeddings. arXiv:2608.03410. — *To read*
+**Stewart, Fang, Corley & Zhu (2026).** Earth Embeddings.
+arXiv:2608.03410 (book chapter). — *Read*
 
-Review of geospatial embeddings in applications. Reports that
-embeddings are competitive when trained and evaluated locally but
-less robust under spatial transfer, and argues they work "in a
-narrower and more practical sense" than foundation-model narratives
-suggest. Useful framing for the thesis hypothesis.
+Taxonomy of embedding products, a review of applications, licences and
+publishing guidance; no experiments of its own. Says embeddings work
+"in a narrower and more practical sense" than foundation-model
+narratives imply. Its statement that embeddings are competitive
+locally but less robust under spatial transfer is a one-sentence
+report of **Ma, Shen, Swatantran & Lobell (2026)**, "Harvesting
+AlphaEarth", *IJAEOG* 149, 105258 — not read; it is the primary
+source for that claim.
+
+- Classes TESSERA as a per-pixel model "neglecting spatial
+  correlations", unlike AlphaEarth (§2.2).
+- States that TESSERA weights and embeddings are public domain, and
+  that only 2024 has global coverage, other years on request (§6.3,
+  Table 3).
+- Guidance (§7.1): compare embeddings against simple baselines and
+  hand-designed covariates under spatial and temporal splits; random
+  splits are insufficient evidence of transfer.
 
 **Yang et al. (2026).** Evaluating the Performance of AlphaEarth
 Foundation Embeddings for Irrigated Cropland Mapping Across Regions
 and Years. *Remote Sensing*, 18(7), 1065.
 DOI: [10.3390/rs18071065](https://doi.org/10.3390/rs18071065)
-— *To read*
+— *Read*
 
-Random forests on AlphaEarth embeddings for irrigated cropland (China,
-USA). Reported (by a citing paper) as high accuracy with stable
-transfer between years but weaker generalisation across regions.
+Seven light classifiers on frozen AlphaEarth embeddings for irrigated
+cropland (Guanzhong Plain, China; Kansas, USA), labels from visual
+interpretation. Within region, overall accuracy 0.90–0.95; across
+years in the same region 0.87–0.88; from China to Kansas every model
+falls below 0.5 (Random Forest best, 0.47).
+
+- **No Sentinel baseline in the transfer test:** it shows embeddings
+  transfer worse across regions than within, not worse than
+  conventional features. The authors attribute the drop to
+  region-specific associations learned by the classifier.
+- No spatial validation (random 70/30 split of points).
+- Accuracy columns in Tables A2–A3 do not match the confusion-matrix
+  counts; quote its numbers with care.
 
 **Ratsakatika, Zotta, Keshav & Lines (2026).** Geospatial embeddings
 detect old-growth forests but buffered spatial validation narrows
 their advantage over Sentinel features. arXiv:2609.28194 (preprint,
-v1, 23 Sep 2026). — *Abstract and the area-of-applicability sections
-(2.9, 3.5, 4.6) read; the rest not yet*
+v1). — *Read (main text and supplementary tables)*
 
 Old-growth forest mapping over 211 893 ha of Romania's Southern
-Carpathians, expert-informed labels, AlphaEarth, TESSERA v2 and
-Sentinel-1/2 features added to a topographic/access baseline,
-spatially blocked validation with and without 10 km train–test
-buffers. Unbuffered, TESSERA reaches PR-AUC 0.84 and beats
-Sentinel-1/2 by +0.08 [+0.05, +0.11]; with a 10 km buffer the
-advantage narrows to +0.04 [−0.01, +0.11], consistent with no
-difference. The closest existing result to the question of whether
-foundation-model gains survive spatial separation.
+Carpathians, expert-informed parcels with confirmed negatives,
+AlphaEarth, TESSERA v2 and Sentinel-1/2 features added to a
+topographic/access baseline, XGBoost, six spatial folds with
+train–test buffers of 0, 10 and 20 km.
+
+- **Unbuffered,** TESSERA reaches PR-AUC 0.84 and beats Sentinel-1/2
+  by +0.08 [+0.05, +0.11]. **With a 10 km buffer** the advantage is
+  +0.04 [−0.01, +0.11]. At 20 km it is +0.09 again, with little
+  training data left. TESSERA has the highest point estimate at every
+  buffer: the advantage narrows, embeddings are never worse.
+- **Blocking is "necessary but not sufficient"** (§4.4): only buffering
+  removes proximity across folds (PR-AUC 0.84 → 0.73). The 10 km
+  buffer was chosen from measured autocorrelation (labels 6.6–6.7 km,
+  TESSERA dimensions median 10.5 km).
+- The unbuffered advantage is "unlikely to be attributable to spatial
+  encoding within the embeddings", which are computed per pixel
+  (§4.4).
+- **Metrics:** PR-AUC is primary; ROC-AUC can look optimistic under
+  class imbalance, and precision-based metrics are confounded by
+  assumed negatives (§2.3, §4.2).
+- Removing half the training parcels at random cost less than 0.04
+  PR-AUC.
+- Controls worth reusing: a coordinate-only model and a random-removal
+  control matched to the buffer.
 
 Also computes the area of applicability (Meyer & Pebesma, 2021 — see
 [Spatial validation](#spatial-validation)) for its deployed model:
 98.4% of forest inside the study area is within it, 65.0% across the
-whole Carpathians, and the area outside is read as where new labels
-would contribute most. Done for one model only, not compared between
+whole Carpathians. Done for one model only, not compared between
 feature sets, and the authors state that applicability "refers to
 feature-space support rather than model accuracy, which was not
 tested outside the AOI or verified in the field" — the part a test
@@ -157,213 +211,213 @@ against independent reference data would add.
 
 ### EO foundation models in related applications
 
-Listed to show RQ1 alone is not novel; skim only.
+Listed to show RQ3 alone is not novel.
 
-- **Atoll ecosystem mapping** (*Remote Sensing* 18(17), 2964, 2026;
-  DOI: [10.3390/rs18172964](https://doi.org/10.3390/rs18172964)):
-  AlphaEarth 2023 embeddings vs. Sentinel-2 bands and indices,
-  Maldives; embeddings better for most classes. Same 2023 reference
-  year and same comparison design as RQ1. — *To read*
-- **Gonçalves et al. (2026).** Evaluating AlphaEarth and TESSERA
-  Geospatial Embeddings for Machine Learning-Based Burned Area
-  Mapping in Portugal. Found only in a reference list; venue to
-  check. Portuguese precedent for both embeddings — check whether
-  the authors are from Coimbra/INESC. — *To find*
+**Silva & Gonçalves (2026).** Evaluating AlphaEarth and TESSERA
+Geospatial Embeddings for Machine Learning-Based Burned Area Mapping
+in Portugal. Research Square preprint,
+DOI: [10.21203/rs.3.rs-10285823/v1](https://doi.org/10.21203/rs.3.rs-10285823/v1)
+(University of Porto; not peer reviewed). — *Read*
+
+Twenty 2024 fires from the ICNF catalogue, burned vs. unburned points,
+Random Forest, SVM and Gradient Boosting, cross-validation grouped by
+fire. **The Sentinel-2 baseline wins:** F1 (SVM) 0.895, against 0.860
+for TESSERA and 0.812 for AlphaEarth. The baseline uses pre- and
+post-fire windows that an annual embedding cannot match. Embeddings of
+the following year are worse (TESSERA 0.860 → 0.796). A Portuguese
+case of Random Forest on TESSERA where the conventional features are
+better, and evidence that fire changes a TESSERA annual embedding.
 
 ### Citizen science + remote sensing + plant mapping
 
-**Gillespie et al. (2024).** Deep learning models map rapid plant
-species changes from citizen science and remote sensing data.
-*PNAS*, 121(37), e2318296121.
+**Gillespie, Ruffley & Exposito-Alonso (2024).** Deep learning models
+map rapid plant species changes from citizen science and remote
+sensing data. *PNAS*, 121(37), e2318296121.
 DOI: [10.1073/pnas.2318296121](https://doi.org/10.1073/pnas.2318296121)
-— *Read (full text)*
+— *Read (main text; SI Appendix not read)*
 
-Deepbiosphere: 650,000+ research-grade (mostly iNaturalist)
-observations of 2,221 plant species, paired with remote sensing and
-deep learning, in California only. Beats conventional SDM baselines
-(AUC 0.95 vs. 0.88). No EO foundation models, no focus on invasive
-species or data sparsity/bias.
+Deepbiosphere: 652 027 research-grade observations of 2 221 plant
+species in California, paired with 1 m NAIP imagery and deep learning.
+Median per-species AUC 0.95 vs. 0.88 for Maxent and Random Forest on a
+uniform split; 0.87 vs. 0.73 and 0.71 under latitudinal block
+validation (Table 2). No EO foundation models, no invasive species. It
+does address observation bias, with a sampling-aware loss.
 
-Each point is paired with one 256×256 m, 1 m/pixel NAIP image
-**centred on the point**, and the model predicts per-image species
-presence — not a per-pixel mask grown from the point. CALVEG
-vegetation-class maps appear only in a post-hoc case study, to
-validate predictions against an independent map (per-pixel label =
-the alliance with the largest area overlap), not to generate training
-labels from points. GPS handling: keep only points with coordinate
-uncertainty ≤120 m, drop near-duplicates within 150 m; no snapping or
-correction of the coordinate itself. **Not a precedent for the
-"nearest vegetation area" rule** (see
-[`research_questions.md`](research_questions.md#prediction-task-adopted)):
-the point→pixel-neighbourhood link here is a fixed 256 m window
-around the point, not a rule that moves or expands the label based on
-what is actually at that location.
+- **Filters:** coordinate uncertainty ≤120 m, same-species duplicates
+  within 150 m dropped, human observations only, 2015–2022.
+- **Temporal:** observations from 2015–2022 are paired with 2012
+  imagery — multi-year observations against one imagery year.
+- **Background for the baselines:** 50 000 points drawn from circles
+  around the training points, not uniform over the study area.
+- **Point → image:** each point is paired with one 256 × 256 m image
+  centred on it, and the model predicts per-image presence. Not a
+  precedent for extending a label to the patch around a point.
 
-**Deepbiosphere for invasive plants, Michigan (2026).** Mapping
-distribution of invasive plant species and uncertainty using citizen
-science, remote sensing, and deep learning. bioRxiv,
+**Qiang et al. (2026).** Mapping distribution of invasive plant
+species and uncertainty using citizen science, remote sensing, and
+deep learning. bioRxiv,
 DOI: [10.64898/2026.06.10.731341](https://doi.org/10.64898/2026.06.10.731341)
-— *To read*
+(not peer reviewed; author name order to check on the bioRxiv page).
+— *Read (supplement not read)*
 
-Applies Deepbiosphere to invasive plants in Michigan: citizen science
-+ high-resolution imagery + climate, statewide predictions at 256 m,
-plus climate-scenario uncertainty. Acknowledges citizen-science
-sampling bias as a limitation. **Closest work on invasive plants +
-citizen science + remote sensing**; differs from this thesis in
-resolution (256 m vs. 10 m), the absence of EO foundation models,
-and no explicit bias experiment.
+Deepbiosphere applied to Michigan: a multispecies model (1 553
+species) with two focal invasives, statewide at 256 m. Mean AUC 0.79
+on a uniform split; median 0.69 across spatial bands, against 0.55 for
+Random Forest. Acknowledges sampling bias as a limitation and states
+there is no independent validation data. **Closest work on invasive
+plants + citizen science + remote sensing**; differs in resolution,
+no EO foundation models, no bias experiment. Its uncertainty map is
+disagreement between future climate projections, not model or label
+confidence.
 
 **Cambridge TESSERA group (2026, work in progress).** Global habitat
 maps from Tessera embeddings.
 [Project page](https://anil.recoil.org/ideas/tessera-habitat-maps)
-— *To read / follow*
+— *Unpublished (project page and M. Dales's weeknotes read; no paper
+or preprint as of 2026-11-11)*
 
-GBIF occurrences, filtered against IUCN ranges, used as weak, noisy
-labels over TESSERA embeddings for habitat classification. Reports
-heavy clustering around nature reserves, canals and a zoo.
-**Closest work on foundation models + citizen-science labels**;
-habitats, not invasive plants; no published results yet. Monitor:
-the group could publish in the same space.
+GBIF occurrences of terrestrial vertebrates, filtered against IUCN
+ranges, used as weak labels of habitat class over TESSERA embeddings.
+Reports heavy clustering of **places** (nature reserves, canals, a
+zoo); observers are never analysed. **Closest work on foundation
+models + citizen-science labels**; animals and habitats, not invasive
+plants. From the weeknotes, informal and not citable: GBIF filtered to
+≤10 m positional accuracy, spatial thinning on a 100 m grid, a linear
+classifier on per-pixel embeddings.
 
 **Radová (2026, unpublished).** Can citizen science data improve
 *Acacia dealbata* maps from supervised satellite image classification?
 A post-classification approach. Internal presentation, Department of
 Mathematics, University of Coimbra, 2026-10-30 (CFE, advised by
 Cidália Fonte and Diogo Duarte). — *Unpublished; I only attended the
-talk, this is not a paper or preprint, and the summary below may not
-match whatever the final thesis says*
+talk, and the summary below may not match whatever the final thesis
+says*
 
 Post-classification recalibration of an existing Sentinel-2 Random
 Forest *A. dealbata* probability map, using iNaturalist research-grade
-observations (Sentinel-2 tile 29TNE, Aveiro–Coimbra–Leiria — contains
-this thesis's Coimbra study area) as a correction signal, not as
-training data; retraining the classifier with citizen-science labels
-is listed as future work, not done. Points worth noting, with the
-unpublished caveat above:
+observations (Sentinel-2 tile 29TNE, which contains the Coimbra study
+area) as a correction signal, not as training data.
 
-- Most apparent disagreement between points and map is attributed to
-  GPS/pixel misalignment rather than model error (median point
-  probability 18% → 51% once a 30–50 m neighbourhood is allowed
-  instead of the exact pixel) — consistent with this thesis's choice
-  to drop positional accuracy > 30 m (step 2 of the
-  [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed))
-  and with the segmentation-mask question in
-  [Prediction Task](research_questions.md#prediction-task-adopted).
-- One observer made 85% of *A. dealbata* records — close to the
-  dominant-observer bias found independently in this thesis's own
-  pilot (83% overall, 85% in 2021–2025; see
-  [RQ3](research_questions.md#rq3--spatial-sampling-concentration)), over a
-  larger area. If it is the same observer, that is independent
-  support that the bias is not an artefact of the smaller pilot.
-- Points cluster along roads/trails, consistent with the bias axes
-  from Dimson et al. (2023).
-- Uses COS 2023 and OrtoSat 2023 as independent checks, the same
-  sources used in this thesis's [Species Scope](research_questions.md#species-scope-proposed)
-  work.
-- **Contrast:** proposes using other-plant observations as negative
-  evidence against *Acacia* (to push probabilities down). This thesis
-  does not use other-plant observations at all: its negative side is a
-  uniform-random background, not claimed absences.
-
-### Citizen science + invasive plants + deep learning
-
-**Cardoso et al. (2024).** Can citizen science and social media
-images support the detection of new invasion sites? A deep learning
-test case with *Cortaderia selloana*. *Ecological Informatics*, 81,
-102602. DOI: [10.1016/j.ecoinf.2024.102602](https://doi.org/10.1016/j.ecoinf.2024.102602)
-— *To read*
-
-CNNs on ground-level citizen-science and social-media photos detect
-*Cortaderia selloana* in Portugal (>77% identification success) and
-map unreported occurrences. Image-based computer vision, not
-satellite EO.
+- Most disagreement between points and map is attributed to GPS/pixel
+  misalignment rather than model error (median point probability
+  18% → 51% once a 30–50 m neighbourhood is allowed).
+- One observer made 85% of *A. dealbata* records, close to the
+  concentration found in this thesis's own pilot.
+- Points cluster along roads/trails.
+- Uses COS 2023 and OrtoSat 2023 as independent checks.
+- Proposes other-plant observations as negative evidence against
+  *Acacia*, which this thesis does not do.
 
 ### Citizen-science sampling bias
 
-**Dimson et al. (2023).** Citizen science can complement professional
-invasive plant surveys and improve estimates of suitable habitat.
-*Diversity and Distributions*.
-DOI: [10.1111/ddi.13749](https://doi.org/10.1111/ddi.13749)
-— *To read*
+**Dimson, Berio Fortini, Tingley & Gillespie (2023).** Citizen science
+can complement professional invasive plant surveys and improve
+estimates of suitable habitat. *Diversity and Distributions*, 29(9),
+1141–1156. DOI: [10.1111/ddi.13749](https://doi.org/10.1111/ddi.13749)
+— *Read (other version): the published article is blocked; read the
+published abstract and the submitted version in M. Dimson's UCLA
+dissertation, chapter 3. Download the article by hand before citing
+any detail*
 
-Hawaiʻi, four invasive species. iNaturalist records are biased toward
-roads/trails and disturbed vegetation; professional surveys toward
-less accessible, native-dominated sites. Habitat models from each
-source overlap only moderately; combining both gives more complete
-estimates. Whether the same bias axes hold in Portugal is untested.
+Hawaiʻi, four invasive species, Maxent fitted on iNaturalist only,
+agency data only, and both. iNaturalist records are biased toward
+roads/trails and disturbed vegetation; professional surveys tended
+toward less accessible, native-dominated sites. Models from each
+source overlap moderately; the authors conclude that combining both
+gives more complete estimates, without measuring accuracy (no
+independent test set).
 
-Relevance to the expert-reference comparison in RQ1: citizen-science
-and professional data have *inverse* biases, so the expert end of
-the effort-reduction curve is not bias-free either — it is biased
-differently.
+- **"Inverse biases" is partial:** the abstract says "often". In the
+  dissertation version accessibility bias is inverse for two of four
+  species, and both sources share a bias toward protected open space.
+- **Background:** restricted to cells within 500 m of any
+  research-grade iNaturalist plant observation, citing Phillips et al.
+  (2009).
+- **Thinning** at 1 km barely changed the models; the conclusion
+  recommends "including all available data regardless of suspected
+  anthropogenic sampling biases".
+- Filtering effects were confounded with sample size; they recommend
+  controlling for it.
+
+Its agencies sampled different places from the citizen scientists;
+here experts and the dominant observer visited the same places, so it
+is an analogy for the expert end of the RQ2 curve, not direct
+evidence.
 
 ### Conventional invasive plant mapping
 
+All three use a random train/test split, none a spatial one, and all
+find the signal in specific months or phenological differences rather
+than an annual composite.
+
 **Martins, Alegria & Gil (2016).** Mapping invasive alien *Acacia
 dealbata* Link using ASTER multispectral imagery: a case study in
-central-eastern Portugal. *Forest Systems*, 25(3), e078.
+central-eastern of Portugal. *Forest Systems*, 25(3), e078.
 DOI: [10.5424/fs/2016253-09248](https://doi.org/10.5424/fs/2016253-09248)
-— *To read*
+— *Read*
 
-ASTER imagery, central-eastern Portugal. Best accuracy with
-flowering-season imagery and Maximum Likelihood (overall accuracy
-86%). Early Portuguese precedent; supports flowering phenology as the
-key conventional signal, which the Sentinel-2 baseline features
-should capture.
+One ASTER scene (15 m), Castelo Branco district, nine classes, 1 080
+reference sites split 75/25 at random. Best result with March
+(flowering) imagery and Maximum Likelihood: overall accuracy 85.2% in
+Table 4 (the abstract says 86%), far above SVM and ANN; no Random
+Forest. *Acacia* user's accuracy 100%, producer's 70%. March against
+August is a comparison of two single dates two years apart. In March
+*Acacia* was confused with agriculture and maritime pine, and the
+authors suggest January–February imagery might be better. Field data
+are 4–7 years later than the imagery, without discussion.
 
 **Mouta et al. (2021).** 'The Best of Two Worlds' — Combining
 Classifier Fusion and Ecological Models to Map and Explain Landscape
 Invasion by an Alien Shrub. *Remote Sensing*, 13(16), 3287.
 DOI: [10.3390/rs13163287](https://doi.org/10.3390/rs13163287)
-— *To read*
+— *Read*
 
-Maps *Acacia longifolia* in a northern Portugal municipality with
-Sentinel-2 (10 m), a fusion of eight classifiers, and Random Forest
-to explain invasion drivers. Portuguese precedent for a credible
-conventional baseline.
+Maps *Acacia longifolia* in Viana do Castelo with Sentinel-2 at 10 m
+(one image per month, December–May, 12 bands plus six indices) and a
+fusion of eight classifiers in biomod2.
+
+- **Presence vs. pseudo-absence:** 167 presence areas, 40
+  photo-interpreted absences and random pseudo-absences equal in
+  number to the presences, evaluated with ROC, TSS and Kappa; random
+  80/20 holdout.
+- **Random Forest was third** as a classifier (TSS 0.824, ROC 0.962),
+  behind GAM and FDA; the ensemble beat all (ROC 0.988). Maxent did
+  poorly as a pixel classifier. The "Random Forest" that explains
+  invasion drivers is a regression on 2 km² hexagons.
+- **Importance:** green, SWIR2 and blue bands first; bands 78%,
+  indices 22%; December–February mattered most.
 
 **Domingo et al. (2023).** Assessing the Efficacy of Phenological
 Spectral Differences to Detect Invasive Alien *Acacia dealbata* Using
 Sentinel-2 Data in Southern Europe. *Remote Sensing*, 15(3), 722.
 DOI: [10.3390/rs15030722](https://doi.org/10.3390/rs15030722)
-— read in full (open-access copy via Universidad de
-Zaragoza repository, since MDPI blocks automated access).
+— *Read (open-access copy, Universidad de Zaragoza repository)*
 
-Sentinel-2 time series and flowering-period spectral differences,
-with Random Forest feature selection, map *A. dealbata* in Arnoia
-(Ourense, Galicia): 94% overall accuracy with six metrics. Sentinel-2
-only; no spatial cross-validation confirmed.
+Sentinel-2 monthly composites and flowering-period spectral
+differences, with Random Forest feature selection, map *A. dealbata*
+presence/absence in Arnoia (Ourense, Galicia): 94% overall accuracy
+(Kappa 0.86) with six metrics.
 
-**Exact method, confirmed from the text:** Sentinel-2 L2A, blue
-(B02)/green(B03)/red(B04)/NIR(B08) at native 10 m only; cloud/cirrus
-masked via the quality bitmask (<20% scene cloudiness kept); monthly
-median composites built from 208 cloud-free scenes, 2018–2021. Six
-normalized-difference indices from all pairwise combinations of the
-four bands (RG, GB, BR, NDVI = NIR/Red, NIRG, NIRB). The flowering
-peak was found empirically from the monthly time series (blooming:
-March; pre-flowering: January; post-flowering: May — chosen as the
-months where the ND indices returned to baseline either side of the
-peak), giving 27 candidate features (9 metrics × 3 periods: the raw
-bands/indices at each period, plus the pre→bloom and bloom→post
-deltas). Random Forest (GEE `smileRandomForest`, ntrees 1–3000,
-mtry 1–3, 75/25 train/test, 10 repeats) with Gini importance then
-narrowed this to **6 final features** for the reported 94% accuracy:
-NIR in March (blooming), Δpre-NDVI, Δpre-BR, Δpre-RG, ΔBR-post,
-ΔRG-post — i.e. every surviving feature is a flowering-period
-difference except the raw blooming-NIR value, and the two indices
-built from blue (BR, RG) carried the most importance.
+**Method:** Sentinel-2 L2A, blue (B02), green (B03), red (B04) and NIR
+(B08) at 10 m; cloud/cirrus masked via the quality bitmask (scenes
+under 20% cloud); monthly medians from 208 scenes, 2018–2021. Six
+normalized-difference indices from all pairs of the four bands (RG,
+GB, BR, NDVI, NIRG, NIRB). Flowering peak found from the time series
+(blooming: March; pre-flowering: January; post-flowering: May).
+Candidate features are blooming values and the pre→bloom and
+bloom→post differences. Random Forest (GEE `smileRandomForest`, 75/25
+random split, 10 repeats) with Gini importance gave **six final
+features**: NIR in March, Δpre-NDVI, Δpre-BR, Δpre-RG, ΔBR-post,
+ΔRG-post. Highest importance: Δpre-RG and Δpre-NDVI; March NIR lowest.
+Differences between periods discriminated better than single-period
+values.
 
-**Eskandari, Acuña-Alonso & Álvarez (2025).** Identification of
-Acacia invasive species in protected areas of Spain using PlanetScope
-high-resolution satellite images and machine learning models in time
-series. *Forest Ecology and Management*, 586, 122696.
-DOI: [10.1016/j.foreco.2025.122696](https://doi.org/10.1016/j.foreco.2025.122696)
-— *To read*
-
-PlanetScope time series + Random Forest map *Acacia* sp. in the Cíes
-Islands, Galicia; Random Forest beat the other algorithms. Specific
-area-change figures (2016–2024) are **unverified** — the publisher
-page blocks automated access.
+**Limits:** 120 field plots (48 presences, 72 absences) in 20.7 km²,
+so each validation run uses 30 points. Pure stands only, plots more
+than 30 m from stand borders; mixed stands and understorey *Acacia*
+are excluded, so 94% is not a comparable target for roadside
+citizen-science points. Confusion with cropland and shrubland. The
+authors note that flowering coincides with the cloudiest period.
 
 ### Presence-only modelling
 
@@ -371,26 +425,42 @@ page blocks automated access.
 distribution models: implications for background and pseudo-absence
 data. *Ecological Applications*, 19(1), 181–197.
 DOI: [10.1890/07-2153.1](https://doi.org/10.1890/07-2153.1)
-— *To read*
+— *Read*
 
 Background data are usually drawn at random, but occurrence records
-are biased toward accessible areas, which gives inaccurate models.
-Proposes **target-group background**: use all occurrences of a group
-of species recorded by similar methods as background, since they
-share the same bias. Across 226 species, target-group background
-improved average performance for every modelling method tested,
-with the largest gains where the presence records were most biased.
-The adopted background is uniform-random, which this paper argues against; it is
-kept on empirical grounds (step 7 of the
+are biased toward accessible areas, so "a fitted model might be closer
+to a model of survey effort than to a model of the true distribution".
+Proposes **target-group background**: all occurrences of a group of
+species recorded by similar methods, which share the same bias. Across
+226 species in six regions it improved every method tested (e.g.
+boosted trees AUC 0.728 → 0.754, Maxent 0.728 → 0.757), most where
+bias was strongest. Random Forest was not tested.
+
+- **The gains only show against independent presence–absence data.**
+  Scored with test presences against random background, the
+  target-group model looks *worse* (AUC 0.717 vs. 0.820, p. 193). A
+  check that scores presences against a background therefore cannot
+  show a uniform background is unbiased.
+- **Restricting the background** to areas where the species could
+  occur is "a special case of the biased background sampling approach"
+  (p. 195), for one species with no effort information.
+- **Stated failure case:** the correction assumes effort and presence
+  are independent given the predictors; a pioneer plant correlated
+  with disturbance, more common near roads, breaks it (p. 187).
+- **AUC ceiling:** AUC against random background has a maximum
+  "typically less than 1" (p. 188).
+- Discarding or down-weighting records is "unpalatable" when records
+  are few (p. 182); single-observer dominance is not discussed.
+
+The adopted background is uniform-random, which this paper argues
+against (step 7 of the
 [Reference-Data Pipeline](research_questions.md#reference-data-pipeline-proposed)).
 
 ### One-class / positive-unlabeled classification
 
-> Search done for the RQ1 method choice. True one-class methods were
+> Search done for the RQ2 method choice. True one-class methods were
 > then tested and dropped in favour of presence-vs-background (see
 > [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)).
-> **Every entry comes from search snippets, abstracts or citing-paper
-> summaries; no full text was read. Verify any figure before citing.**
 
 Terminology is inconsistent in this literature: "one-class" is used
 both for methods with no background data at all (true one-class,
@@ -398,77 +468,110 @@ novelty detection) and for methods with no *labelled negatives* that
 still use unlabelled or background data (presence-background,
 PU-learning). Phillips et al. (2009) and MaxEnt are the second kind.
 
-- **Deng, Li, Liu, Guo & Newsam (~2018).** One-class remote sensing
-  classification: one-class vs. binary classifiers. *Int. J. Remote
-  Sensing*. DOI: 10.1080/01431161.2017.1416697. The closest to this
-  thesis's framing: under a limited labelling budget,
-  Presence-and-Background Learning beat both plain one-class SVM and
-  the binary classifiers tested. The advantage comes from using
-  unlabelled data, not from avoiding it.
-- **Skowronek, Asner & Feilhauer (2017).** Performance of one-class
-  classifiers for invasive species mapping using airborne imaging
-  spectroscopy. *Ecological Informatics*, 37, 66–76. DOI:
-  10.1016/j.ecoinf.2016.11.005. Two invasives, 1 m airborne data;
-  MaxEnt, biased SVM and BRT (all presence-background); overall
-  accuracy 72–88%.
+**Deng, Li, Liu, Guo & Newsam (2018).** One-class remote sensing
+classification: one-class vs. binary classifiers. *Int. J. Remote
+Sensing*, 39(6), 1890–1910. DOI: 10.1080/01431161.2017.1416697.
+— *Read*
+
+Land cover on 0.3 m aerial photos and a 2 m WorldView-3 scene, 200 to
+1 000 labelled pixels. Presence-and-Background Learning (a neural
+network on positive vs. 5 000 unlabelled pixels, then calibrated) was
+best in every scene and class, ahead of one-class SVM and binary
+classifiers; the advantage comes from using unlabelled data. One-class
+SVM was not always worst: in one scene it beat a neural network and a
+binary SVM (Table 3). The closest support for presence-vs-background,
+by analogy only (land cover, very high resolution, no spatial blocks).
+
+**Malinowski, Krupiński, Skórka, Mikołajczyk, Chuda & Lenda (2025).**
+Harnessing remote sensing and machine learning techniques for
+detecting and monitoring the invasion of goldenrod invasive species.
+*Scientific Reports*, 15, 32222. DOI: 10.1038/s41598-025-17440-0.
+— *Read*
+
+*Solidago* in Poland, Sentinel-2 and PlanetScope. Random Forest
+outperformed one-class SVM by 1–15 points on Sentinel-2 (best F1 0.98
+vs. 0.90); one-class SVM won in two single-date PlanetScope scenarios
+and over-predicted extent. The closest in subject, with caveats: the
+Random Forest is multi-class with real labelled samples of eight
+land-cover classes, not presence-background; reference polygons are
+homogeneous full-cover stands; no spatial blocks.
+
+**Rapinel & Hubert-Moy (2021).** One-Class Classification of Natural
+Vegetation Using Remote Sensing: A Review. *Remote Sensing*, 13(10),
+1892. DOI: 10.3390/rs13101892. — *Read*
+
+Review of 136 articles, 2013–2020, where "one-class" mostly means
+MaxEnt-style models. No comparison of zero-background methods with
+presence-background ones.
+
+- **Background** should be drawn over the entire landscape, including
+  the surroundings of occurrences, or accuracy may be overestimated;
+  only 6 of 136 studies excluded field-plot areas from it. The usual
+  number is 10 000 points (range 200–50 000).
+- By its terms, background goes with presence-only classifiers
+  (MaxEnt, biased SVM) and pseudo-absences with presence/absence
+  classifiers such as Random Forest; 42% of studies confuse the two.
+- Sampling bias was corrected in only 10 studies, and spatial
+  autocorrelation in validation was usually ignored.
+- Accuracy without absence data is biased; it recommends continuous
+  maps over thresholds.
+
+**Abstract only** (paywalled; consistent with the above, not citable
+for details):
+
 - **Li, Guo & Elkan (2011).** A Positive and Unlabeled Learning
   Algorithm for One-Class Classification of Remote-Sensing Data. *IEEE
   TGRS*, 49(2), 717–725. DOI: 10.1109/TGRS.2010.2058578. PU-learning
-  outperformed biased SVM and one-class SVM on two aerial scenes.
+  outperformed biased SVM and one-class SVM on aerial scenes.
 - **Li & Guo (2010).** A maximum entropy approach to one-class
-  classification of remote sensing imagery. *Int. J. Remote Sensing*.
-  DOI: 10.1080/01431161003702245. Reports MaxEnt beating one-class
-  SVM; contradicted by a 2016 comparison in *Remote Sensing Letters*
-  (DOI: 10.1080/2150704X.2016.1265689), where biased SVM came first
-  and "even the best overall approach still performs poorly in a
-  significant number of tasks".
-- **Rapinel & Hubert-Moy (2021).** Systematic review of one-class
-  vegetation classification, 2013–2020, 136 articles. Content not
-  retrieved.
-- **Goldenrod (*Solidago*), Sentinel-2 vs. PlanetScope, Poland (2024;
-  title and authorship not confirmed).** Random Forest outperformed
-  one-class SVM by 1–15 percentage points on dense stands; a related
-  study reportedly found a drop for patchy vegetation, relevant here
-  because citizen-science presences are often isolated trees.
-- **Zhu, Samat, Li, Xu, Li & Li (2025).** Adversarial
-  Positive-Unlabeled Learning-Based Invasive Plant Detection in Alpine
-  Wetland Using Jilin-1 and Sentinel-2 Imageries. *Remote Sensing*,
-  17(6), 1041. DOI: 10.3390/rs17061041. No figures retrieved.
+  classification of remote sensing imagery. *Int. J. Remote Sensing*,
+  31(8), 2227–2235. DOI: 10.1080/01431161003702245. MaxEnt beat
+  one-class SVM.
+- **Mack & Waske (2017).** In-depth comparisons of MaxEnt, biased SVM
+  and one-class SVM for one-class classification of remote sensing
+  data. *Remote Sensing Letters*, 8(3), 290–299.
+  DOI: 10.1080/2150704X.2016.1265689. Biased SVM came first; even the
+  best approach performed poorly in many tasks. Agrees with Li & Guo
+  (2010) on one-class SVM being behind.
 
-**Synthesis (my reading):** in every empirical comparison found, a
-true zero-background one-class method was the worst or near-worst
-performer, with no counter-example. None of these studies matches this
-setup, but the thesis's own tests later agreed with them.
+**Synthesis (my reading):** in the papers read, one-class SVM never
+beat the best positive-unlabelled or presence-background method,
+though it sometimes beat individual binary classifiers. None of these
+studies matches this setup, but the thesis's own tests later agreed
+with them.
 
 ### Evaluating presence-only models without confirmed absences
 
 **Hirzel, Le Lay, Helfer, Randin & Guisan (2006).** Evaluating the
 ability of habitat suitability models to predict species presences.
 *Ecological Modelling*, 199(2), 142–152.
-DOI: 10.1016/j.ecolmodel.2006.05.017 — *Abstract + secondary
-documentation (R package docs), full text not read*
+DOI: 10.1016/j.ecolmodel.2006.05.017 — *Read*
 
-Introduces the **continuous Boyce index**: a Spearman rank correlation
-between the proportion of presence sites falling in each
-prediction-value class and the proportion expected from background
-sites in that class; range −1 to 1, with values above 0 meaning
-predictions track true presence probability. Tested on 114 alpine
-plant species (Swiss Alps) against AUC/Kappa-style metrics —
-moderately-to-strongly correlated with them, fairly insensitive to
-prevalence. **Still needs background points**: it avoids needing
-*labelled absences*, not background data entirely. Implemented in R:
-`enmSdmX::evalContBoyce`, `tidysdm::boyce_cont`.
+Introduces the **continuous Boyce index**. For each class of predicted
+values, P is the share of evaluation presences and E the share of the
+study area's cells in that class; the index is the Spearman
+correlation between P/E and the class rank, from −1 to 1. Positive
+means predictions are consistent with the distribution of presences,
+near zero no better than chance, negative an incorrect model. Tested
+on 114 alpine plant species (Swiss Alps, GLMs, 5-fold
+cross-validation): correlated above 0.5 with AUC in most cases,
+fairly insensitive to prevalence.
 
-**Li & Guo (2014).** Positive-background learning F-measures (F-pb,
-F-cpb). *IEEE TGRS*, 52(8), 4621–4632. DOI: 10.1109/TGRS.2013.2283082
-— *Abstract only; exact title not independently confirmed*
-
-Replaces observed negatives with background data in a modified
-confusion matrix; F-cpb calibrated for class prevalence. Tested on two
-aerial-photo scenes, ranked models similarly to standard
-F-measure/kappa. A 2023 follow-up (Hainan University) extended the
-idea to impervious-surface mapping (WorldView-3, Landsat 8). Also
-needs background data — same caveat as the Boyce index.
+- **Moving window:** width 0.1 recommended, shifted upward in small
+  steps over [0, 1]; wider windows and more than ten fixed classes
+  both behave poorly.
+- **It cannot rank models with monotone curves:** being rank-based,
+  the indices "cannot discriminate between monotonic curves" (p. 150).
+  A value near 1 means only that P/E rises with the score.
+- **No guidance on near-ceiling values.** In the paper the median was
+  −0.07 and the maximum 0.61, against a median AUC of 0.88.
+- **Report the P/E curve itself:** its shape, its maximum and its
+  variance across folds.
+- Agreement with presence/absence metrics drops below about 50
+  presences; evaluation data should ideally be independent.
+- It needs predictions over the whole study area for E; a random
+  background sample is an approximation of that, so the index is not
+  background-free.
 
 **No method was found that evaluates a presence-only model without
 any background or unlabelled sample.** Even a zero-background training
@@ -477,83 +580,105 @@ background pool exists.
 
 ### Spatial validation
 
-**Karasiak, Dejoux, Monteil & Sheeren (2021/2022).** Spatial
-dependence between training and test sets: another pitfall of
-classification accuracy assessment in remote sensing. *Machine
-Learning*, 111(7), 2715–2740. DOI:
+**Karasiak, Dejoux, Monteil & Sheeren (2022).** Spatial dependence
+between training and test sets: another pitfall of classification
+accuracy assessment in remote sensing. *Machine Learning*, 111(7),
+2715–2740. DOI:
 [10.1007/s10994-021-05972-1](https://doi.org/10.1007/s10994-021-05972-1)
-(online 2021, journal issue dated 2022) — authors/venue confirmed via
-dblp/OpenAlex — *Full text not read: blocked by bot
-protection on HAL and a login wall on Springer; everything below is
-from its own software's documentation and from a citing review
-(Mahoney et al., 2023, full text read — see below)*
+(online 2021). — *Read*
 
-Sentinel-2 forest classification: non-spatial cross-validation
-overestimates accuracy; spatial leave-one-out (SLOO) gives estimates
-consistent with real map quality. Released **Museo ToolBox**, whose
-`SpatialLeaveOneOut` class takes its buffer/exclusion distance as
-`distance_thresold`, documented **in pixels, not metres**
-(museotoolbox.readthedocs.io, checked) — relevant directly
-to how many pixels/metres a validation buffer should be, see
-[methodology.md#validation](methodology.md#validation).
+Sentinel-2 forest classification over one 100 km tile. Non-spatial
+cross-validation overestimated overall accuracy by 8 to 14 points
+against distant sites; spatial leave-one-out matched them (82.1%,
+against 93.7% for k-fold).
+
+- **The buffer is derived from the data:** Moran's I per band over
+  increasing neighbourhoods, and the buffer is the distance where it
+  falls to 0.05 — about **19.7 km** here.
+- **Blocks without a buffer are not enough:** with blocks "residual
+  correlation may exist"; "finding the ideal block size does not solve
+  the problem, but the distance-based buffer approach avoids it" (§5).
+- **Object-level splitting is the minimum:** all pixels of one polygon
+  go to training or to test (§6).
+- A 20 m inner buffer appears only to erode stand edges, unrelated to
+  train/test separation.
+- Released **Museo ToolBox**; its `SpatialLeaveOneOut` documents the
+  distance threshold in pixels (software docstring, not the paper).
+
+**Not in the paper:** duplicate samples in one pixel, or thinning to
+one sample per pixel. It is about dependence between training and test
+sets.
 
 **Le Rest, Pinaud, Monestiez, Chadoeuf & Bretagnolle (2014).** Spatial
 leave-one-out cross-validation for variable selection in the presence
 of spatial autocorrelation. *Global Ecology and Biogeography*, 23(7),
 811–820. DOI:
-[10.1111/geb.12161](https://doi.org/10.1111/geb.12161) — *Full text
-not read (403 on the publisher); secondary summary and the citing
-review (below) only*
+[10.1111/geb.12161](https://doi.org/10.1111/geb.12161) — *Read*
 
-Introduced SLOO: the exclusion buffer/threshold distance is set equal
-to the **range of residual spatial autocorrelation (RSA)** —
-estimated from the data (e.g. via a variogram), not a fixed universal
-value.
+A variable-selection paper for generalised linear models, not a
+map-accuracy paper. Formalises spatial leave-one-out with the buffer
+set to the **range of residual spatial autocorrelation**, from the
+variogram of the full model's residuals. Underestimating the range is
+the unsafe direction: results were stable from the range (40–50 km in
+its case study) up to five times it, and wrong below it. The range is
+of model residuals, a different quantity from the autocorrelation of
+predictors.
 
-**Mahoney, Johnson & Silge (2023).** Assessing the performance of
-spatial cross-validation approaches for models of spatially structured
-data. arXiv:2303.07334. — *Full text read (open-access preprint)*
+**Mahoney, Johnson, Silge, Frick, Kuhn & Beier (2023).** Assessing the
+performance of spatial cross-validation approaches for models of
+spatially structured data. arXiv:2303.07334. — *Read*
 
-Simulation study comparing five spatial CV strategies (clustered,
-blocked, LODO, buffered leave-one-observation-out, inclusion-radius
-variants). Confirms the buffer/exclusion distance is "a matter of some
-debate," with suggestions across the field (including Karasiak et al.,
-2021) to use the **variogram range of the predictors, outcome, or
-model residuals** — not a fixed constant. In their simulations, the
-best-performing parameterisations separated train/test by roughly
-**25–41% of the study-area extent**, close to the measured ~25%
-autocorrelation range of their simulated outcome variable; spatial
-blocking/clustering (closer to this thesis's existing 10 km block
-holdout) was at least as robust as buffered leave-one-out, which was
-comparatively sensitive to the buffer size chosen. Introduces the R
-package `spatialsample`.
+Simulation study (Random Forest regression on a regular grid)
+comparing V-fold, blocked, clustered, buffered
+leave-one-observation-out and leave-one-disc-out cross-validation.
+The buffer distance is "a matter of some debate", with suggestions to
+use the variogram range of the predictors, outcome or residuals.
+
+- **Best estimates come from spatially contiguous assessment sets
+  combined with exclusion buffers.** The best blocked settings all use
+  a buffer; blocks without a buffer are not reported.
+- Buffered leave-one-observation-out did no better than random V-fold
+  (1.3% vs. 2.0% of iterations in the target range; blocked 27.9%,
+  clustered 37.0%).
+- The best settings separated sets by 25–41% of the grid length,
+  against an outcome autocorrelation range of about 25%.
+- Too few folds overestimates error. Clustered sampling, as in
+  citizen science, is not covered. Introduces the R package
+  `spatialsample`.
 
 **Meyer & Pebesma (2021).** Predicting into unknown space? Estimating
 the area of applicability of spatial prediction models. *Methods in
 Ecology and Evolution*, 12(9), 1620–1633. DOI:
 [10.1111/2041-210X.13650](https://doi.org/10.1111/2041-210X.13650)
-(journal details from a library listing, not checked on the
-publisher) — *arXiv version (2005.07939) read through an automated
-text extraction, not page by page*
+— *Read (journal version, which differs from the arXiv preprint)*
 
 Defines a dissimilarity index (DI): distance in predictor space from a
 location to its nearest training point, with predictors standardised
 and weighted by variable importance, divided by the mean pairwise
 distance among training points; for training points, the nearest
 point outside their own cross-validation fold. The area of
-applicability (AOA) is where DI stays below a threshold taken from
-the training data's own cross-validated DI. Tested on simulated
-responses over Europe (Random Forest, 19 bioclimatic predictors),
-including a spatially clustered training scenario with
-leave-cluster-out validation: inside the AOA, prediction error is
-comparable to the cross-validation error; outside it is considerably
-higher (case study RMSE 0.07 inside vs. 0.38 outside), and DI
-correlates with true absolute error (r = 0.71). Stated limits:
-regression only (classification not tested), Random Forest only,
-simulated data, nearest-point distance only, and the threshold "comes
-with reservations". Implemented in the R package `CAST`. Method in
-the proposed RQ3 redesign (to confirm with the supervisor) — see
-[`research_questions.md`](research_questions.md#rq3--spatial-sampling-concentration).
+applicability (AOA) is where DI stays below the outlier-removed
+maximum of the training data's cross-validated DI (75th percentile
++ 1.5 × IQR).
+
+- Tested on simulated responses over Europe (Random Forest, 19
+  bioclimatic predictors, 972 scenarios), including clustered training
+  data with leave-cluster-out validation. Case study: RMSE 0.07 inside
+  the AOA, 0.44 outside; DI correlates with true absolute error
+  (r = 0.71).
+- **The AOA depends on the cross-validation design:** with random
+  folds on clustered data it shrinks to almost nothing.
+- **The AOA is binary.** A continuous error estimate is a separate
+  step (a model of error against DI), and its tested strength is weak
+  (mean R² 0.21 across scenarios).
+- It is "a precondition for reliable predictions, but … in no way … a
+  guarantee".
+- **Only tested on regression** with Random Forest and simulated data.
+  Classification, presence-background data and high-dimensional
+  learned embeddings are not addressed, so using it on TESSERA with a
+  classifier is an extension.
+- The variable-importance method changes the result. Implemented in
+  the R package `CAST`.
 
 **Applied here:** this project's own empirical variogram
 result and what it was used for (not a paper finding) is logged in
@@ -563,158 +688,111 @@ notebook:
 
 ### *Acacia* fire ecology
 
-**Riveiro et al. (2025).** Effectiveness of slash and burn treatments
-in controlling *Acacia dealbata* Link invasion. *Biological
-Invasions*, 27, 125.
+**Riveiro, Nereu, Reyes & Silva (2025).** Effectiveness of slash and
+burn treatments in controlling *Acacia dealbata* Link invasion.
+*Biological Invasions*, 27, 125.
 DOI: [10.1007/s10530-025-03567-8](https://doi.org/10.1007/s10530-025-03567-8)
-— *To read*
+— *Read*
 
-Eight experimental blocks across central Portugal, monitored for
-three years. Burning promoted *A. dealbata* seed germination;
-slashing stimulated resprouting. Even combined slash-and-burn left at
-least 6.5 stems/m² (0 in controls). Relevance: burned *Acacia* stands
-are not gone, so the disturbance filter removes observations because
-the 2023 pixel no longer matches the label, not because the species
-is absent. Also a caveat for post-2023 observations in burned areas:
-after the 2025 fires, later observations may be regrowth.
+Eight stands, all in the Coimbra district, treated between 2018 and
+2021 and monitored for up to three years. Burning promoted
+*A. dealbata* seed germination; slashing stimulated resprouting. No
+treatment prevented regeneration (at least 6.5 stems/m², 0 in
+controls), and regrowth after two to three years is low seedlings and
+resprouts, not a mature canopy.
+
+**What it supports:** fire does not remove *A. dealbata*, so absence
+cannot be assumed after a burn. **What it does not:** the burns were
+prescribed, in 5 × 5 m plots, not wildfires, and the paper has no
+remote sensing. Stand persistence appears only as one introduction
+sentence citing Boland (1986) and as undisturbed control plots.
 
 ### Weak supervision from point labels
 
-**Rivier et al. (2023/2024).** Efficient Semantic Segmentation for
-Aerial Imagery Using Query Points and Superpixel Supervision.
-arXiv:2309.05490v2; published at IEEE ICIP 2024,
-DOI: [10.1109/ICIP51287.2024.10647646](https://doi.org/10.1109/ICIP51287.2024.10647646).
+**Rivier, Hinojosa, Giancola & Ghanem (2024).** Efficient Semantic
+Segmentation for Aerial Imagery Using Query Points and Superpixel
+Supervision. IEEE ICIP 2024, pp. 2292–2298,
+DOI: [10.1109/ICIP51287.2024.10647646](https://doi.org/10.1109/ICIP51287.2024.10647646);
+arXiv:2309.05490.
 PDF: [`literature/rivier_2024_superpixel_query_points.pdf`](literature/rivier_2024_superpixel_query_points.pdf).
-Recommended by the supervisor for the segmentation mask:
-a rule linking each citizen-science point to the nearest vegetation
-area, with several approaches to compare (see
-[`research_questions.md`](research_questions.md#prediction-task-adopted)).
-— *Read (full text)*
+Recommended by the supervisor for the segmentation mask (see
+[RQ1](research_questions.md#rq1--from-point-observations-to-reference-data)).
+— *Read*
 
-Trains a full segmentation network (DeepLabV3/U-Net/FCN, not a
-classifier on frozen embeddings) from sparse point labels (10-50 per
-512×512 image) via superpixel propagation: superpixels are generated
-with DAL-HERS (learned pixel affinities + hierarchical entropy-rate
-merging), each superpixel gets the majority class among the points
-that fall inside it, and superpixels with no point are left unlabelled
-(masked out of the loss). mIoU 75.64% on LandCoverAI (25-50 cm RGB
-aerial imagery, 4 classes), close to full supervision (83.99%).
-Ablation: more points per image always helps; more superpixels (i.e.
-smaller regions) hurts once past ~100-200 (best at 80-100, worse at
-200-300) — relevant here because our citizen-science points are a few
-per tile, not tens to fifty as in their setup, so coarser regions may
-suit us better. Differences from our setting to keep in mind: dense,
-evenly distributed point grids (not sparse opportunistic citizen
-science), RGB-only sub-metre imagery (not Sentinel-2/TESSERA), and an
-end-to-end trained segmentation backbone (not the frozen-embedding +
-light-classifier approach adopted here, see
-[Foundation Model Use](research_questions.md#foundation-model-use-adopted)).
+Trains a full segmentation network (DeepLabV3, U-Net, FCN) from sparse
+point labels (10–50 per 512 × 512 image) via superpixel propagation:
+superpixels come from DAL-HERS, each takes the majority class among
+the points inside it, and superpixels with no point are left out of
+the loss. mIoU 75.64% on LandCoverAI (25–50 cm RGB aerial imagery,
+four classes), against 83.99% fully supervised.
 
-**Zhang, Tang, Corpetti & Zhao (2021).** WTS: A Weakly towards
-Strongly Supervised Learning Framework for Remote Sensing Land Cover
-Classification Using Segmentation Models. *Remote Sensing*, 13(3),
-394. DOI: [10.3390/rs13030394](https://doi.org/10.3390/rs13030394)
-— *Not read (full text blocked on MDPI, HAL — hal-03717196, behind a
-bot-protection wall — and ResearchGate mirrors, confirmed still
-blocked on a second attempt; characterisation below is from a
-search-engine summary only, not verified first-hand — do not cite its
-numbers)*
-
-Reportedly uses SVM-labelled high-confidence pixels as seeds, then
-seeded region growing plus a fully-connected CRF to iteratively grow
-the labelled set, validated on Sentinel-2 imagery. Potentially another
-candidate for the patch-mask rule (region growing from a point,
-analogous to growing from a TESSERA-embedding seed), but needs the
-actual text read before it can ground anything.
-
-**Zhang, Kumar, Hoffman, Ivanov, Wang, Sheshukov, Zhou, Montesano &
-Liu (2025).** A Region-Growing Segmentation Approach to Delineating
-Timberline from Satellite-Derived Tree Fractional Cover Products.
-*Remote Sensing*, 17(12), 2002.
-DOI: [10.3390/rs17122002](https://doi.org/10.3390/rs17122002) —
-*Read (full text, open access)*
-
-Found while checking a candidate title; no relation to Zhang, Tang,
-Corpetti & Zhao (2021) above beyond a shared surname. Seeded region
-growing over a single satellite-derived raster band (tree fractional
-cover, CGLS, 100 m): seeds are pixels representative of each
-continuous forest patch (densest cover or patch boundary), the region
-grows by a fixed global threshold (fCover > 0.3), and the output
-boundary is the timberline. **The strongest accessible precedent found
-so far for candidate 1 (region growing)** — a real, read, open-access
-case of seeded region growing delineating vegetation extent from a
-satellite product, replacing Zhang et al. (2021) above as the live
-anchor for this candidate, which stays unread/blocked. Not a perfect
-fit: grows over one interpretable scalar band with a fixed threshold,
-not high-dimensional embeddings with a similarity-to-seed criterion,
-and has no sparse point-label or citizen-science-noise angle at all —
-so it supports the general technique (region growing to delineate
-vegetation extent from satellite data), not our specific point-label
-setting.
+- **Points are simulated:** random pixels drawn from the ground-truth
+  mask, so correctly labelled by construction.
+- **Superpixel count:** 80–100 per image is best, 200–300 worse; 80 is
+  the fewest DAL-HERS could produce, so nothing coarser was tested.
+- Only the downstream mIoU is reported; the accuracy of the propagated
+  masks is never measured.
+- Differences from this thesis: sub-metre RGB imagery, an end-to-end
+  trained network, and noise-free points. It supports the idea of
+  propagating a point to its superpixel and gives no parameter usable
+  at 10 m.
 
 **Raine, Marchant, Kusy, Maire & Fischer (2022).** Point Label Aware
 Superpixels for Multi-species Segmentation of Underwater Imagery.
 *IEEE Robotics and Automation Letters*, 7(3), 8291–8298.
 DOI: [10.1109/LRA.2022.3187836](https://doi.org/10.1109/LRA.2022.3187836),
-arXiv:2202.13487. — *Read (full text, HTML)*
+arXiv:2202.13487. — *Read (arXiv accepted version)*
 
-Found searching for papers citing Rivier et al. (2024) /
-addressing the same problem, in response to the supervisor's "and
-similar works" pointer (no second direct remote-sensing precedent for
-superpixel label propagation turned up this way — see Wölk et al.
-below). **Not remote sensing** — underwater photo-quadrats of coral,
-not satellite imagery — but a closer analogue than Rivier on one axis:
-it is **species-level**, propagating sparse ecologist point labels to
-multi-species segmentation, the same structure as our *A. dealbata*
-point-to-patch problem. Superpixels are computed on features from a
-Superpixel Sampling Network encoder, not raw pixels; their own ablation
-shows feature-based superpixels clearly beat raw-LAB ones (89.6–92.6 vs.
-64.1 pixel accuracy) — direct support for building superpixels on
-TESSERA embeddings rather than raw Sentinel-2 bands, our candidate 2.
-Unlabeled superpixels take the class of the **most feature-similar
-labeled superpixel**, not masked out of the loss as in Rivier — a
-different, explicit design choice to consider instead of just
-inheriting Rivier's rule. Point density tested (200–300/image) is still
-far above our few citizen-science points per tile, same gap as Rivier.
-Explicitly notes prior point-supervision work "assumes points lie
-centrally within objects" — a caveat directly relevant to citizen-science
-points, which are often off-target (phone GPS near a road or trail, not
-the plant itself).
+Not remote sensing (coral photo-quadrats), but species-level: sparse
+ecologist point labels propagated to multi-species segmentation, 100
+superpixels per 512 × 512 image, majority vote inside each.
 
-**Liu, Wang, Xu, Shi & Xing (2026).** Tighnari v2: Mitigating Label
-Noise and Distribution Shift in Multimodal Plant Distribution
-Prediction via Mixture of Experts and Weakly Supervised Learning.
-arXiv:[2602.08282](https://arxiv.org/abs/2602.08282). Experiments on
-GeoLifeCLEF 2025 (11 255 species). — *Read (full text, HTML)*
+- **Few points do badly:** propagation accuracy is 89–92% at 300
+  points per image, 84–86% at 100, 79–81% at 50, 71–73% at 20 and
+  64–68% at 10 (Fig. 4). Unlike Rivier, the propagated labels are
+  measured directly.
+- **Features matter less than the summary numbers suggest:** their
+  method on learned features reaches 89.6–92.6% against 64.1% on raw
+  colour, but colour-based baselines reach 86.6–88.9% and a
+  randomly initialised encoder 87.9%; the authors conclude the
+  algorithm "is not sensitive to the pixel features" (§V-B.2).
+- Superpixels are shaped by the labels through a loss between
+  differing classes, which has nothing to act on with presence-only
+  labels.
+- Unlabelled superpixels take the class of the most feature-similar
+  labelled one, a rule that would label everything in a presence-only
+  setting.
+- Notes that earlier point-supervision work assumes points are placed
+  centrally within the objects of interest (§II-B).
 
-Found searching for a precedent for candidate 3 (COS-polygon label
-extension). Pools *multiple* presence-only point records that fall
-inside the same fixed 640 m × 640 m Sentinel patch as joint labels for
-that patch — the mirror operation of our rule (we extend *one* point's
-label outward to an existing polygon; they pool *many* points' labels
-inward onto a fixed grid cell). Confirms area-based aggregation of
-sparse presence-only points against satellite imagery is an active,
-current technique (2026) in this general problem family, but is **not
-a direct precedent** for extending a label via an independent,
-pre-existing auxiliary land-cover polygon (as opposed to a fixed grid
-or a model-derived region) — reinforces, rather than changes, what
-`research_questions.md` already says about candidate 3 being a
-possible contribution, not an applied practice.
+**Zhang, Tang, Corpetti & Zhao (2021).** WTS: A Weakly towards
+Strongly Supervised Learning Framework for Remote Sensing Land Cover
+Classification Using Segmentation Models. *Remote Sensing*, 13(3),
+394. DOI: [10.3390/rs13030394](https://doi.org/10.3390/rs13030394)
+— *Read*
 
-**Wölk, Degenhardt, Hellmundt & Fu (2026).** Uncertainty-Aware
-Annotation for Reliable Tree Cover Monitoring from Satellite Imagery.
-ACM GoodIT 2026 (Best Paper Award), Madagascar tree-cover case study.
-— *To find (only a university press release found; no PDF or DOI
-landing page with full text located)*
+Sentinel-2 (20 m, north-west France), 16 844 labelled points in five
+classes. An SVM trained on the points labels high-confidence pixels as
+seeds; a U-Net is trained on them; seeded region growing on the
+U-Net's class-probability maps, after a fully connected CRF, enlarges
+the labelled set over eight iterations. Overall accuracy 0.825 against
+0.797 for the SVM on the same points.
 
-The one paper citing Rivier et al. (2024) found to be topically
-close, while searching for the supervisor's unnamed "similar works."
-From the press release only: lets annotators flag ambiguous objects as
-"uncertain" and uses auxiliary models to estimate class probabilities
-for those — **a different problem** (annotation uncertainty, not
-point→patch label propagation) from our three mask candidates. **Low
-relevance**; do not use beyond this one-line characterisation unless
-the full text is found later.
+- **Growth criterion:** a neighbour joins a class if that class is its
+  most probable and the probability exceeds a threshold (0.95, raised
+  each iteration). It grows on classifier confidence, not on
+  similarity to the seed, and has no radius limit.
+- Growth starts from SVM-densified seeds, not from the labelled
+  points.
+- Without the CRF accuracy hardly improves; with a stricter seed
+  threshold it falls in later iterations.
+
+A remote-sensing precedent for densifying point labels by region
+growing at Sentinel-2 scale, but as iterative self-training with a
+trained multi-class model.
+
+**No paper read grows a region on feature similarity to the seed or
+limits its radius**, the two elements of the RQ1 region-growing rule.
 
 ## Data Sources Found in the Literature Search
 
@@ -724,28 +802,29 @@ Not papers, but relevant:
   dataset by the Centre for Functional Ecology, University of
   Coimbra (invasoras.pt), published on GBIF. Different platform and
   observer pool from iNaturalist: candidate extra presences or a
-  cross-platform test for RQ3. See
+  cross-platform test for RQ4. See
   [Species Scope](research_questions.md#species-scope-proposed).
 
 ## What Has Already Been Done
 
 1. Citizen science → plant/invasive-species observations at scale
-   (Gillespie 2024; Dimson 2023; Cardoso 2024).
+   (Gillespie 2024; Dimson 2023).
 2. Remote sensing → invasive plant mapping, including *Acacia* in
-   Iberia (Martins 2016; Mouta 2021; Domingo 2023; Eskandari 2025).
-3. Deep learning → plant species mapping (Gillespie 2024; Cardoso
-   2024).
+   Iberia (Martins 2016; Mouta 2021; Domingo 2023).
+3. Deep learning → plant species mapping (Gillespie 2024).
 4. Citizen science + remote sensing → plant mapping (Gillespie 2024),
-   including invasive plants at 256 m (Michigan preprint, 2026).
+   including invasive plants at 256 m (Qiang 2026).
 5. EO foundation models vs. conventional features → many tasks:
-   trees (Ball 2026), crops (Yang 2026), ecosystems (atolls 2026),
-   burned area in Portugal (Gonçalves 2026).
+   trees (Ball 2026), crops (Yang 2026), and burned area in Portugal,
+   where the conventional features won (Silva & Gonçalves 2026).
 6. EO foundation models + iNaturalist labels → genus-level evaluation
    (Brown 2025); habitat mapping with GBIF labels in progress
    (Cambridge).
 7. EO foundation models → label efficiency (Ball 2026).
-8. Embeddings transfer worse across regions than within (Zhu 2026;
-   Yang 2026; old-growth preprint 2026).
+8. Embedding-based models lose accuracy when moved to another region
+   (Yang 2026), and their advantage over Sentinel features narrows
+   when training and test sets are separated by a buffer (Ratsakatika
+   2026).
 9. Citizen-science invasive-plant data are spatially biased (Dimson
    2023); target-group background mitigates bias in presence-only
    models (Phillips 2009).
@@ -762,29 +841,33 @@ underexplored:
 - Ball et al. (2026): foundation models + label efficiency, but tree
   species with curated labels, and random label reduction only.
 - Brown et al. (2025): foundation models + iNaturalist labels, but as
-  a generic benchmark, with no bias analysis.
+  a generic benchmark, with no analysis of label bias.
 - Cambridge TESSERA group: foundation models + GBIF labels with
-  observed bias, but habitats, and not yet published.
-- Michigan preprint (2026): invasive plants + citizen science +
-  remote sensing, but 256 m and no foundation models.
+  observed clustering, but habitats, and not yet published.
+- Qiang et al. (2026): invasive plants + citizen science + remote
+  sensing, but 256 m and no foundation models.
 - Dimson et al. (2023): citizen-science bias for invasive plants, but
   no foundation models.
-- Zhu et al. (2026) and related: embeddings transfer worse across
-  regions, but not tested with biased citizen-science labels.
-- Cardoso et al. (2024): citizen science + invasive plants in
-  Portugal, but ground-level images, not satellite EO.
+- Yang et al. (2026) and Ratsakatika et al. (2026): embeddings under
+  spatial transfer or separation, but not with concentrated
+  citizen-science labels, and not compared with conventional features
+  away from the sampled area.
 
-Three specific questions not answered by any of the above:
+Four specific questions not answered by any of the above:
 
 1. **Do foundation models amplify or mitigate citizen-science spatial
    bias** compared with conventional features? (RQ3)
 2. **Does extending a citizen-science point label to the patch around
    it, using frozen embeddings, change mapping performance?** Existing
-   point-to-patch work uses dense point grids and trained segmentation
-   networks (Rivier 2024; Raine 2022). (RQ2)
+   point-to-patch work uses many correctly placed points per image and
+   trained segmentation networks (Rivier 2024; Raine 2022). (RQ1)
 3. **How much is lost by training on citizen science instead of
    expert reference data**, with the same representation and test
-   set? (RQ1)
+   set? (RQ2)
+4. **Do foundation-model embeddings improve on conventional
+   Sentinel-2 features when the labels are citizen-science points for
+   an invasive plant?** Ball et al. (2026) make the comparison with
+   curated tree-species labels. (RQ3)
 
 ## Contribution
 
@@ -805,7 +888,7 @@ Two parts:
    cumulative ablation measuring each step's effect is an optional
    stretch goal. The segmentation mask, which extends a
    citizen-science point to the patch around it using frozen
-   embeddings, has no precedent found and is tested as
-   [RQ2](research_questions.md#rq2--extending-point-labels-to-patches).
-2. **Empirical:** RQ1–RQ3 in
+   embeddings, has no precedent found and is tested in
+   [RQ1](research_questions.md#rq1--from-point-observations-to-reference-data).
+2. **Empirical:** RQ1–RQ4 in
    [`research_questions.md`](research_questions.md).

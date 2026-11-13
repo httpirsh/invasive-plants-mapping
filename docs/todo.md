@@ -8,8 +8,10 @@
 
 Âmbito fechado
 ([thesis/notes.md](../thesis/notes.md#primeira-entrega-relatório-intermédio-início-de-janeiro-de-2027)):
-RQ1 só com TESSERA como resultado preliminar; Sentinel-2, RQ2 e RQ3 no
-plano de trabalho; sem novas experiências antes da entrega.
+RQ2 (curva de redução de esforço) só com TESSERA como resultado
+preliminar; RQ1, RQ3 (Sentinel-2) e RQ4 no plano de trabalho; sem
+novas experiências antes da entrega. Numeração das perguntas:
+[thesis/notes.md](../thesis/notes.md#reformulacao-quatro-perguntas).
 
 - [ ] Decidir o mapeamento dos capítulos de `thesis/document/text/`
   para a forma de relatório intermédio.
@@ -17,30 +19,43 @@ plano de trabalho; sem novas experiências antes da entrega.
   referência, à medida que for escrito
   ([thesis/notes.md](../thesis/notes.md#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável)).
 - [ ] Máscara de segmentação: apresentar as duas regras,
-  fundamentadas na literatura, com a comparação planeada na RQ2
+  fundamentadas na literatura, com a comparação planeada na RQ1
   ([thesis/notes.md](../thesis/notes.md#rq2-proposta-mascara)).
-- [ ] Ler Phillips et al. (2009) na íntegra.
-- [ ] Levar ao orientador as três propostas em fila: nova RQ2 (máscara
-  de segmentação), redesenho da RQ3 e formulação das perguntas
-  ([próxima reunião](meetings/proxima-reuniao.md)).
+- [ ] Descarregar à mão o artigo publicado de Dimson et al. (2023) e
+  ler Ma et al. (2026)
+  ([thesis/notes.md](../thesis/notes.md#lista-de-literatura-releitura-integral-e-limpeza)).
+- [ ] Corrigir a entrada `zhu2026` no manuscrito: o autor é Stewart et
+  al. ([thesis/notes.md](../thesis/notes.md#lista-de-literatura-releitura-integral-e-limpeza)).
+- [ ] Levar ao orientador as propostas em fila (máscara de
+  segmentação, redesenho da pergunta da concentração espacial,
+  formulação das perguntas) e a reformulação em quatro perguntas
+  ([próxima reunião](meetings/proxima-reuniao.md);
+  [thesis/notes.md](../thesis/notes.md#reformulacao-quatro-perguntas)).
 
 ## Depois da defesa intermédia
 
-- [ ] Retomar o braço Sentinel-2 da RQ1, depois de decidir como
+- [ ] Retomar o braço Sentinel-2 (RQ3, incluindo a comparação perto
+  contra longe entre representações), depois de decidir como
   reduzir o custo da extração. Só Random Forest e Logistic Regression;
   os diagnósticos de robustez só se o resultado parecer inesperado
   ([thesis/notes.md](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo)).
 - [ ] Implementar a zona-tampão na validação espacial do lado dos
   especialistas
   ([thesis/notes.md](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)).
-- [ ] RQ2 (máscara de segmentação): fixar os parâmetros de cada regra
+- [ ] RQ1 (máscara de segmentação): fixar os parâmetros de cada regra
   e correr o desenho que o orientador confirmar
   ([thesis/notes.md](../thesis/notes.md#rq2-proposta-mascara)).
-- [ ] RQ3: correr o desenho que o orientador confirmar
-  ([thesis/notes.md](../thesis/notes.md#rq3-proposta-redesenho-diagnostico-primeiro)).
-- [ ] Validação independente da RQ1 com a classe *Acacia* da COS 2023
+- [ ] RQ1 (filtros de qualidade): extrair os embeddings TESSERA das
+  observações que os filtros retiram e correr as duas condições, sem
+  filtros de qualidade contra todos os filtros, com todas as
+  observações
+  ([thesis/notes.md](../thesis/notes.md#simplificacao-desenho-2026-11-13)).
+- [ ] RQ4: correr perto contra longe só com TESSERA e fazer o mapa de
+  confiança, no desenho que o orientador confirmar
+  ([thesis/notes.md](../thesis/notes.md#simplificacao-desenho-2026-11-13)).
+- [ ] Validação independente da curva (RQ2) com a classe *Acacia* da COS 2023
   ([docs/methodology.md](methodology.md#validation)).
-- [ ] Análise de erro sistemática; precisa da RQ3 e da máscara de
+- [ ] Análise de erro sistemática; precisa da RQ4 e da máscara de
   segmentação ([docs/methodology.md](methodology.md#error-analysis)).
 - [ ] Mapa final da área de estudo, com incerteza
   ([docs/methodology.md](methodology.md#final-map)).

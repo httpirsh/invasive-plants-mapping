@@ -75,14 +75,17 @@ obtained.
   removed on 2026-10-20 (experiments paused until the exploratory
   analysis is done); kept because reading them takes ~2 h.
 
-### TESSERA embeddings — RQ1 background pool (2026-11-06)
+### TESSERA embeddings — RQ1 background pool (2026-11-13)
 
 - **Source:** same store as above (`GeoTesseraZarr.sample_points`).
-- **Access date:** 2026-11-06.
+- **Access date:** 2026-11-13.
 - **Spatial coverage:** 2 000 points sampled uniformly at random within
   the bounding box of the RQ1 pilot points above (507 905–607 985 mE,
   4 419 545–4 485 285 mN, EPSG:32629), excluding a 50 m buffer around
-  every citizen-science and expert-polygon *A. dealbata* presence.
+  every expert polygon and every cleaned citizen-science *A. dealbata*
+  presence (`inat_dealbata_clean.csv`, the 2 465 presences of
+  2021–2025). Random seed 42; the points are reproduced exactly from
+  the seed and that presence file.
 - **Temporal coverage:** 2023.
 - **License:** MIT.
 - **File:** `processed/embeddings/tessera_v1.1_2023_rq1_background/background_points.npz`
@@ -95,9 +98,31 @@ obtained.
   Made by
   [`notebooks/07_foundation_models/one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb),
   regenerated only if this file is missing.
-- **Status:** first version of the background pool meant to be shared
-  across the whole RQ1 effort-reduction curve; not yet confirmed by
+- **Status:** the background pool shared across the whole
+  effort-reduction curve (RQ2); not yet confirmed by
   the supervisor as final.
+
+### TESSERA embeddings — forest-only background pool (2026-11-13)
+
+- **Source:** same store as above (`GeoTesseraZarr.sample_points`);
+  land-cover class from COS 2023
+  (`interim/spatial/COS2023v1-S2.gpkg`, field `COS23_n4_C`).
+- **Access date:** 2026-11-13.
+- **Spatial coverage:** 2 000 points sampled uniformly at random
+  within the same bounding box as the uniform pool above, kept only if
+  they fall in a COS 2023 forest or shrubland class (eucalyptus
+  forest 917, pine forest 725, shrubland 188, other forest 170) and
+  outside the same 50 m exclusion buffer. Random seed 0.
+- **Temporal coverage:** 2023.
+- **License:** MIT (embeddings).
+- **File:** `processed/embeddings/tessera_v1.1_2023_rq1_background/background_points_forest_only.npz`
+  (same fields as the uniform pool, plus `cos_group` = land-cover
+  group of each point; all 2 000 valid, no NaN rows).
+- **Preprocessing:** made by
+  [`notebooks/07_foundation_models/forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb),
+  regenerated only if this file is missing.
+- **Status:** used only as a harder background in the robustness
+  check of the effort-reduction curve (RQ2).
 
 ### TESSERA embeddings — patch access (2026-11-03)
 
@@ -249,8 +274,8 @@ documents every step.
 
 ### *Acacia dealbata* expert reference polygons
 
-Expert reference data for the RQ1 effort-reduction curve (see
-[`docs/research_questions.md`](../docs/research_questions.md#rq1--foundation-models-vs-conventional-approaches)).
+Expert reference data for the RQ2 effort-reduction curve (see
+[`docs/research_questions.md`](../docs/research_questions.md#rq2--citizen-science-as-a-substitute-for-expert-data)).
 
 - **Source:** sent by the supervisor by email. Made from field visits
   and manual visual interpretation of OrtoSat 2023 (30 cm). The small
@@ -275,24 +300,45 @@ Expert reference data for the RQ1 effort-reduction curve (see
 
 ### iNaturalist observations, cleaned (derived)
 
-- **File:** `interim/citizen_science/inat_dealbata_clean.csv` (3 000
-  *A. dealbata* presences).
+- **File:** `interim/citizen_science/inat_dealbata_clean.csv`
+  (2 465 *A. dealbata* presences observed in 2021–2025, one per 10 m
+  pixel; 2 227 from Observer A, 90.3%).
 - **Made by:** part 2 of
-  `notebooks/02_citizen_science/acacia_observations.ipynb`.
-- **Steps:** dropped observations without a date and with obscured
-  coordinates; main observer anonymised (`observer` = "Observer A" /
-  "Others", no username kept); `burned` flag (fire between the
-  observation and 2023, ICNF) and `burned_same_year` (ambiguous
-  cases); only *A. dealbata* kept (species and subspecies); only
-  research grade; positional accuracy above 30 m dropped, missing
-  values kept and marked (`accuracy_missing`); same 10 m pixel
-  (`pixel`, EPSG:32629 grid, `src/grid.py`): one presence per pixel,
-  the closest in date to 2023 (`n_obs_in_pixel` keeps how many there
-  were).
+  `notebooks/02_citizen_science/acacia_observations.ipynb`, from the
+  raw file above.
+- **Assumption:** every presence is treated as representative of the
+  stand in 2023, the year of the predictor variables (design:
+  [`docs/research_questions.md`](../docs/research_questions.md#temporal-design-adopted)).
+- **Steps, in the order they run:**
+
+  | Step | Before | After | Observer A after |
+  |---|---|---|---|
+  | Drop observations without a date | 7 943 | 7 941 | — |
+  | Drop obscured coordinates | 7 941 | 7 898 | 83.5% |
+  | Anonymise the main observer (`observer` = "Observer A" / "Others", no username kept) | 7 898 | 7 898 | 83.5% |
+  | Keep only *A. dealbata* (species and subspecies) | 7 898 | 5 242 | 90.2% |
+  | Keep only research grade | 5 242 | 3 441 | 86.9% |
+  | Drop positional accuracy above 30 m; missing values kept and marked (`accuracy_missing`) | 3 441 | 3 276 | 89.1% |
+  | Keep only observations from 2021–2025 | 3 276 | 2 580 | 90.7% |
+  | One presence per 10 m pixel (`pixel`, EPSG:32629 grid, `src/grid.py`): the closest in date to 2023, ties to the most recent (`n_obs_in_pixel` keeps how many there were) | 2 580 | 2 465 | 90.3% |
+  | `burned` flag (fire between the observation and 2023, ICNF) and `burned_same_year` (ambiguous cases); nothing removed | 2 465 | 2 465 | 90.3% |
+
+  The year filter drops 594 observations from before 2021 and 102 from
+  2026. No presence is flagged as burned. The same counts are written
+  to `results/tables/acacia_cleaning_counts.csv` (local, not
+  versioned).
 - **Columns:** `id`, `observed_on`, `year`, `taxon_id`, `taxon_name`,
   `taxon_rank`, `latitude`, `longitude`, `positional_accuracy`,
   `quality_grade`, `accuracy_missing`, `observer`, `pixel`,
   `n_obs_in_pixel`, `burned`, `burned_same_year`.
+- **Embeddings:** 2 464 of the 2 465 presences have a valid embedding
+  in the RQ1 pilot set above.
+- **Read by:** the notebooks downstream of the cleaning
+  (`03_expert_reference/expert_polygons`,
+  `04_satellite/tessera_embeddings`,
+  `05_data_integration/qgis_overview` and `segmentation_mask`, and
+  every notebook in `07_foundation_models/` that uses citizen
+  science), and the 50 m exclusion buffer of the two background pools.
 
 ### Expert reference polygons, cleaned (derived)
 
@@ -319,19 +365,19 @@ Expert reference data for the RQ1 effort-reduction curve (see
 
 | Source | Use | Status |
 |---|---|---|
-| **Sentinel-2**, full pilot extent | Conventional baseline (RQ1–RQ3); precedent: Mouta et al. (2021) | Pilot obtained via AWS Earth Search STAC, no account needed, for a small test strip only (see "Sentinel-2 L2A, TESSERA grid, 2023" above) — extend to the full Coimbra pilot extent |
-| **Sentinel-1** | Possible second conventional sensor (RQ1–RQ3) | Not obtained |
+| **Sentinel-2**, full pilot extent | Conventional baseline (RQ3); precedent: Mouta et al. (2021) | Pilot obtained via AWS Earth Search STAC, no account needed, for a small test strip only (see "Sentinel-2 L2A, TESSERA grid, 2023" above) — extend to the full Coimbra pilot extent |
+| **Sentinel-1** | Possible second conventional sensor (RQ3) | Not obtained |
 | **OrtoSat 30 cm** (Pleiades-Neo, RGB+NIR, continental Portugal, Apr–Oct 2023, CC BY 4.0) | Possible validation reference | Full resolution restricted to public-administration entities; only WMS confirmed public. University access unconfirmed |
-| **AlphaEarth embeddings** | Second foundation model (RQ1) | Access terms unconfirmed |
+| **AlphaEarth embeddings** | Second foundation model (RQ3) | Access terms unconfirmed |
 | **CAOP administrative boundaries** | Study-area clipping | Not downloaded (bounding boxes used) |
-| **A second, distinct region** | Only if the RQ3 design to confirm is not accepted | Candidate found, not chosen — see below |
+| **A second, distinct region** | Not planned; possible future work for RQ4 | Candidate found, not chosen — see below |
 
 Scope (proposed, not decided): start with Coimbra as a pilot, extend
 to continental Portugal once the pipeline works. GBIF (which
 aggregates iNaturalist and other sources) is an alternative to the
 iNaturalist API.
 
-### Candidate second region for RQ3 (found, not chosen)
+### Candidate second region for RQ4 (found, not chosen)
 
 Checked 2026-11-04. The 398 `classifica = 1` expert polygons outside
 tile TNE (`raw/expert_reference/notTNE_18MAY2026_6.gpkg`) include

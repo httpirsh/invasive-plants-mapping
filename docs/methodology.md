@@ -27,8 +27,9 @@ What was checked before modelling, and what was decided:
   locations.
 
 **Grounded in:** Gillespie et al. (2024); Brown et al. (2025) (research
-grade); Ball et al. (2026) (label impurity); Karasiak et al. (2022)
-(nearby samples).
+grade and a positional-uncertainty filter); Ball et al. (2026)
+(tolerance to label impurity). One presence per pixel is my own
+reasoning, with no source found.
 
 ## Validation
 
@@ -39,30 +40,37 @@ grade); Ball et al. (2026) (label impurity); Karasiak et al. (2022)
 - **Expert side: a buffer on top of the blocks (supervisor,
   recalled).** Expert polygons are contiguous patches, so a validation
   pixel can sit next to a training pixel inside a kept block. Buffer
-  given as "20/30"; assumed to be 20–30 m (my decision, not confirmed),
-  although the empirical variogram and Karasiak's own software point
-  to pixels (200–300 m). Not implemented yet: stated as a known
-  limitation in the January report. Reasoning:
+  given as "20/30"; assumed to be 20–30 m (my decision, not
+  confirmed). The literature does not give a fixed value: the distance
+  is estimated from the measured autocorrelation range, and
+  underestimating it is the unsafe direction. This project's variogram
+  of TESSERA embeddings levels off at 300–500 m. Not implemented yet:
+  stated as a known limitation in the January report. Reasoning:
   [`thesis/notes.md`](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km).
+- **Known limitation: no buffer between training and test blocks.**
+  The papers read agree that blocks alone leave residual proximity
+  across block borders and recommend blocks combined with a buffer.
 - **Open: independent validation**, with a reference not drawn from
   the citizen-science source, so that biased training data are not
   evaluated only on equally biased test data. Plan: compare the
   predictions with the COS 2023 *Acacia* class, without spatial
   overlap with the expert polygons used for training. Not done yet.
 
-**Grounded in:** Karasiak et al. (2021/2022) and Le Rest et al. (2014)
-(spatial leakage; buffer set to the autocorrelation range); Mahoney,
-Johnson & Silge (2023) (block holdout at least as robust as buffered
-leave-one-out); Ratsakatika et al. (2026) (validation choice can
-change the RQ1 result). Domingo et al. (2023) is a counter-example
-with no spatial cross-validation confirmed.
+**Grounded in:** Karasiak et al. (2022) and Le Rest et al. (2014)
+(spatial leakage; buffer set to the autocorrelation range estimated
+from the data); Mahoney et al. (2023) (blocks combined with an
+exclusion buffer performed best); Ratsakatika et al. (2026) (blocks
+are necessary but not sufficient, and a buffer can change the
+comparison between representations). The *Acacia* mapping papers
+(Martins et al., 2016; Mouta et al., 2021; Domingo et al., 2023) all
+use random splits.
 
 ## Baseline
 
 The simplest credible approach: Sentinel-2 spectral-temporal features
 with the same presence-vs-background Random Forest used for the
 embeddings (see
-[RQ1](research_questions.md#rq1--foundation-models-vs-conventional-approaches)).
+[RQ3](research_questions.md#rq3--foundation-models-vs-conventional-features)).
 It answers *how well can this be done without foundation models?*
 
 - **Status: on hold.** TESSERA ran first (supervisor). Extracting
@@ -73,8 +81,12 @@ It answers *how well can this be done without foundation models?*
   [`thesis/notes.md`](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo).
 - **Feature set (mine, not confirmed by the supervisor):** the annual
   composite of Ball et al. (2026) — the 2023 median of all 12 bands
-  plus NDVI, NDWI and NBR. The flowering-phenology features of Domingo
-  et al. (2023) are added later, as an ablation. See
+  plus NDVI, NDWI and NBR. It is the simpler of that paper's two
+  variants; its headline baseline is seasonal and includes Sentinel-1.
+  The flowering-phenology features of Domingo et al. (2023) are added
+  later, as an ablation. The *Acacia* mapping papers all find the
+  signal in specific months or in differences between them, so the
+  ablation may matter more than the annual composite. See
   [`thesis/notes.md`](../thesis/notes.md#conjunto-de-features-do-sentinel-2-na-rq1-compósito-anual-ball-et-al-fenologia-da-floração-como-extensão-por-ablação-domingo-et-al).
 - **Background:** the uniform-random pool shared by both label sources
   and every point of the effort-reduction curve (step 7 of the
@@ -82,8 +94,9 @@ It answers *how well can this be done without foundation models?*
 
 **Grounded in:** Sentinel-2 at 10 m for *Acacia* — Mouta et al. (2021);
 Domingo et al. (2023). Flowering-season features — Domingo et al.
-(2023); Martins et al. (2016). Random Forest — Mouta et al. (2021);
-Domingo et al. (2023); Eskandari et al. (2025); Ball et al. (2026).
+(2023); Martins et al. (2016). Presence vs. random pseudo-absences
+evaluated with ROC — Mouta et al. (2021). Random Forest — see
+[RQ2](research_questions.md#rq2--citizen-science-as-a-substitute-for-expert-data).
 
 ## Foundation Models
 
@@ -91,28 +104,47 @@ Domingo et al. (2023); Eskandari et al. (2025); Ball et al. (2026).
 fusion of embeddings with conventional features (needs the Sentinel-2
 arm) are possibilities for the work plan, not committed.
 
-**Grounded in:** TESSERA (Feng et al., 2025) and AlphaEarth (Brown et
+**Grounded in:** TESSERA (Feng et al., 2026) and AlphaEarth (Brown et
 al., 2025), compared by Ball et al. (2026); fusion is motivated by the
 same paper's classifier-dependent result.
 
 ## Evaluation
 
 **Adopted: ROC-AUC and the continuous Boyce index** (Hirzel et al.,
-2006), used in every RQ1 notebook. Never report a metric without
+2006), used in every notebook of the effort-reduction curve. Never report a metric without
 stating what was evaluated, on which data, and under which split.
 
+**Known limits of the Boyce index as computed here**
+(`src/evaluation.py`):
+
+- It uses ten adjacent windows of one tenth of the observed score
+  range, which is the fixed-class form, not the moving window over
+  [0, 1] of Hirzel et al. (2006). With ten values the rank correlation
+  moves in coarse steps, so 0.99 is about one swap away from 1.
+- The index is rank-based and cannot rank models whose curves all rise
+  monotonically; a value near 1 says only that presences become more
+  frequent as the score rises.
+- It is unstable to small changes in the background pool: see
+  [`thesis/notes.md`](../thesis/notes.md#fundo-uniforme-reconstruido-2465).
+- **Use:** the index is reported next to ROC-AUC and no conclusion
+  rests on it alone. The presence-to-expected curve that Hirzel et al.
+  (2006) recommend is not computed; this is a stated limitation.
+  Reasoning:
+  [`thesis/notes.md`](../thesis/notes.md#simplificacao-desenho-2026-11-13).
+
 **Grounded in:** Hirzel et al. (2006) (presence-only evaluation
-without confirmed absences); Gillespie et al. (2024) reported AUC.
+without confirmed absences); Gillespie et al. (2024) reported AUC;
+Phillips et al. (2009) (AUC against background has a maximum below 1).
 
 ## Error Analysis
 
 Go beyond aggregate metrics: where and why do models fail? Candidate
 dimensions: region, land-cover context (COS), observation density,
 observer, quality of the citizen-science record. Not started: the
-region dimension needs RQ3 and the land-cover dimension needs the
-segmentation-mask comparison. The
-habitat-concentration finding of
-[RQ1](research_questions.md#rq1--foundation-models-vs-conventional-approaches)
+region dimension needs RQ4 and the land-cover dimension needs the
+segmentation-mask comparison of RQ1. The habitat-composition finding
+of
+[RQ2](research_questions.md#rq2--citizen-science-as-a-substitute-for-expert-data)
 stands in as an informal error explanation for now.
 
 ## Final Map
@@ -121,8 +153,9 @@ Document the area mapped, how pixel probabilities become a map, any
 threshold used, and uncertainty where available. Interpret the map in
 light of the validation results and known data limitations. A
 confidence layer based on dissimilarity to the training data is part
-of RQ3 (to confirm; see
-[RQ3](research_questions.md#rq3--spatial-sampling-concentration)). Not started.
+of RQ4 (to confirm; see
+[RQ4](research_questions.md#rq4--transferability-away-from-the-sampled-area)). Not started.
 
-**Grounded in:** mapping uncertainty alongside predictions was done by
-the Michigan Deepbiosphere preprint (2026).
+**Grounded in:** Ratsakatika et al. (2026) mapped the area of
+applicability of Meyer & Pebesma (2021) alongside the predictions of a
+model on embeddings.

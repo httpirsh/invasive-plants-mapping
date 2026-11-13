@@ -73,7 +73,7 @@ resolver.
 | Poucos dados | Data efficiency / few labels | RQ2 |
 | Observações de anos diferentes das imagens (Ball et al., 2026) | Desfasamento temporal entre dados e rótulos | Ano único 2023; filtro de fogo |
 | Pontos vizinhos parecidos inflacionam a exatidão (Karasiak et al., 2022) | Data leakage / autocorrelação | Validação espacial |
-| Pior desempenho noutras regiões (Zhu et al., 2026) | Distribution shift | RQ3 |
+| Pior desempenho noutras regiões (Yang et al., 2026) | Distribution shift | RQ3 |
 
 Ideia para a defesa: um diagrama do pipeline (observação no
 iNaturalist → píxel → embedding → classificador → mapa) antes das
@@ -82,7 +82,10 @@ perguntas de investigação.
 **Na tese:** ✅ Os conceitos base e a tabela de problemas já estão em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
 (abertura do capítulo e secção Motivation). O diagrama do pipeline
-ainda não foi feito.
+ainda não foi feito. A Introdução ainda cita `zhu2026` para a linha
+das outras regiões; a entrada da bibliografia tem o autor errado (é
+Stewart et al.) e a fonte certa para essa linha é Yang et al. (2026).
+Por corrigir no manuscrito.
 
 ### Metodologias abandonadas
 
@@ -104,11 +107,14 @@ Abandoned Methodologies".*
 - **Afinar o foundation model (fine-tuning).** A proposta da tese pede
   fine-tuning; uso embeddings congelados com um classificador leve. É
   um desvio à proposta, não algo testado e largado. Razões: o
-  AlphaEarth só existe como embeddings; os pesos do TESSERA têm de ser
-  pedidos; com poucos rótulos e ruidosos, afinar arrisca ajustar o
-  ruído; e o mesmo classificador sobre cada representação isola o
-  efeito da representação. Segue Ball et al. (2026), Yang et al.
-  (2026) e Brown et al. (2025). Ver
+  AlphaEarth só existe como embeddings; o artigo do TESSERA diz que os
+  pesos são abertos, mas o repositório restringe o checkpoint
+  (verificado em 2026-11-11); no próprio artigo do TESSERA, afinar o
+  codificador não trouxe benefício (Feng et al., 2026); com poucos
+  rótulos e ruidosos, afinar arrisca ajustar o ruído; e o mesmo
+  classificador sobre cada representação isola o efeito da
+  representação. Segue Ball et al. (2026), Yang et al. (2026) e Brown
+  et al. (2025). Ver
   [Foundation Model Use](../docs/research_questions.md#foundation-model-use-adopted).
 - **RQ3: assumir que o observador dominante é um enviesamento.** Só
   conta se o orientador aceitar o redesenho. Questionei a premissa,
@@ -170,6 +176,11 @@ Agrupadas por tema:
 - [Validação e Sentinel-2](#decisões-validação-e-sentinel-2)
 - [Documento e entrega](#decisões-documento-e-entrega)
 
+Numeração das perguntas: as entradas anteriores a 2026-11-13 usam a
+numeração antiga (RQ1 curva e comparação, RQ2 máscara, RQ3
+concentração). A correspondência com a atual está em
+[Reformulação em quatro perguntas](#reformulacao-quatro-perguntas).
+
 ## Decisões: âmbito e perguntas
 
 ### Só *Acacia dealbata*
@@ -210,7 +221,7 @@ enviesamento espacial da ciência cidadã, comparados com o Sentinel-2?)
 fica nas perguntas da tese, a seguir à RQ1 e à RQ2.
 
 **Porquê:**
-- Uma pessoa fez 83% de todas as observações de *Acacia* (88% das
+- Uma pessoa fez 83% de todas as observações de *Acacia* (90% das
   presenças de *A. dealbata* depois da limpeza), e 98% do pico de 2021.
 - O modelo só aprende com os sítios por onde esta pessoa passou; os
   embeddings podem aprender esse percurso mais facilmente (amplificar)
@@ -219,9 +230,16 @@ fica nas perguntas da tese, a seguir à RQ1 e à RQ2.
 - É a pergunta mais cara, por isso fica em último na prioridade.
 
 **Fundamentação:** Dimson et al. (2023): registos de invasoras do
-iNaturalist enviesados para estradas e zonas perturbadas; Zhu et al.
-(2026) e Yang et al. (2026): embeddings que generalizam pior para
-outras regiões; Phillips et al. (2009) para corrigir o enviesamento.
+iNaturalist enviesados para estradas e zonas perturbadas; Yang et al.
+(2026): modelos sobre embeddings que perdem exatidão noutra região;
+Phillips et al. (2009) para corrigir o enviesamento.
+
+**Correção (2026-11-11, releitura integral):** a fundamentação citava
+"Zhu et al. (2026)", que é Stewart et al. (2026), um capítulo sem
+experiências que só relata Ma et al. (2026), ainda por ler. Yang et
+al. não têm linha de base Sentinel no teste de transferência. Nenhum
+trabalho lido mostra embeddings a transferir pior do que features
+convencionais: é isso que a RQ3 testa, não um facto de partida.
 
 **Desenho aprovado:**
 - Avaliar em regiões de teste geograficamente separadas, com blocos
@@ -245,11 +263,12 @@ Até o orientador responder, o desenho aprovado é este. Desde
 2026-11-11, `docs/research_questions.md` mostra só a proposta, marcada
 "a confirmar"; se ele não a aceitar, repõe-se este desenho.
 
-**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq3--spatial-sampling-concentration).
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq4--transferability-away-from-the-sampled-area).
 
 **Na tese:** ✅ Parcial. O enunciado da RQ3 e a estatística do
-observador dominante (83%/88%) já estão em
-[`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex);
+observador dominante já estão em
+[`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
+(que diz 88% das presenças limpas; o valor é 90%, por atualizar);
 a fundamentação completa fica para a Metodologia.
 
 ### RQ3: proposta de redesenho — diagnosticar primeiro se a concentração da amostragem prejudica o modelo {#rq3-proposta-redesenho-diagnostico-primeiro}
@@ -268,11 +287,15 @@ responder. Na fila da
   houve amostragem?" Muda "enviesamento" para "concentração" e
   "regiões geograficamente distintas" para "longe de onde houve
   amostragem".
-- **Hipóteses:** amplifica (os embeddings guardam contexto da
-  paisagem, o modelo aprende a zona amostrada e piora mais do que o
-  Sentinel-2 fora dela); atenua (descrevem melhor a planta, piora
-  menos); sem efeito (nenhum piora — hipótese que o desenho aprovado
-  não previa). As experiências mostram o resultado, não o mecanismo.
+- **Hipóteses:** amplifica (o modelo com TESSERA piora mais do que o
+  Sentinel-2 longe da zona amostrada); atenua (piora menos); sem
+  efeito (nenhum piora — hipótese que o desenho aprovado não previa).
+  As experiências mostram o resultado, não o mecanismo. Retirei em
+  2026-11-11 o mecanismo que tinha escrito para "amplifica" (os
+  embeddings guardarem contexto da paisagem): o artigo do TESSERA,
+  Stewart et al. (2026) e Ratsakatika et al. (2026) dizem que os
+  embeddings TESSERA são calculados por píxel e não codificam a
+  paisagem à volta.
 - **Experiência 1 — diagnóstico.** Treinar com a ciência cidadã e
   avaliar nos polígonos de especialistas (referência independente),
   perto e longe do ponto de treino mais próximo, em distância
@@ -282,8 +305,8 @@ responder. Na fila da
   mosaico (TNE) a mais de 1 km de qualquer ponto de ciência cidadã; os
   do resto do país (notTNE) ficam como extensão opcional.
 - **Experiência 2 — um observador dedicado contra muitos ocasionais,
-  com o mesmo número de pontos:** 353 pontos do Observador A
-  (subamostragens repetidas) contra os 353 dos outros, testados perto
+  com o mesmo número de pontos:** 238 pontos do Observador A
+  (subamostragens repetidas) contra os 238 dos outros, testados perto
   e longe. Hipóteses: profundidade (os pontos do observador dedicado
   dão um modelo igual ou melhor) contra largura (os dos outros dão um
   modelo melhor longe).
@@ -302,18 +325,18 @@ responder. Na fila da
   enviesamento a corrigir, mas nunca o medimos. A fiabilidade dele
   (rótulos) já foi verificada; o que é facto é só a concentração
   espacial. Numa grelha de 10 km em EPSG:3763 (minha, não
-  necessariamente a dos notebooks), os 2 647 pontos dele ocupam 18 de
-  43 blocos e os 353 dos outros ocupam os 43; em contrapartida, 82%
+  necessariamente a dos notebooks), os 2 227 pontos dele ocupam 18 de
+  42 blocos e os 238 dos outros ocupam os 42; em contrapartida, 79%
   dos polígonos de especialistas dentro da área da ciência cidadã
-  estão a menos de 500 m de um ponto dele (66% para os outros).
+  estão a menos de 500 m de um ponto dele (33% para os outros).
 - O desenho aprovado avalia "nos registos dos outros observadores"
-  (353 pontos, da mesma fonte). Os polígonos de especialistas são
+  (238 pontos, da mesma fonte). Os polígonos de especialistas são
   independentes do iNaturalist.
 - Há dados para o teste. Polígonos por distância ao ponto de ciência
   cidadã mais próximo (0–1 / 1–5 / 5–20 / >20 km): TNE dentro do
-  distrito 1 677 / 120 / 52 / 0; TNE fora do distrito 3 / 50 / 115 /
-  55; notTNE 0 / 0 / 23 / 375. "Perto" = 1 680 polígonos; "longe" no
-  mesmo ficheiro = 392; mais 398 no resto do país.
+  distrito 1 641 / 109 / 99 / 0; TNE fora do distrito 2 / 5 / 160 /
+  56; notTNE 0 / 0 / 23 / 375. "Perto" = 1 643 polígonos; "longe" no
+  mesmo ficheiro = 429; mais 398 no resto do país.
 - Em quilómetros perde-se a distinção entre "é longe" e "a paisagem é
   diferente"; aceito, porque a comparação entre representações fica
   direta e o mapa de confiança cobre parte dessa leitura.
@@ -335,7 +358,7 @@ responder. Na fila da
 - ROC-AUC e Boyce precisam de pontos de fundo também nas faixas de
   longe, fora do distrito.
 - Fixar antes de correr o que conta como "amplifica" e como "atenua".
-- Risco de teto como na RQ1; os 118 pontos dos outros observadores
+- Risco de teto como na RQ1; os 69 pontos dos outros observadores
   fora dos blocos do Observador A são o teste mais difícil de reserva.
 - Custo, não verificado: embeddings TESSERA e Sentinel-2 fora da caixa
   do piloto. A comparação depende do braço Sentinel-2, adiado.
@@ -345,12 +368,17 @@ responder. Na fila da
 **Fundamentação:** Meyer & Pebesma (2021) para o método; Ratsakatika
 et al. (2026, preprint) aplicam-no a um modelo com embeddings mas
 declaram como limitação que a exatidão fora da área não foi testada.
+Da releitura integral (2026-11-11): em Ratsakatika et al. a vantagem
+do TESSERA sobre o Sentinel estreita-se com um tampão de 10 km mas
+nunca se inverte; em Meyer & Pebesma a área de aplicabilidade é
+binária, depende do desenho da validação cruzada, e o mapa contínuo
+de erro é um passo à parte com apoio fraco (R² médio 0,21).
 Não encontrei precedente com ciência cidadã concentrada num observador
 (pesquisa rápida, não revisão): possível contributo. Resumos em
 [`docs/literature.md`](../docs/literature.md#spatial-validation). As
 contagens são verificação minha, ad-hoc (script não guardado).
 
-**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq3--spatial-sampling-concentration).
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq4--transferability-away-from-the-sampled-area).
 
 **Na tese:** ⏳ Ainda não escrita. O enunciado da RQ3 na introdução
 não muda enquanto o orientador não responder.
@@ -440,8 +468,8 @@ vale até ele responder. Substitui também a minha decisão de 2026-11-10
   região e superpíxeis, as duas regras sobre os embeddings TESSERA.
   Duas regras chegam para as "várias abordagens" que o orientador
   pediu: decisão minha, fechada, não é pergunta para ele.
-- **Dois níveis de dados:** as 3 000 presenças e uma subamostra ao
-  acaso de 150 (5%).
+- **Dois níveis de dados:** as 2 465 presenças e uma subamostra ao
+  acaso de 150 (6%).
 - **Só muda o treino.** Teste, fundo, Random Forest, blocos de 10 km e
   cinco sementes são os da RQ1. Só com TESSERA.
 - **Um conjunto de parâmetros fixo por regra**, fundamentado e
@@ -454,13 +482,12 @@ vale até ele responder. Substitui também a minha decisão de 2026-11-10
 
 **Porquê substituir a pergunta da redução de dados:**
 
-1. **O filtro de recência não se aguentava.** A ±1 ano de 2023 estão
-   47,1% das presenças, a ±2 anos 82,2%, a ±3 anos 94,5% e a ±4 anos
-   99,4%; só 19 estão a mais de 4 anos, e o filtro de perturbação
-   encontrou 6 ardidas. "Remover as mais distantes" seria remover
-   2019–2020. Além disso misturava quantidade e composição (a quota do
-   Observador A cai de 88% para 72% aos 10% dos dados e 63% aos 5%) e
-   dava uma só curva, sem repetições.
+1. **O filtro de recência não se aguentava.** Todas as presenças
+   estão a 2 anos ou menos de 2023 (3,7% no próprio ano, 57,4% a ±1
+   ano), e o filtro de perturbação não encontrou nenhuma ardida.
+   "Remover as mais distantes" seria só separar 2021 e 2025 do resto.
+   Além disso misturava quantidade e composição e dava uma só curva,
+   sem repetições.
 2. **A redução ao acaso contribuía pouco.** Resolvia os problemas do
    ponto 1, mas a curva da RQ1 está no teto, por isso o resultado
    provável era "não muda até níveis muito baixos", e repetia Ball et
@@ -478,7 +505,7 @@ vale até ele responder. Substitui também a minha decisão de 2026-11-10
   teto, e a máscara serve para tirar mais de cada observação; é com
   poucas que pode mostrar efeito. Um nível com propósito, não uma
   curva.
-- **Sem a regra da COS:** só cobre cerca de 17% dos pontos, é a que
+- **Sem a regra da COS:** só cobre cerca de 18% dos pontos, é a que
   tem menos apoio na literatura e fica circular com a validação
   independente, que usa a mesma classe da COS.
 - **Sem comparar com os polígonos de especialistas:** 70% dos 1 925
@@ -501,21 +528,193 @@ vale até ele responder. Substitui também a minha decisão de 2026-11-10
   temporal, não testada.
 
 **Fundamentação:** Rivier et al. (2024) e Raine et al. (2022) para os
-superpíxeis; Zhang et al. (2025) para o crescimento de região. Não
-encontrei trabalho que junte propagação de ponto para mancha, pontos
-de ciência cidadã e embeddings congelados: possível contributo. Não
-fiz pesquisa nova para esta proposta; resumos em
+superpíxeis; Zhang et al. (2021) para o crescimento de região a
+partir de rótulos pontuais à escala do Sentinel-2. Da releitura
+integral (2026-11-11): Zhang et al. (2021) crescem pela confiança de
+um classificador, não por semelhança à semente, e sem raio máximo,
+por isso esses dois elementos da minha regra não têm precedente
+encontrado; em Raine et al. os superpíxeis sobre features aprendidas
+ganham pouco aos de cor; Rivier e Raine usam muitos pontos por imagem,
+corretamente colocados. Zhang et al. (2025), que eu citava, saiu da
+lista: o crescimento de região só refina a orla de uma mancha já
+mapeada. Não encontrei trabalho que junte propagação de ponto para
+mancha, pontos de ciência cidadã e embeddings congelados: possível
+contributo. Não fiz pesquisa nova para esta proposta; resumos em
 [`docs/literature.md`](../docs/literature.md#weak-supervision-from-point-labels).
 As contagens são verificação minha, ad-hoc (scripts não guardados),
 sobre `inat_dealbata_clean.csv` e `expert_polygons_clean.gpkg`.
 
-**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq2--extending-point-labels-to-patches);
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq1--from-point-observations-to-reference-data);
 regras e testes iniciais em
 [Máscara de segmentação](#máscara-de-segmentação-testar-várias-abordagens).
 
 **Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia). O
 enunciado da RQ2 na introdução é o aprovado e não muda enquanto o
 orientador não responder.
+
+### Reformulação em quatro perguntas, centrada na substituição dos dados de especialistas {#reformulacao-quatro-perguntas}
+
+*Decisão minha, de 2026-11-13 (a confirmar com o orientador). Os
+enunciados que ele aprovou valem até ele responder e continuam
+registados na entrada da
+[formulação anterior](#formulacao-pergunta-objetivos-hipoteses).*
+
+**O que decidi:** reorganizar as perguntas para ficarem no âmbito da
+proposta de tese (`docs/thesis-proposal.md`).
+
+- **Pergunta principal:** passa a ser sobre a substituição: em que
+  medida as observações de ciência cidadã, transformadas em dados de
+  referência e representadas por embeddings de foundation models,
+  podem substituir os dados de referência de especialistas no
+  mapeamento de *A. dealbata* no distrito de Coimbra.
+- **Quatro perguntas, numeradas pela ordem dos objetivos da
+  proposta:**
+  - RQ1, dos pontos aos dados de referência: efeito dos filtros de
+    qualidade e da máscara de segmentação (era a RQ2 da máscara, mais
+    os filtros).
+  - RQ2, ciência cidadã como substituto dos dados de especialistas: a
+    curva de redução de esforço (era metade da RQ1).
+  - RQ3, foundation models contra features convencionais: TESSERA
+    contra Sentinel-2, com todas as observações e com poucas (era a
+    outra metade da RQ1).
+  - RQ4, transferibilidade para longe da área amostrada (era a RQ3).
+- **Prioridade:** RQ2 e RQ1 primeiro; RQ3 e a parte da RQ4 que depende
+  do Sentinel-2 depois.
+- **Filtros (H₀b da RQ1):** versão barata, com duas condições (sem os
+  filtros de qualidade contra todos os filtros), sem ablação passo a
+  passo. A janela 2021–2025 é fixa nas duas condições. Assumo que
+  "filtros de qualidade" são os passos 1 a 3 do pipeline (coordenadas
+  escondidas, precisão, grau de qualidade).
+- **Critério de decisão comum:** conta como mudança quando a média das
+  diferenças de ROC-AUC por semente é maior do que o seu desvio-padrão
+  e tem o mesmo sinal em pelo menos quatro das cinco sementes. O Boyce
+  é reportado e não decide.
+- **Fica de fora, como limitação declarada:**
+  - Ruído: não testo se os foundation models compensam o ruído dos
+    rótulos; a RQ3 usa só dados de ciência cidadã limpos.
+  - Outras acácias: não testo se o modelo separa a *A. dealbata* das
+    outras espécies de *Acacia*; fica como trabalho futuro no
+    objetivo 5.
+
+**Porquê:**
+- O centro da proposta é reduzir a dependência de dados de referência
+  caros usando ciência cidadã; os foundation models são o meio. A
+  pergunta principal anterior punha no centro a comparação TESSERA
+  contra Sentinel-2, que a proposta não pede explicitamente e que
+  depende do braço Sentinel-2, parado.
+- A RQ1 anterior juntava duas perguntas com hipóteses separadas.
+  Separadas, o resultado da curva deixa de esperar pelo Sentinel-2.
+- O objetivo 1 da proposta ("investigar métodos" para transformar os
+  pontos) não tinha pergunta; a máscara e os filtros respondem-lhe.
+- O ruído e as outras acácias ficam de fora pela quantidade de
+  trabalho que já tenho: o teste do ruído depende do Sentinel-2, e o
+  âmbito de uma só espécie já está justificado em
+  [Só *Acacia dealbata*](#só-acacia-dealbata).
+
+**Fundamentação:** nenhuma literatura consultada. É o ajuste das
+perguntas à proposta de tese, na forma do guia de escrita já adotado.
+O critério de decisão não tem fonte externa; foi escrito depois de
+ver a curva da RQ2 (ver
+[RQ2: curva por fonte](#rq2-curva-por-fonte)).
+
+**Em aberto:** o que variam as cinco sementes na RQ4; os parâmetros
+das regras da máscara.
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#main-question-and-objectives).
+As entradas anteriores deste ficheiro usam a numeração antiga (RQ1
+curva e comparação, RQ2 máscara, RQ3 concentração).
+
+**Na tese:** ⏳ Ainda não aplicada. A Introdução tem os enunciados
+aprovados pelo orientador, que não mudam enquanto ele não responder.
+
+### Simplificação do desenho: uma só pergunta com Sentinel-2, sem limiar de decisão {#simplificacao-desenho-2026-11-13}
+
+*Decisão minha, de 2026-11-13 (a confirmar com o orientador). Ajusta
+a [reformulação em quatro perguntas](#reformulacao-quatro-perguntas)
+e a entrada da [curva por fonte](#rq2-curva-por-fonte), do mesmo dia.*
+
+**O que decidi:**
+1. **Só a RQ3 depende do Sentinel-2.** A comparação da descida
+   perto–longe entre representações (amplifica ou atenua) passa da
+   RQ4 para a RQ3, como segunda hipótese. A RQ4 fica só com TESSERA e
+   pode correr sem o Sentinel-2.
+2. **RQ4 reduzida** à experiência perto contra longe nos polígonos de
+   especialistas e ao mapa de confiança. A comparação entre
+   observadores (238 contra 238), o desbaste espacial e a segunda
+   região saem do desenho; ficam como trabalho futuro.
+3. **Filtros da RQ1 só com todas as observações**, sem o nível de 150
+   presenças. A máscara mantém os dois níveis e as duas regras.
+4. **Boyce só reportado.** Não vou reimplementá-lo (curva P/E, janela
+   móvel), ao contrário do que tinha ficado em
+   [Métricas](#metricas-limites-boyce); os limites ficam declarados.
+5. **Sem limiar de decisão.** As hipóteses mantêm-se, medidas pela
+   diferença de ROC-AUC emparelhada por semente, reportada com média,
+   desvio-padrão e número de sementes com o mesmo sinal. Deixo de
+   escrever "cumpre" ou "não cumpre". Substitui o critério comum das
+   duas entradas acima.
+6. **RQ2 curta no design doc**, com os valores aqui em baixo; e o
+   notebook da curva passa a ter uma só corrida, com os dados atuais,
+   sem as secções da corrida com todos os anos.
+
+**Porquê:**
+- Com duas perguntas a depender do Sentinel-2, o risco de ele não
+  arrancar atingia metade do plano.
+- Os filtros são a parte mais cara da RQ1 (exigem extrair embeddings
+  novos) e a que menos responde à proposta.
+- O Boyce mudou de 0,930 para 0,969 só com a troca do fundo; não
+  justifica mais trabalho numa métrica que não decide.
+- O limiar foi escrito depois de ver a curva, dava respostas
+  diferentes conforme o nível comparado (falhava aos 90%, passava aos
+  20%–50%) e assentava em cinco sementes que reutilizam blocos.
+  Reportar as diferenças é mais simples e mais defensável.
+
+**O que se perde:** uma regra de decisão explícita por hipótese; a
+resposta sobre o observador dominante; a medição do efeito dos
+filtros com poucos dados.
+
+**Valores da curva da RQ2** (TESSERA, presenças de 2021–2025, fundo
+novo, uma corrida, média de cinco sementes; RF = Random Forest, LR =
+Logistic Regression):
+
+| % polígonos | RF ROC-AUC, global | RF ROC-AUC, só especialistas | RF ROC-AUC, só ciência cidadã | LR ROC-AUC, global | RF Boyce, global | RF Boyce, só especialistas |
+|---|---|---|---|---|---|---|
+| 0 | 0,902 | 0,976 | 0,812 | 0,893 | 0,995 | 0,970 |
+| 10 | 0,906 | 0,986 | 0,810 | 0,910 | 0,995 | 0,963 |
+| 20 | 0,907 | 0,988 | 0,810 | 0,917 | 0,995 | 0,958 |
+| 30 | 0,907 | 0,990 | 0,807 | 0,920 | 0,998 | 0,957 |
+| 40 | 0,907 | 0,991 | 0,806 | 0,921 | 0,985 | 0,960 |
+| 50 | 0,907 | 0,992 | 0,805 | 0,923 | 0,993 | 0,952 |
+| 60 | 0,906 | 0,991 | 0,802 | 0,923 | 0,993 | 0,949 |
+| 70 | 0,908 | 0,992 | 0,807 | 0,923 | 0,995 | 0,959 |
+| 80 | 0,907 | 0,992 | 0,804 | 0,923 | 0,978 | 0,958 |
+| 90 | 0,906 | 0,993 | 0,801 | 0,924 | 0,993 | 0,940 |
+| 100 (só especialistas) | 0,854 | 0,994 | 0,677 | 0,873 | 0,969 | 0,961 |
+
+Diferenças emparelhadas por semente, face a 0%:
+- **RF, teste global:** cerca de +0,005 em todos os níveis de 10% a
+  90%. Aos 20% é +0,005 (dp 0,003), positiva nas cinco sementes; aos
+  90% é +0,004 (dp 0,005), positiva em quatro.
+- **RF, só especialistas, aos 90%:** +0,017 (dp 0,005), nas cinco
+  sementes. O Boyce desce de 0,970 para 0,940 (em três sementes; igual
+  em duas); com 10 janelas toma poucos valores distintos.
+- **LR, teste global, aos 90%:** +0,031 (dp 0,007), nas cinco
+  sementes.
+- **A 100%:** a queda no teste global vem das presenças de teste de
+  ciência cidadã (0,812 → 0,677).
+- **Fiabilidade:** cada semente testa em 2 a 4 blocos de 10 km com
+  polígonos; 9 blocos distintos nas cinco sementes, 6 deles em duas.
+  Nas sementes 1 e 3 um só bloco dá 472 dos 523 e dos 557 píxeis de
+  teste de especialistas.
+
+**Fundamentação:** nenhuma literatura consultada; são decisões de
+âmbito e de forma de reportar.
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
+[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb);
+`results/rq2_per_source_check/`.
+
+**Na tese:** ⏳ Ainda não aplicada (Introdução com os enunciados
+aprovados; Metodologia e Resultados preliminares por escrever).
 
 ## Decisões: dados de referência
 
@@ -623,8 +822,11 @@ marcadas com `accuracy_missing`. Presenças: 3 441 → 3 276.
 pelo menos 1 ha, por isso compara grupos e não confirma cada ponto. Os
 grupos com valor são pequenos (74 a 429) e a ordem não é perfeita.
 
-**Fundamentação:** Ball et al. (2026): rótulos impuros baixam a
-exatidão. O teste com a COS é meu.
+**Fundamentação:** o limiar de 30 m vem do meu teste com a COS.
+Filtrar pela incerteza posicional tem precedente em Brown et al.
+(2025), com ≤10 m, e Gillespie et al. (2024), com ≤120 m para imagens
+de 256 m. Corrigido em 2026-11-11: eu citava Ball et al. (2026), que
+não têm dados pontuais nem limiar de precisão posicional.
 
 **Onde:** passo 12 de
 [`acacia_observations.ipynb`](../notebooks/02_citizen_science/acacia_observations.ipynb);
@@ -633,28 +835,99 @@ tabela do pipeline, passo 2.
 **Na tese:** ✅ Parcial. Mencionada em resumo na Introdução; o teste e
 o limiar ficam para a Metodologia.
 
+### Janela temporal das observações: só 2021–2025 {#janela-temporal-2021-2025}
+
+*Decisão minha, de 2026-11-13. O orientador ainda não foi informado;
+está como ponto informativo na
+[fila da próxima reunião](../docs/meetings/proxima-reuniao.md#para-informar).*
+
+**O que decidi:**
+- Todas as presenças de *A. dealbata* são tratadas como representativas
+  do povoamento de 2023, o ano das variáveis preditoras.
+- Para sustentar esse pressuposto, ficam só as observações de
+  2021–2025 (2023 ± 2 anos).
+- O filtro é um passo da limpeza: depois das validações de cada
+  observação (data, coordenadas, espécie, grau de qualidade, precisão
+  da localização) e antes de "uma observação por píxel" e da marca de
+  fogo.
+- Rejeitei 2021–2026 e 2020–2026.
+
+**Porquê:**
+- Quanto mais longe de 2023 está a observação, mais fraca é como
+  evidência de que o povoamento estava lá em 2023.
+- 2026 fica de fora nas duas alternativas rejeitadas: o ano estava
+  incompleto no download (2026-09-22), e uma observação depois dos
+  incêndios de 2025 pode ser rebrota.
+
+**Contagens:**
+
+| Passo | Antes | Depois | Observador A depois |
+|---|---|---|---|
+| Sem data | 7 943 | 7 941 | — |
+| Coordenadas escondidas | 7 941 | 7 898 | 83,5% |
+| Só *A. dealbata* | 7 898 | 5 242 | 90,2% |
+| Só *research* | 5 242 | 3 441 | 86,9% |
+| Precisão ≤ 30 m ou sem valor | 3 441 | 3 276 | 89,1% |
+| Só 2021–2025 | 3 276 | 2 580 | 90,7% |
+| Uma por píxel de 10 m | 2 580 | 2 465 | 90,3% |
+
+- Ficam **2 465 presenças**, 2 227 do Observador A (90,3%) e 238 dos
+  outros.
+- O filtro tira 696 observações: 594 anteriores a 2021 (575 delas de
+  2019–2020) e 102 de 2026.
+- Nenhuma presença fica com a marca de fogo. 704 presenças (28,6%)
+  estão em áreas ardidas em 2025.
+- Para o nível de 150 presenças da
+  [proposta da RQ2](#rq2-proposta-mascara), o sorteio é
+  `sample(150, random_state=0)` sobre o ficheiro limpo (6,1% das
+  presenças; 90,7% do Observador A; todas com embedding válido).
+
+**Em aberto:** o efeito da distância a 2023 dentro da janela não é
+testado.
+
+**Fundamentação:** tratar observações de vários anos como um ano de
+referência tem precedente em Ball et al. (2026) e Gillespie et al.
+(2024). Para a largura da janela (± 2 anos) não li nenhuma fonte: é
+raciocínio meu. A persistência dos povoamentos também não tem fonte
+lida; uma pesquisa rápida em 2026-11-13 não encontrou uma medição
+publicada, e Riveiro et al. (2025) só apoia que o fogo não elimina a
+espécie.
+
+**Onde:** passo 13 de
+[`acacia_observations.ipynb`](../notebooks/02_citizen_science/acacia_observations.ipynb);
+ficheiro e contagens em
+[`data/README.md`](../data/README.md#inaturalist-observations-cleaned-derived);
+desenho em
+[`docs/research_questions.md`](../docs/research_questions.md#temporal-design-adopted);
+sorteio das 150 em `results/tables/rq2_sample_150_seed0.csv` (local,
+fora do git).
+
+**Na tese:** ⏳ Ainda não escrita (Metodologia).
+
 ### Uma observação por píxel; nos conflitos fica a presença
 
 *Decisão minha.*
 
 **O que decidi:** uma presença por píxel de 10 m (grelha UTM 29N,
 EPSG:32629). Quando há várias, fica a mais próxima de 2023 (em empate,
-a mais recente). 3 276 → 3 000. Nos 443 píxeis com uma *A. dealbata* e
+a mais recente). 2 580 → 2 465. Nos píxeis com uma *A. dealbata* e
 outras plantas, ficou a presença (regra do tempo do multiclasse, hoje
 sem efeito).
 
 **Porquê:**
 - O modelo vê píxeis, não pontos: duas observações no mesmo píxel têm
   o mesmo embedding e são o mesmo exemplo repetido.
-- 98% das presenças repetidas eram do Observer A, quase todas do mesmo
+- 99% das presenças repetidas eram do Observer A, quase todas do mesmo
   ano (registos repetidos da mesma visita).
 - Fica a mais próxima de 2023 porque todas as observações são tratadas
   como 2023.
 
-**Fundamentação:** Karasiak et al. (2022): amostras repetidas e
-próximas inflacionam a exatidão.
+**Fundamentação:** raciocínio meu; não encontrei fonte. Corrigido em
+2026-11-11: eu citava Karasiak et al. (2022), mas o artigo trata da
+dependência entre treino e teste e nunca fala de amostras repetidas
+no mesmo píxel.
 
-**Onde:** passo 13 de
+**Onde:** passo 14 de
 [`acacia_observations.ipynb`](../notebooks/02_citizen_science/acacia_observations.ipynb);
 [`src/grid.py`](../src/grid.py); tabela do pipeline, passo 8.
 
@@ -666,7 +939,7 @@ fica para a Metodologia.
 *Decisão minha.*
 
 **O que decidi:** no modelo principal ficam todas as observações do
-Observer A (88% das 3 000 presenças). Não limito o número por
+Observer A (90% das 2 465 presenças). Não limito o número por
 quadrícula na preparação dos dados.
 
 **Porquê:**
@@ -677,13 +950,19 @@ quadrícula na preparação dos dados.
 - Limitar já cortava muitos dados antes de saber se a concentração
   muda o resultado.
 
-**Fundamentação:** raciocínio meu, a partir do desenho da RQ3.
+**Fundamentação:** raciocínio meu, a partir do desenho da RQ3. Apoio
+parcial: Dimson et al. (2023) recomendam incluir todos os dados
+disponíveis, e Phillips et al. (2009) dizem que descartar registos é
+pouco aceitável quando são poucos. Nenhum trata de um observador
+dominante. O grupo de Cambridge, que a tabela do pipeline citava,
+descreve agrupamento de locais, não de observadores.
 
 **Onde:** tabela do pipeline, passo 9;
-[RQ3](../docs/research_questions.md#rq3--spatial-sampling-concentration).
+[RQ3](../docs/research_questions.md#rq4--transferability-away-from-the-sampled-area).
 
-**Na tese:** ✅ Parcial. A estatística dos 88% já está na Introdução;
-a decisão fica para a Metodologia.
+**Na tese:** ✅ Parcial. A estatística do Observer A já está na
+Introdução (que diz 88%; o valor é 90%, por atualizar); a decisão fica
+para a Metodologia.
 
 ### Máscara de segmentação: testar várias abordagens
 
@@ -706,10 +985,10 @@ definir por mim.*
 - **Testado numa amostra de 30:**
   - Crescimento de região (cosseno ao píxel-semente, 8 vizinhos, raio
     máximo 20 px/200 m, limiar 0,90; parâmetros não calibrados):
-    1/15/758 píxeis (mín/mediana/máx). A cauda superior bate no limite
+    3/33/962 píxeis (mín/mediana/máx). A cauda superior bate no limite
     do raio, sinal de limiar permissivo demais nalguns casos.
   - Superpíxeis (SLIC, `n_segments=100`, `compactness=0,1`, não
-    fundamentados): 11/21/45 píxeis. Mais consistente, mas só porque o
+    fundamentados): 10/22/64 píxeis. Mais consistente, mas só porque o
     número de segmentos limita o tamanho por construção. A propagação
     por voto maioritário (a proposta real de Rivier et al.) não foi
     exercitada: a amostra tem um ponto por patch.
@@ -818,7 +1097,7 @@ Para o one-class: pesquisa por resumos, sem texto completo lido (ver
 [`docs/literature.md`](../docs/literature.md#one-class--positive-unlabeled-classification)).
 A mistura aditiva é raciocínio meu.
 
-**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq1--foundation-models-vs-conventional-approaches);
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq2--citizen-science-as-a-substitute-for-expert-data);
 [`docs/meetings/2026-11-05.md`](../docs/meetings/2026-11-05.md);
 [`one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb).
 
@@ -842,11 +1121,18 @@ partilhado):** Random Forest ROC-AUC 0,842 (dp 0,028), Boyce 0,989 (dp
 
 **Porquê Random Forest:** é mais estável entre divisões espaciais, o
 que importa mais do que um pequeno ganho médio de AUC quando o lado
-dos especialistas só tem 18 blocos independentes; e tem cinco citações
-de apoio, contra nenhuma da Logistic Regression.
+dos especialistas só tem 18 blocos independentes; e tem apoio na
+literatura, que a Logistic Regression não tem.
 
-**Fundamentação:** Ball et al. (2026); Yang et al. (2026); Mouta et
-al. (2021); Domingo et al. (2023); Eskandari et al. (2025).
+**Fundamentação:** Domingo et al. (2023), Random Forest para
+presença/ausência de *A. dealbata*; Yang et al. (2026), sobre
+embeddings. Corrigido em 2026-11-11, depois da releitura integral: o
+apoio é mais fraco do que as "cinco citações" que eu contava. Em Ball
+et al. (2026) o Random Forest é uma linha de base, abaixo de uma rede
+pequena, e a Logistic Regression fica muito abaixo (macro F1 0,38
+contra 0,55). Em Mouta et al. (2021) é um de oito classificadores
+fundidos e fica em terceiro. Eskandari et al. (2025) saiu da lista
+(só o resumo é acessível).
 
 **Em aberto:** confirmar com o orientador; afinação de hiperparâmetros.
 
@@ -933,7 +1219,11 @@ anteriores, que usavam cada um o seu sorteio de blocos de teste.
 - Confirmar com o orientador antes de tratar como resposta final.
 
 **Fundamentação:** Dimson et al. (2023) para a diferença de viés entre
-fontes; o resto é raciocínio meu.
+fontes, como analogia: dizem que os enviesamentos são "muitas vezes"
+inversos (não em todas as espécies), e lá as duas fontes amostraram
+sítios diferentes, enquanto aqui especialistas e Observador A
+visitaram os mesmos. Só li a versão submetida, não o artigo
+publicado. O resto é raciocínio meu.
 
 **Onde:** [`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
 
@@ -1027,6 +1317,41 @@ permutação são técnicas padrão, a aplicação a embeddings é minha.
 
 **Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia).
 
+### Métricas: limites do índice de Boyce tal como está calculado {#metricas-limites-boyce}
+
+*Decisão minha, de 2026-11-11, depois de ler Hirzel et al. (2006) na
+íntegra.*
+
+**O que decidi:** manter ROC-AUC e Boyce nos resultados já corridos,
+sem alterar o código antes da entrega, e declarar os limites do Boyce
+sempre que o reportar.
+
+**Porquê:**
+- O índice é uma correlação de ordens: não distingue curvas
+  monótonas. Um valor perto de 1 diz só que as presenças ficam mais
+  frequentes quando a pontuação sobe. Boyce ≈0,99 em todos os modelos
+  não os ordena.
+- `continuous_boyce()` em `src/evaluation.py` usa dez janelas
+  adjacentes de um décimo do intervalo observado de pontuações. É a
+  forma de classes fixas, não a janela móvel sobre [0, 1] do artigo.
+  Com dez valores a correlação anda em degraus grossos: 0,99 está a
+  cerca de uma troca de 1.
+- Hirzel et al. não dão orientação para valores perto do teto; nos
+  dados deles o máximo foi 0,61.
+
+**Em aberto:** reportar a própria curva P/E e a sua variação entre
+divisões espaciais, como o artigo recomenda; passar à janela móvel.
+As duas coisas mudam números já reportados, por isso ficam para
+depois da entrega.
+
+**Fundamentação:** Hirzel et al. (2006), texto integral. A leitura do
+código é minha.
+
+**Onde:** [`src/evaluation.py`](../src/evaluation.py);
+[`docs/methodology.md`](../docs/methodology.md#evaluation).
+
+**Na tese:** ⏳ Ainda não escrita (Metodologia/Resultados).
+
 ### RQ1: fundo partilhado de pontos aleatórios uniformes {#rq1-fundo-uniforme-nao-cos}
 
 *Decisão minha, não confirmada pelo orientador; não é pergunta
@@ -1044,6 +1369,21 @@ melhora; só o one-class SVM piora.
 (2009), que defende o oposto (fundo de grupo-alvo). A fundamentação
 real é a verificação empírica.
 
+**Segunda correção (2026-11-11, depois de ler Phillips et al. na
+íntegra):** a verificação empírica não chega para afastar o
+enviesamento do fundo. Phillips et al. mostram que, avaliado com
+presenças contra fundo aleatório, o modelo de fundo aleatório parece
+melhor por construção (AUC 0,820 contra 0,717 do grupo-alvo), e que o
+ganho do grupo-alvo só aparece com dados independentes de
+presença-ausência. O teste com fundo só de floresta mostra que a
+curva plana não depende de um fundo fácil, não que o fundo uniforme
+seja não enviesado. O fundo uniforme fica como escolha minha, com
+esta limitação declarada. A favor: Rapinel & Hubert-Moy (2021)
+recomendam fundo sobre toda a paisagem, mas sem excluir a vizinhança
+das presenças, ao contrário do meu tampão de 50 m. Phillips et al.
+notam ainda um caso em que a correção deles falha: uma planta
+pioneira ligada à perturbação, mais comum junto a estradas.
+
 **Política para os diagnósticos (2026-11-10):** os quatro diagnósticos
 da curva plana (fundo só de floresta, redundância, habitat, pureza)
 não se repetem por omissão em cada braço novo. Só se o resultado
@@ -1058,6 +1398,119 @@ robustez.
 **Onde:** [`forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb).
 
 **Na tese:** ⏳ Ainda não escrita (Metodologia/Resultados).
+
+### Fundo uniforme reconstruído a partir das 2 465 presenças {#fundo-uniforme-reconstruido-2465}
+
+*Registo de 2026-11-13. Decisão minha (o fundo continua por confirmar
+com o orientador).*
+
+**O que aconteceu:** em 2026-11-13, às 03:59, o
+`background_points.npz` foi reconstruído pelo
+`one_class_method_selection.ipynb`, que só o constrói quando o
+ficheiro não existe. Os dois ficheiros de fundo anteriores (uniforme e
+só de floresta) tinham desaparecido; a causa é desconhecida. O de
+floresta foi reconstruído às 04:28 pelo
+`forest_only_background_check.ipynb` e é igual ao anterior, byte a
+byte (mesmo sha256).
+
+**O que decidi:** o fundo uniforme em uso é o novo. A entrada da
+[janela temporal](#janela-temporal-2021-2025) diz que mantive os
+fundos antigos; isso deixou de ser verdade para o uniforme a partir
+desta data.
+
+**O que mudou no fundo uniforme:** só a zona-tampão de 50 m, agora à
+volta das 2 465 presenças de 2021–2025 em vez das 3 000 de todos os
+anos. Código, semente (42) e número de pontos (2 000) são os mesmos.
+Verifiquei que o ficheiro atual se reproduz exatamente a partir da
+semente e do ficheiro de presenças atual. Do antigo só resta o
+checksum, por isso não comparei os dois ponto a ponto.
+
+**Efeito nos resultados (curva 2021–2025, Random Forest):** o ROC-AUC
+global coincide a 0,002 entre os dois fundos (0,903 e 0,902 a 0%;
+0,855 e 0,854 a 100%). O Boyce global a 100% não: 0,930 com o fundo
+antigo, 0,969 com o novo.
+
+**Fundamentação:** nenhuma literatura consultada; é um registo de
+proveniência.
+
+**Onde:** corridas com o fundo antigo em
+`results/temporal_window_2021_2025/` (marcadas em `OBSOLETE.md`);
+curva completa com o fundo novo em `results/rq2_per_source_check/`,
+feita pela secção 8 de
+[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (Metodologia).
+
+### RQ2: curva por fonte das presenças de teste, critério e leitura do resultado {#rq2-curva-por-fonte}
+
+*Decisão minha, de 2026-11-13 (a confirmar com o orientador). RQ2 na
+[numeração nova](#reformulacao-quatro-perguntas); a curva era a RQ1.*
+
+**O que decidi:**
+- Correr a curva completa (11 níveis, cinco sementes, Random Forest e
+  Logistic Regression) numa só corrida, com as presenças de 2021–2025
+  e o [fundo novo](#fundo-uniforme-reconstruido-2465), separando as
+  presenças de teste por fonte.
+- **Teste principal:** o global (ciência cidadã e especialistas
+  juntos), como no desenho da curva. As presenças de especialistas
+  sozinhas são uma segunda análise, reportada ao lado.
+- **Critério:** a diferença emparelhada por semente entre 90% e 0%,
+  pelo critério comum. Foi escrito, tal como a H₁, depois de ver a
+  curva plana: não é um teste pré-registado.
+- **Random Forest continua a ser o classificador principal** e a
+  Logistic Regression passa a ser reportada como segundo classificador,
+  não como referência barata.
+- Deixar de descrever a curva como "plana" sem mais.
+
+**O que deu (valores em
+[`docs/research_questions.md`](../docs/research_questions.md#rq2--citizen-science-as-a-substitute-for-expert-data)):**
+- No teste global, o Random Forest ganha cerca de 0,005 de ROC-AUC
+  logo aos 10%–20% de polígonos e não sobe mais. Aos 90% não cumpre o
+  critério; aos 20%–50% cumpre. O resultado depende do nível
+  comparado; mantive 90% contra 0% para não ajustar o critério ao
+  resultado.
+- Só nas presenças de especialistas, o ROC-AUC do Random Forest sobe
+  de 0,976 para 0,993 e cumpre o critério; o Boyce vai no sentido
+  contrário.
+- A Logistic Regression sobe 0,031 no teste global. A resposta
+  depende do classificador.
+- A queda a 100% vem toda das presenças de teste de ciência cidadã.
+
+**Porquê:**
+- O teste global mistura dois níveis muito diferentes (0,976 nos
+  especialistas, 0,812 na ciência cidadã, no modelo de 0%), por isso
+  a média escondia um ganho pequeno nos especialistas.
+- As presenças de teste de ciência cidadã partilham provavelmente o
+  enviesamento de amostragem do treino, por isso o teste global
+  favorece os modelos treinados com ciência cidadã. A queda a 100%
+  não quer dizer que o modelo só de especialistas seja pior.
+- O ROC-AUC mais alto nos especialistas pode refletir presenças mais
+  fáceis de separar do fundo, não equivalência entre as fontes.
+- O Random Forest foi escolhido em 4 de novembro com as 3 000
+  presenças de todos os anos, antes da curva. Com 2021–2025 a
+  Logistic Regression continua com a média mais alta a 0% (0,874
+  contra 0,836) e o argumento da estabilidade enfraquece (dp 0,041
+  contra 0,055; era 0,028 contra 0,052).
+- A consistência entre sementes não é evidência independente: as
+  sementes reutilizam blocos (9 blocos distintos com polígonos em
+  cinco sementes, 6 deles em duas).
+- O Boyce mudou de 0,930 para 0,969 (global, 100%) só com a troca do
+  fundo, enquanto o ROC-AUC coincidiu a 0,002: confirma que não deve
+  decidir.
+
+**Fundamentação:** nenhuma literatura nova consultada. O critério não
+tem fonte externa. Os limites do Boyce estão em
+[Métricas](#metricas-limites-boyce).
+
+**Em aberto:** os diagnósticos da curva (fundo só de floresta,
+redundância, pureza) não foram separados por fonte.
+
+**Onde:** secção 8 de
+[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb);
+`results/rq2_per_source_check/`. As entradas anteriores sobre a curva
+descrevem as corridas com todos os anos ou com o fundo antigo.
+
+**Na tese:** ⏳ Ainda não escrita (Resultados preliminares).
 
 ## Decisões: validação e Sentinel-2
 
@@ -1081,16 +1534,26 @@ teste pode ficar a poucos metros de um de treino. Gastar tempo de
 reunião a confirmar a unidade não compensa. Fica registado que a
 leitura mais provável é outra:
 - A literatura diz que a distância não é uma constante: deve
-  corresponder ao alcance da autocorrelação espacial (Le Rest et al.,
-  2014; Mahoney et al., 2023). O bloqueio espacial foi pelo menos tão
-  robusto quanto a zona-tampão nas simulações de Mahoney et al.
+  corresponder ao alcance da autocorrelação espacial, estimado dos
+  dados (Le Rest et al., 2014; Karasiak et al., 2022; Mahoney et al.,
+  2023), e subestimá-lo é o lado perigoso (Le Rest et al.).
 - A biblioteca de Karasiak (Museo ToolBox) define a distância em
-  píxeis, o que daria 200–300 m.
+  píxeis, o que daria 200–300 m; o tampão do próprio artigo foi cerca
+  de 19,7 km, tirado de um correlograma.
 - O variograma dos embeddings TESSERA nos nossos dados estabiliza por
   volta dos 300–500 m (primeira estimativa, não um ajuste formal).
 
 **Fundamentação:** nenhuma para os 20–30 m; é uma escolha pragmática,
-e a literatura e o variograma apontam para píxeis.
+e a literatura e o variograma apontam para distâncias maiores.
+
+**Correção (2026-11-11, releitura integral):** eu tinha escrito que o
+bloqueio espacial foi pelo menos tão robusto quanto a zona-tampão nas
+simulações de Mahoney et al. Não é isso que mostram: o melhor
+resultado é de blocos combinados com um tampão de exclusão, e blocos
+sem tampão não são reportados. Karasiak et al. e Ratsakatika et al.
+dizem o mesmo (em Ratsakatika, PR-AUC 0,84 sem tampão contra 0,73 com
+10 km). Os blocos de 10 km sem tampão entre treino e teste ficam como
+limitação conhecida, nos dois braços e não só no dos especialistas.
 
 **Onde:** [`tessera_spatial_autocorrelation.ipynb`](../notebooks/04_satellite/tessera_spatial_autocorrelation.ipynb);
 [`docs/methodology.md`](../docs/methodology.md#validation).
@@ -1160,12 +1623,18 @@ espécie. O conjunto de Domingo et al. depende de uma janela de
 floração encontrada na Galiza (março); aplicá-lo a Coimbra sem
 verificar seria assumir um facto não confirmado.
 
-**Em aberto:** a janela de floração para Portugal central; qual das
-variantes (anual ou sazonal) é a reportada nos números principais de
-Ball et al.
+**Em aberto:** a janela de floração para Portugal central.
 
-**Fundamentação:** Ball et al. (2026), pelo código-fonte dos autores;
-Domingo et al. (2023), texto integral. Resumos em
+**Da releitura integral (2026-11-11):** a variante reportada nos
+números principais de Ball et al. é a sazonal, e sempre com
+Sentinel-1; a anual fica abaixo (F1 ponderado 0,745 contra 0,803). O
+meu braço é só Sentinel-2 e anual, por isso é uma linha de base mais
+fraca do que a deles. Martins, Mouta e Domingo encontram todos o
+sinal em meses específicos ou em diferenças entre eles, o que dá mais
+peso à ablação da floração.
+
+**Fundamentação:** Ball et al. (2026), pelo código-fonte dos autores e
+pelo texto integral; Domingo et al. (2023), texto integral. Resumos em
 [`docs/literature.md`](../docs/literature.md).
 
 **Onde:** sem notebook; ainda não implementado.
@@ -1205,6 +1674,53 @@ escrito, o que vale a pena imitar.
 
 **Na tese:** ✅ Parcial. `1-introduction.tex` existe; os restantes
 capítulos estão por escrever à luz desta referência.
+
+### Lista de literatura: releitura integral e limpeza
+
+*Decisão minha, de 2026-11-11.*
+
+**O que decidi:** reler todas as entradas de `docs/literature.md` a
+partir do texto integral, corrigir os resumos e eliminar as que não
+apoiam nenhuma decisão.
+
+**Resultado:** ficam 31 entradas. 25 lidas na íntegra; Dimson et al. (2023) só na versão
+submetida (o artigo publicado está bloqueado); três só pelo resumo
+(Li, Guo & Elkan 2011; Li & Guo 2010; Mack & Waske 2017); duas não
+publicadas (grupo de Cambridge, apresentação da Radová).
+
+**Eliminadas (10):**
+- Liu et al. 2026 (Tighnari v2): só servia a regra dos polígonos da
+  COS.
+- Wölk et al. 2026: outro problema, e inacessível.
+- Cardoso et al. 2024: fotografias ao nível do solo, não satélite.
+- Skowronek et al. 2017, Zhu, Samat et al. 2025, Zagajewski et al.
+  2024 e Li & Guo 2014: não testam um método one-class verdadeiro, ou
+  são de uma métrica que não uso.
+- Lucas et al. 2026 (atóis): o braço Sentinel-2 é de 2024–2025 contra
+  embeddings de 2023, por isso não apoia o ano de referência único.
+- Eskandari et al. 2025: só o resumo é acessível; género *Acacia*,
+  imagens de junho.
+- Zhang et al. 2025 (timberline): o crescimento de região só refina a
+  orla de uma mancha já mapeada.
+
+**Identificações corrigidas:** "Zhu et al. 2026" é Stewart, Fang,
+Corley & Zhu; "Gonçalves et al. 2026" é Silva & Gonçalves, um preprint
+do Porto em que o Sentinel-2 ganha aos embeddings; o artigo do
+goldenrod é Malinowski et al. 2025; o TESSERA saiu no CVPR 2026.
+
+**O que mudou na fundamentação:** cada correção está na entrada da
+decisão respetiva (precisão posicional, uma observação por píxel,
+Observer A, Random Forest, fundo uniforme, validação espacial,
+features do Sentinel-2, RQ2, RQ3, Boyce).
+
+**Em aberto:** descarregar à mão o artigo publicado de Dimson et al.;
+ler Ma et al. (2026), a fonte primária da frase sobre transferência
+espacial; a entrada `zhu2026` do manuscrito tem o autor errado.
+
+**Onde:** [`docs/literature.md`](../docs/literature.md).
+
+**Na tese:** ⏳ Ainda não aplicada. `references.bib` e a Introdução
+ainda têm `zhu2026` com o autor errado.
 
 ### Identidade da tese confirmada: título, mestrado, orientadores, idioma e data da entrega
 
