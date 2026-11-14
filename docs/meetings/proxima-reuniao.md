@@ -279,6 +279,18 @@ Origem:
   fundo? São ausências fiáveis nessas áreas, e como foram escolhidos?
   O treino (presenças contra fundo) não muda. Ainda não contei quantos
   ficam no distrito e nos blocos de teste.
+  - **Porque peço:** sem ausências confirmadas não meço falsos
+    positivos. Os negativos do teste são pontos de fundo, de classe
+    desconhecida: quando o modelo prevê acácia num deles, não sei se
+    errou ou se há lá acácia. Fico sem saber quanto o mapa
+    sobrestima a espécie, que é o erro que mais pesa para quem o usa
+    no terreno (leitura minha).
+  - **O que tenho hoje não o resolve:** o índice de Boyce está
+    saturado (cerca de 0,99) e o teste só com presenças de
+    especialistas tem 0,02 de folga até ao teto.
+  - **O que ganhava:** exatidão do utilizador e do produtor para a
+    classe acácia, em vegetação parecida com a que o modelo confunde,
+    medida com dados que já existem e sem mexer no treino.
   *Literatura:* Phillips et al. (2009): o enviesamento do fundo só se
   vê com dados independentes de presença-ausência (origem:
   [thesis/notes.md](../../thesis/notes.md#usar-os-dados-de-especialistas-com-limpeza)).
