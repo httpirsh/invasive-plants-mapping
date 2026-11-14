@@ -114,7 +114,9 @@ Each question also lists its own risks.
 - **Spatial blocks have no buffer between them.** Training and test
   pixels on either side of a block border can be close, which can
   inflate scores (Karasiak et al., 2022; Ratsakatika et al., 2026).
-  See [`methodology.md`](methodology.md#validation).
+  Measured for the RQ1 curve with buffers of 300 m and 1 km, as a
+  sensitivity analysis: see
+  [`methodology.md`](methodology.md#validation).
 - **The Sentinel-2 arm is on hold.** RQ4 cannot be answered without
   it; RQ1, RQ2 and RQ3 do not depend on it.
 
@@ -180,6 +182,8 @@ script
 [`experiments/effort_reduction_curve/run.py`](../experiments/effort_reduction_curve/run.py);
 tables in `results/effort_reduction_curve/`; figure and reading in
 [`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
+Sensitivity of the curve to a buffer between training and test:
+[`methodology.md`](methodology.md#validation).
 
 **Not measured:** the curve with Sentinel-2 features (not planned: see RQ4);
 the curve diagnostics (forest-only background, redundancy, label

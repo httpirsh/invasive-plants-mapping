@@ -1569,6 +1569,15 @@ entrada deixava de fora ou com entradas desconhecidas.
   [`tessera_pilot_embeddings.ipynb`](../notebooks/04_satellite/tessera_pilot_embeddings.ipynb).
 - **Na tese:** se entrar, é uma frase de limitação na Metodologia.
 
+**Revisão (2026-11-14):** *decisão minha.* Deixo de verificar os
+embeddings do piloto e dou o conjunto guardado como certo. Os ficheiros
+não tinham como mudar: cada bloco tem o hash no manifesto, e os
+notebooks verificam-no antes de ler. Reler a fonte só mostrava que ela
+devolve hoje os mesmos valores, o que não muda nenhum resultado. Antes
+de parar, duas leituras parciais (13 e 14 de novembro) cobriram 33 dos
+65 blocos (11 311 pontos), todos idênticos aos guardados. A lista dos
+pontos e o notebook de releitura ficam.
+
 ## Decisões: RQ1, desenho e resultados
 
 ### Multiclasse abandonado; RQ1 passa a uma curva de redução de esforço (presença vs. fundo)

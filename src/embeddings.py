@@ -62,7 +62,7 @@ def pilot_points(root: Path) -> pd.DataFrame:
 
 
 def fetch_pilot_embeddings(root: Path, out_dir: Path, log=print) -> None:
-    """Read the TESSERA embedding of every point of the list (remote read, about 2 h) and
+    """Read the TESSERA embedding of every point of the list (remote read, several hours) and
     write one block_<x>_<y>.npz per block into out_dir. Blocks already in out_dir are kept,
     so an interrupted run can be resumed; start from an empty folder for a full rebuild."""
     import geopandas as gpd

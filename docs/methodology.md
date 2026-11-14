@@ -46,12 +46,26 @@ reasoning, with no source found.
   underestimating it is the unsafe direction. In this project's
   variogram of TESSERA embeddings the semivariance still rises at
   400–500 m and levels off between 500 m and 1 km (binned means, no
-  model fitted). Not implemented yet:
-  stated as a known limitation in the January report. Reasoning:
+  model fitted). The buffer is not part of the design; it is reported
+  as a sensitivity analysis (next item). Reasoning:
   [`thesis/notes.md`](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km).
-- **Known limitation: no buffer between training and test blocks.**
+- **No buffer between training and test blocks; its effect is reported
+  as a sensitivity analysis (my decision).**
   The papers read agree that blocks alone leave residual proximity
   across block borders and recommend blocks combined with a buffer.
+  In the five splits of the RQ1 curve, the presences in training that
+  lie close to a test point are 17 of 21 507 within 30 m, 445 (2.1%)
+  within 300 m and 1 821 (8.5%) within 1 km, the last ranging from
+  under 1% to 27% between seeds
+  ([`design_counts.ipynb`](../notebooks/05_data_integration/design_counts.ipynb)).
+  Removing every training point within 300 m or 1 km of a test point
+  leaves the 90% against 0% difference of RQ1 within 0.0014 ROC-AUC,
+  with the same sign; with 1 km, ROC-AUC at fixed levels falls by up
+  to 0.0075, so the levels without buffer are slightly optimistic.
+  Whether that fall comes from less proximity or from less training
+  data was not tested. Table and criterion: `thesis/notes.md`, linked
+  above; script
+  [`compare_buffer.py`](../experiments/effort_reduction_curve/compare_buffer.py).
 - **Open: independent validation**, with a reference not drawn from
   the citizen-science source, so that biased training data are not
   evaluated only on equally biased test data. Plan: compare the

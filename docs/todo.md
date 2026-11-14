@@ -21,6 +21,9 @@ novas experiências antes da entrega. Numeração das perguntas:
 - [ ] Máscara de segmentação: apresentar as duas regras,
   fundamentadas na literatura, com a comparação planeada na RQ2
   ([thesis/notes.md](../thesis/notes.md#rq2-proposta-mascara)).
+- [ ] Reportar no relatório a análise de sensibilidade da curva da RQ1
+  à zona-tampão (300 m e 1 km), ao lado da curva sem tampão
+  ([thesis/notes.md](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)).
 - [ ] Descarregar à mão o artigo publicado de Dimson et al. (2023)
   ([thesis/notes.md](../thesis/notes.md#lista-de-literatura-releitura-integral-e-limpeza)).
 - [ ] Corrigir a entrada `zhu2026` no manuscrito: o autor é Stewart et
@@ -38,9 +41,6 @@ novas experiências antes da entrega. Numeração das perguntas:
   extração. Só Random Forest e Logistic Regression;
   os diagnósticos de robustez só se o resultado parecer inesperado
   ([thesis/notes.md](../thesis/notes.md#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo)).
-- [ ] Implementar a zona-tampão na validação espacial do lado dos
-  especialistas
-  ([thesis/notes.md](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)).
 - [ ] RQ2 (máscara de segmentação): aprovar a extração das janelas
   TESSERA à volta das observações e correr o desenho que o orientador
   confirmar, com a configuração já fixada

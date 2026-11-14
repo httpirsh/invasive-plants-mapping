@@ -11,6 +11,13 @@ Subfolders are created when the first experiment is run.
   `--background forest_only` it writes the robustness check to
   `results/effort_reduction_curve_forest_only/`, read by
   `notebooks/07_foundation_models/forest_only_background_check.ipynb`.
+  With `--buffer-m METRES` it drops the training points within that
+  distance of a test point and writes to
+  `results/effort_reduction_curve_buffer_<METRES>m/`.
+- `effort_reduction_curve/compare_buffer.py`: compares the runs with
+  `--buffer-m 300` and `--buffer-m 1000` with the curve without
+  buffer, paired by seed. Run after them; writes to
+  `results/effort_reduction_curve_buffer_comparison/`.
 
 ## What goes here and what goes in `notebooks/`
 

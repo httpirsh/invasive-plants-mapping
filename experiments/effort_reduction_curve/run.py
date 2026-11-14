@@ -10,10 +10,19 @@ A One-Class SVM is trained on the same presences at every level and scored on th
 test presences only (one_class_per_seed.csv); it is used by the forest-only background check.
 
 Usage: python experiments/effort_reduction_curve/run.py [--background uniform|forest_only]
+           [--buffer-m METRES] [--out-dir DIR]
 Writes to results/effort_reduction_curve/ (uniform background, the curve of RQ1) or to
 results/effort_reduction_curve_forest_only/ (forest-only background, the robustness check
 read by notebooks/07_foundation_models/forest_only_background_check.ipynb): tables and
 run.json with the configuration and the hashes of the inputs.
+
+--buffer-m (default 0, no buffer): in each seed, drops from TRAINING every point
+(citizen-science presence, expert pixel, background point) within that distance of any test
+point of that seed. Test points are all points inside the test blocks, of the three sources
+and at every level, as in section 5 of notebooks/05_data_integration/design_counts.ipynb.
+The test set is unchanged, so runs with and without buffer are scored on the same points.
+A positive buffer writes to its own folder, <default folder>_buffer_<metres>m/.
+--out-dir overrides the output folder (used to check a run against an existing one).
 """
 import argparse
 import json
@@ -29,6 +38,7 @@ import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import roc_auc_score
+from scipy.spatial import cKDTree
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import OneClassSVM
 
@@ -47,7 +57,14 @@ TEST_FRACTION = 0.2              # share of candidate 10 km blocks held out per 
 OUT_DIRS = {"uniform": "effort_reduction_curve", "forest_only": "effort_reduction_curve_forest_only"}
 _parser = argparse.ArgumentParser(description="Effort-reduction curve (RQ1).")
 _parser.add_argument("--background", choices=sorted(OUT_DIRS), default="uniform")
-BACKGROUND = _parser.parse_args().background  # background pool, see src/background.py
+_parser.add_argument("--buffer-m", type=float, default=0.0,
+                     help="drop training points within this distance (m) of any test point of the seed")
+_parser.add_argument("--out-dir", type=Path, default=None, help="output folder (default: under results/)")
+_args = _parser.parse_args()
+BACKGROUND = _args.background  # background pool, see src/background.py
+BUFFER_M = _args.buffer_m      # 0 = no buffer between training and test
+if BUFFER_M < 0:
+    _parser.error("--buffer-m must be 0 or positive")
 CLASSIFIERS = {
     "RandomForest": dict(n_estimators=300, class_weight="balanced", random_state=42),
     "LogisticRegression": dict(class_weight="balanced", max_iter=1000),
@@ -58,7 +75,8 @@ ONE_CLASS = dict(kernel="rbf", nu=0.05, gamma="scale")  # One-Class SVM, presenc
 PILOT_DIR = ROOT / "data" / "processed" / "embeddings" / "tessera_v1.1_2023_rq1_pilot"
 CS_FILE = ROOT / "data" / "interim" / "citizen_science" / "inat_dealbata_clean.csv"
 EXPERT_FILE = ROOT / "data" / "interim" / "expert_reference" / "expert_polygons_clean.gpkg"
-OUT_DIR = ROOT / "results" / OUT_DIRS[BACKGROUND]
+OUT_DIR = _args.out_dir.resolve() if _args.out_dir else ROOT / "results" / (
+    OUT_DIRS[BACKGROUND] + (f"_buffer_{BUFFER_M:g}m" if BUFFER_M > 0 else ""))
 
 # ---------------------------------------------------------------- data
 pilot_df, pilot_emb = load_pilot_embeddings(PILOT_DIR)
@@ -124,17 +142,33 @@ for seed in SEEDS:
 print(f"{len(candidate_blocks)} candidate blocks (citizen-science ∪ expert presences)")
 
 # ---------------------------------------------------------------- run the curve
-source_records, one_class_records, test_size_rows = [], [], []
+source_records, one_class_records, test_size_rows, buffer_removed = [], [], [], {}
 for seed in SEEDS:
     test_blocks = test_blocks_by_seed[seed]
     cs_test_mask = np.isin(cs_block, list(test_blocks))
     expert_test_mask = np.isin(expert_block, list(test_blocks))
     bg_test_mask = np.isin(bg_block, list(test_blocks))
 
-    cs_train_emb, cs_test_emb = cs_emb[~cs_test_mask], cs_emb[cs_test_mask]
-    expert_train_emb, expert_test_emb = expert_emb[~expert_test_mask], expert_emb[expert_test_mask]
-    expert_train_poly = expert_poly_id[~expert_test_mask]
-    bg_train_emb, bg_test_emb = bg_emb[~bg_test_mask], bg_emb[bg_test_mask]
+    cs_train_mask, expert_train_mask, bg_train_mask = ~cs_test_mask, ~expert_test_mask, ~bg_test_mask
+
+    # Buffer: training points within BUFFER_M of any test point of this seed leave training.
+    coords = {"citizen_science": (cs_x, cs_y, cs_test_mask, cs_train_mask),
+              "expert": (expert_x, expert_y, expert_test_mask, expert_train_mask),
+              "background": (bg_x, bg_y, bg_test_mask, bg_train_mask)}
+    buffer_removed[str(seed)] = {}
+    if BUFFER_M > 0:
+        test_tree = cKDTree(np.vstack([np.column_stack([x[t], y[t]]) for x, y, t, _ in coords.values()]))
+    for source, (x, y, _, train_mask) in coords.items():
+        n_before = int(train_mask.sum())
+        if BUFFER_M > 0:
+            dist, _ = test_tree.query(np.column_stack([x[train_mask], y[train_mask]]))
+            train_mask[np.flatnonzero(train_mask)[dist <= BUFFER_M]] = False  # in place
+        buffer_removed[str(seed)][source] = {"n_train_before": n_before, "n_removed": n_before - int(train_mask.sum())}
+
+    cs_train_emb, cs_test_emb = cs_emb[cs_train_mask], cs_emb[cs_test_mask]
+    expert_train_emb, expert_test_emb = expert_emb[expert_train_mask], expert_emb[expert_test_mask]
+    expert_train_poly = expert_poly_id[expert_train_mask]
+    bg_train_emb, bg_test_emb = bg_emb[bg_train_mask], bg_emb[bg_test_mask]
 
     test_size_rows.append({
         "seed": seed,
@@ -248,11 +282,13 @@ BG_FILE = pool_file(ROOT, BACKGROUND)
 (OUT_DIR / "run.json").write_text(json.dumps({
     "run_date": date.today().isoformat(),
     "script": "experiments/effort_reduction_curve/run.py",
-    "command": f"python experiments/effort_reduction_curve/run.py --background {BACKGROUND}",
+    "command": f"python experiments/effort_reduction_curve/run.py --background {BACKGROUND}"
+               + (f" --buffer-m {BUFFER_M:g}" if BUFFER_M > 0 else ""),
     "git_commit": _git("rev-parse", "HEAD"),
     "git_uncommitted_changes": bool(_git("status", "--porcelain")),
     "levels_pct": LEVELS, "seeds": SEEDS, "polygon_order_seed": POLYGON_ORDER_SEED,
     "test_fraction": TEST_FRACTION, "background": BACKGROUND, "classifiers": CLASSIFIERS,
+    "buffer_m": BUFFER_M, "buffer_removed_from_training_by_seed": buffer_removed,
     "one_class_svm": ONE_CLASS,
     "embeddings": PILOT_DIR.name,
     "n_cs_presences": len(cs_emb), "n_cs_matched": cs_n_matched, "n_cs_rows": len(dealbata),
@@ -271,4 +307,4 @@ BG_FILE = pool_file(ROOT, BACKGROUND)
         BG_FILE.relative_to(ROOT).as_posix(): manifest.sha256_file(BG_FILE),
     },
 }, indent=1))
-print(f"saved to {OUT_DIR.relative_to(ROOT)}")
+print(f"saved to {OUT_DIR}")

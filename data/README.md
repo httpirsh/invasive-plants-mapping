@@ -85,11 +85,12 @@ obtained.
     current file explains. The list itself is versioned in
     [`tessera_rq1_pilot_points.csv`](tessera_rq1_pilot_points.csv)
     (block, `px`, `py`), written from the stored blocks on 2026-11-13.
-  - *Embeddings:* can be read again from that list (about 2 h) with
+  - *Embeddings:* taken as correct as stored; each block is fixed by
+    its hash in the manifest. They can be read again from the list
+    (several hours) with
     [`tessera_pilot_embeddings.ipynb`](../notebooks/04_satellite/tessera_pilot_embeddings.ipynb).
-    A full read was not done. A run of 2026-11-13, stopped after 14 of
-    the 65 blocks (3 360 points), returned arrays identical to the
-    stored ones; the other 51 blocks were not checked.
+    Two partial reads (2026-11-13 and 2026-11-14) covered 33 of the 65
+    blocks (11 311 points), all identical to the stored ones.
 
 ### TESSERA embeddings — RQ1 background pool (2026-11-13)
 
