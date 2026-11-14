@@ -2384,6 +2384,43 @@ corridas de novo e ficam sem o nível novo.
 **Na tese:** ⏳ Ainda não escrita (Metodologia e Resultados
 preliminares, ainda esqueletos).
 
+**O que deu (corrida de 2026-11-14, `results/effort_reduction_curve/`,
+commit `5add326`):**
+
+- **Critério de implementação cumprido:** as sete tabelas que já
+  existiam saíram iguais byte a byte às da corrida de 2026-11-13. Só
+  mudou o `run.json`; as duas tabelas novas são
+  `plus_cs_per_seed.csv` e `plus_cs_paired_differences.csv`.
+- **N de treino nominal do nível novo:** 1 457 polígonos (2 771
+  píxeis) mais 2 464 presenças de ciência cidadã, 5 235 no total.
+
+ROC-AUC, média de cinco sementes; diferença emparelhada (dp; sementes
+a subir/a descer):
+
+| Classificador, teste | 100% + CC | menos 0% | menos 90% | menos só especialistas |
+|---|---|---|---|---|
+| RF, global | 0,906 | +0,004 (0,006; 3/2) | −0,000 (0,002; 3/2) | +0,051 (0,016; 5/0) |
+| RF, só especialistas | 0,993 | +0,017 (0,006; 5/0) | +0,000 (0,000; 4/1) | −0,001 (0,000; 0/5) |
+| RF, só ciência cidadã | 0,799 | −0,013 (0,017; 2/3) | −0,002 (0,005; 2/3) | +0,122 (0,062; 5/0) |
+| LR, global | 0,924 | +0,031 (0,007; 5/0) | +0,000 (0,000; 2/3) | +0,050 (0,026; 5/0) |
+| LR, só especialistas | 0,988 | +0,061 (0,012; 5/0) | +0,001 (0,000; 5/0) | −0,008 (0,002; 0/5) |
+| LR, só ciência cidadã | 0,836 | −0,004 (0,014; 2/3) | −0,001 (0,001; 1/4) | +0,122 (0,075; 5/0) |
+
+Boyce do RF no teste global: 0,995 no nível novo, igual ao de 0% e
+de 90%.
+
+**Leitura:**
+- **A curva aditiva fica plana até ao fim.** Do 90% para o 100% + CC
+  nada muda (diferenças de 0,000 a 0,002). A queda que se via a 100%
+  vinha de tirar a ciência cidadã, não de acrescentar especialistas.
+- **Contra o modelo só de especialistas:** nas presenças de
+  especialistas, juntar a ciência cidadã quase não custa (RF −0,001,
+  LR −0,008, mas a descer nas cinco sementes); nas presenças de
+  ciência cidadã ganha +0,122. Que isto venha de o teste de ciência
+  cidadã partilhar o enviesamento do treino continua a ser hipótese,
+  não testada.
+- A comparação principal (90% contra 0%) e a sua leitura não mudam.
+
 ## Decisões: validação e Sentinel-2
 
 ### Validação espacial no lado dos especialistas: zona-tampão, além dos blocos de 10 km

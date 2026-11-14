@@ -9,7 +9,8 @@
 > decisão) e [`todo.md`](todo.md) (tarefas).
 >
 > Não tem decisões novas. Todos os números vêm desses ficheiros ou de
-> `results/effort_reduction_curve/` (execução de 2026-11-13).
+> `results/effort_reduction_curve/` (execuções de 2026-11-13 e
+> 2026-11-14).
 
 ## 1. A ideia da tese numa página
 
@@ -104,8 +105,12 @@ orientador (reunião de 2026-11-05); os pormenores são teus.
 - Por cima acrescentam-se polígonos de especialistas: 0%, 10%, …, 90%
   dos 1 457 polígonos com embedding guardado. Os de 20% incluem os de
   10% (ordem encaixada).
-- A 100% a base de ciência cidadã sai: o modelo treina só com
-  especialistas (2 771 píxeis).
+- A 100% entram todos os polígonos, e a ciência cidadã continua lá
+  (5 235 presenças de treino). A curva é aditiva até ao fim.
+- À parte, como ponto de referência, há o modelo **só de
+  especialistas** (2 771 píxeis, sem ciência cidadã). É o termo de
+  comparação da pergunta principal. Decisão de 2026-11-14, por
+  confirmar com o orientador; antes, o "100%" era este modelo.
 - O conjunto de teste de cada semente é o mesmo em todos os níveis e
   tem sempre presenças das duas fontes.
 
@@ -131,7 +136,8 @@ sementes, ROC-AUC):
 | 0% (só ciência cidadã) | 0,902 | 0,976 | 0,812 | 0,893 |
 | 20% | 0,907 | 0,988 | 0,810 | 0,917 |
 | 90% | 0,906 | 0,993 | 0,801 | 0,924 |
-| 100% (só especialistas) | 0,854 | 0,994 | 0,677 | 0,873 |
+| 100% + ciência cidadã | 0,906 | 0,993 | 0,799 | 0,924 |
+| Só especialistas (referência) | 0,854 | 0,994 | 0,677 | 0,873 |
 
 Diferenças emparelhadas, 90% menos 0%:
 
@@ -151,9 +157,12 @@ Diferenças emparelhadas, 90% menos 0%:
   presenças de especialistas, acrescentam um pouco.
 - **O modelo só de ciência cidadã ordena bem os sítios mapeados pelos
   especialistas** (0,976, contra 0,994 do modelo só de especialistas).
-- **A queda a 100% no teste global** (0,854) vem das presenças de
-  teste de ciência cidadã (0,812 → 0,677). Explicação provável, não
-  testada: essas presenças partilham o enviesamento de amostragem do
+- **A curva fica plana até ao fim:** de 90% para 100% + ciência
+  cidadã nada muda. O valor mais baixo do modelo só de especialistas
+  no teste global (0,854) vem de lhe faltar a ciência cidadã: nas
+  presenças de especialistas fica igual (0,994 contra 0,993), nas de
+  ciência cidadã perde 0,122 (0,677 contra 0,799). Explicação
+  provável, não testada: essas presenças partilham o enviesamento de amostragem do
   treino de ciência cidadã, por isso o teste global favorece quem
   treinou com ela. Não quer dizer que o modelo de especialistas seja
   pior.

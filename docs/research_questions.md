@@ -45,9 +45,9 @@ training data for mapping *A. dealbata* in the Coimbra district.
 
 **Specific objectives:**
 
-1. To measure the performance gained by adding 10% to 90% of the
+1. To measure the performance gained by adding 10% to 100% of the
    expert polygons to a citizen-science base, to compare it with the
-   expert-only case (100%), and to report the performance of the
+   expert-only model, and to report the performance of the
    citizen-science-only model on expert reference data (RQ1).
 2. To build and document the process that turns citizen-science point
    observations into reference data, and to measure how its grade and
@@ -145,8 +145,12 @@ analysis, reported next to it.
 **Design (curve idea: supervisor; details: mine, to confirm with
 him):** an effort-reduction curve. Expert data are
 added on top of a fixed citizen-science base, from 0% to 100% in
-10-point steps; at 100% the citizen-science base is removed and
-training is expert-only. The mixing unit is the polygon, sampled in a
+10-point steps, so the citizen-science base is in training at every
+level. The **expert-only** model (no citizen science) is a separate
+reference point, not a level of the curve (to confirm with the
+supervisor:
+[`thesis/notes.md`](../thesis/notes.md#curva-100-mais-ciencia-cidada)).
+The mixing unit is the polygon, sampled in a
 nested order; the percentages are of the 1 457 polygons that hold at
 least one pixel with a stored embedding, of the 1 849 in the district;
 one spatial test set per seed is reused at every level
@@ -162,11 +166,13 @@ classifier and Logistic Regression is reported as a second one. Why:
 supervisor):** the answer depends on the classifier and on the test
 presences. On the pooled test set, Random Forest gains about 0.005
 ROC-AUC with the first 10% to 20% of expert polygons and no more after
-(0.902 at 0%, 0.906 at 90%); Logistic Regression gains 0.031. On
-expert presences alone, the citizen-science-only Random Forest reaches
-0.976, against 0.994 for the expert-only model. The pooled drop at
-100% (0.854) comes from the citizen-science test presences, which
-likely share the sampling bias of the training data.
+(0.902 at 0%, 0.906 at 90% and at 100%); Logistic Regression gains
+0.031. On expert presences alone, the citizen-science-only Random
+Forest reaches 0.976, against 0.994 for the expert-only model. The
+expert-only model scores lower on the pooled test set (0.854) only
+because of the citizen-science test presences (0.677, against 0.799
+for 100% plus citizen science), which likely share the sampling bias
+of the training data.
 
 **Reading:** the citizen-science-only model ranks the sites mapped by
 experts well. That may reflect expert presences that are easier to
