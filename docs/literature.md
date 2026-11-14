@@ -6,7 +6,9 @@ must be revisited after a broader search (protocol in
 [`thesis/notes.md`](../thesis/notes.md#protocolo-de-pesquisa-da-literatura)).
 
 Every entry was re-read on 2026-11-11 from the full text where it
-could be obtained. Each paper has a status:
+could be obtained. Seven entries were added on 2026-11-14 (marked in
+their status), read from the PDF or web page converted to text.
+Each paper has a status:
 
 - **Read** — full text read end to end; the summary is checked against
   it. Figures were read from captions and text, not viewed, and
@@ -125,8 +127,9 @@ preprocessing ablation (it runs one-factor ablations).
 ### Spatial transfer of embeddings
 
 What these show is narrower than "embeddings transfer worse than
-conventional features": none of them compares the two under transfer
-and finds embeddings worse.
+conventional features". Only Ma et al. (2026) compare the two under
+transfer: AlphaEarth is worse for crop-yield regression and mixed for
+classification. None does it for species mapping or for TESSERA.
 
 **Stewart, Fang, Corley & Zhu (2026).** Earth Embeddings.
 arXiv:2608.03410 (book chapter). — *Read*
@@ -136,9 +139,8 @@ publishing guidance; no experiments of its own. Says embeddings work
 "in a narrower and more practical sense" than foundation-model
 narratives imply. Its statement that embeddings are competitive
 locally but less robust under spatial transfer is a one-sentence
-report of **Ma, Shen, Swatantran & Lobell (2026)**, "Harvesting
-AlphaEarth", *IJAEOG* 149, 105258 — not read; it is the primary
-source for that claim.
+report of Ma et al. (2026), the next entry, and leaves out that the
+result depends on the task.
 
 - Classes TESSERA as a per-pixel model "neglecting spatial
   correlations", unlike AlphaEarth (§2.2).
@@ -148,6 +150,40 @@ source for that claim.
 - Guidance (§7.1): compare embeddings against simple baselines and
   hand-designed covariates under spatial and temporal splits; random
   splits are insufficient evidence of transfer.
+
+**Ma, Shen, Swatantran & Lobell (2026).** Harvesting AlphaEarth:
+Benchmarking the Geospatial Foundation Model for Agricultural
+Downstream Tasks. arXiv:2601.00857; cited by Stewart et al. as
+*IJAEOG* 149, 105258. — *Read (other version), added 2026-11-14: the
+arXiv manuscript marked "Under Review", main text and tables; figures
+from captions only; the published article not read*
+
+AlphaEarth embeddings against task-specific features (Landsat bands
+and indices, climate, elevation; no Sentinel-2) on three US
+agricultural tasks: crop yield, tillage and cover crop. Random Forest
+and XGBoost on county or field means, not pixels. Space transfer is
+training in one ecoregion of the Corn Belt (East, five states; West,
+seven states) and testing in the other.
+
+- **Trained locally, embeddings are competitive** with the
+  purpose-built features (abstract).
+- **Under transfer, yield regression is much worse with embeddings**
+  (Table 6, Random Forest, county level): corn East → West R² 0.02
+  against 0.66; soybean −0.28 against 0.53; West → East 0.51 against
+  0.60 and 0.39 against 0.59.
+- **Under transfer, classification is mixed** (Table 6, field level):
+  tillage accuracy 0.64 and 0.66 against 0.67 and 0.72; cover crop
+  0.88 and 0.48 against 0.84 and 0.52.
+- **US → Argentina** soybean yield: embeddings give a negative R² in
+  every year from 2019 to 2024 (Table 7).
+- The authors attribute the drop to embeddings of the two regions that
+  barely overlap, so that models learn "region-specific association"
+  (§5.2). The same explanation as Yang et al. (2026), here with a
+  conventional baseline.
+
+**Not in the paper:** species or vegetation mapping, pixel-level
+prediction, citizen-science labels, TESSERA, a Sentinel-2 baseline,
+or transfer over a few kilometres.
 
 **Yang et al. (2026).** Evaluating the Performance of AlphaEarth
 Foundation Embeddings for Irrigated Cropland Mapping Across Regions
@@ -227,6 +263,40 @@ post-fire windows that an annual embedding cannot match. Embeddings of
 the following year are worse (TESSERA 0.860 → 0.796). A Portuguese
 case of Random Forest on TESSERA where the conventional features are
 better, and evidence that fire changes a TESSERA annual embedding.
+
+**Koukos, Kondylatos, Nord-Larsen, Nyborg, Tøttrup & Grogan (2026).**
+Tree species mapping in Denmark: A comparison of spectral-temporal
+features with geospatial foundation model embeddings.
+arXiv:2609.03480 (v3, preprint). — *Read, added 2026-11-14 (main
+text; figures from captions only, so the values of the training-size
+curve in Fig. 5 were not read)*
+
+Nine tree-species groups across Denmark from National Forest
+Inventory plots (2 683 pure, 3 098 mixed). Engineered
+spectral-temporal features against frozen TESSERA and AlphaEarth
+embeddings, with Random Forest, XGBoost and an MLP. Random 80/20
+split of plots, not spatial; the authors name spatial blocking as
+future work (§5.3).
+
+- **The conventional features are far richer than an annual
+  composite:** 3 387 features from Sentinel-2 time series (ten bands,
+  eight indices, seasonal statistics), Sentinel-1 and LiDAR canopy
+  height. With Sentinel-2 bands only, macro F1 falls from 0.843 to
+  0.790 (Table 8).
+- **With all data the conventional features win** (Table 4, pure
+  plots, macro F1, MLP): 0.843 against 0.832 for TESSERA and 0.738 for
+  AlphaEarth.
+- **Random Forest is the weakest classifier and widens the gap:**
+  0.772 conventional, 0.688 TESSERA, 0.566 AlphaEarth. The distance
+  between conventional features and TESSERA is 8.4 points with Random
+  Forest and 1.1 with the MLP.
+- **With little data TESSERA wins:** below about 25% of the training
+  plots (roughly 500 plots), MLP only (§4.1.4, Fig. 5). How the
+  subsets are drawn is not stated, and Random Forest was not run in
+  this experiment.
+
+Curated inventory labels; no presence-only data, citizen science or
+invasive species.
 
 ### Citizen science + remote sensing + plant mapping
 
@@ -308,6 +378,108 @@ area) as a correction signal, not as training data.
 - Proposes other-plant observations as negative evidence against
   *Acacia*, which this thesis does not do.
 
+### Volunteered geographic data as training data
+
+**Fonte, Patriarca, Jesus & Duarte (2020).** Automatic Extraction and
+Filtering of OpenStreetMap Data to Generate Training Datasets for
+Land Use Land Cover Classification. *Remote Sensing*, 12(20), 3428.
+DOI: [10.3390/rs12203428](https://doi.org/10.3390/rs12203428)
+— *Read, added 2026-11-14 (University of Coimbra repository copy;
+figures from captions only)*
+
+OpenStreetMap polygons, converted to eight land-cover classes, train a
+Random Forest on Sentinel-2 (three 2018 dates, four 10 m bands) in two
+Portuguese areas: A, Lisbon metropolitan, and B, Beiras e Serra da
+Estrela. Three training sets: TD0, every cell touched by a polygon;
+TD1, without mixed pixels; TD2, TD1 filtered by per-class NDVI, NDWI
+and NDBI thresholds. Accuracy is agreement with the whole COS 2018
+map; no train/test split.
+
+- **Filtering always improved the training data, and the map only in
+  one area** (Table 8, overall accuracy, TD0 / TD1 / TD2): training
+  data 64 / 74 / 76 in A and 87 / 89 / 93 in B; classification
+  55 / 64 / 73 in A and 65 / 65 / 65 in B.
+- **Filtering has per-class costs:** in A, from TD1 to TD2 the user's
+  accuracy of artificial surfaces rose 40 points and its producer's
+  accuracy fell 30 (Tables 9–12).
+- **No head-to-head with authoritative training data:** no classifier
+  is trained on expert data; the maps are only compared with COS.
+- **Limits of COS as reference, stated by the authors:** 1 ha minimum
+  mapping unit, some classes are land use and not cover, and it is
+  "not the best reference data" for a 10 m pixel classification.
+- Forest is classified moderately (producer's accuracy 44–58 in A,
+  70–73 in B); shrubland and herbaceous vegetation poorly.
+
+A precedent for filtering volunteered data before training and
+measuring the effect, as in RQ2. Differences: polygons covering about
+half the area, not sparse points; labelled samples of every class,
+not one species against background; no foundation models; no spatial
+validation.
+
+**Duarte, Fonte, Patriarca & Jesus (2022).** Geographical
+Transferability of LULC Image-Based Segmentation Models Using Training
+Data Automatically Generated from OpenStreetMap – Case Study in
+Portugal. *ISPRS Annals*, V-3-2022, 25–31.
+DOI: [10.5194/isprs-annals-V-3-2022-25-2022](https://doi.org/10.5194/isprs-annals-V-3-2022-25-2022)
+— *Read, added 2026-11-14 (figures from captions only)*
+
+The filtered OpenStreetMap training data of Fonte et al. (2020, TD2)
+train one segmentation network (DenseNet-121 encoder with a decoder;
+three 2018 Sentinel-2 dates, four 10 m bands) per region: Lisbon
+metropolitan area and Serra da Estrela National Park. Each model is
+applied to both regions and compared with the whole COS 2018 map.
+
+- **Transfer is asymmetric** (Table 5, overall accuracy): trained and
+  tested in Lisbon 64, trained in Lisbon and tested in Serra da
+  Estrela 19; trained and tested in Serra da Estrela 63, tested in
+  Lisbon 55.
+- **It depends on the class** (Tables 6–7): shrubland was always
+  mapped better by the local model; forest in Lisbon was mapped
+  better by the Serra da Estrela model (producer's accuracy 69
+  against 41).
+- **The amount of training data does not explain it alone**, in the
+  authors' reading: artificial surfaces are 12% of the Lisbon
+  training area and 1% of the other, without better detection.
+- **Limits stated:** COS has a 1 ha minimum mapping unit against 10 m
+  maps and mixes use with cover; the network may overfit with so
+  little data.
+
+A precedent, in Portugal, for RQ3's question with volunteered training
+data: a model trained where volunteers contribute and applied
+elsewhere. Differences: two regions with different landscapes, not
+near against far inside one district; a network trained on Sentinel-2,
+not embeddings; land-cover classes, not a species; contributors are
+not analysed.
+
+**Fonte, Antoniou, Bastin, Estima, Arsanjani, Laso Bayas, See &
+Vatseva (2017).** Assessing VGI Data Quality. In *Mapping and the
+Citizen Sensor* (ch. 7). Ubiquity Press.
+DOI: [10.5334/bbf.g](https://doi.org/10.5334/bbf.g)
+— *Read, added 2026-11-14 (University of Coimbra repository copy)*
+
+A review of how the quality of volunteered geographic information is
+assessed: the ISO 19157 measures (positional, thematic and temporal
+accuracy, completeness, logical consistency, usability) and indicators
+specific to volunteered data (agreement between sources, contributor
+history and reputation). No experiment and no numbers of its own.
+
+- **Agreement is not accuracy:** agreement indicators "may be used to
+  measure data reliability, but not to assess data accuracy if none
+  of the data under comparison can be considered as reference data".
+- **Filtering by quality indicators is proposed** (excluding data
+  less likely to be trustworthy, minimum levels per indicator),
+  without setting thresholds or measuring how much data is lost.
+- **Position of a photograph** may be where it was taken or what it
+  shows, "potentially some distance away".
+- Spatial bias towards urban areas is stated from other studies.
+- **Not in the chapter:** one contributor dominating a dataset,
+  iNaturalist or research grade, volunteered data as training data.
+
+Used as the frame for RQ2's two filters: research grade is an
+agreement indicator, so its effect has to be measured against
+reference data, which is what the comparison with the expert polygons
+does.
+
 ### Citizen-science sampling bias
 
 **Dimson, Berio Fortini, Tingley & Gillespie (2023).** Citizen science
@@ -343,6 +515,36 @@ Its agencies sampled different places from the citizen scientists;
 here experts and the dominant observer visited the same places, so it
 is an analogy for the expert end of the RQ1 curve, not direct
 evidence.
+
+**Milanesi, Mori & Menchetti (2020).** Observer-oriented approach
+improves species distribution models from citizen science data.
+*Ecology and Evolution*, 10(21), 12104–12114.
+DOI: [10.1002/ece3.6832](https://doi.org/10.1002/ece3.6832)
+— *Read, added 2026-11-14 (PMC full text; figures not viewed;
+supplement not read)*
+
+Fifteen mammal species in Italy, 6 701 iNaturalist presences from 957
+observers. Pseudo-absences are the records of every other species
+made by the observers of the target species, and three effort
+measures per 1 km cell (observations, observers, days) enter as
+predictors. Compared with 10 000 random pseudo-absences in an
+ensemble of nine models.
+
+- **Reported gain:** AUC 0.639–0.906 with random pseudo-absences
+  against 0.767–0.945 with the observers' records (Tables 2–3).
+- **The evaluation is internal:** a random 90/10 split, each approach
+  scored against its own pseudo-absences. No spatial split and no
+  independent presence–absence data, which is the check Phillips et
+  al. (2009) show is needed; the authors state they could not compare
+  with structured surveys (§5).
+- **Concentration in few observers is not examined.** Each species
+  has 52 to 280 observers; records per observer are not reported.
+- Phillips et al. (2009) is cited once, for other-species records as
+  a proxy of survey effort.
+
+A precedent for building the background from the observers' other
+records, not for citizen science concentrated in one observer. Here
+that background would mostly describe where one person walks.
 
 ### Conventional invasive plant mapping
 
@@ -791,8 +993,40 @@ A remote-sensing precedent for densifying point labels by region
 growing at Sentinel-2 scale, but as iterative self-training with a
 trained multi-class model.
 
-**No paper read grows a region on feature similarity to the seed or
-limits its radius**, the two elements of the RQ2 region-growing rule.
+**Raine, Marchant, Kusy, Maire, Sünderhauf & Fischer (2026).**
+Human-in-the-Loop Segmentation of Multi-species Coral Imagery.
+arXiv:2404.09406 (v4), preprint of an *IEEE Journal of Oceanic
+Engineering* article; earlier version at CVPR Workshops 2024.
+— *Read (other version), added 2026-11-14: arXiv v4, main text and
+tables; figures from captions only; the journal version not read*
+
+Coral photo-quadrats, as in Raine et al. (2022), but without
+superpixels: each pixel takes the class of the labelled point most
+similar to it, by cosine similarity on frozen, denoised DINOv2
+features (§III-A). No training on coral images.
+
+- **Nearest labelled point only:** k = 1 is best; at 5 points per
+  image pixel accuracy is 71.56 with k = 1 and 46.40 with k = 3
+  (Fig. 13).
+- **Better than superpixels with few points, worse with many**
+  (Table I, mIoU at 5 and 300 points, grid placement): 38.72 and
+  85.77, against 32.89 and 89.38 for the superpixel method.
+- **No threshold, radius or connectivity:** every pixel is labelled,
+  however far from a point and however dissimilar. With one class
+  only, the rule would label the whole image.
+- **Features are not comparable between images** (§VI): the same
+  species lies far apart in feature space in different images, so
+  propagation runs inside each image.
+- Points are simulated from the ground-truth mask, so correct by
+  construction.
+
+A precedent for propagating point labels by similarity to the
+labelled points on frozen foundation-model features. Not remote
+sensing, multi-class, and without positional error in the points.
+
+**No paper read propagates with a similarity threshold, a
+connectivity rule or a maximum radius, or from presence-only
+points**, the elements of the RQ2 region-growing rule.
 
 ## Data Sources Found in the Literature Search
 
@@ -815,19 +1049,31 @@ Not papers, but relevant:
 4. Citizen science + remote sensing → plant mapping (Gillespie 2024),
    including invasive plants at 256 m (Qiang 2026).
 5. EO foundation models vs. conventional features → many tasks:
-   trees (Ball 2026), crops (Yang 2026), and burned area in Portugal,
-   where the conventional features won (Silva & Gonçalves 2026).
+   trees (Ball 2026; Koukos 2026), crops (Yang 2026; Ma 2026), and
+   burned area in Portugal (Silva & Gonçalves 2026). The conventional
+   features won in Silva & Gonçalves and, with all the training data,
+   in Koukos.
 6. EO foundation models + iNaturalist labels → genus-level evaluation
    (Brown 2025); habitat mapping with GBIF labels in progress
    (Cambridge).
-7. EO foundation models → label efficiency (Ball 2026).
+7. EO foundation models → label efficiency (Ball 2026; Koukos 2026,
+   where TESSERA overtakes engineered features below about 25% of the
+   training plots).
 8. Embedding-based models lose accuracy when moved to another region
-   (Yang 2026), and their advantage over Sentinel features narrows
-   when training and test sets are separated by a buffer (Ratsakatika
-   2026).
+   (Yang 2026), more than conventional features do for crop-yield
+   regression with AlphaEarth (Ma 2026), and their advantage over
+   Sentinel features narrows when training and test sets are separated
+   by a buffer (Ratsakatika 2026).
 9. Citizen-science invasive-plant data are spatially biased (Dimson
    2023); target-group background mitigates bias in presence-only
-   models (Phillips 2009).
+   models (Phillips 2009), and a background built from the observers'
+   other records has been tried on iNaturalist data (Milanesi 2020).
+10. Volunteered geographic data → training data for satellite
+    land-cover classification, with the effect of filtering them
+    measured (Fonte 2020); such models lose accuracy when applied to
+    another region of Portugal, unevenly across classes (Duarte 2022).
+11. Point labels → dense labels by similarity on frozen
+    foundation-model features, in underwater imagery (Raine 2026).
 
 None of these, on its own, is this thesis's novelty.
 
@@ -848,29 +1094,50 @@ underexplored:
   sensing, but 256 m and no foundation models.
 - Dimson et al. (2023): citizen-science bias for invasive plants, but
   no foundation models.
-- Yang et al. (2026) and Ratsakatika et al. (2026): embeddings under
-  spatial transfer or separation, but not with concentrated
-  citizen-science labels, and not compared with conventional features
-  away from the sampled area.
+- Yang et al. (2026), Ma et al. (2026) and Ratsakatika et al. (2026):
+  embeddings under spatial transfer or separation, but not with
+  concentrated citizen-science labels, and not for species mapping.
+- Fonte et al. (2020): volunteered data as training data for
+  satellite classification, with filtering, but land-cover polygons,
+  no foundation models, and no classifier trained on expert data to
+  compare with.
+- Duarte et al. (2022): volunteered training data under transfer
+  between two Portuguese regions, but land-cover classes, no
+  foundation models, and no analysis of who contributed.
+
+**How far the search went:** besides the reading list, a web search
+on 2026-11-14 (twelve queries; no Scopus or Web of Science) found no
+study that trains the same satellite classifier on citizen-science
+labels and on expert labels for an invasive plant, and none that uses
+EO foundation-model embeddings for invasive plants. The documented
+search of the protocol is still to run.
 
 Four specific questions not answered by any of the above:
 
 1. **How much is lost by training on citizen science instead of
    expert reference data**, with the same representation and test
-   set? (RQ1)
+   set? (RQ1) The nearest works stop short of it: Dimson et al. (2023)
+   fit models on each source without measuring accuracy, and Fonte et
+   al. (2020) only compare the map from volunteered data with an
+   authoritative map.
 2. **Does extending a citizen-science point label to the patch around
    it, using frozen embeddings, change mapping performance?** Existing
-   point-to-patch work uses many correctly placed points per image and
-   trained segmentation networks (Rivier 2024; Raine 2022). (RQ2)
+   point-to-patch work uses several correctly placed points per image,
+   of several classes (Rivier 2024; Raine 2022; Raine 2026). Raine et
+   al. (2026) already propagate by similarity on frozen
+   foundation-model features; what is not found is a rule that works
+   from one presence-only point with positional error, in satellite
+   embeddings. (RQ2)
 3. **Does a model trained on spatially concentrated citizen-science
    observations lose performance away from the sampled area?** (RQ3)
    Whether foundation models amplify or mitigate that effect, compared
-   with conventional features, is also unanswered and is not tested in
-   this thesis.
+   with conventional features, has one answer in another setting
+   (worse for yield regression with AlphaEarth, Ma 2026); for species
+   mapping it is unanswered, and it is not tested in this thesis.
 4. **Do foundation-model embeddings improve on conventional
    Sentinel-2 features when the labels are citizen-science points for
-   an invasive plant?** Ball et al. (2026) make the comparison with
-   curated tree-species labels. (RQ4)
+   an invasive plant?** Ball et al. (2026) and Koukos et al. (2026)
+   make the comparison with curated tree-species labels. (RQ4)
 
 ## Contribution
 
@@ -878,7 +1145,8 @@ Four specific questions not answered by any of the above:
 invasive plant mapping with EO foundation models.** Not "apply TESSERA
 to invasive plants", but a controlled study of how far
 citizen-science observations, turned into reference data, can replace
-expert reference data: with increasing amounts of expert data, with
+expert reference data as training data: with increasing amounts of
+expert data, with
 point labels extended to patches, away from the sampled area, and
 against a conventional satellite baseline. Wording mine, to confirm
 with the supervisor.
@@ -893,7 +1161,8 @@ Two parts:
    cumulative ablation measuring each step's effect is an optional
    stretch goal. The segmentation mask, which extends a
    citizen-science point to the patch around it using frozen
-   embeddings, has no precedent found and is tested in
+   embeddings, has no precedent found for a single presence-only
+   point in satellite embeddings, and is tested in
    [RQ2](research_questions.md#rq2--from-point-observations-to-reference-data),
    together with the effect of the grade and accuracy filters.
 2. **Empirical:** RQ1–RQ4 in

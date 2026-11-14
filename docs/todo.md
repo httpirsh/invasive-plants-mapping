@@ -21,8 +21,7 @@ novas experiências antes da entrega. Numeração das perguntas:
 - [ ] Máscara de segmentação: apresentar as duas regras,
   fundamentadas na literatura, com a comparação planeada na RQ2
   ([thesis/notes.md](../thesis/notes.md#rq2-proposta-mascara)).
-- [ ] Descarregar à mão o artigo publicado de Dimson et al. (2023) e
-  ler Ma et al. (2026)
+- [ ] Descarregar à mão o artigo publicado de Dimson et al. (2023)
   ([thesis/notes.md](../thesis/notes.md#lista-de-literatura-releitura-integral-e-limpeza)).
 - [ ] Corrigir a entrada `zhu2026` no manuscrito: o autor é Stewart et
   al. ([thesis/notes.md](../thesis/notes.md#lista-de-literatura-releitura-integral-e-limpeza)).

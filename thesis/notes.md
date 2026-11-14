@@ -683,6 +683,11 @@ de decisão comum já tinha sido retirado na entrada seguinte. Ver
 e a RQ4 trocaram: a transferibilidade é a RQ3 e a comparação com o
 Sentinel-2 é a RQ4. Ver a [tabela de numeração](#decisões).
 
+**Revisão (2026-11-14):** a pergunta principal passa a dizer que a
+ciência cidadã substitui os dados de especialistas "como dados de
+treino", porque o desenho continua a usá-los como teste. Ver
+[Pergunta principal](#pergunta-principal-dados-de-treino).
+
 ### Simplificação do desenho: uma só pergunta com Sentinel-2, sem limiar de decisão {#simplificacao-desenho-2026-11-13}
 
 *Decisão minha, de 2026-11-13 (a confirmar com o orientador). Ajusta
@@ -1115,6 +1120,51 @@ anteriores davam como não contadas ou sem script.
   consultada; raciocínio meu.
 - **Ficheiros derivados:** ver a Revisão em
   [Ficheiros derivados](#manifesto-ficheiros-derivados).
+
+### Pergunta principal: a ciência cidadã substitui os dados de especialistas como dados de treino {#pergunta-principal-dados-de-treino}
+
+*Decisão minha, de 2026-11-14 (a confirmar com o orientador). Ajusta
+a pergunta principal da
+[reformulação em quatro perguntas](#reformulacao-quatro-perguntas);
+os enunciados que ele aprovou valem até ele responder.*
+
+**O que decidi:**
+- Acrescentar "as training data" à pergunta principal e ao objetivo
+  geral: em que medida as observações de ciência cidadã podem
+  substituir os dados de referência de especialistas **como dados de
+  treino**.
+- Escrever no contexto comum que 90% das presenças são de um
+  observador.
+- Definir "substituir": é a diferença de desempenho entre modelos
+  treinados com ciência cidadã e modelos treinados com dados de
+  especialistas. Os dados de especialistas continuam a ser a
+  referência de teste.
+
+**Porquê:**
+- O desenho continua a precisar dos dados de especialistas para
+  testar (teste global da RQ1, teste da RQ3). O que a ciência cidadã
+  substitui é o treino; "substituir os dados de especialistas", sem
+  mais, prometia mais do que o desenho mostra.
+- A proposta de tese diz o mesmo: usar as observações "to create
+  training data".
+- "Ciência cidadã" neste caso é sobretudo uma pessoa. Fica dito no
+  contexto da pergunta, não só nos riscos.
+
+**O que os dados mostram:** 2 227 das 2 465 presenças (90,3%) são do
+Observador A (`inat_dealbata_clean.csv`, coluna `observer`).
+
+**Fundamentação:** nenhuma literatura consultada; raciocínio meu, a
+partir da proposta de tese e do desenho.
+
+**Impacto:** só a redação. Nenhuma experiência, hipótese ou número
+muda. As RQ1 a RQ4 ficam como estão.
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#main-question-and-objectives);
+`README.md`; `docs/literature.md` (Contribution);
+[próxima reunião](../docs/meetings/proxima-reuniao.md).
+
+**Na tese:** ⏳ Ainda não aplicada. A Introdução tem os enunciados
+aprovados pelo orientador.
 
 ## Decisões: dados de referência
 
@@ -1869,6 +1919,19 @@ as presenças de 2021–2025 e o fundo atual.
   todos os anos e com o erro. O sinal de "isolada" é calculado com
   todas as presenças, incluindo as dos blocos de teste.
 
+**Revisão (2026-11-14):** fechei a limitação que tinha ficado na
+Revisão anterior. O sinal de "isolada" passa a ser calculado também
+dentro de cada semente, só com as presenças de treino, numa terceira
+linha da mesma célula.
+
+- **Resultado:** ROC-AUC 0,824, contra 0,835 com todas as presenças.
+  Diferença emparelhada −0,012 (dp 0,019), negativa nas cinco sementes
+  (−0,045 numa). Boyce 0,978.
+- **Leitura:** igual à da variante anterior (−0,009). Tirar as
+  presenças isoladas do treino não melhora o resultado; a conclusão
+  mantém-se.
+- **Critério:** escrito antes de correr, o mesmo da Revisão anterior.
+
 ### Métricas: limites do índice de Boyce tal como está calculado {#metricas-limites-boyce}
 
 *Decisão minha, de 2026-11-11, depois de ler Hirzel et al. (2006) na
@@ -2255,6 +2318,15 @@ script já escreva essas tabelas para o fundo de floresta.
 
 **Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia).
 
+**Revisão (2026-11-13, à noite):** repeti as duas execuções do script
+(fundo uniforme e só de floresta) sobre o commit `43d7ede`, sem
+alterações por gravar. Critério escrito antes de correr: as tabelas
+tinham de sair iguais byte a byte. Saíram: as oito tabelas de cada
+pasta são idênticas às anteriores, e só o `run.json` mudou, porque
+regista agora esse commit em vez do `cc81a3f` com alterações por
+gravar. Vale também para a entrada do
+[script da curva](#curva-script-experiments).
+
 ## Decisões: validação e Sentinel-2
 
 ### Validação espacial no lado dos especialistas: zona-tampão, além dos blocos de 10 km
@@ -2318,6 +2390,31 @@ entre 500 m e 1 km, não aos 300–500 m.
   limitação.
 - **Limites:** médias por classe de distância, sem modelo ajustado;
   as duas primeiras classes têm 61 e 48 pares.
+
+**Revisão (2026-11-14):** contei quanto um tampão retiraria, sem o
+implementar. Nas cinco divisões da curva, pontos de treino a menos de
+uma dada distância de qualquer ponto de teste (soma das cinco
+sementes):
+
+| Fonte | Pontos de treino | ≤ 30 m | ≤ 300 m | ≤ 1 km |
+|---|---|---|---|---|
+| Ciência cidadã | 9 774 | 3 | 142 | 754 (7,7%) |
+| Especialistas | 11 733 | 14 | 303 | 1 067 (9,1%) |
+| Fundo | 8 631 | 0 | 5 | 130 (1,5%) |
+
+- **Leitura:** com blocos de 10 km, um tampão de 20–30 m quase não
+  retira nada (17 presenças em 21 507). A 300 m retira cerca de 2% e
+  a 1 km, o alcance do variograma, cerca de 8,5%, mas de forma muito
+  desigual: na semente 5 são 630 dos 2 182 píxeis de especialistas e
+  380 das 1 581 presenças de ciência cidadã; na semente 2 são 29 e 2.
+- **O que os dados não dizem:** se retirar estes pontos muda o
+  ROC-AUC. Não repeti a curva com tampão; continua a ser limitação
+  declarada, agora com número.
+- **Para o orientador:** a unidade do "20/30" só pesa se forem
+  píxeis ou mais; em metros o tampão não muda quase nada.
+- **Onde:** secção 5 de
+  [`design_counts.ipynb`](../notebooks/05_data_integration/design_counts.ipynb);
+  [`docs/methodology.md`](../docs/methodology.md#validation).
 
 ### Sentinel-2 bruto: via Earth Search (AWS), sem conta, alinhado à grelha da TESSERA
 
@@ -2480,6 +2577,76 @@ espacial; a entrada `zhu2026` do manuscrito tem o autor errado.
 **Na tese:** ⏳ Ainda não aplicada. `references.bib` e a Introdução
 ainda têm `zhu2026` com o autor errado; `feng2025` e `karasiak2022`
 estão com a versão anterior à publicação (ver a [revisão de consistência](#revisao-consistencia-2026-11-13)).
+
+**Revisão (2026-11-14):** pesquisa web para testar os gaps e cinco
+entradas novas. Ficam 36 entradas.
+
+- **Pesquisa:** doze consultas web, sem Scopus nem Web of Science
+  (não tenho acesso por aqui). O
+  [protocolo](#protocolo-de-pesquisa-da-literatura) continua por
+  executar. Não apareceu nenhum estudo que treine o mesmo
+  classificador de satélite com rótulos de ciência cidadã e com
+  rótulos de especialistas para uma planta invasora, nem embeddings
+  de foundation models aplicados a invasoras.
+- **Lidas na íntegra (texto extraído do PDF ou da página; figuras só
+  pelas legendas):** Ma et al. (2026, manuscrito do arXiv, não o
+  artigo publicado); Koukos et al. (2026, preprint); Fonte et al.
+  (2020); Milanesi et al. (2020); Raine et al. (2026, versão do
+  arXiv).
+- **O que mudou na fundamentação:**
+  - *Transferência espacial:* a frase "nenhum compara as duas
+    representações sob transferência" deixou de ser verdade. Ma et
+    al. comparam: o AlphaEarth transfere pior na regressão de
+    produtividade e de forma mista na classificação. Não cobre
+    espécies nem o TESSERA.
+  - *RQ2, máscara:* Raine et al. (2026) já propagam pontos por
+    semelhança em features congeladas de um foundation model. O "sem
+    precedente" fica mais estreito: um só ponto, só de presença, com
+    limiar, conectividade e raio, em embeddings de satélite.
+  - *RQ2, filtros:* Fonte et al. (2020) medem o efeito de filtrar
+    dados voluntários de treino. Os filtros melhoraram sempre os
+    dados de treino e só numa das duas áreas o mapa.
+  - *RQ3:* Milanesi et al. (2020) não analisam a concentração num
+    observador; o "sem precedente" mantém-se.
+  - *RQ4:* Koukos et al. (2026) apoiam os dois níveis de dados
+    (features convencionais à frente com todos os dados, TESSERA à
+    frente abaixo de cerca de 25%). Trazem também um risco: com
+    Random Forest a distância a favor das features convencionais é
+    de 8,4 pontos, contra 1,1 com uma rede neuronal.
+  - *RQ1:* o gap mantém-se. Fonte et al. não treinam nenhum
+    classificador com dados de especialistas para comparar.
+- **Por ler:** Di Cecco et al. (2021, "Observing the Observers",
+  fechado); o pacote AlphaSDM (CRAN); a literatura de informação
+  geográfica voluntária como dados de treino para além de Fonte et
+  al. (2020).
+- **Tarefa fechada:** ler Ma et al. (2026). Falta o artigo publicado.
+
+**Revisão (2026-11-14, trabalhos dos orientadores):** duas entradas
+novas, de trabalhos dos meus orientadores. Ficam 38 entradas.
+
+- **Porquê:** Fonte et al. (2020) tem o Prof. Duarte como coautor e
+  cita trabalhos do Prof. Estima. Fui ver a lista de publicações dos
+  dois (ORCID e CiênciaVitae) para saber o que da linha deles serve as
+  minhas perguntas.
+- **Lidas na íntegra (texto extraído do PDF; figuras só pelas
+  legendas) e acrescentadas:** Duarte et al. (2022), transferência
+  entre duas regiões de Portugal de modelos treinados com
+  OpenStreetMap, que apoia a RQ3; Fonte et al. (2017), revisão da
+  qualidade de dados voluntários, que enquadra os filtros da RQ2 (o
+  acordo entre voluntários mede fiabilidade, não exatidão).
+- **Lidas e deixadas de fora:** Antoniou et al. (2016), fotografias
+  georreferenciadas de Londres sem classificador nem dados de
+  referência; Duarte et al. (2023), comparação da COS 2018 com o
+  WorldCover, cujo limite útil (unidade mínima de 1 ha) já está na
+  entrada de Fonte et al. (2020). Não mudam nenhuma decisão.
+- **O que se mantém:** nenhum dos quatro analisa um contribuidor
+  dominante nem compara treino voluntário com treino de especialistas;
+  os gaps da RQ1 e da RQ3 ficam como estavam.
+- **Por ler:** três trabalhos do grupo de que só vi o título e que
+  pedi na [próxima reunião](../docs/meetings/proxima-reuniao.md#perguntas)
+  (floração da *A. dealbata* na Lousã, avaliação de uma classe rara,
+  segmentação fracamente supervisionada de invasoras); See et al.
+  (2016) e Fonte et al. (2024), públicos mas não obtidos.
 
 ### Identidade da tese confirmada: título, mestrado, orientadores, idioma e data da entrega
 

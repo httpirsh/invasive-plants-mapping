@@ -70,8 +70,15 @@ de trabalho ou testes estatísticos formais?
 - **Principal:** em que medida as observações de ciência cidadã,
   transformadas em dados de referência e representadas por embeddings
   de foundation models de observação da Terra, podem substituir os
-  dados de referência de especialistas no mapeamento de *Acacia
-  dealbata* no distrito de Coimbra?
+  dados de referência de especialistas como dados de treino no
+  mapeamento de *Acacia dealbata* no distrito de Coimbra?
+  - "Como dados de treino" (acrescentado a 2026-11-14): os dados de
+    especialistas continuam a ser a referência de teste; o que a
+    ciência cidadã substitui é o treino. "Substituir" mede-se pela
+    diferença de desempenho face a modelos treinados com dados de
+    especialistas. No contexto comum fica escrito que 90% das
+    presenças são de um observador. Origem:
+    [thesis/notes.md](../../thesis/notes.md#pergunta-principal-dados-de-treino).
 - **RQ1 (substituição):** em que medida um modelo treinado só com
   observações de ciência cidadã atinge o desempenho de modelos
   treinados com dados de referência de especialistas?
@@ -157,9 +164,12 @@ efeito dos filtros de grau e de precisão.
 
 *Literatura:* Rivier et al. (2024) e Raine et al. (2022) para os
 superpíxeis; Zhang et al. (2021) para o crescimento de região (crescem
-pela confiança de um classificador, não por semelhança à semente). Não
-encontrei trabalho que junte propagação de ponto para mancha, ciência
-cidadã e embeddings congelados: possível contributo. Nenhum artigo
+pela confiança de um classificador, não por semelhança à semente).
+Raine et al. (2026) já propagam pontos por semelhança em features
+congeladas de um foundation model, em imagens subaquáticas e com
+vários pontos de várias classes. Não encontrei trabalho que junte
+propagação de ponto para mancha, pontos só de presença de ciência
+cidadã e embeddings de satélite congelados: possível contributo. Nenhum artigo
 lido dá valores utilizáveis para a configuração da máscara. A
 comparação com e sem filtros é adaptada das ablações de um fator de
 Ball et al. (2026).
@@ -197,7 +207,7 @@ amostragem prejudica o modelo.
 - **Dados:** 1 645 polígonos a 1 km ou menos de uma observação (1 643
   no distrito) e 206
   polígonos do distrito a mais de 1 km, entre 1,0 e 8,2 km (contagem
-  de 2026-11-13, feita ad hoc, sem script).
+  em [`design_counts.ipynb`](../../notebooks/05_data_integration/design_counts.ipynb)).
 - **Risco a discutir:** perto e longe diferem também no tamanho dos
   polígonos (mediana de 77 m² perto e 2 788 m² longe) e um pouco na
   ocupação do solo, por isso reporto a diferença sem atribuir a causa
@@ -259,9 +269,31 @@ Origem:
   previsões com a classe "Florestas de acácias" da COS 2023, como
   referência que não vem da ciência cidadã nem dos polígonos de
   especialistas. Confirmar que os polígonos foram feitos sem apoio da
-  COS, e que a comparação faz sentido mesmo com 54% dos polígonos
+  COS, e que a comparação faz sentido mesmo com 56% dos polígonos
   dentro dessa classe (origem:
   [`data/README.md`](../../data/README.md#acacia-dealbata-expert-reference-polygons)).
+- **Polígonos `classifica = 0` como ausências só no teste:** decidiu
+  que não entram no estudo. Os que caem em vegetação (56% dos 5 013)
+  podem servir de ausências verificadas apenas na avaliação, nunca no
+  treino, como segundo conjunto de teste ao lado do teste contra
+  fundo? São ausências fiáveis nessas áreas, e como foram escolhidos?
+  O treino (presenças contra fundo) não muda. Ainda não contei quantos
+  ficam no distrito e nos blocos de teste.
+  *Literatura:* Phillips et al. (2009): o enviesamento do fundo só se
+  vê com dados independentes de presença-ausência (origem:
+  [thesis/notes.md](../../thesis/notes.md#usar-os-dados-de-especialistas-com-limpeza)).
+- **Trabalhos do grupo que não encontrei publicados:** posso ler os
+  resumos ou apresentações de (1) Majchrzak, Duarte, Fonte e Bogawski
+  (2025, 2026), fenologia da floração da *A. dealbata* na Lousã com
+  Sentinel-2 e iNaturalist, por causa da janela de floração para
+  Portugal central que tenho em aberto; (2) "Impacts of Equal and
+  Proportional Allocations in Accuracy Assessment of a Rare Class"
+  (EARSeL 2024), por causa da avaliação; (3) a segmentação fracamente
+  supervisionada para reduzir o esforço de anotação de invasoras
+  lenhosas (EARSeL 2024), por causa da máscara?
+  *Literatura:* só vi os títulos, nos perfis ORCID e CiênciaVitae; não
+  sei o que concluem (origem:
+  [thesis/notes.md](../../thesis/notes.md#lista-de-literatura-releitura-integral-e-limpeza)).
 - **invasoras.pt:** se as presenças de ciência cidadã ficarem poucas,
   faz sentido juntar observações dessa plataforma? Quem a gere?
   (origem:

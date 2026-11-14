@@ -29,17 +29,19 @@ this document:
 ## Main Question and Objectives
 
 *Wording and numbering mine, to confirm with the supervisor
-([`thesis/notes.md`](../thesis/notes.md#renumeracao-perguntas-2026-11-13)).*
+([`thesis/notes.md`](../thesis/notes.md#renumeracao-perguntas-2026-11-13);
+main question:
+[`thesis/notes.md`](../thesis/notes.md#pergunta-principal-dados-de-treino)).*
 
 **Main question:** To what extent can citizen-science observations,
 turned into reference data and represented by Earth Observation
-foundation-model embeddings, replace expert reference data for mapping
-*Acacia dealbata* in the Coimbra district?
+foundation-model embeddings, replace expert reference data as training
+data for mapping *Acacia dealbata* in the Coimbra district?
 
 **General objective:** to assess to what extent citizen-science
 observations, turned into reference data and represented by
-foundation-model embeddings, can replace expert reference data for
-mapping *A. dealbata* in the Coimbra district.
+foundation-model embeddings, can replace expert reference data as
+training data for mapping *A. dealbata* in the Coimbra district.
 
 **Specific objectives:**
 
@@ -60,9 +62,14 @@ mapping *A. dealbata* in the Coimbra district.
    other *Acacia* species is not tested and is left as future work.
 
 **Common context:** *Acacia dealbata*, Coimbra district, 2023 imagery,
-research-grade iNaturalist observations from 2021–2025, TESSERA vs.
-Sentinel-2 features; performance measured with ROC-AUC and the
-continuous Boyce index under 10 km spatial block holdout.
+research-grade iNaturalist observations from 2021–2025, 90% of them
+from one observer, TESSERA vs. Sentinel-2 features; performance
+measured with ROC-AUC and the continuous Boyce index under 10 km
+spatial block holdout.
+
+**What "replace" means here:** the difference in performance between
+models trained on citizen-science observations and models trained
+with expert reference data. Expert data remain the test reference.
 
 **Hypotheses** are stated under each question as a null (H₀) and an
 alternative (H₁), each marked as written before or after its result
@@ -309,10 +316,13 @@ idea of Rivier et al. (2024); Raine et al. (2022) compute superpixels
 on learned features, with a modest gain over colour-based ones. Both
 use many correctly placed points per image. Region growing to densify
 point labels at Sentinel-2 scale: Zhang et al. (2021), who grow on
-classifier confidence; no precedent found for growing on embedding
-similarity to the seed or for a maximum radius. No paper found
-combines point-to-patch propagation with sparse citizen-science points
-and frozen embeddings, so that combination is a possible contribution.
+classifier confidence. Raine et al. (2026) propagate point labels by
+similarity on frozen foundation-model features, in underwater images
+with several points of several classes; no precedent found for a
+similarity threshold, a connectivity rule or a maximum radius. No
+paper found combines point-to-patch propagation with sparse
+presence-only citizen-science points and frozen satellite embeddings,
+so that combination is a possible contribution.
 The mask configuration is my own reasoning, with no source found: no
 paper read gives a value usable here. The 50 m limit is the exclusion
 distance of the background pool around presences (step 7 of the
@@ -323,7 +333,12 @@ window of a presence ([`design_counts.ipynb`](../notebooks/05_data_integration/d
 a background point that a mask labels as *Acacia* is taken out of the
 background of that condition (my rule, to apply when the mask runs). The
 filtered-against-unfiltered comparison is adapted from the one-factor
-ablations of Ball et al. (2026). Summaries:
+ablations of Ball et al. (2026); Fonte et al. (2020) measure the
+effect of filtering volunteered training data on a land-cover map.
+Research grade is an agreement indicator, which measures reliability
+and not accuracy unless compared with reference data (Fonte et al.,
+2017).
+Summaries:
 [`literature.md`](literature.md#weak-supervision-from-point-labels);
 reasoning and counts:
 [`thesis/notes.md`](../thesis/notes.md#renumeracao-perguntas-2026-11-13).
@@ -393,10 +408,15 @@ reported without attributing its cause to distance (see Risks).
 
 **Grounded in:** clustering of citizen-science records in a few
 places: Cambridge TESSERA group. Embedding-based models lost accuracy
-in another region in Yang et al. (2026). The dissimilarity map follows Meyer &
-Pebesma (2021), tested there on regression only, so its use with a
-classifier on embeddings is an extension. No precedent found for
-citizen science concentrated in one observer. The 1 km cut and the
+in another region in Yang et al. (2026) and, against conventional
+features, in Ma et al. (2026; AlphaEarth, crop yield). Models
+trained on volunteered data lost accuracy between two Portuguese
+regions in Duarte et al. (2022; OpenStreetMap, land cover). The
+dissimilarity map follows Meyer & Pebesma (2021), tested there on
+regression only, so its use with a classifier on embeddings is an
+extension. No precedent found for citizen science concentrated in one
+observer: Milanesi et al. (2020) model observers' effort without
+examining concentration. The 1 km cut and the
 use of the expert pixels as test data are my own reasoning, with no
 source found.
 
@@ -438,12 +458,17 @@ at the small data level.
 - The Sentinel-2 extraction may stay too costly to run.
 - With all observations the models may be too close to the ceiling of
   the metrics to be separated.
+- Random Forest may understate the embeddings: in Koukos et al. (2026)
+  the distance between engineered features and TESSERA is 8.4 points
+  of macro F1 with Random Forest and 1.1 with a neural network.
 
 **Grounded in:** the representation comparison follows Ball et al.
 (2026), whose conventional arm combines Sentinel-1 and Sentinel-2; not
 yet tested for invasive plants with citizen-science labels. Silva &
 Gonçalves (2026) is a Portuguese case where the Sentinel-2 baseline
-beat TESSERA. No source read for the choice of 150 presences as the
+beat TESSERA. The two data levels have a precedent in Koukos et al.
+(2026): engineered features ahead with all the data, TESSERA ahead
+below about 25% of the training plots. No source read for the choice of 150 presences as the
 small level.
 
 ## Shared Design (RQ1–RQ4)
