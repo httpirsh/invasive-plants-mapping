@@ -1798,6 +1798,12 @@ publicado. O resto é raciocínio meu.
 
 **Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia).
 
+**Revisão (2026-11-14):** a curva ganha um nível "100% especialistas
++ ciência cidadã" no fim da parte aditiva; o "100%" desta entrada (só
+especialistas) passa a ser um ponto de referência à parte. O resto do
+desenho não muda. Ver
+[nível 100% + ciência cidadã](#curva-100-mais-ciencia-cidada).
+
 ### Curva de redução de esforço sob um fundo só de floresta: verificação de robustez {#curva-fundo-so-floresta}
 
 *Decisão minha (investigar), não confirmada pelo orientador. Motivada
@@ -2314,6 +2320,69 @@ pasta são idênticas às anteriores, e só o `run.json` mudou, porque
 regista agora esse commit em vez do `cc81a3f` com alterações por
 gravar. Vale também para a entrada do
 [script da curva](#curva-script-experiments).
+
+### Curva da RQ1: nível "100% especialistas + ciência cidadã"; o "só especialistas" fica como referência à parte {#curva-100-mais-ciencia-cidada}
+
+*Decisão minha, de 2026-11-14 (a confirmar com o orientador). Ajusta
+o desenho da
+[curva completa](#curva-de-redução-de-esforço-completa-0100-com-fundo-e-bloco-de-teste-fixos).*
+
+**O que decidi:**
+- A parte aditiva da curva passa a acabar num nível novo, **100% dos
+  polígonos de especialistas mais a base inteira de ciência cidadã**.
+- O modelo **só de especialistas** (o antigo "100%") fica, mas como
+  ponto de referência à parte, desenhado separado da curva.
+- A comparação principal da RQ1 não muda: 90% contra 0%, no teste
+  global. O nível novo é reportado ao lado.
+
+**Porquê:** do 90% para o 100% mudavam duas coisas ao mesmo tempo:
+entravam mais 10% dos polígonos e saía toda a ciência cidadã. O último
+troço da curva não era comparável aos outros, e a queda no teste
+global a 100% (0,906 → 0,854) lia-se como se os especialistas
+piorassem o modelo. Vem quase toda das presenças de teste de ciência
+cidadã (0,801 → 0,677). Com o nível novo, a curva aditiva fica
+contínua até ao fim. O "só especialistas" continua a ser preciso,
+porque é o termo de comparação da pergunta principal (substituir os
+dados de especialistas como dados de treino).
+
+**Origem do "100% sem ciência cidadã":** está registado nesta lista
+como parte da decisão do orientador de 2026-11-05 (ponto 2 da
+[entrada do multiclasse](#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)),
+mas a [ata dessa reunião](../docs/meetings/2026-11-05.md) só diz
+"começar só com ciência cidadã e acrescentar progressivamente dados de
+especialistas". Não sei se a saída da ciência cidadã no fim foi dita
+por ele. O ponto "só especialistas" mantém-se, por isso nada do que
+ele possa ter dito se perde.
+
+**Critério, escrito antes de correr:**
+- **Implementação:** o nível novo sai do mesmo script, numa tabela à
+  parte. As tabelas que já existem têm de sair iguais byte a byte; se
+  não saírem, paro e não uso os números novos.
+- **O que se reporta:** diferença emparelhada de ROC-AUC por semente
+  (média, dp, sementes com o mesmo sinal), com o Boyce ao lado, Random
+  Forest e Logistic Regression, nos três conjuntos de teste (global,
+  só especialistas, só ciência cidadã), em três comparações: nível
+  novo menos 0%, nível novo menos 90% e nível novo menos "só
+  especialistas".
+- **Sem hipótese nova e sem limiar.** Não escrevo uma expectativa de
+  sentido para o nível novo; reporta-se a diferença.
+- O one-class SVM não é avaliado no nível novo (só serve à verificação
+  com fundo de floresta).
+
+**Fundamentação:** nenhuma literatura consultada; raciocínio meu. Não
+procurei precedente para curvas de mistura de fontes com um ponto
+final aditivo e um de substituição.
+
+**Impacto:** `experiments/effort_reduction_curve/run.py` (nível novo);
+`results/effort_reduction_curve/` (tabela nova; as outras não podem
+mudar); [`docs/research_questions.md`](../docs/research_questions.md#rq1--citizen-science-as-a-substitute-for-expert-data)
+(desenho e resultado da RQ1);
+[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb)
+(figura). As pastas do fundo só de floresta e da zona-tampão não são
+corridas de novo e ficam sem o nível novo.
+
+**Na tese:** ⏳ Ainda não escrita (Metodologia e Resultados
+preliminares, ainda esqueletos).
 
 ## Decisões: validação e Sentinel-2
 

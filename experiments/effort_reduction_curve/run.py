@@ -9,6 +9,12 @@ written here.
 A One-Class SVM is trained on the same presences at every level and scored on the pooled
 test presences only (one_class_per_seed.csv); it is used by the forest-only background check.
 
+Extra condition, outside the curve tables: all expert polygons PLUS the citizen-science base
+("100% + citizen science"), the additive end of the curve; level 100 in the curve tables stays
+expert only, the reference point. Written to plus_cs_per_seed.csv and
+plus_cs_paired_differences.csv (against 0%, 90% and expert only, same seeds and test blocks).
+Reasoning: thesis/notes.md, entry "nível 100% especialistas + ciência cidadã".
+
 Usage: python experiments/effort_reduction_curve/run.py [--background uniform|forest_only]
            [--buffer-m METRES] [--out-dir DIR]
 Writes to results/effort_reduction_curve/ (uniform background, the curve of RQ1) or to
@@ -70,6 +76,7 @@ CLASSIFIERS = {
     "LogisticRegression": dict(class_weight="balanced", max_iter=1000),
 }
 MAKERS = {"RandomForest": RandomForestClassifier, "LogisticRegression": LogisticRegression}
+PLUS_CS = "100% + citizen science"  # extra condition, see the docstring
 ONE_CLASS = dict(kernel="rbf", nu=0.05, gamma="scale")  # One-Class SVM, presences only
 
 PILOT_DIR = ROOT / "data" / "processed" / "embeddings" / "tessera_v1.1_2023_rq1_pilot"
@@ -142,7 +149,7 @@ for seed in SEEDS:
 print(f"{len(candidate_blocks)} candidate blocks (citizen-science ∪ expert presences)")
 
 # ---------------------------------------------------------------- run the curve
-source_records, one_class_records, test_size_rows, buffer_removed = [], [], [], {}
+source_records, one_class_records, test_size_rows, buffer_removed, plus_cs_records = [], [], [], {}, []
 for seed in SEEDS:
     test_blocks = test_blocks_by_seed[seed]
     cs_test_mask = np.isin(cs_block, list(test_blocks))
@@ -222,6 +229,26 @@ for seed in SEEDS:
                     "roc_auc": roc_auc_score(y_true, np.concatenate([score_pres, score_bg])),
                     "boyce": continuous_boyce(score_pres, score_bg),
                 })
+    # Extra condition: every expert polygon plus the citizen-science base (additive end of the curve).
+    train_pres_emb = np.concatenate([cs_train_emb, expert_train_emb])
+    X_train = np.concatenate([train_pres_emb, bg_train_emb])
+    y_train = np.concatenate([np.ones(len(train_pres_emb)), np.zeros(len(bg_train_emb))])
+    scaler = StandardScaler().fit(X_train)
+    for name, params in CLASSIFIERS.items():
+        model = MAKERS[name](**params).fit(scaler.transform(X_train), y_train)
+        score_cs = model.predict_proba(scaler.transform(cs_test_emb))[:, 1]
+        score_expert = model.predict_proba(scaler.transform(expert_test_emb))[:, 1]
+        score_bg = model.predict_proba(scaler.transform(bg_test_emb))[:, 1]
+        subsets = {"pooled": np.concatenate([score_cs, score_expert]),
+                   "expert only": score_expert, "citizen science only": score_cs}
+        for subset, score_pres in subsets.items():
+            y_true = np.concatenate([np.ones(len(score_pres)), np.zeros(len(score_bg))])
+            plus_cs_records.append({
+                "seed": seed, "condition": PLUS_CS, "classifier": name, "test_presences": subset,
+                "n_train_presence": len(train_pres_emb), "n_test_presences": len(score_pres),
+                "roc_auc": roc_auc_score(y_true, np.concatenate([score_pres, score_bg])),
+                "boyce": continuous_boyce(score_pres, score_bg),
+            })
     print(f"seed {seed} done")
 
 test_size_df = pd.DataFrame(test_size_rows)
@@ -263,6 +290,23 @@ for metric in ["roc_auc", "boyce"]:
             })
 paired_df = pd.DataFrame(paired_rows)
 
+# extra condition against 0%, 90% and expert only (level 100), per seed on the same test blocks
+plus_cs_df = pd.DataFrame(plus_cs_records)
+plus_wide = plus_cs_df.pivot_table(index=["classifier", "test_presences", "seed"], values=["roc_auc", "boyce"])
+plus_paired_rows = []
+for metric in ["roc_auc", "boyce"]:
+    for ref_lvl, ref_name in [(0, "0%"), (90, "90%"), (100, "expert only")]:
+        diff = (plus_wide[metric] - wide[metric][ref_lvl]).rename("diff").reset_index()
+        for (clf, subset), d in diff.groupby(["classifier", "test_presences"], sort=False):
+            plus_paired_rows.append({
+                "classifier": clf, "test_presences": subset, "metric": metric,
+                "comparison": f"{PLUS_CS} minus {ref_name}",
+                "plus_cs_mean": plus_wide[metric].xs((clf, subset)).mean(),
+                "diff_mean": d["diff"].mean(), "diff_sd": d["diff"].std(),
+                "seeds_up": int((d["diff"] > 0).sum()), "seeds_down": int((d["diff"] < 0).sum()),
+            })
+plus_paired_df = pd.DataFrame(plus_paired_rows)
+
 # ---------------------------------------------------------------- save
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 source_df.to_csv(OUT_DIR / "per_seed.csv", index=False)
@@ -272,6 +316,8 @@ test_size_df.to_csv(OUT_DIR / "test_sizes.csv", index=False)
 pd.DataFrame(reuse_rows).to_csv(OUT_DIR / "block_reuse.csv", index=False)
 nominal_df.to_csv(OUT_DIR / "nominal_levels.csv", index=False)
 pd.DataFrame(one_class_records).to_csv(OUT_DIR / "one_class_per_seed.csv", index=False)
+plus_cs_df.to_csv(OUT_DIR / "plus_cs_per_seed.csv", index=False)
+plus_paired_df.to_csv(OUT_DIR / "plus_cs_paired_differences.csv", index=False)
 
 
 def _git(*args):
@@ -290,6 +336,9 @@ BG_FILE = pool_file(ROOT, BACKGROUND)
     "test_fraction": TEST_FRACTION, "background": BACKGROUND, "classifiers": CLASSIFIERS,
     "buffer_m": BUFFER_M, "buffer_removed_from_training_by_seed": buffer_removed,
     "one_class_svm": ONE_CLASS,
+    "plus_cs_condition": {"name": PLUS_CS, "n_polygons": len(poly_ids_available),
+                          "n_expert_pixels": len(expert_poly_id), "n_cs_presences": len(cs_emb),
+                          "total_N": len(expert_poly_id) + len(cs_emb)},
     "embeddings": PILOT_DIR.name,
     "n_cs_presences": len(cs_emb), "n_cs_matched": cs_n_matched, "n_cs_rows": len(dealbata),
     "n_expert_pixels": len(expert_emb), "n_expert_polygons": len(np.unique(expert_poly_id)),
