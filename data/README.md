@@ -178,7 +178,9 @@ obtained.
   the Zarr store's tiling, not the full pilot extent above.
 - **Temporal coverage:** 2023.
 - **File:** `raw/satellite/tessera_tiles/coimbra_2023_geotiff/tessera_2023_utm29.tif`
-  (128 bands, float32).
+  (128 bands, float32). **Not on disk:** deleted on 2026-11-14 (62 MB,
+  read only by the Sentinel-2 test below); the command above downloads
+  it again.
 - **Use:** read only for its grid (`rioxarray` + `tess.odc.geobox`),
   to resample Sentinel-2 onto the same pixels (see next entry) — not
   used itself as embeddings here.
@@ -202,7 +204,9 @@ obtained.
   licence).
 - **Files:** `raw/satellite/sentinel2/tessera_grid_2023/<scene_id>/<band>.tif`
   (one GeoTIFF per band per scene), plus `manifest.csv` (scene id,
-  datetime, cloud cover) in the same folder.
+  datetime, cloud cover) in the same folder. **Not on disk:** deleted
+  on 2026-11-14 (72 MB, a test strip read by no other notebook); the
+  notebook below downloads it again, after the TESSERA tile above.
 - **Preprocessing:** every band resampled onto the TESSERA tile's 10 m
   grid (bilinear for reflectance, nearest for `scl`) — so, unlike the
   rest of this project's `raw/` data, this is not byte-for-byte
@@ -231,10 +235,13 @@ obtained.
 - **License:** CC BY 4.0.
 - **Format:** vector GeoPackage, 93 classes, minimum mapping unit
   1 ha, scale 1:25,000.
-- **File:** `raw/satellite/cos/COS2023v1-S2-gpkg.zip` (857 MB), read
-  by the notebooks. An unzipped copy with the DGT layer style, for
-  QGIS, is in `interim/spatial/COS2023v1-S2.gpkg` (1.5 GB).
-- **Preprocessing:** none.
+- **File:** `interim/spatial/COS2023v1-S2.gpkg` (1.5 GB), read by the
+  notebooks and `src/background.py`, and opened in QGIS. It is the
+  file inside the downloaded zip, unchanged (same size and CRC-32,
+  `80d32e82`, checked on 2026-11-14). The zip
+  (`raw/satellite/cos/COS2023v1-S2-gpkg.zip`, 857 MB) was deleted on
+  2026-11-14, as no code read it; the URL above downloads it again.
+- **Preprocessing:** none (unzipped only).
 - **Possible uses:** land-cover context for error analysis, absence
   checks, independent validation.
 
@@ -254,7 +261,8 @@ obtained.
 
 ### Datasets with no active use
 
-Kept on disk, not used by any current experiment. All were downloaded
+Not used by any current experiment; kept on disk unless marked
+otherwise. All were downloaded
 and processed by
 `notebooks/02_citizen_science/other_plants_observations.ipynb`, which
 documents every step.
@@ -271,7 +279,10 @@ documents every step.
 - **GIFT plant traits, version 3.2:** API
   `https://gift.uni-goettingen.de/api/extended/index3.2.php`, accessed
   2026-10-30; cite Weigelt, König & Kreft (2020) and the version used.
-  Files in `external/auxiliary/gift/`.
+  Files were in `external/auxiliary/gift/` (`gift_species.csv` and
+  `gift_trait_<id>.csv` for traits 1.2.1, 1.4.1, 1.6.2 and 1.7.1).
+  **Not on disk:** deleted on 2026-11-14 (23 MB); the notebook
+  downloads them again when they are missing.
 - **National list of invasive species (Decreto-Lei 92/2019, Annex
   II):** ICNF PDF, https://www.icnf.pt/api/file/doc/cf455e5a84ab1d96,
   accessed 2026-10-30. File in
