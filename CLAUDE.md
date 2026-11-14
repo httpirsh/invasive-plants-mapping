@@ -189,8 +189,8 @@ Every table reported in a doc or in the thesis must come from one
 single run. If two runs disagree, say so and decide which is canonical
 before writing text. Mark superseded result folders with an
 `OBSOLETE.md` instead of deleting them, and also record each obsolete
-`results/` folder in one line of `results/README.md`, because
-`.gitignore` does not version the `OBSOLETE.md`. A notebook with stale
+`results/` folder in one line of `results/README.md` (the index of
+what is obsolete). A notebook with stale
 earlier sections must say at the top which section holds the current
 results.
 

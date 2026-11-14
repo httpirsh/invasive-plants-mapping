@@ -22,9 +22,10 @@ data/external/**
 # Expert reference polygons are versioned (repository is private)
 !data/raw/expert_reference/*.gpkg
 
-# Results: generated outputs are not versioned
-results/**
-!results/README.md
+# Results are versioned; heavy outputs (rasters, trained models) are not
+results/**/*.tif
+results/**/*.joblib
+results/**/*.pkl
 
 # Keep directory placeholders everywhere
 !**/.gitkeep

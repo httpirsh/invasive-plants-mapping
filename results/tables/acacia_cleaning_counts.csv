@@ -1,0 +1,8 @@
+step,before,after,removed,observer_a_share
+7. dated,7943,7941,2,
+8. coordinates not obscured,7941,7898,43,83.5
+10. A. dealbata only,7898,5242,2656,90.2
+11. research grade,5242,3441,1801,86.9
+12. positional accuracy <= 30 m or missing,3441,3276,165,89.1
+13. observed 2021-2025,3276,2580,696,90.7
+14. one observation per 10 m pixel,2580,2465,115,90.3

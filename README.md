@@ -22,7 +22,7 @@ invasive-plants-mapping/
 ├── notebooks/     # Main research environment, numbered by research stage
 ├── src/           # Reusable code, extracted from notebooks once stable
 ├── experiments/   # Experiment configurations and runs
-├── results/       # Generated figures, tables, maps and models (not versioned)
+├── results/       # Generated figures, tables, maps and models (versioned, except heavy files)
 ├── thesis/        # Decision log (notes.md) and document/ (LaTeX manuscript, synced with Overleaf)
 └── docs/          # Research questions, literature, open questions, meetings, to-do
 ```

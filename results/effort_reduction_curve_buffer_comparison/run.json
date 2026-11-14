@@ -1,0 +1,41 @@
+{
+ "run_date": "2026-11-14",
+ "script": "experiments/effort_reduction_curve/compare_buffer.py",
+ "git_commit": "eeb6240e5d9916ca9a938fdfd4c0a5490fd41136",
+ "git_uncommitted_changes": true,
+ "buffers_m": [
+  300,
+  1000
+ ],
+ "levels_pct": [
+  0,
+  90,
+  100
+ ],
+ "test_presences": [
+  "pooled",
+  "expert only"
+ ],
+ "seed_left_out": 5,
+ "criterion": "ROC-AUC: |mean paired difference| < its standard deviation across seeds, in all comparisons",
+ "criterion_met_count": {
+  "300": {
+   "comparisons": 16,
+   "met": 16,
+   "met_without_seed5": 15
+  },
+  "1000": {
+   "comparisons": 16,
+   "met": 13,
+   "met_without_seed5": 12
+  }
+ },
+ "inputs_sha256": {
+  "results/effort_reduction_curve_buffer_300m/per_seed.csv": "3efafec3b7d2d222e3ef6621f8619b1f8aa9f303c24c6af423b9f55a2df3a965",
+  "results/effort_reduction_curve_buffer_300m/run.json": "13cd3c111c2a93c21b8b1afbf486267804c8aa2689590f95fc9ac4dbfa65aaf6",
+  "results/effort_reduction_curve_buffer_1000m/per_seed.csv": "2294ee9a039b29e8615e48653d672c0bf2df35bc1447198a27f814df4371478a",
+  "results/effort_reduction_curve_buffer_1000m/run.json": "5d8b9f68a278c4273512590d14b3402ea81ca428a5d5f85c3040603469cfd6eb",
+  "results/effort_reduction_curve/per_seed.csv": "570587e4b7fde34d52fc403e3bda32d46790e2ec296f8f25f92b4a3d0e3af7fd",
+  "results/effort_reduction_curve/run.json": "63418754efbbc7a2e75784ce1604bcb64849da837be403b59bc5976c760734a0"
+ }
+}

@@ -1,0 +1,121 @@
+classifier,test_presences,metric,comparison,diff_mean,diff_sd,seeds_up,seeds_down
+LogisticRegression,citizen science only,roc_auc,10% minus 0%,0.001984164110298714,0.004560691340038091,4,1
+LogisticRegression,expert only,roc_auc,10% minus 0%,0.03214395183035286,0.01002587420801087,5,0
+LogisticRegression,pooled,roc_auc,10% minus 0%,0.017621407974342994,0.0030475271486278994,5,0
+RandomForest,citizen science only,roc_auc,10% minus 0%,-0.0034711289848998296,0.009871592178357357,2,3
+RandomForest,expert only,roc_auc,10% minus 0%,0.010550248449104616,0.005083056636324518,5,0
+RandomForest,pooled,roc_auc,10% minus 0%,0.004650581139906307,0.003742543082670494,4,1
+LogisticRegression,citizen science only,roc_auc,20% minus 0%,0.0031273146050743604,0.007332600521105088,4,1
+LogisticRegression,expert only,roc_auc,20% minus 0%,0.04486175563199464,0.010477538311897473,5,0
+LogisticRegression,pooled,roc_auc,20% minus 0%,0.024853194884815966,0.0017220451769991115,5,0
+RandomForest,citizen science only,roc_auc,20% minus 0%,-0.0019250743253088841,0.010301441188011566,2,3
+RandomForest,expert only,roc_auc,20% minus 0%,0.012611011367170888,0.0055949734473466775,5,0
+RandomForest,pooled,roc_auc,20% minus 0%,0.0061743513217679125,0.003973053486497596,5,0
+LogisticRegression,citizen science only,roc_auc,30% minus 0%,0.004262071761779773,0.009310490645976588,4,1
+LogisticRegression,expert only,roc_auc,30% minus 0%,0.04931575421173355,0.011384253047558258,5,0
+LogisticRegression,pooled,roc_auc,30% minus 0%,0.027751328312041502,0.0021836155703451672,5,0
+RandomForest,citizen science only,roc_auc,30% minus 0%,-0.0032113207281008415,0.011318717175643504,2,3
+RandomForest,expert only,roc_auc,30% minus 0%,0.013606576370337043,0.0060578071111300116,5,0
+RandomForest,pooled,roc_auc,30% minus 0%,0.006041578781104162,0.0057635956546717325,4,1
+LogisticRegression,citizen science only,roc_auc,40% minus 0%,0.003930173586742169,0.010496134164282654,4,1
+LogisticRegression,expert only,roc_auc,40% minus 0%,0.052702003720909205,0.010938864639801583,5,0
+LogisticRegression,pooled,roc_auc,40% minus 0%,0.02945160721742803,0.0023282313302679307,5,0
+RandomForest,citizen science only,roc_auc,40% minus 0%,-0.003915730467689715,0.01566203623072487,2,3
+RandomForest,expert only,roc_auc,40% minus 0%,0.014075550646600155,0.006899539288941067,5,0
+RandomForest,pooled,roc_auc,40% minus 0%,0.006344565861878926,0.007526976850241831,4,1
+LogisticRegression,citizen science only,roc_auc,50% minus 0%,0.003633125870233944,0.012022344989747325,4,1
+LogisticRegression,expert only,roc_auc,50% minus 0%,0.05464045783553586,0.010497044261975863,5,0
+LogisticRegression,pooled,roc_auc,50% minus 0%,0.03041919901474721,0.003082050949274847,5,0
+RandomForest,citizen science only,roc_auc,50% minus 0%,-0.0033767720495474275,0.01665623641788411,2,3
+RandomForest,expert only,roc_auc,50% minus 0%,0.015048827050821889,0.0065072645406588055,5,0
+RandomForest,pooled,roc_auc,50% minus 0%,0.007315157168625031,0.007098617547917731,4,1
+LogisticRegression,citizen science only,roc_auc,60% minus 0%,0.00312781846951935,0.011945536611688588,4,1
+LogisticRegression,expert only,roc_auc,60% minus 0%,0.056008229377021254,0.010413682157104332,5,0
+LogisticRegression,pooled,roc_auc,60% minus 0%,0.030824935528536556,0.0027584437502050823,5,0
+RandomForest,citizen science only,roc_auc,60% minus 0%,-0.004771464350998578,0.018370631538947878,2,3
+RandomForest,expert only,roc_auc,60% minus 0%,0.016168740017179207,0.006503469161029326,5,0
+RandomForest,pooled,roc_auc,60% minus 0%,0.007210678214486755,0.008726366861419388,3,2
+LogisticRegression,citizen science only,roc_auc,70% minus 0%,0.002181199551310864,0.011758820427449359,4,1
+LogisticRegression,expert only,roc_auc,70% minus 0%,0.0572393421949416,0.010649180652538424,5,0
+LogisticRegression,pooled,roc_auc,70% minus 0%,0.031034363456171297,0.0023402256657378095,5,0
+RandomForest,citizen science only,roc_auc,70% minus 0%,-0.009038035850781622,0.01940699431543941,2,3
+RandomForest,expert only,roc_auc,70% minus 0%,0.015968883481691853,0.006440969729742531,5,0
+RandomForest,pooled,roc_auc,70% minus 0%,0.0055631237070525195,0.008038412617043673,3,2
+LogisticRegression,citizen science only,roc_auc,80% minus 0%,0.001826883037622129,0.01259696544600551,4,1
+LogisticRegression,expert only,roc_auc,80% minus 0%,0.058357073769852906,0.01094754291123022,5,0
+LogisticRegression,pooled,roc_auc,80% minus 0%,0.031501593609203994,0.0024064162600433417,5,0
+RandomForest,citizen science only,roc_auc,80% minus 0%,-0.006920705929768856,0.018516616570144338,2,3
+RandomForest,expert only,roc_auc,80% minus 0%,0.016246262454845284,0.006555206380572545,5,0
+RandomForest,pooled,roc_auc,80% minus 0%,0.006381356077635769,0.0079118460891049,3,2
+LogisticRegression,citizen science only,roc_auc,90% minus 0%,0.0011475161779054056,0.013195952472676341,4,1
+LogisticRegression,expert only,roc_auc,90% minus 0%,0.059629409453255164,0.011037041503355811,5,0
+LogisticRegression,pooled,roc_auc,90% minus 0%,0.03187651854200242,0.0024569984756895335,5,0
+RandomForest,citizen science only,roc_auc,90% minus 0%,-0.010551331727851231,0.02271870165194597,2,3
+RandomForest,expert only,roc_auc,90% minus 0%,0.016826030866610674,0.006847508205383314,5,0
+RandomForest,pooled,roc_auc,90% minus 0%,0.005343537710012836,0.010256342923431791,3,2
+LogisticRegression,citizen science only,roc_auc,100% minus 0%,-0.10996763076493063,0.07018224940302757,0,5
+LogisticRegression,expert only,roc_auc,100% minus 0%,0.06970548418684178,0.010747062366786365,5,0
+LogisticRegression,pooled,roc_auc,100% minus 0%,-0.013914114722309568,0.02541924035761622,1,4
+RandomForest,citizen science only,roc_auc,100% minus 0%,-0.127111257825997,0.09115862109713528,0,5
+RandomForest,expert only,roc_auc,100% minus 0%,0.018175827466012227,0.007838223038939643,5,0
+RandomForest,pooled,roc_auc,100% minus 0%,-0.04186440609078905,0.028730445591622363,0,5
+LogisticRegression,citizen science only,boyce,10% minus 0%,-0.009696969696969671,0.017978662999019703,1,3
+LogisticRegression,expert only,boyce,10% minus 0%,0.010845427217447457,0.022680201960773947,3,1
+LogisticRegression,pooled,boyce,10% minus 0%,-0.0005940699134656668,0.018736913698341698,2,2
+RandomForest,citizen science only,boyce,10% minus 0%,-0.014039941637722908,0.03187847160508882,1,2
+RandomForest,expert only,boyce,10% minus 0%,0.0049553940744822885,0.006785962505392469,2,0
+RandomForest,pooled,boyce,10% minus 0%,0.0024242424242424177,0.010141333654958465,2,1
+LogisticRegression,citizen science only,boyce,20% minus 0%,-0.021297909409494453,0.06572599473502229,3,2
+LogisticRegression,expert only,boyce,20% minus 0%,0.007264822760073208,0.03167100449663066,3,2
+LogisticRegression,pooled,boyce,20% minus 0%,-0.017563766883162656,0.049080311239167194,2,3
+RandomForest,citizen science only,boyce,20% minus 0%,0.01212121212121211,0.02571297386132901,4,1
+RandomForest,expert only,boyce,20% minus 0%,-0.007337500859211654,0.01338571989627198,1,3
+RandomForest,pooled,boyce,20% minus 0%,0.00242424242424244,0.01014133365495849,2,1
+LogisticRegression,citizen science only,boyce,30% minus 0%,-0.022469441993987593,0.03261777077178787,1,3
+LogisticRegression,expert only,boyce,30% minus 0%,0.011870942839030141,0.032516946156219,4,1
+LogisticRegression,pooled,boyce,30% minus 0%,-0.0005940699134656668,0.016112353170953195,2,3
+RandomForest,citizen science only,boyce,30% minus 0%,-0.0030755026000482077,0.03861758047210392,2,2
+RandomForest,expert only,boyce,30% minus 0%,-0.012610354521612743,0.013328055516820389,0,3
+RandomForest,pooled,boyce,30% minus 0%,-0.007272727272727253,0.01084154170908986,0,2
+LogisticRegression,citizen science only,boyce,40% minus 0%,-0.06303030303030299,0.14879991310956514,2,2
+LogisticRegression,expert only,boyce,40% minus 0%,0.00943932066430988,0.035359867369182466,3,1
+LogisticRegression,pooled,boyce,40% minus 0%,0.012106452620256447,0.017279982623740385,3,1
+RandomForest,citizen science only,boyce,40% minus 0%,-0.031515151515151565,0.05325062457330621,1,3
+RandomForest,expert only,boyce,40% minus 0%,-0.007619338574253476,0.0167781563945347,1,3
+RandomForest,pooled,boyce,40% minus 0%,0.0,0.008570991287109643,1,1
+LogisticRegression,citizen science only,boyce,50% minus 0%,-0.0030377166833081004,0.06278069862282683,3,1
+LogisticRegression,expert only,boyce,50% minus 0%,0.00023730245569186792,0.025993755583833142,3,2
+LogisticRegression,pooled,boyce,50% minus 0%,0.01819288780753492,0.01754076314409778,3,0
+RandomForest,citizen science only,boyce,50% minus 0%,-0.03151515151515152,0.05041608325596466,2,3
+RandomForest,expert only,boyce,50% minus 0%,-0.009978590862009784,0.016191275443649816,1,4
+RandomForest,pooled,boyce,50% minus 0%,0.00242424242424244,0.010141333654958489,2,1
+LogisticRegression,citizen science only,boyce,60% minus 0%,0.0,0.022676711434993595,1,2
+LogisticRegression,expert only,boyce,60% minus 0%,-0.007701444493796883,0.05398675332577982,3,2
+LogisticRegression,pooled,boyce,60% minus 0%,0.009674830445536187,0.014185246105383081,3,1
+RandomForest,citizen science only,boyce,60% minus 0%,-0.017679995149325455,0.03017686941130194,1,2
+RandomForest,expert only,boyce,60% minus 0%,-0.014983134963146938,0.02706705634470661,1,2
+RandomForest,pooled,boyce,60% minus 0%,0.0048484848484848355,0.006639061303092905,2,0
+LogisticRegression,citizen science only,boyce,70% minus 0%,-0.007272727272727275,0.040746027427810035,2,2
+LogisticRegression,expert only,boyce,70% minus 0%,-0.014024097911806699,0.06018448015024358,3,2
+LogisticRegression,pooled,boyce,70% minus 0%,0.001830172510776751,0.009497870747684661,2,1
+RandomForest,citizen science only,boyce,70% minus 0%,-0.08518610562898273,0.17619904057378097,2,3
+RandomForest,expert only,boyce,70% minus 0%,-0.013694801386017174,0.008116303629802852,0,4
+RandomForest,pooled,boyce,70% minus 0%,-0.0048484848484848355,0.020282667309916992,2,2
+LogisticRegression,citizen science only,boyce,80% minus 0%,-0.027340066093905956,0.036124664212949,0,3
+LogisticRegression,expert only,boyce,80% minus 0%,-0.01645572008652698,0.05894121601633716,3,2
+LogisticRegression,pooled,boyce,80% minus 0%,0.001830172510776773,0.0181272541290931,2,2
+RandomForest,citizen science only,boyce,80% minus 0%,-0.19518841390390435,0.41642447138996463,1,3
+RandomForest,expert only,boyce,80% minus 0%,-0.01383677069618372,0.005299339405647788,0,5
+RandomForest,pooled,boyce,80% minus 0%,0.0024242424242424177,0.010141333654958463,2,1
+LogisticRegression,citizen science only,boyce,90% minus 0%,-0.019393939393939363,0.04251073434363677,1,2
+LogisticRegression,expert only,boyce,90% minus 0%,-0.02617482903493016,0.04961740762434142,3,2
+LogisticRegression,pooled,boyce,90% minus 0%,0.009102899783504047,0.016307566396336855,3,2
+RandomForest,citizen science only,boyce,90% minus 0%,-0.08024927565707826,0.14428997823866804,0,4
+RandomForest,expert only,boyce,90% minus 0%,-0.021592767996915275,0.03259976742714937,1,3
+RandomForest,pooled,boyce,90% minus 0%,0.00242424242424244,0.01014133365495849,2,1
+LogisticRegression,citizen science only,boyce,100% minus 0%,-0.24505216781579478,0.21160651216307125,0,5
+LogisticRegression,expert only,boyce,100% minus 0%,-0.01975625415057729,0.034932302097926804,2,3
+LogisticRegression,pooled,boyce,100% minus 0%,-0.10801953478476989,0.09058619909086889,1,4
+RandomForest,citizen science only,boyce,100% minus 0%,-0.48313759929817224,0.5622354943684912,0,5
+RandomForest,expert only,boyce,100% minus 0%,-0.03289978917823992,0.10206131568208507,3,2
+RandomForest,pooled,boyce,100% minus 0%,-0.06377636374759214,0.041685276493765425,0,5

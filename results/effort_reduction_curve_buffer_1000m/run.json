@@ -1,0 +1,145 @@
+{
+ "run_date": "2026-11-14",
+ "script": "experiments/effort_reduction_curve/run.py",
+ "command": "python experiments/effort_reduction_curve/run.py --background uniform --buffer-m 1000",
+ "git_commit": "eeb6240e5d9916ca9a938fdfd4c0a5490fd41136",
+ "git_uncommitted_changes": true,
+ "levels_pct": [
+  0,
+  10,
+  20,
+  30,
+  40,
+  50,
+  60,
+  70,
+  80,
+  90,
+  100
+ ],
+ "seeds": [
+  1,
+  2,
+  3,
+  4,
+  5
+ ],
+ "polygon_order_seed": 0,
+ "test_fraction": 0.2,
+ "background": "uniform",
+ "classifiers": {
+  "RandomForest": {
+   "n_estimators": 300,
+   "class_weight": "balanced",
+   "random_state": 42
+  },
+  "LogisticRegression": {
+   "class_weight": "balanced",
+   "max_iter": 1000
+  }
+ },
+ "buffer_m": 1000.0,
+ "buffer_removed_from_training_by_seed": {
+  "1": {
+   "citizen_science": {
+    "n_train_before": 1744,
+    "n_removed": 152
+   },
+   "expert": {
+    "n_train_before": 2248,
+    "n_removed": 109
+   },
+   "background": {
+    "n_train_before": 1718,
+    "n_removed": 32
+   }
+  },
+  "2": {
+   "citizen_science": {
+    "n_train_before": 2419,
+    "n_removed": 2
+   },
+   "expert": {
+    "n_train_before": 2668,
+    "n_removed": 29
+   },
+   "background": {
+    "n_train_before": 1748,
+    "n_removed": 21
+   }
+  },
+  "3": {
+   "citizen_science": {
+    "n_train_before": 1731,
+    "n_removed": 158
+   },
+   "expert": {
+    "n_train_before": 2214,
+    "n_removed": 97
+   },
+   "background": {
+    "n_train_before": 1694,
+    "n_removed": 23
+   }
+  },
+  "4": {
+   "citizen_science": {
+    "n_train_before": 2299,
+    "n_removed": 62
+   },
+   "expert": {
+    "n_train_before": 2421,
+    "n_removed": 202
+   },
+   "background": {
+    "n_train_before": 1719,
+    "n_removed": 22
+   }
+  },
+  "5": {
+   "citizen_science": {
+    "n_train_before": 1581,
+    "n_removed": 380
+   },
+   "expert": {
+    "n_train_before": 2182,
+    "n_removed": 630
+   },
+   "background": {
+    "n_train_before": 1752,
+    "n_removed": 32
+   }
+  }
+ },
+ "one_class_svm": {
+  "kernel": "rbf",
+  "nu": 0.05,
+  "gamma": "scale"
+ },
+ "embeddings": "tessera_v1.1_2023_rq1_pilot",
+ "n_cs_presences": 2464,
+ "n_cs_matched": 2465,
+ "n_cs_rows": 2465,
+ "n_expert_pixels": 2771,
+ "n_expert_polygons": 1457,
+ "n_background": 2000,
+ "n_candidate_blocks": 46,
+ "n_test_blocks_per_seed": {
+  "1": 9,
+  "2": 9,
+  "3": 9,
+  "4": 9,
+  "5": 9
+ },
+ "n_expert_blocks": 18,
+ "n_expert_blocks_in_a_test_set": 9,
+ "n_expert_blocks_in_two_or_more_seeds": 6,
+ "n_expert_test_pixels_summed_over_seeds": 2122,
+ "n_expert_test_pixels_distinct": 1265,
+ "inputs_sha256": {
+  "data/interim/citizen_science/inat_dealbata_clean.csv": "c24cea5f9bd003d30bd7f519e7ac1633bb4578a004bf997cc7b593124d0de776",
+  "data/interim/expert_reference/expert_polygons_clean.gpkg": "cf6287c2842b8d5e067021bab07327e2eb61aac2bde0a70ee86e128453c50022",
+  "data/processed/embeddings/tessera_v1.1_2023_rq1_pilot/": "1134debdb02a93a4d8af860b9ea6bd0f992de71ea856eaa398ae93d02129a3c2",
+  "data/processed/embeddings/tessera_v1.1_2023_rq1_background/background_points.npz": "4bb2ee42d304c0f430a8d009ddf41716e628c44fe62becf097e287c95cc00c68"
+ }
+}

@@ -1,8 +1,8 @@
 # Results
 
-Generated outputs (figures, tables, maps, trained models). Not
-version-controlled (see `.gitignore`); subfolders are created as
-needed.
+Generated outputs (figures, tables, maps, trained models). Versioned,
+except heavy files such as rasters and trained models (see
+`.gitignore`); subfolders are created as needed.
 
 Folder names and question numbers:
 
