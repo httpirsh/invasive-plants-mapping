@@ -771,8 +771,7 @@ Diferenças emparelhadas por semente, face a 0%:
 âmbito e de forma de reportar.
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
-[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb);
-`results/rq2_per_source_check/`.
+[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
 
 **Na tese:** ⏳ Ainda não aplicada (Introdução com os enunciados
 aprovados; Metodologia e Resultados preliminares por escrever).
@@ -923,9 +922,6 @@ reformulação e à leitura de "área de vegetação mais próxima".
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
 [`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md).
-Os resultados da curva (RQ1) continuam em
-`results/rq2_per_source_check/`, que mantém o nome da numeração da
-manhã.
 
 **Na tese:** ⏳ Ainda não aplicada. A Introdução tem os enunciados
 aprovados pelo orientador, que não mudam enquanto ele não responder.
@@ -988,8 +984,7 @@ Três correções ao texto acima, sem mudar o desenho:
   sorteado como fundo" só vale ao longo dos eixos; não contei quantos
   pontos de fundo ficam entre 50 m e 71 m de uma presença.
 - **Resultados da curva:** estão em `results/effort_reduction_curve/`
-  e não em `results/rq2_per_source_check/`, que ficou marcada como
-  obsoleta ([script da curva](#curva-script-experiments)).
+  ([script da curva](#curva-script-experiments)).
 
 ### Revisão de consistência de 2026-11-13: ajustes ao desenho e limpeza {#revisao-consistencia-2026-11-13}
 
@@ -1017,9 +1012,6 @@ do repositório.*
   distrito; no passo 1 do pipeline, 43 são observações de *Acacia* de
   todas as espécies; o variograma dos embeddings ainda sobe aos
   400–500 m e estabiliza entre 500 m e 1 km.
-- **Scripts apagados:** os três de
-  `experiments/temporal_window_2021_2025/`. A pasta de resultados fica,
-  marcada como obsoleta.
 - **Notebooks marcados:** `other_plants_observations` como histórico e
   fora da ordem de execução; `segmentation_mask` como protótipo, com
   parâmetros diferentes dos da RQ2. Nenhum foi corrido de novo.
@@ -1516,9 +1508,8 @@ do `CLAUDE.md` proíbe isso; esta é a forma de a cumprir.
   antes (`4bb2ee42…` e `2211909f…`) e não houve extração nem
   download.
 - **Curva (RQ1):** voltei a correr `effort_reduction_curve.ipynb` com
-  o carregamento novo. Os sete ficheiros de
-  `results/rq2_per_source_check/` ficaram idênticos byte a byte aos
-  anteriores. Nenhum valor mudou.
+  o carregamento novo. Os sete ficheiros de resultados ficaram idênticos byte a
+  byte aos anteriores. Nenhum valor mudou.
 - **Números citados nos docs:** os da curva, o 0,874 contra 0,836 e os
   do fundo de floresta (0,950 e 0,952) batem com os resultados e as
   saídas atuais.
@@ -1538,9 +1529,8 @@ do `CLAUDE.md` proíbe isso; esta é a forma de a cumprir.
 - Ficam de fora: os downloads de dados brutos "só se não existir"
   (não dependem das presenças), os ficheiros de `data/interim/` (os
   notebooks reescrevem-nos sempre; entram no manifesto como entradas),
-  `results/tables/rq2_sample_150_seed0.csv` (a tratar quando a RQ2
-  correr) e `experiments/temporal_window_2021_2025/rerun.py`, que lê
-  um ficheiro de presenças que já não existe.
+  e `results/tables/rq2_sample_150_seed0.csv` (a tratar quando a RQ2
+  correr).
 
 **Fundamentação:** nenhuma literatura consultada; é prática de
 reprodutibilidade, raciocínio meu.
@@ -2048,10 +2038,7 @@ antigo, 0,969 com o novo.
 **Fundamentação:** nenhuma literatura consultada; é um registo de
 proveniência.
 
-**Onde:** corridas com o fundo antigo em
-`results/temporal_window_2021_2025/` (marcadas em `OBSOLETE.md`);
-curva completa com o fundo novo em `results/rq2_per_source_check/`,
-feita pela secção 8 de
+**Onde:** curva completa com o fundo novo feita pela secção 8 de
 [`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
 
 **Na tese:** ⏳ Ainda não escrita (Metodologia).
@@ -2068,8 +2055,7 @@ que o orientador aprovou. O conteúdo desta entrada não muda. Ver
 e a RQ4 trocaram: a transferibilidade é a RQ3 e a comparação com o
 Sentinel-2 é a RQ4. Ver a [tabela de numeração](#decisões).
 A curva com o fundo novo está hoje em
-`results/effort_reduction_curve/`; `results/rq2_per_source_check/`
-ficou marcada como obsoleta
+`results/effort_reduction_curve/`
 ([script da curva](#curva-script-experiments)).
 
 ### RQ2: curva por fonte das presenças de teste, critério e leitura do resultado {#rq2-curva-por-fonte}
@@ -2137,8 +2123,8 @@ tem fonte externa. Os limites do Boyce estão em
 redundância, pureza) não foram separados por fonte.
 
 **Onde:** secção 8 de
-[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb);
-`results/rq2_per_source_check/`. As entradas anteriores sobre a curva
+[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
+As entradas anteriores sobre a curva
 descrevem as corridas com todos os anos ou com o fundo antigo.
 
 **Na tese:** ⏳ Ainda não escrita (Resultados preliminares).
@@ -2184,10 +2170,6 @@ desenho da curva não muda.*
   com o propósito, as tabelas lidas dos resultados, a figura e a
   leitura da curva. Ao abrir compara os hashes do `run.json` com os
   ficheiros atuais e avisa se os resultados forem de outras entradas.
-- **A pasta anterior fica.** `results/rq2_per_source_check/` não foi
-  apagada nem alterada; tem um `OBSOLETE.md` e uma linha em
-  `results/README.md`. As entradas anteriores deste ficheiro que citam
-  esse caminho continuam válidas.
 
 **Porquê:** a curva é o resultado que vai para os docs e para a tese e
 volta a correr sempre que os dados mudam. Num notebook, o resultado
@@ -2198,7 +2180,7 @@ execução, como pede a regra de reprodutibilidade do `CLAUDE.md`.
 **O que verifiquei (2026-11-13):**
 
 - As cinco tabelas escritas pelo script são idênticas byte a byte às
-  de `results/rq2_per_source_check/`. Nenhum valor mudou.
+  que o notebook escrevia. Nenhum valor mudou.
 - A figura gerada pelo notebook a partir das tabelas novas tem o mesmo
   hash da anterior.
 - As contagens que o notebook imprimia (46 blocos candidatos, 9 blocos
@@ -2217,9 +2199,6 @@ execução, como pede a regra de reprodutibilidade do `CLAUDE.md`.
   floresta (0,950 e 0,952), que são os atuais.
 - As contagens feitas à mão a 2026-11-13 (filtros; polígonos perto e
   longe) continuam sem script.
-- `experiments/temporal_window_2021_2025/rerun.py` executava o
-  notebook antigo e lia variáveis dele; já estava partido e não lhe
-  toquei.
 
 **Fundamentação:** nenhuma literatura consultada; é prática de
 reprodutibilidade, raciocínio meu.
@@ -2415,6 +2394,102 @@ sementes):
 - **Onde:** secção 5 de
   [`design_counts.ipynb`](../notebooks/05_data_integration/design_counts.ipynb);
   [`docs/methodology.md`](../docs/methodology.md#validation).
+
+**Revisão (2026-11-14, efeito medido):** *decisão minha.* Repeti a
+curva da RQ1 com um tampão de 300 m e de 1 km entre treino e teste,
+como exceção que aprovei ao "sem novas experiências antes de janeiro".
+Muda o que estava decidido ("tampão por implementar, declarado como
+limitação"): o tampão fica implementado como opção do script, o efeito
+fica medido, e a limitação passa a análise de sensibilidade.
+
+**O que decidi:** o desenho continua sem tampão. Os tampões de 300 m e
+de 1 km são reportados ao lado da curva como análise de sensibilidade.
+
+**Como foi medido:** em cada semente saem do treino todos os pontos
+(ciência cidadã, especialistas e fundo) a menos dessa distância de
+qualquer ponto de teste. O conjunto de teste é o mesmo nas três
+condições. Sem tampão, o script reproduz as tabelas da curva byte a
+byte. Os pontos retirados coincidem com a contagem da revisão anterior.
+
+**Critério, escrito antes de correr com tampão:** em cada comparação,
+a diferença de ROC-AUC face à curva sem tampão, emparelhada por
+semente, tem média menor em módulo do que o seu desvio-padrão entre as
+cinco sementes. O tampão não muda a leitura da RQ1 só se as 16
+comparações cumprirem: níveis 0%, 90% e 100% e a diferença 90% − 0%,
+para os dois classificadores, no teste global e só nas presenças de
+especialistas. Declarei também, sem poder de decisão, o valor absoluto
+da diferença, o sinal de 90% − 0% e a repetição sem a semente 5.
+
+**Resultado (ROC-AUC, média das cinco sementes; d = com tampão − sem
+tampão, média ± desvio-padrão):**
+
+| Classificador, teste | Nível | Sem tampão | d 300 m | d 1 km |
+|---|---|---|---|---|
+| RF, global | 0% | 0,9018 | −0,0022 ± 0,0024 | −0,0075 ± 0,0078 |
+| RF, global | 90% | 0,9061 | −0,0009 ± 0,0025 | **−0,0065 ± 0,0057** |
+| RF, global | 100% | 0,8543 | −0,0001 ± 0,0015 | −0,0019 ± 0,0060 |
+| RF, global | 90% − 0% | +0,0043 | +0,0014 ± 0,0043 | +0,0010 ± 0,0059 |
+| RF, especialistas | 0% | 0,9761 | −0,0004 ± 0,0021 | −0,0007 ± 0,0036 |
+| RF, especialistas | 90% | 0,9927 | +0,0005 ± 0,0006 | −0,0004 ± 0,0007 |
+| RF, especialistas | 100% | 0,9936 | +0,0002 ± 0,0008 | 0,0000 ± 0,0012 |
+| RF, especialistas | 90% − 0% | +0,0165 | +0,0009 ± 0,0020 | +0,0003 ± 0,0038 |
+| LR, global | 0% | 0,8930 | −0,0015 ± 0,0015 | −0,0052 ± 0,0079 |
+| LR, global | 90% | 0,9236 | −0,0006 ± 0,0008 | **−0,0039 ± 0,0027** |
+| LR, global | 100% | 0,8732 | −0,0004 ± 0,0006 | +0,0007 ± 0,0074 |
+| LR, global | 90% − 0% | +0,0306 | +0,0009 ± 0,0010 | +0,0013 ± 0,0061 |
+| LR, especialistas | 0% | 0,9270 | −0,0012 ± 0,0018 | −0,0016 ± 0,0081 |
+| LR, especialistas | 90% | 0,9869 | −0,0004 ± 0,0004 | **−0,0019 ± 0,0011** |
+| LR, especialistas | 100% | 0,9960 | −0,0001 ± 0,0002 | −0,0009 ± 0,0011 |
+| LR, especialistas | 90% − 0% | +0,0599 | +0,0009 ± 0,0017 | −0,0002 ± 0,0085 |
+
+- **300 m:** critério cumprido nas 16 comparações.
+- **1 km:** não cumprido, 13 de 16. Falham as três a negrito, todas no
+  nível 90% e todas a descer. As quatro diferenças 90% − 0% cumprem.
+- **O que a RQ1 reporta (90% − 0%):** mantém o sinal nas quatro
+  comparações e nas duas distâncias, e muda no máximo 0,0014. Em RF
+  global as sementes a favor passam de 4 para 3; nas outras três
+  continuam a ser as 5.
+- **Semente 5** (27% das presenças de treino retiradas a 1 km): dá
+  34%, 35% e 12% da soma das diferenças nas três comparações que
+  falham, e as três falham também sem ela. Sem a semente 5 cumprem 15
+  de 16 a 300 m e 12 de 16 a 1 km.
+- **Boyce (só reportado):** a maior alteração é em LR, só
+  especialistas, a 100%, de 0,782 para 0,938 com 1 km.
+
+**Porquê:**
+- A conclusão da RQ1 não depende do tampão, por isso não compensa
+  repetir a curva canónica, a verificação com fundo só de floresta e o
+  que partilha as divisões antes de janeiro.
+- Os níveis absolutos de ROC-AUC sem tampão ficam ligeiramente
+  otimistas (até 0,0075 a 1 km), e isso tem de ficar dito ao lado da
+  curva. O critério falhou a 1 km, por isso não chega declarar a
+  limitação.
+- Não adoto 300 m como desenho. O tampão é parte da avaliação, não do
+  modelo: escolher a distância que dá o ROC-AUC mais alto é circular,
+  porque é o que a fuga espacial também produziria. A distância que os
+  dados apoiam é o alcance do variograma, entre 500 m e 1 km.
+
+**O que os dados não dizem:** se a descida a 1 km vem de menos
+proximidade ou de menos dados de treino; a experiência não separa as
+duas coisas. As sementes reutilizam blocos, por isso a concordância
+entre elas não é evidência independente.
+
+**Fundamentação:** a recomendação de blocos com tampão e a distância
+pelo alcance da autocorrelação são as já citadas nesta entrada (Le
+Rest et al., 2014; Karasiak et al., 2022; Mahoney et al., 2023;
+Ratsakatika et al., 2026). Para o critério e para reportar como análise
+de sensibilidade em vez de adotar no desenho não procurei literatura:
+raciocínio próprio.
+
+**Onde:** [`run.py`](../experiments/effort_reduction_curve/run.py)
+(`--buffer-m`) e
+[`compare_buffer.py`](../experiments/effort_reduction_curve/compare_buffer.py);
+tabelas em `results/effort_reduction_curve_buffer_300m/`,
+`..._buffer_1000m/` e `..._buffer_comparison/`;
+[`docs/methodology.md`](../docs/methodology.md#validation).
+
+**Na tese:** ⏳ Ainda não escrita. A análise de sensibilidade pertence
+à Metodologia (validação) e aos resultados da RQ1.
 
 ### Sentinel-2 bruto: via Earth Search (AWS), sem conta, alinhado à grelha da TESSERA
 

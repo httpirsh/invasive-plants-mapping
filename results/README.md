@@ -11,17 +11,14 @@ Folder names and question numbers:
 - `effort_reduction_curve_forest_only/` holds the same curve under the
   forest-only background (robustness check), written by the same
   script with `--background forest_only`.
+- `effort_reduction_curve_buffer_300m/` and
+  `effort_reduction_curve_buffer_1000m/` hold the same curve with a
+  buffer between training and test (sensitivity analysis), written by
+  the same script with `--buffer-m 300` and `--buffer-m 1000`.
+- `effort_reduction_curve_buffer_comparison/` holds the differences
+  between those two runs and the curve without buffer, paired by seed,
+  written by `experiments/effort_reduction_curve/compare_buffer.py`.
 - `tables/rq2_sample_150_seed0.csv` is the subsample of 150 presences
   of RQ2 (segmentation mask), drawn with seed 0 at the end of
   `notebooks/02_citizen_science/acacia_observations.ipynb` on every
   run.
-
-Obsolete folders:
-
-- `temporal_window_2021_2025/`: runs made with the earlier uniform
-  background pool; see its `OBSOLETE.md`. The scripts that wrote it
-  were removed on 2026-11-13 and are in the Git history
-  (`experiments/temporal_window_2021_2025/`).
-- `rq2_per_source_check/`: the effort-reduction curve as written by
-  the notebook, replaced by `effort_reduction_curve/` with identical
-  tables; see its `OBSOLETE.md`.
