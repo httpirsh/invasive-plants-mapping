@@ -1277,6 +1277,49 @@ tabela do pipeline, passo 2.
 **Na tese:** ✅ Parcial. Mencionada em resumo na Introdução; o teste e
 o limiar ficam para a Metodologia.
 
+**Revisão (2026-11-15):** a tabela acima é das 3 441 observações
+*research* de todos os anos, porque o filtro dos anos (passo 13) vem
+depois deste. Repeti o teste só com as de 2021–2025, que são as usadas
+nas experiências, para a tabela da tese ser do conjunto atual. A
+decisão não muda.
+
+- **Critério, escrito antes de correr:** manter os 30 m se, nos outros
+  observadores, ≤ 10 m e 10–30 m ficassem parecidos e os grupos acima
+  de 30 m abaixo deles; e se as sem valor não ficassem claramente
+  abaixo das de ≤ 10 m.
+- **Resultado** (2 696 observações *research* de 2021–2025, antes do
+  filtro de precisão e de uma por píxel; Observer A 88,5%; pontos ao
+  acaso 2,3%):
+
+  | Precisão | Presenças | % em acacial | Só outros observadores | % em acacial (só outros) |
+  |---|---|---|---|---|
+  | ≤ 10 m | 344 | 23,3% | 175 | 10,9% |
+  | 10–30 m | 89 | 15,7% | 36 | 13,9% |
+  | 30–100 m | 61 | 8,2% | 26 | 7,7% |
+  | > 100 m | 55 | 12,7% | 45 | 6,7% |
+  | sem valor | 2 147 | 18,0% | 28 | 10,7% |
+
+- **Leitura:** a primeira condição cumpre-se. Nos outros observadores,
+  acima de 30 m a proporção continua a descer (7,7% e 6,7%, contra
+  10,9% e 13,9%). Para a segunda, o critério não dizia o que é
+  "claramente", e isso é uma falha dele. A distância das sem valor às
+  de ≤ 10 m aumentou (de 2,1 para 5,3 pontos). Mantenho-as porque
+  continuam acima do grupo de 10–30 m (15,7%), que o filtro deixa
+  passar, e muito acima do acaso. Esta leitura foi feita depois de
+  ver os números.
+- **Limitações:** os grupos dos outros observadores são ainda mais
+  pequenos (26 a 175); a ordem continua imperfeita (> 100 m, 12,7%,
+  acima de 30–100 m, 8,2%).
+- **O que não mudou:** o notebook correu de ponta a ponta e os três
+  ficheiros que escreve (`inat_dealbata_clean.csv`,
+  `acacia_cleaning_counts.csv`, `rq2_sample_150_seed0.csv`) saíram
+  iguais byte a byte.
+- **Fundamentação:** nenhuma literatura nova.
+- **Onde:** passo 12 de
+  [`acacia_observations.ipynb`](../notebooks/02_citizen_science/acacia_observations.ipynb),
+  logo a seguir à tabela de todos os anos.
+- **Na tese:** a tabela a usar na Metodologia é esta, de 2021–2025.
+
 ### Janela temporal das observações: só 2021–2025 {#janela-temporal-2021-2025}
 
 *Decisão minha, de 2026-11-13. O orientador ainda não foi informado;
