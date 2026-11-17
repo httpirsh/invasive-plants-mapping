@@ -304,7 +304,7 @@ a fundamentação completa fica para a Metodologia.
 *Proposta minha (a confirmar com o orientador). Muda o desenho de uma
 pergunta que ele aprovou, por isso não é adotada antes de ele
 responder. Na fila da
-[próxima reunião](../docs/meetings/proxima-reuniao.md).*
+[próxima reunião](../docs/meetings/2026-11-17.md).*
 
 **O que decidi (como proposta):**
 
@@ -421,7 +421,7 @@ hoje a RQ3 da [renumeração](#renumeracao-perguntas-2026-11-13). O texto acima 
 
 *Proposta minha (a confirmar com o orientador). Reescreve enunciados
 que ele aprovou; os aprovados valem até ele responder. Na fila da
-[próxima reunião](../docs/meetings/proxima-reuniao.md).*
+[próxima reunião](../docs/meetings/2026-11-17.md).*
 
 **O que decidi (como proposta):** reescrever a pergunta principal e as
 três RQ na estrutura de um guia de escrita de teses (tesify.pt):
@@ -921,7 +921,7 @@ as contagens de perto e longe por semente; a resposta do orientador à
 reformulação e à leitura de "área de vegetação mais próxima".
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
-[`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md).
+[`docs/meetings/2026-11-17.md`](../docs/meetings/2026-11-17.md).
 
 **Na tese:** ⏳ Ainda não aplicada. A Introdução tem os enunciados
 aprovados pelo orientador, que não mudam enquanto ele não responder.
@@ -961,7 +961,7 @@ desenho: proposta (a confirmar com o orientador).
 - **Fundamentação:** nenhuma literatura nova consultada; é organização
   das perguntas e âmbito.
 - **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
-  [`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md).
+  [`docs/meetings/2026-11-17.md`](../docs/meetings/2026-11-17.md).
 - **Na tese:** ⏳ Ainda não aplicada, como o resto desta entrada.
 
 **Revisão (2026-11-13, depois da revisão de consistência).** Na
@@ -1153,7 +1153,7 @@ muda. As RQ1 a RQ4 ficam como estão.
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#main-question-and-objectives);
 `README.md`; `docs/literature.md` (Contribution);
-[próxima reunião](../docs/meetings/proxima-reuniao.md).
+[próxima reunião](../docs/meetings/2026-11-17.md).
 
 **Na tese:** ⏳ Ainda não aplicada. A Introdução tem os enunciados
 aprovados pelo orientador.
@@ -1324,7 +1324,7 @@ decisão não muda.
 
 *Decisão minha, de 2026-11-13. O orientador ainda não foi informado;
 está como ponto informativo na
-[fila da próxima reunião](../docs/meetings/proxima-reuniao.md#para-informar).*
+[fila da próxima reunião](../docs/meetings/2026-11-17.md).*
 
 **O que decidi:**
 - Todas as presenças de *A. dealbata* são tratadas como representativas
@@ -1716,7 +1716,7 @@ de estar no desenho: na Revisão do fim do dia da [renumeração](#renumeracao-p
 de ser repetida com o Sentinel-2. É decisão minha e contraria o que
 ele decidiu a 2026-11-05, por isso vale como proposta até ele
 responder; está na fila da
-[próxima reunião](../docs/meetings/proxima-reuniao.md), em "O que muda
+[próxima reunião](../docs/meetings/2026-11-17.md), em "O que muda
 face ao que aprovou".
 
 ### Classificador presença-vs-fundo (ciência cidadã): Random Forest, por agora
@@ -2876,7 +2876,7 @@ novas, de trabalhos dos meus orientadores. Ficam 38 entradas.
   dominante nem compara treino voluntário com treino de especialistas;
   os gaps da RQ1 e da RQ3 ficam como estavam.
 - **Por ler:** três trabalhos do grupo de que só vi o título e que
-  pedi na [próxima reunião](../docs/meetings/proxima-reuniao.md#perguntas)
+  pedi na [próxima reunião](../docs/meetings/2026-11-17.md)
   (floração da *A. dealbata* na Lousã, avaliação de uma classe rara,
   segmentação fracamente supervisionada de invasoras); See et al.
   (2016) e Fonte et al. (2024), públicos mas não obtidos.

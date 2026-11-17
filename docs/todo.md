@@ -31,7 +31,7 @@ novas experiências antes da entrega. Numeração das perguntas:
 - [ ] Levar ao orientador as propostas em fila (máscara de
   segmentação, redesenho da pergunta da concentração espacial,
   formulação das perguntas) e a reformulação em quatro perguntas
-  ([próxima reunião](meetings/proxima-reuniao.md);
+  ([próxima reunião](meetings/2026-11-17.md);
   [thesis/notes.md](../thesis/notes.md#renumeracao-perguntas-2026-11-13)).
 
 ## Depois da defesa intermédia

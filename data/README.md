@@ -426,7 +426,7 @@ other, in the Covilhã–Fundão area (Castelo Branco district, MGRS tile
 iNaturalist count in that bounding box (39.95–40.40°N, -7.60–-7.30°E,
 not cleaned) found 57 research-grade *A. dealbata* observations.
 Nothing was downloaded or cleaned there. Queued as a question in
-[`docs/meetings/proxima-reuniao.md`](../docs/meetings/proxima-reuniao.md).
+[`docs/meetings/2026-11-17.md`](../docs/meetings/2026-11-17.md).
 
 ## Template
 

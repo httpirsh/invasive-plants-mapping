@@ -471,4 +471,4 @@ RQ4; aplicar a zona-tampão; validar com a classe *Acacia* da COS 2023;
 análise de erro; mapa final.
 
 Lista completa e fontes: [`todo.md`](todo.md) e
-[próxima reunião](meetings/proxima-reuniao.md).
+[próxima reunião](meetings/2026-11-17.md).
