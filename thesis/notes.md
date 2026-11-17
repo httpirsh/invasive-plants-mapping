@@ -103,9 +103,11 @@ perguntas de investigação.
 
 **Na tese:** ✅ Os conceitos base e a tabela de problemas já estão em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
-(abertura do capítulo e secção Motivation); a tabela do manuscrito
-usa a numeração das três perguntas aprovadas. O diagrama do pipeline
-ainda não foi feito. A Introdução ainda cita `zhu2026` para a linha
+(abertura do capítulo e secção 1.1 Context and Motivation); a tabela
+do manuscrito usa a numeração das três perguntas aprovadas. O
+diagrama do pipeline está na secção 1.1 (Figura
+`fig:introduction-pipeline`, TikZ, 2026-11-17), com cada pergunta na
+etapa em que atua. A Introdução ainda cita `zhu2026` para a linha
 das outras regiões; a entrada da bibliografia já tem o autor certo
 (Stewart et al., corrigido a 2026-11-17), mas a fonte certa para essa
 linha é Yang et al. (2026). Por corrigir no manuscrito. Duas outras
