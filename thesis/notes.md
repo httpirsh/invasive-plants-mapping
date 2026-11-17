@@ -2293,6 +2293,35 @@ aninhada.
 - As duas corridas anteriores (com Random Forest e biased SVM) ficam só
   nesta entrada; o notebook foi reescrito e tem uma única corrida.
 
+**Revisão (2026-11-17, leitura das fontes da métrica; decisão minha):**
+li Phillips et al. (2006), Peterson et al. (2008) e Elkan & Noto
+(2008), que acima estavam "por ler" ou "não lido".
+
+- **A sensitivity a área fixa deixa de ser raciocínio meu com fontes
+  por ler.** É o teste de "equalized predicted area" de Phillips et
+  al. (2006, §2.6.1): a omissão depende da área prevista, por isso
+  dois modelos só se comparam a área igual; eles fixam a área pelo
+  modelo rival, eu fixo-a à partida. O eixo "proporção da área
+  prevista", em vez de comissão sobre ausências, é o que Peterson et
+  al. (2008) adotam na ROC parcial, com a diferença de que fixam a
+  tolerância de omissão e não a área, e dizem, sem o implementar, que
+  limitar a área prevista também faria sentido. Nenhum dos dois
+  recomenda uma fração: **os 10% continuam a ser escolha minha.**
+- **Elkan & Noto (2008, lema 1)** confirma a equivalência de
+  ordenação entre PU-learning e presença-vs-fundo que usei para não
+  correr o PU-learning à parte, no cenário de um só conjunto de
+  treino. Para o cenário caso-controlo (presenças e fundo amostrados à
+  parte, o nosso) o artigo só diz que a prevalência não é
+  identificável; estender-lhe a equivalência de ordenação continua a
+  ser raciocínio meu.
+- Li, Guo & Elkan (2011) e Li & Guo (2010) passaram de "só resumo" a
+  lidos na íntegra e confirmam o que o resumo dizia; Mack & Waske
+  (2017) fica só pelo resumo.
+- Resumos em
+  [`docs/literature.md`](../docs/literature.md#evaluating-presence-only-models-without-confirmed-absences);
+  estado atualizado em
+  [`docs/methodology.md`](../docs/methodology.md#evaluation).
+
 **Impacto a jusante (tudo a recorrer ou a marcar):** curva da RQ1
 (`results/effort_reduction_curve/`, números em
 `docs/research_questions.md`), análise de sensibilidade à zona-tampão
@@ -3635,6 +3664,24 @@ novas, de trabalhos dos meus orientadores. Ficam 38 entradas.
 **Revisão (2026-11-17):** não pedi os três trabalhos do grupo na
 reunião de 2026-11-17; dou o ponto por resolvido e ficam fora da
 lista por ler.
+
+**Revisão (2026-11-17, leitura do que faltava):** lidos na íntegra
+Phillips et al. (2006, cópia do autor via Internet Archive), Peterson
+et al. (2008, cópia na WHOI), Elkan & Noto (2008, PDF do autor), Li,
+Guo & Elkan (2011) e Li & Guo (2010, cópias na página do Guo na UC
+Merced); figuras só pelas legendas. Ficam 41 entradas: 35 lidas na
+íntegra; 3 noutra versão (Dimson 2023, Ma 2026, Raine 2026); 1 só
+resumo (Mack & Waske 2017: a *Remote Sensing Letters* está paga e o
+repositório da FU Berlin com a tese do autor bloqueou o acesso
+automático); 2 não publicadas. O artigo publicado de Dimson et al.
+continua bloqueado por aqui (Wiley) e o de Ma et al. (Elsevier) não
+foi obtido; o de Raine et al. (IEEE) não foi tentado. O que mudou na
+fundamentação está na
+[entrada da RQ1 presence-only](#rq1-presence-only) (Revisão de
+2026-11-17, leitura das fontes da métrica). Verifiquei também a
+consistência de `docs/literature.md` com o desenho atual: só a nota da
+secção one-class apontava ainda para a entrada do multiclasse; passou
+a apontar para a entrada presence-only.
 
 ### Identidade da tese confirmada: título, mestrado, orientadores, idioma e data da entrega
 

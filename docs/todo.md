@@ -14,9 +14,6 @@ novas experiências antes da entrega (a curva da RQ1 já foi recorrida
 com o classificador presence-only a 2026-11-17). Numeração das perguntas:
 [thesis/notes.md](../thesis/notes.md#renumeracao-perguntas-2026-11-13).
 
-- [ ] RQ1: ler Phillips et al. (2006) e Peterson et al. (2008) para
-  confirmar a sensitivity a área fixa já usada na seleção de método
-  ([thesis/notes.md](../thesis/notes.md#rq1-presence-only)).
 - [ ] Decidir o mapeamento dos capítulos de `thesis/document/text/`
   para a forma de relatório intermédio.
 - [ ] Rever a estrutura de cada capítulo face aos relatórios de

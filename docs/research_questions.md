@@ -228,8 +228,11 @@ own habitat-composition result. The curve design itself has no
 literature precedent checked yet. Presence-only classifier: Rapinel &
 Hubert-Moy (2021) on background vs. pseudo-absences; Phillips et al.
 (2009) on background as an unlabelled sample; Deng et al. (2018),
-Mack & Waske (2017), Li & Guo (2010) on presence-background methods
-against true one-class ones.
+Mack & Waske (2017), Li & Guo (2010), Li, Guo & Elkan (2011) on
+presence-background methods against true one-class ones; Elkan & Noto
+(2008) on why no separate PU-learning model is run (rank equivalence
+with presence-vs-background). Metric:
+[`methodology.md`](methodology.md#evaluation).
 
 **Expert reference labels (adopted):** *A. dealbata* polygons sent by
 the supervisor; provenance and counts in

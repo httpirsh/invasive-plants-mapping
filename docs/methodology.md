@@ -137,10 +137,13 @@ background of the test block is the sample of its landscape, so the
 metric is rank-based within each fold and pooled over held-out
 presences. The background pool serves only to
 measure area; no background point is labelled as absence, so an
-unrecorded acacia there is never counted as an error. Literature not
-yet read: this is believed to be the omission-rate-against-area logic
-of Phillips et al. (2006) and the partial ROC of Peterson et al.
-(2008) — to confirm before treating it as established. Reasoning:
+unrecorded acacia there is never counted as an error. It is the
+equalized-predicted-area test of Phillips et al. (2006) (omission
+compared at equal predicted area; proportional predicted area as the
+x-axis of a presence-vs-random ROC) with the area fixed in advance;
+Peterson et al. (2008) use the same axis in their partial ROC but fix
+the omission tolerance instead of the area. Neither recommends an
+area fraction. Reasoning:
 [`thesis/notes.md`](../thesis/notes.md#rq1-presence-only).
 
 **Secondary: ROC-AUC per fold against the block background.** The
@@ -169,9 +172,11 @@ data, and under which split.
   Reasoning:
   [`thesis/notes.md`](../thesis/notes.md#simplificacao-desenho-2026-11-13).
 
-**Grounded in:** Hirzel et al. (2006) (presence-only evaluation
-without confirmed absences); Gillespie et al. (2024) reported AUC;
-Phillips et al. (2009) (AUC against background has a maximum below 1).
+**Grounded in:** Phillips et al. (2006) and Peterson et al. (2008)
+(evaluation by predicted area, no absences); Hirzel et al. (2006)
+(presence-only evaluation without confirmed absences); Gillespie et
+al. (2024) reported AUC; Phillips et al. (2006, 2009) (AUC against
+background has a maximum below 1).
 
 ## Error Analysis
 

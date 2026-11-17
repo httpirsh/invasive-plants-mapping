@@ -6,9 +6,10 @@ must be revisited after a broader search (protocol in
 [`thesis/notes.md`](../thesis/notes.md#protocolo-de-pesquisa-da-literatura)).
 
 Every entry was re-read on 2026-11-11 from the full text where it
-could be obtained. Seven entries were added on 2026-11-14 (marked in
-their status), read from the PDF or web page converted to text.
-Each paper has a status:
+could be obtained. Seven entries were added on 2026-11-14 and three on
+2026-11-17 (marked in their status), read from the PDF or web page
+converted to text; on 2026-11-17 two entries also went from abstract
+only to read in full. Each paper has a status:
 
 - **Read** — full text read end to end; the summary is checked against
   it. Figures were read from captions and text, not viewed, and
@@ -660,9 +661,10 @@ against (step 7 of the
 
 ### One-class / positive-unlabeled classification
 
-> Search done for the RQ1 method choice. True one-class methods were
-> then tested and dropped in favour of presence-vs-background (see
-> [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)).
+> Search done for the RQ1 method choice. True one-class methods and
+> presence-background methods were then compared under one protocol,
+> and the presence-background logistic regression was chosen (see
+> [`thesis/notes.md`](../thesis/notes.md#rq1-presence-only)).
 
 Terminology is inconsistent in this literature: "one-class" is used
 both for methods with no background data at all (true one-class,
@@ -718,29 +720,112 @@ presence-background ones.
 - Accuracy without absence data is biased; it recommends continuous
   maps over thresholds.
 
+**Elkan & Noto (2008).** Learning classifiers from only positive and
+unlabeled data. *KDD 2008*, pp. 213–220.
+DOI: [10.1145/1401890.1401920](https://doi.org/10.1145/1401890.1401920)
+— *Read, added 2026-11-17 (author PDF)*
+
+The positive-unlabelled (PU) learning paper behind Li, Guo & Elkan
+(2011). Not remote sensing: protein records.
+
+- **Lemma 1:** if the labelled positives are "selected completely at
+  random" from all positives, a classifier trained on labelled vs.
+  unlabelled examples estimates g(x) = c · p(y = 1 | x), with c the
+  constant probability that a positive is labelled. "f is an
+  increasing function of g", so for ranking "the classifier g can be
+  used directly" (§2). This is why RQ1 runs no separate PU-learning
+  model: on a rank-based metric it is the presence-vs-background
+  classifier.
+- **Case-control vs. single training set (§2):** the lemma is stated
+  for one sample in which some positives are labelled. When presences
+  and the background are drawn separately, as here, the paper only
+  says that the prevalence p(y = 1) cannot be identified (citing Ward
+  et al., 2008), and still applies its methods in that setting. That
+  the ranking equivalence also holds there is my own reading, not a
+  statement of the paper.
+- c is estimated as the mean of g over held-out labelled positives; a
+  second method weights each unlabelled example as positive with
+  weight p(y = 1 | x, s = 0) and negative with the complement. Both
+  need calibrated probabilities (logistic regression gives them; SVMs
+  via Platt scaling).
+- Experiment: 2 453 TCDB protein records against 4 906 unlabelled
+  SwissProt records, linear SVMs, ten-fold cross-validation: F1 0.931
+  (adjusted threshold) and 0.942 (weighting) against 0.928 for the
+  biased SVM, which needs 621 SVM fits per fold for its grid search
+  (Table 1).
+- One-class SVMs "ignore useful information that is present in the
+  unlabeled examples" and depend on tuning parameters for which "no
+  good way is known" (§6).
+
+**Li, Guo & Elkan (2011).** A Positive and Unlabeled Learning
+Algorithm for One-Class Classification of Remote-Sensing Data. *IEEE
+TGRS*, 49(2), 717–725. DOI: 10.1109/TGRS.2010.2058578.
+— *Read, added to full text 2026-11-17 (accepted manuscript on
+Q. Guo's UC Merced page; figures from captions only)*
+
+Elkan & Noto's method on two 0.3 m aerial scenes (Richmond and El
+Cerrito, California; red, green and blue bands plus 3 × 3 texture
+statistics, 15 features), one class at a time (urban, trees, grass,
+soil, water). Training: 1 000 labelled positive pixels and 5 000
+random unlabelled background pixels; test: 2 000 positive and 2 000
+negative; ten random draws.
+
+- **PU-learning best in every scene and class**, biased SVM close
+  behind, one-class SVM and the Gaussian domain descriptor far below
+  with "salt-and-pepper" maps. Scene two, urban, kappa: 0.82, 0.80,
+  0.41, 0.42; one-class overall accuracy 70–80% "most of the time".
+- The two one-class methods were tuned on the test set, to show their
+  best achievable performance, and still lost; the authors attribute
+  it to ignoring the unlabelled data and to parameter sensitivity.
+- Biased SVM tuning took about 80 min per draw against 2 min for the
+  PU-learning network.
+- **Stated limitation:** the selected-completely-at-random assumption
+  "is difficult to satisfy and/or verify", and the effect of biased
+  samples is future work. Citizen-science points violate it by
+  construction.
+- Random pixel draws, no spatial split, very high resolution.
+
+**Li & Guo (2010).** A maximum entropy approach to one-class
+classification of remote sensing imagery. *Int. J. Remote Sensing*,
+31(8), 2227–2235. DOI: 10.1080/01431161003702245.
+— *Read, added to full text 2026-11-17 (author copy on Q. Guo's UC
+Merced page; figures from captions only)*
+
+MaxEnt (the Phillips et al. software, 5 000 background points,
+regularisation multiplier 1) against a one-class SVM on the El Cerrito
+scene of Li et al. (2011), four classes; 1 000 positive training
+pixels, 1 000 + 1 000 test pixels. The threshold is the logistic value
+at 5% omission on a held-out quarter of the positives.
+
+- MaxEnt overall accuracy 82.8–92.7% (kappa 0.66–0.85) against
+  72.4–82.3% (0.45–0.65) for the one-class SVM, McNemar significant
+  for every class; the one-class SVM over-predicts and gives
+  salt-and-pepper maps.
+- MaxEnt is presented as needing "only positive data" but uses 5 000
+  background pixels — the second sense of one-class in the
+  terminology note above.
+- The one-class SVM was tuned by ten-fold cross-validation on
+  positives only, so only the true-positive rate guided it. Random
+  pixel draws, no spatial split.
+
 **Abstract only** (paywalled; consistent with the above, not citable
 for details):
 
-- **Li, Guo & Elkan (2011).** A Positive and Unlabeled Learning
-  Algorithm for One-Class Classification of Remote-Sensing Data. *IEEE
-  TGRS*, 49(2), 717–725. DOI: 10.1109/TGRS.2010.2058578. PU-learning
-  outperformed biased SVM and one-class SVM on aerial scenes.
-- **Li & Guo (2010).** A maximum entropy approach to one-class
-  classification of remote sensing imagery. *Int. J. Remote Sensing*,
-  31(8), 2227–2235. DOI: 10.1080/01431161003702245. MaxEnt beat
-  one-class SVM.
 - **Mack & Waske (2017).** In-depth comparisons of MaxEnt, biased SVM
   and one-class SVM for one-class classification of remote sensing
   data. *Remote Sensing Letters*, 8(3), 290–299.
   DOI: 10.1080/2150704X.2016.1265689. Biased SVM came first; even the
   best approach performed poorly in many tasks. Agrees with Li & Guo
-  (2010) on one-class SVM being behind.
+  (2010) on one-class SVM being behind. The author's FU Berlin thesis,
+  which contains the comparison, is in an open repository that
+  blocked automated access on 2026-11-17; to download by hand.
 
 **Synthesis (my reading):** in the papers read, one-class SVM never
 beat the best positive-unlabelled or presence-background method,
-though it sometimes beat individual binary classifiers. None of these
-studies matches this setup, but the thesis's own tests later agreed
-with them.
+though it sometimes beat individual binary classifiers. All the
+remote-sensing comparisons use random pixel draws on very high
+resolution imagery, none a spatial split. None of these studies
+matches this setup, but the thesis's own tests agreed with them.
 
 ### Evaluating presence-only models without confirmed absences
 
@@ -775,10 +860,99 @@ fairly insensitive to prevalence.
   background sample is an approximation of that, so the index is not
   background-free.
 
+**Phillips, Anderson & Schapire (2006).** Maximum entropy modeling of
+species geographic distributions. *Ecological Modelling*, 190(3–4),
+231–259.
+DOI: [10.1016/j.ecolmodel.2005.03.026](https://doi.org/10.1016/j.ecolmodel.2005.03.026)
+— *Read, added 2026-11-17 (author copy via the Internet Archive;
+figures from captions only)*
+
+The MaxEnt paper. Two Neotropical mammals (116 and 88 museum
+records), climate, elevation and potential vegetation at 0.05°, ten
+random 70/30 partitions, compared with GARP. Read for its evaluation
+section, which is the source of RQ1's metric.
+
+- **Evaluation by predicted area (§2.6.1):** after a threshold, a
+  model is described by its *extrinsic omission rate* (test localities
+  outside the predicted area) and its *proportional predicted area*
+  (fraction of all pixels predicted suitable). A one-tailed binomial
+  test compares the omission with a random model of the same predicted
+  area. Because omission "is highly sensitive to the proportional
+  predicted area", two models are compared only at equal area: the
+  **equalized predicted area test** sets MaxEnt's threshold to the
+  area of the GARP prediction and compares omission rates (Wilcoxon
+  signed-rank over partitions). Sensitivity at a fixed area fraction
+  is this test with the area fixed in advance instead of taken from
+  the other model.
+- **ROC with presence vs. random (§2.6.2):** the negative instances
+  are 10 000 background pixels drawn uniformly at random; 1 −
+  specificity is then "almost identical to proportional predicted
+  area" (§3.1.2). The maximum achievable AUC is 1 − a/2, with a the
+  unknown fraction of pixels the species occupies; random prediction
+  is still 0.5.
+- **Background is not absence (§2.1.4):** MaxEnt models a distribution
+  over pixels and "in no sense are pixels without species records
+  interpreted as absences"; GLM/GAM fitted with background pixels must
+  be read as a relative index of suitability, as must any model fitted
+  to biased samples (§2.1.3).
+- **Cumulative output (§2.2):** a threshold of t gives about t%
+  omission with minimal predicted area, offered as a basis for
+  choosing a threshold.
+- **Positional error (§4.3):** two test localities on a
+  vegetation-class border lowered one partition's AUC; smoothing the
+  prediction with a 3 × 3 low-pass filter raised it from 0.93 to 0.98,
+  proposed as a general remedy "when spatial error is known to exist
+  in the data".
+- Sampling bias towards roads and rivers is listed as a pitfall and
+  left to future work; background drawn from sampled sites is named
+  as a mitigation. Regularisation was one small value for all features
+  (v1.0); later versions set it per feature type and sample size.
+- No spatial split, no remote-sensing features, no area fraction
+  recommended.
+
+**Peterson, Papeş & Soberón (2008).** Rethinking receiver operating
+characteristic analysis applications in ecological niche modeling.
+*Ecological Modelling*, 213(1), 63–72.
+DOI: [10.1016/j.ecolmodel.2007.11.008](https://doi.org/10.1016/j.ecolmodel.2007.11.008)
+— *Read, added 2026-11-17 (copy hosted by WHOI; figures from captions
+only)*
+
+Argues that the full AUC undervalues models that do not predict across
+the whole range of proportional areas, and weights omission and
+commission equally, which is wrong for models of potential
+distribution. Proposes a partial ROC.
+
+- **The x-axis is the proportion of the area predicted present**, not
+  commission on absence points, "following the reasoning that Phillips
+  et al. (2006) used in substituting 'background points' for 'absence
+  points'" (§3). Absence data "should not be employed in evaluating
+  model quality" for potential distributions, with invasive species as
+  the example of why (§2).
+- **Partial ROC:** the AUC is computed only where omission is at most
+  a user-chosen tolerance E (0 for high-quality data, "perhaps 5–20%"
+  for found data) and within the algorithm's prediction domain, and is
+  reported as the ratio to the null area on the same interval, with
+  bootstrap significance (200 replicates of 50% of the test points).
+  Omission is treated as the more serious error.
+- Worked example: Mourning Dove, 1 202 Breeding Bird Survey routes,
+  trained on two diagonal quadrants and tested on the other two (a
+  spatial split). At E = 100 (full ROC) MaxEnt and MinDist beat GARP
+  (ratios 1.49, 1.46, 1.27); at E = 5 GARP and MaxEnt lead (1.15,
+  1.13); at E = 1 GARP leads and MaxEnt is not significant (p =
+  0.074). Rankings depend on the tolerance.
+- **Bounding the area instead:** the discussion says that limiting
+  "the fraction of total area that an algorithm is allowed to predict"
+  would also be "biologically sensible", giving a curve bounded on
+  both sides, but does not implement it. RQ1's metric fixes the area
+  side; this paper fixes the omission side. No area fraction is
+  recommended.
+
 **No method was found that evaluates a presence-only model without
 any background or unlabelled sample.** Even a zero-background training
 method needs background data to be evaluated, which is why the shared
-background pool exists.
+background pool exists; the predicted-area axis of Phillips et al.
+(2006) and Peterson et al. (2008) likewise needs the whole study area
+or a random sample of it.
 
 ### Spatial validation
 
