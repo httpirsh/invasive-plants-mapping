@@ -124,19 +124,19 @@ it acts on.
 \centering
 \begin{tikzpicture}[
   node distance=5mm and 7mm,
-  step/.style={draw, rounded corners=2pt, align=center, minimum height=11mm,
+  stage/.style={draw, rounded corners=2pt, align=center, minimum height=11mm,
     text width=24mm, font=\small, inner sep=2pt},
-  expert/.style={step, dashed},
+  expert/.style={stage, dashed},
   note/.style={align=center, font=\scriptsize, text width=26mm},
   rq/.style={font=\scriptsize\bfseries},
   flow/.style={-{Latex[length=2mm]}, thick},
   dflow/.style={flow, dashed}
 ]
-\node[step] (obs) {Citizen-science\\observation};
-\node[step, right=of obs] (lab) {Reference\\pixel label};
-\node[step, right=of lab] (emb) {Embedding\\(TESSERA)};
-\node[step, right=of emb] (clf) {Presence-only\\classifier};
-\node[step, right=of clf] (map) {\emph{A.~dealbata} map\\+ confidence};
+\node[stage] (obs) {Citizen-science\\observation};
+\node[stage, right=of obs] (lab) {Reference\\pixel label};
+\node[stage, right=of lab] (emb) {Embedding\\(TESSERA)};
+\node[stage, right=of emb] (clf) {Presence-only\\classifier};
+\node[stage, right=of clf] (map) {\emph{A.~dealbata} map\\+ confidence};
 \node[expert, below=9mm of clf] (exp) {Expert polygons};
 
 \node[note, below=1mm of obs] {iNaturalist,\\research grade};
