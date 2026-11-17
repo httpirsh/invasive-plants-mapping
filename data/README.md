@@ -119,7 +119,8 @@ obtained.
   read. Inputs, seed and hashes are in
   [`processed_manifest.csv`](processed_manifest.csv). The current file
   was written on 2026-11-13 by `one_class_method_selection.ipynb`,
-  with the same code.
+  with the same code (notebook deleted on 2026-11-17; in the Git
+  history up to commit `1ed5b46`).
 - **Status:** the background pool shared across the whole
   effort-reduction curve (RQ1); not yet confirmed by
   the supervisor as final.
@@ -145,7 +146,8 @@ obtained.
   under the same rule as the uniform pool; inputs, seed and hashes are
   in [`processed_manifest.csv`](processed_manifest.csv). The current
   file was written on 2026-11-13 by
-  `forest_only_background_check.ipynb`, with the same code.
+  `forest_only_background_check.ipynb`, with the same code (notebook
+  deleted on 2026-11-17; in the Git history up to commit `1ed5b46`).
 - **Status:** used only as a harder background in the robustness
   check of the effort-reduction curve (RQ1).
 

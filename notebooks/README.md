@@ -30,24 +30,23 @@ Run order: `02_citizen_science/acacia_observations` →
 `05_data_integration/qgis_overview` →
 `05_data_integration/segmentation_mask` →
 `05_data_integration/background_pools` →
-`07_foundation_models/one_class_method_selection` →
-`07_foundation_models/one_class_background_free_evaluation` →
 `07_foundation_models/presence_only_method_selection` →
-`07_foundation_models/presence_background_citizen_science` →
-`07_foundation_models/expert_arm_classifiers` →
 `07_foundation_models/effort_reduction_curve` →
-`07_foundation_models/forest_only_background_check` →
 `07_foundation_models/expert_polygon_redundancy_check` →
 `07_foundation_models/expert_polygon_geographic_diversity` →
 `07_foundation_models/label_purity_check`.
 
-`07_foundation_models/effort_reduction_curve` and
-`07_foundation_models/forest_only_background_check` only read results:
-run `experiments/effort_reduction_curve/run.py` before them, the second
-time with `--background forest_only`. The notebooks from
-`presence_background_citizen_science` to `label_purity_check` ran under
-the RQ1 protocol superseded on 2026-11-17 and say so at the top; the
-current method selection is `presence_only_method_selection`.
+`07_foundation_models/effort_reduction_curve` only reads results: run
+`experiments/effort_reduction_curve/run.py` before it. The three
+diagnostic notebooks after it are facts about the data; the Random
+Forest section at the end of `label_purity_check` ran under the RQ1
+protocol superseded on 2026-11-17 and says so at the top. The five
+notebooks of that protocol (`one_class_method_selection`,
+`one_class_background_free_evaluation`,
+`presence_background_citizen_science`, `expert_arm_classifiers`,
+`forest_only_background_check`) were deleted on 2026-11-17; they are
+in the Git history up to commit `1ed5b46`, and their numbers are
+recorded in `thesis/notes.md`.
 
 `05_data_integration/design_counts` only counts, from the stored
 files, what `docs/research_questions.md` cites; run it again when the

@@ -9,7 +9,13 @@ Cada entrada segue a mesma forma: quem decidiu, **O que decidi**,
 **Porquê**, **Fundamentação**, **Onde**, **Na tese**. O texto e a
 data de uma entrada nunca mudam; o que muda depois entra num bloco
 **Revisão** datado no fim da entrada, e o estado atual de cada uma
-está no [índice das decisões](#decisões).
+está no [índice das decisões](#decisões). Os notebooks apagados a
+2026-11-17 (`one_class_method_selection`,
+`one_class_background_free_evaluation`,
+`presence_background_citizen_science`, `expert_arm_classifiers`,
+`forest_only_background_check`) continuam ligados nas linhas "Onde"
+das entradas antigas; estão no histórico do Git até ao commit
+`1ed5b46`.
 
 ## Para dizer
 
@@ -2292,6 +2298,68 @@ grep; nada a corrigir lá por agora).
 **Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia); o Random
 Forest entra como metodologia abandonada, com a razão do ponto 1.
 
+### Curva da RQ1 no desenho presence-only: leave-one-block-out com as duas fontes, sensitivity a 10% de área {#curva-presence-only}
+
+*Decisão minha (2026-11-17), a confirmar com o orientador. Reescreve
+`experiments/effort_reduction_curve/run.py` e `compare_buffer.py` para
+o desenho da entrada [#rq1-presence-only](#rq1-presence-only); o que
+muda face à [curva completa](#curva-de-redução-de-esforço-completa-0100-com-fundo-e-bloco-de-teste-fixos)
+está na Revisão dessa entrada.*
+
+**O que decidi:**
+1. **Folds: leave-one-block-out sobre os blocos de 10 km com pelo
+   menos 5 presenças de qualquer das fontes** (ciência cidadã ou
+   píxeis de especialistas): 26 blocos, 15 com ciência cidadã, 18 com
+   especialistas, 6 com as duas. Em cada fold, as presenças das duas
+   fontes do bloco e o fundo do bloco são o teste; tudo o resto
+   treina. Polígonos que cruzam a fronteira do bloco (9 em 1 457)
+   dão os píxeis do bloco ao teste e os outros ao treino, como antes.
+2. **Classificador:** regressão logística presença-fundo, `C=10`, o
+   escolhido na seleção de método; escala ajustada em presenças +
+   fundo de treino.
+3. **Métrica:** sensitivity a 10% de área prevista, calculada como na
+   seleção de método (área necessária por presença contra o fundo do
+   bloco de teste); reportada agrupada sobre todas as presenças
+   retidas (cada uma conta uma vez) e por fold (blocos com peso
+   igual), com a curva 1%–50%. ROC-AUC por fold como secundária. **O
+   Boyce deixa de ser calculado na curva:** um bloco tem 5–41 pontos
+   de fundo, poucos para as dez janelas do índice.
+4. **Condições:** as mesmas de antes (0% a 100% em passos de 10, 100%
+   = só especialistas, e "100% + ciência cidadã"), ordem encaixada dos
+   polígonos com seed 0. Comparação principal: 90% − 0% no teste
+   agrupado, diferença emparelhada por fold (média, dp, folds a
+   subir/descer) e diferença agrupada; especialistas e ciência cidadã
+   em separado ao lado.
+5. **Tampão:** continua opção do script, agora por fold; critério da
+   análise de sensibilidade na Revisão da
+   [entrada do tampão](#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km).
+
+**Porquê:** o mesmo protocolo da seleção de método, estendido aos
+especialistas pela regra mais simples (o bloco é a unidade; entra como
+fold se tiver presenças que cheguem de uma das fontes). Evita sortear
+blocos de teste por semente e a reutilização de blocos entre
+sementes, que impedia ler a concordância entre sementes como evidência
+independente. Os 5 de mínimo são o mesmo limiar da seleção. Um fold
+com 1 154 píxeis de especialistas (56_443) pesa muito no agrupado; por
+isso o por-fold é reportado ao lado.
+
+**Fundamentação:** nenhuma nova; o limiar de 5 e a regra dos folds são
+raciocínio meu. Própria da avaliação: ver [#rq1-presence-only](#rq1-presence-only).
+
+**Impacto a jusante:** `results/effort_reduction_curve/`,
+`_buffer_300m/`, `_buffer_1000m/` e `_buffer_comparison/` são
+regenerados com tabelas novas (`per_fold.csv`, `summary.csv`,
+`pooled_curve.csv`, `paired_differences.csv`); o notebook
+`effort_reduction_curve.ipynb` tem de ser reescrito para as ler;
+`forest_only_background_check.ipynb` fica obsoleto (o fundo só de
+floresta não é recorrido).
+
+**Onde:** [`run.py`](../experiments/effort_reduction_curve/run.py);
+[`compare_buffer.py`](../experiments/effort_reduction_curve/compare_buffer.py);
+[`src/evaluation.py`](../src/evaluation.py) (`needed_area`).
+
+**Na tese:** ⏳ Ainda não escrita (Metodologia).
+
 ### Curva de redução de esforço completa: 0%–100%, com fundo e bloco de teste fixos
 
 *Decisão minha, não confirmada pelo orientador.*
@@ -2357,6 +2425,15 @@ resultado. A curva é recorrida com o classificador de
 especialistas) passa a ser um ponto de referência à parte. O resto do
 desenho não muda. Ver
 [nível 100% + ciência cidadã](#curva-100-mais-ciencia-cidada).
+
+**Revisão (2026-11-17):** *superada em parte* pela
+[curva no desenho presence-only](#curva-presence-only): os pontos 1, 2
+e 4 (polígonos como unidade, ordem encaixada, teste com as duas
+fontes) mantêm-se; o ponto 3 (um conjunto de teste sorteado por
+semente, cinco sementes) é substituído por leave-one-block-out. Os
+resultados desta entrada foram obtidos com o Random Forest
+presença-vs-fundo e deixam de ser reportados
+([#rq1-presence-only](#rq1-presence-only)).
 
 ### Curva de redução de esforço sob um fundo só de floresta: verificação de robustez {#curva-fundo-so-floresta}
 
@@ -3181,6 +3258,20 @@ tabelas em `results/effort_reduction_curve_buffer_300m/`,
 à Metodologia (validação) e aos resultados da RQ1. Foi calculada em
 ROC-AUC do Random Forest; desde 2026-11-17 fica a recorrer com o
 classificador da RQ1 ([RQ1 passa a presence-only](#rq1-presence-only)).
+
+**Revisão (2026-11-17, desenho presence-only):** a medição acima foi
+feita com o Random Forest e os cinco sorteios, e deixa de ser
+reportada. O tampão continua opção de `run.py`, agora por fold
+(saem do treino os pontos a menos da distância de qualquer ponto de
+teste do bloco retido). **Critério, escrito antes de correr:** em cada
+comparação, a diferença de sensitivity a 10% de área face à curva sem
+tampão, emparelhada por fold, tem média menor em módulo do que o seu
+desvio-padrão entre os 26 folds (ou é zero em todos). O tampão não
+muda a leitura da RQ1 só se as 8 comparações cumprirem: 0%, 90%, 100%
+e 90% − 0%, no teste agrupado e só nas presenças de especialistas.
+Reporto também, sem poder de decisão, a diferença nos valores
+agrupados e o ROC-AUC. Resultado: a registar quando a corrida acabar
+([`compare_buffer.py`](../experiments/effort_reduction_curve/compare_buffer.py)).
 
 ### Sentinel-2 bruto: via Earth Search (AWS), sem conta, alinhado à grelha da TESSERA
 

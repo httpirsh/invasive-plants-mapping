@@ -9,8 +9,8 @@ Subfolders are created when the first experiment is run.
   Writes to `results/effort_reduction_curve/`; read and plotted by
   `notebooks/07_foundation_models/effort_reduction_curve.ipynb`. With
   `--background forest_only` it writes the robustness check to
-  `results/effort_reduction_curve_forest_only/`, read by
-  `notebooks/07_foundation_models/forest_only_background_check.ipynb`.
+  `results/effort_reduction_curve_forest_only/` (no notebook reads it
+  since 2026-11-17).
   With `--buffer-m METRES` it drops the training points within that
   distance of a test point and writes to
   `results/effort_reduction_curve_buffer_<METRES>m/`.
