@@ -139,11 +139,12 @@ it acts on.
 \node[stage, right=of lab] (emb) {Embedding\\(TESSERA)};
 \node[stage, right=of emb] (clf) {Presence-only\\classifier};
 \node[stage, right=of clf] (map) {\emph{A.~dealbata} map\\+ confidence};
-\node[expert, below=8mm of clf] (exp) {Expert polygons};
+\node[expert, below=9mm of clf] (exp) {Expert polygons};
 
 \node[note, below=1mm of obs] {iNaturalist,\\research grade};
 \node[note, below=1mm of lab] {10~m pixel, 2023};
 \node[note, below=1mm of emb] {EO foundation\\model};
+\node[note, below=1mm of clf, xshift=-4mm, text width=16mm] {presence vs.\\background};
 \node[note, below=1mm of map] {Coimbra district};
 \node[note, below=1mm of exp] {test reference;\\added to training\\0--100\%};
 
@@ -152,7 +153,7 @@ it acts on.
 \draw[flow] (lab) -- (emb);
 \draw[flow] (emb) -- (clf);
 \draw[flow] (clf) -- (map);
-\draw[dflow] (exp) -- node[rq, right=2pt] {RQ1} (clf);
+\draw[dflow] ([xshift=6mm]exp.north) -- node[rq, right=2pt] {RQ1} ([xshift=6mm]clf.south);
 \node[rq, above=1mm of emb] {RQ4};
 \node[rq, above=1mm of map] {RQ3};
 \end{tikzpicture}}
