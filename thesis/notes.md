@@ -1294,8 +1294,12 @@ muda. As RQ1 a RQ4 ficam como estão.
 `README.md`; `docs/literature.md` (Contribution);
 [próxima reunião](../docs/meetings/2026-11-17.md).
 
-**Na tese:** ⏳ Ainda não aplicada. A Introdução tem os enunciados
-aprovados pelo orientador.
+**Na tese:** ✅ Parcial. O Abstract
+([`6-abstract-EN.tex`](document/frontmatter/6-abstract-EN.tex),
+2026-11-17) já usa esta formulação (ciência cidadã a reduzir a
+dependência dos dados de especialistas, com a formulação do objetivo da
+proposta em vez de "substituir"). A Introdução ainda tem os enunciados
+aprovados pelo orientador; o Resumo em português já está escrito (`6-abstract-PT.tex`).
 
 ## Decisões: dados de referência
 

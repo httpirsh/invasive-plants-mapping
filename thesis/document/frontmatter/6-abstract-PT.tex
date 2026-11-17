@@ -3,10 +3,44 @@
 \section*{Resumo}
 \label{sec:resumo}
 
-\todo[inline]{Tradução do resumo em inglês, escrita depois deste
-estar fechado.}
+As plantas exóticas invasoras estão entre os principais fatores de
+perda de biodiversidade, e o seu controlo exige mapas atualizados de
+onde crescem. As imagens de satélite podem fornecer esses mapas, mas
+os classificadores supervisionados em que assentam precisam de dados
+de referência, locais onde se sabe que a espécie está presente, e
+recolhê-los no terreno é lento e caro. Os produtos de distribuição
+existentes são atualizados com pouca frequência, têm resolução
+espacial grosseira e raramente chegam ao nível da espécie.
+
+As plataformas de ciência cidadã, como o iNaturalist, reúnem milhares
+de observações gratuitas e georreferenciadas de plantas invasoras.
+Apesar da sua riqueza, estes dados são pontos isolados, de qualidade
+posicional e taxonómica desigual, concentrados onde os observadores
+passam, e registam apenas presenças, nunca ausências confirmadas.
+Usá-los diretamente para treinar um classificador baseado em satélite
+não é, por isso, imediato.
+
+Os modelos fundacionais de observação da Terra, pré-treinados em
+grandes volumes de dados de satélite, oferecem um caminho possível.
+Transformam cada píxel numa representação de uso geral, um
+\emph{embedding}, sobre a qual um classificador leve pode ser treinado
+a partir de rótulos escassos e ruidosos, tornando potencialmente as
+observações de ciência cidadã utilizáveis como dados de referência.
+
+Este relatório intermédio, desenvolvido no âmbito do projeto
+MAP.INVADER, investiga em que medida as observações de ciência cidadã,
+transformadas em dados de referência e representadas por
+\emph{embeddings} de modelos fundacionais, podem reduzir a dependência
+de dados de referência de especialistas, dispendiosos, no mapeamento
+de \emph{Acacia dealbata} no distrito de Coimbra. Revê o uso da ciência
+cidadã e dos modelos fundacionais em observação da Terra, propõe um
+\emph{pipeline} que converte observações pontuais em rótulos de treino
+para imagens de satélite, e define uma avaliação que mede quanto se
+ganha ao juntar dados de especialistas a uma base de ciência cidadã.
 
 \section*{Palavras-Chave}
 \label{sec:palavras}
 
-\todo[inline]{Tradução das palavras-chave em inglês.}
+Plantas exóticas invasoras; ciência cidadã; modelos fundacionais de
+observação da Terra; imagens de satélite; mapeamento de espécies;
+dados de referência.
