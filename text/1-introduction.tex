@@ -122,12 +122,13 @@ it acts on.
 
 \begin{figure}[htb]
 \centering
+\resizebox{\textwidth}{!}{%
 \begin{tikzpicture}[
-  node distance=5mm and 5mm,
-  stage/.style={draw, rounded corners=2pt, align=center, minimum height=11mm,
-    text width=22mm, font=\small, inner sep=2pt},
+  node distance=4mm and 8mm,
+  stage/.style={draw, rounded corners=2pt, align=center, minimum height=10mm,
+    text width=25mm, font=\footnotesize, inner sep=2pt},
   expert/.style={stage, dashed},
-  note/.style={align=center, font=\scriptsize, text width=22mm},
+  note/.style={align=center, font=\scriptsize, text width=25mm},
   rq/.style={font=\scriptsize\bfseries},
   flow/.style={-{Latex[length=2mm]}, thick},
   dflow/.style={flow, dashed}
@@ -137,23 +138,22 @@ it acts on.
 \node[stage, right=of lab] (emb) {Embedding\\(TESSERA)};
 \node[stage, right=of emb] (clf) {Presence-only\\classifier};
 \node[stage, right=of clf] (map) {\emph{A.~dealbata} map\\+ confidence};
-\node[expert, below=9mm of clf] (exp) {Expert polygons};
+\node[expert, below=8mm of clf] (exp) {Expert polygons};
 
 \node[note, below=1mm of obs] {iNaturalist,\\research grade};
 \node[note, below=1mm of lab] {10~m pixel, 2023};
-\node[note, below=1mm of emb] {EO foundation model};
-\node[note, below=1mm of clf] {presence vs.\\background};
+\node[note, below=1mm of emb] {EO foundation\\model};
 \node[note, below=1mm of map] {Coimbra district};
-\node[note, below=1mm of exp] {test reference;\\added to training 0--100\%};
+\node[note, below=1mm of exp] {test reference;\\added to training\\0--100\%};
 
-\draw[flow] (obs) -- node[rq, above] {RQ2} (lab);
+\draw[flow] (obs) -- node[rq, above=1pt] {RQ2} (lab);
 \draw[flow] (lab) -- (emb);
 \draw[flow] (emb) -- (clf);
 \draw[flow] (clf) -- (map);
-\draw[dflow] (exp) -- node[rq, right] {RQ1} (clf);
+\draw[dflow] (exp) -- node[rq, right=2pt] {RQ1} (clf);
 \node[rq, above=1mm of emb] {RQ4};
 \node[rq, above=1mm of map] {RQ3};
-\end{tikzpicture}
+\end{tikzpicture}}
 \caption{Overview of the proposed pipeline. Each research question is
 placed at the step it acts on; RQ4 replaces the embedding step by
 Sentinel-2 features.}
