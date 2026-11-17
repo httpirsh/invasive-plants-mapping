@@ -20,6 +20,7 @@ Modules:
 - `manifest.py`: writes and checks `data/processed_manifest.csv`, so
   that a notebook stops when a derived file or one of its inputs has
   changed.
-- `evaluation.py`: continuous Boyce index (Hirzel et al., 2006), used
-  by the same notebooks to evaluate presence-only/presence-background
-  models.
+- `evaluation.py`: sensitivity at a fixed fraction of predicted area
+  (`needed_area`, `sensitivity_at`; the RQ1 metric, shared by the
+  method-selection notebook and the curve script) and the continuous
+  Boyce index (Hirzel et al., 2006).

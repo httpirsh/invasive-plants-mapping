@@ -10,19 +10,12 @@
 ([thesis/notes.md](../thesis/notes.md#primeira-entrega-relatório-intermédio-início-de-janeiro-de-2027)):
 RQ1 (curva de redução de esforço) só com TESSERA como resultado
 preliminar; RQ2, RQ3 e RQ4 (Sentinel-2) no plano de trabalho; sem
-novas experiências antes da entrega, com exceção da correção da RQ1
-abaixo (classificador presence-only). Numeração das perguntas:
+novas experiências antes da entrega (a curva da RQ1 já foi recorrida
+com o classificador presence-only a 2026-11-17). Numeração das perguntas:
 [thesis/notes.md](../thesis/notes.md#renumeracao-perguntas-2026-11-13).
 
 - [ ] RQ1: ler Phillips et al. (2006) e Peterson et al. (2008) para
   confirmar a sensitivity a área fixa já usada na seleção de método
-  ([thesis/notes.md](../thesis/notes.md#rq1-presence-only)).
-- [ ] RQ1: recorrer a curva de redução de esforço e a análise à
-  zona-tampão com a regressão logística presença-fundo (`C=10`), em
-  leave-one-block-out e com a sensitivity a 10% de área (reescrever
-  `experiments/effort_reduction_curve/run.py` e `compare_buffer.py`);
-  escrever os números em `docs/research_questions.md`,
-  `docs/methodology.md` e no ponto de partida da RQ3
   ([thesis/notes.md](../thesis/notes.md#rq1-presence-only)).
 - [ ] Decidir o mapeamento dos capítulos de `thesis/document/text/`
   para a forma de relatório intermédio.

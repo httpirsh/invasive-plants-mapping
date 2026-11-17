@@ -29,3 +29,21 @@ def continuous_boyce(p_scores: np.ndarray, bg_scores: np.ndarray, n_bins: int = 
         return np.nan
     rho, _ = spearmanr(np.array(mids)[ok], f_ratio[ok])
     return rho
+
+
+def needed_area(pres_scores: np.ndarray, bg_scores: np.ndarray) -> np.ndarray:
+    """Predicted-area fraction needed to include each presence: the share of the
+    landscape sample (`bg_scores`, the background of the same test block) scoring at or
+    above the presence. Rank-based, so scores need no common scale across folds. Pooled
+    over held-out presences, `(needed <= a).mean()` is the sensitivity at area fraction
+    `a`. No background point is labelled as absence. Extracted from
+    notebooks/07_foundation_models/presence_only_method_selection.ipynb for the curve
+    script; design in thesis/notes.md (entry rq1-presence-only)."""
+    bg_sorted = np.sort(bg_scores)
+    # count of background >= s, via the position of s in the sorted background
+    return 1.0 - np.searchsorted(bg_sorted, pres_scores, side="left") / len(bg_sorted)
+
+
+def sensitivity_at(needed: np.ndarray, area_fraction: float) -> float:
+    """Share of presences whose needed area is at most `area_fraction`."""
+    return float((needed <= area_fraction).mean()) if len(needed) else np.nan

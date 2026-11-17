@@ -1,41 +1,41 @@
 {
- "run_date": "2026-11-14",
+ "run_date": "2026-11-17",
  "script": "experiments/effort_reduction_curve/compare_buffer.py",
- "git_commit": "eeb6240e5d9916ca9a938fdfd4c0a5490fd41136",
+ "git_commit": "fc5cab599988fc6c64530e6ce1328bd5d6048ccc",
  "git_uncommitted_changes": true,
  "buffers_m": [
   300,
   1000
  ],
- "levels_pct": [
-  0,
-  90,
-  100
+ "conditions": [
+  "0",
+  "90",
+  "100"
  ],
  "test_presences": [
   "pooled",
   "expert only"
  ],
- "seed_left_out": 5,
- "criterion": "ROC-AUC: |mean paired difference| < its standard deviation across seeds, in all comparisons",
+ "criterion": "sensitivity at 10% of area: |mean paired difference across folds| < its sd, in all comparisons",
  "criterion_met_count": {
   "300": {
-   "comparisons": 16,
-   "met": 16,
-   "met_without_seed5": 15
+   "comparisons": 8,
+   "met": 8
   },
   "1000": {
-   "comparisons": 16,
-   "met": 13,
-   "met_without_seed5": 12
+   "comparisons": 8,
+   "met": 8
   }
  },
  "inputs_sha256": {
-  "results/effort_reduction_curve_buffer_300m/per_seed.csv": "3efafec3b7d2d222e3ef6621f8619b1f8aa9f303c24c6af423b9f55a2df3a965",
-  "results/effort_reduction_curve_buffer_300m/run.json": "13cd3c111c2a93c21b8b1afbf486267804c8aa2689590f95fc9ac4dbfa65aaf6",
-  "results/effort_reduction_curve_buffer_1000m/per_seed.csv": "2294ee9a039b29e8615e48653d672c0bf2df35bc1447198a27f814df4371478a",
-  "results/effort_reduction_curve_buffer_1000m/run.json": "5d8b9f68a278c4273512590d14b3402ea81ca428a5d5f85c3040603469cfd6eb",
-  "results/effort_reduction_curve/per_seed.csv": "570587e4b7fde34d52fc403e3bda32d46790e2ec296f8f25f92b4a3d0e3af7fd",
-  "results/effort_reduction_curve/run.json": "63418754efbbc7a2e75784ce1604bcb64849da837be403b59bc5976c760734a0"
+  "results/effort_reduction_curve_buffer_300m/per_fold.csv": "f84da1fda0ab059f183831f06644d47b8d2862faab0cdf5ce0c8bec5600ffa82",
+  "results/effort_reduction_curve_buffer_300m/summary.csv": "ad0c372d7b478ad1ffcceb87f879581eaecf60d4b0da77ae9909f8146f6c329c",
+  "results/effort_reduction_curve_buffer_300m/run.json": "6b35a8f29fd5ea5546499ed8c93a9eb0439566876eb49d279f318298eb10d2c8",
+  "results/effort_reduction_curve_buffer_1000m/per_fold.csv": "1019b91791ed3f22c8e4bd017b1093686e92041f310be6eb084761231564da51",
+  "results/effort_reduction_curve_buffer_1000m/summary.csv": "126451b9c1523223931280a79cd18e4b0e183bc4e9b301e08907714938d5321b",
+  "results/effort_reduction_curve_buffer_1000m/run.json": "f8835919977b4ba35d0ab14cf1a2d26d462b40ca006f3f1119ddc476e64dd134",
+  "results/effort_reduction_curve/per_fold.csv": "d0bd89a5ee656ab12d8a0a0f80775a27e7c8041bb2d74fed9f10b517336cd7b6",
+  "results/effort_reduction_curve/summary.csv": "11079901d4227e5952d7c48ef27f126b63510c6116bf2ab9517e46e213465705",
+  "results/effort_reduction_curve/run.json": "3dc34dab242a716b733e943c6ab051edc67a4468133bd603f2eff69e2ddd3396"
  }
 }

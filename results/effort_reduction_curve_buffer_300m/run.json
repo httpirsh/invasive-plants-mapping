@@ -1,120 +1,484 @@
 {
- "run_date": "2026-11-14",
+ "run_date": "2026-11-17",
  "script": "experiments/effort_reduction_curve/run.py",
  "command": "python experiments/effort_reduction_curve/run.py --background uniform --buffer-m 300",
- "git_commit": "eeb6240e5d9916ca9a938fdfd4c0a5490fd41136",
+ "smoke_test": false,
+ "git_commit": "fc5cab599988fc6c64530e6ce1328bd5d6048ccc",
  "git_uncommitted_changes": true,
- "levels_pct": [
-  0,
-  10,
-  20,
-  30,
-  40,
-  50,
-  60,
-  70,
-  80,
-  90,
-  100
+ "design": "leave-one-block-out; sensitivity at fixed predicted area; background as landscape sample only",
+ "classifier": {
+  "LogisticRegression": {
+   "C": 10.0,
+   "class_weight": "balanced",
+   "max_iter": 5000
+  },
+  "scaling": "StandardScaler on training presences + background"
+ },
+ "primary_area_fraction": 0.1,
+ "curve_area_fractions": [
+  0.01,
+  0.02,
+  0.03,
+  0.04,
+  0.05,
+  0.06,
+  0.07,
+  0.08,
+  0.09,
+  0.1,
+  0.11,
+  0.12,
+  0.13,
+  0.14,
+  0.15,
+  0.16,
+  0.17,
+  0.18,
+  0.19,
+  0.2,
+  0.21,
+  0.22,
+  0.23,
+  0.24,
+  0.25,
+  0.26,
+  0.27,
+  0.28,
+  0.29,
+  0.3,
+  0.31,
+  0.32,
+  0.33,
+  0.34,
+  0.35,
+  0.36,
+  0.37,
+  0.38,
+  0.39,
+  0.4,
+  0.41,
+  0.42,
+  0.43,
+  0.44,
+  0.45,
+  0.46,
+  0.47,
+  0.48,
+  0.49,
+  0.5
  ],
- "seeds": [
-  1,
-  2,
-  3,
-  4,
-  5
+ "conditions": [
+  "0",
+  "10",
+  "20",
+  "30",
+  "40",
+  "50",
+  "60",
+  "70",
+  "80",
+  "90",
+  "100",
+  "100% + citizen science"
  ],
  "polygon_order_seed": 0,
- "test_fraction": 0.2,
+ "min_presences_per_fold": 5,
+ "folds": [
+  "51_444",
+  "52_444",
+  "54_444",
+  "54_445",
+  "54_446",
+  "55_442",
+  "55_443",
+  "55_444",
+  "55_445",
+  "55_446",
+  "56_443",
+  "56_444",
+  "56_445",
+  "56_446",
+  "57_443",
+  "57_444",
+  "57_445",
+  "57_446",
+  "58_444",
+  "58_445",
+  "58_446",
+  "58_447",
+  "59_446",
+  "59_447",
+  "60_444",
+  "60_446"
+ ],
+ "n_folds": 26,
  "background": "uniform",
- "classifiers": {
-  "RandomForest": {
-   "n_estimators": 300,
-   "class_weight": "balanced",
-   "random_state": 42
-  },
-  "LogisticRegression": {
-   "class_weight": "balanced",
-   "max_iter": 1000
-  }
- },
  "buffer_m": 300.0,
- "buffer_removed_from_training_by_seed": {
-  "1": {
+ "buffer_removed_from_training_by_fold": {
+  "51_444": {
    "citizen_science": {
-    "n_train_before": 1744,
-    "n_removed": 31
-   },
-   "expert": {
-    "n_train_before": 2248,
-    "n_removed": 46
-   },
-   "background": {
-    "n_train_before": 1718,
+    "n_train_before": 2462,
     "n_removed": 1
-   }
-  },
-  "2": {
-   "citizen_science": {
-    "n_train_before": 2419,
-    "n_removed": 0
    },
    "expert": {
-    "n_train_before": 2668,
-    "n_removed": 5
+    "n_train_before": 2743,
+    "n_removed": 2
    },
    "background": {
-    "n_train_before": 1748,
+    "n_train_before": 1976,
     "n_removed": 0
    }
   },
-  "3": {
+  "52_444": {
    "citizen_science": {
-    "n_train_before": 1731,
-    "n_removed": 31
+    "n_train_before": 2453,
+    "n_removed": 0
    },
    "expert": {
-    "n_train_before": 2214,
-    "n_removed": 21
+    "n_train_before": 2771,
+    "n_removed": 0
    },
    "background": {
-    "n_train_before": 1694,
-    "n_removed": 1
+    "n_train_before": 1961,
+    "n_removed": 0
    }
   },
-  "4": {
+  "54_444": {
    "citizen_science": {
-    "n_train_before": 2299,
+    "n_train_before": 2409,
+    "n_removed": 4
+   },
+   "expert": {
+    "n_train_before": 2771,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1985,
+    "n_removed": 0
+   }
+  },
+  "54_445": {
+   "citizen_science": {
+    "n_train_before": 2446,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2771,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1975,
+    "n_removed": 0
+   }
+  },
+  "54_446": {
+   "citizen_science": {
+    "n_train_before": 2464,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2766,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1971,
+    "n_removed": 0
+   }
+  },
+  "55_442": {
+   "citizen_science": {
+    "n_train_before": 2454,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2771,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1969,
+    "n_removed": 0
+   }
+  },
+  "55_443": {
+   "citizen_science": {
+    "n_train_before": 2336,
     "n_removed": 7
    },
    "expert": {
-    "n_train_before": 2421,
-    "n_removed": 60
+    "n_train_before": 2771,
+    "n_removed": 0
    },
    "background": {
-    "n_train_before": 1719,
+    "n_train_before": 1960,
+    "n_removed": 0
+   }
+  },
+  "55_444": {
+   "citizen_science": {
+    "n_train_before": 2256,
+    "n_removed": 19
+   },
+   "expert": {
+    "n_train_before": 2771,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1968,
+    "n_removed": 0
+   }
+  },
+  "55_445": {
+   "citizen_science": {
+    "n_train_before": 2436,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2771,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1965,
+    "n_removed": 0
+   }
+  },
+  "55_446": {
+   "citizen_science": {
+    "n_train_before": 2452,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2687,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1969,
+    "n_removed": 0
+   }
+  },
+  "56_443": {
+   "citizen_science": {
+    "n_train_before": 2090,
+    "n_removed": 49
+   },
+   "expert": {
+    "n_train_before": 1617,
+    "n_removed": 82
+   },
+   "background": {
+    "n_train_before": 1970,
     "n_removed": 1
    }
   },
-  "5": {
+  "56_444": {
    "citizen_science": {
-    "n_train_before": 1581,
+    "n_train_before": 1645,
     "n_removed": 73
    },
    "expert": {
-    "n_train_before": 2182,
-    "n_removed": 171
+    "n_train_before": 2392,
+    "n_removed": 118
    },
    "background": {
-    "n_train_before": 1752,
-    "n_removed": 2
+    "n_train_before": 1973,
+    "n_removed": 1
+   }
+  },
+  "56_445": {
+   "citizen_science": {
+    "n_train_before": 2412,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2771,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1966,
+    "n_removed": 0
+   }
+  },
+  "56_446": {
+   "citizen_science": {
+    "n_train_before": 2444,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2771,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1973,
+    "n_removed": 0
+   }
+  },
+  "57_443": {
+   "citizen_science": {
+    "n_train_before": 2457,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2757,
+    "n_removed": 1
+   },
+   "background": {
+    "n_train_before": 1965,
+    "n_removed": 0
+   }
+  },
+  "57_444": {
+   "citizen_science": {
+    "n_train_before": 1794,
+    "n_removed": 31
+   },
+   "expert": {
+    "n_train_before": 2299,
+    "n_removed": 22
+   },
+   "background": {
+    "n_train_before": 1971,
+    "n_removed": 1
+   }
+  },
+  "57_445": {
+   "citizen_science": {
+    "n_train_before": 2464,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2736,
+    "n_removed": 5
+   },
+   "background": {
+    "n_train_before": 1977,
+    "n_removed": 1
+   }
+  },
+  "57_446": {
+   "citizen_science": {
+    "n_train_before": 2462,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2747,
+    "n_removed": 5
+   },
+   "background": {
+    "n_train_before": 1972,
+    "n_removed": 0
+   }
+  },
+  "58_444": {
+   "citizen_science": {
+    "n_train_before": 2464,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2746,
+    "n_removed": 4
+   },
+   "background": {
+    "n_train_before": 1969,
+    "n_removed": 0
+   }
+  },
+  "58_445": {
+   "citizen_science": {
+    "n_train_before": 2457,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2703,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1965,
+    "n_removed": 1
+   }
+  },
+  "58_446": {
+   "citizen_science": {
+    "n_train_before": 2460,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2720,
+    "n_removed": 24
+   },
+   "background": {
+    "n_train_before": 1974,
+    "n_removed": 0
+   }
+  },
+  "58_447": {
+   "citizen_science": {
+    "n_train_before": 2464,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2660,
+    "n_removed": 11
+   },
+   "background": {
+    "n_train_before": 1966,
+    "n_removed": 0
+   }
+  },
+  "59_446": {
+   "citizen_science": {
+    "n_train_before": 2462,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2695,
+    "n_removed": 36
+   },
+   "background": {
+    "n_train_before": 1973,
+    "n_removed": 0
+   }
+  },
+  "59_447": {
+   "citizen_science": {
+    "n_train_before": 2464,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2711,
+    "n_removed": 4
+   },
+   "background": {
+    "n_train_before": 1960,
+    "n_removed": 0
+   }
+  },
+  "60_444": {
+   "citizen_science": {
+    "n_train_before": 2464,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2761,
+    "n_removed": 0
+   },
+   "background": {
+    "n_train_before": 1972,
+    "n_removed": 0
+   }
+  },
+  "60_446": {
+   "citizen_science": {
+    "n_train_before": 2464,
+    "n_removed": 0
+   },
+   "expert": {
+    "n_train_before": 2600,
+    "n_removed": 32
+   },
+   "background": {
+    "n_train_before": 1976,
+    "n_removed": 0
    }
   }
- },
- "one_class_svm": {
-  "kernel": "rbf",
-  "nu": 0.05,
-  "gamma": "scale"
  },
  "embeddings": "tessera_v1.1_2023_rq1_pilot",
  "n_cs_presences": 2464,
@@ -122,20 +486,8 @@
  "n_cs_rows": 2465,
  "n_expert_pixels": 2771,
  "n_expert_polygons": 1457,
+ "n_expert_polygons_crossing_blocks": 9,
  "n_background": 2000,
- "n_candidate_blocks": 46,
- "n_test_blocks_per_seed": {
-  "1": 9,
-  "2": 9,
-  "3": 9,
-  "4": 9,
-  "5": 9
- },
- "n_expert_blocks": 18,
- "n_expert_blocks_in_a_test_set": 9,
- "n_expert_blocks_in_two_or_more_seeds": 6,
- "n_expert_test_pixels_summed_over_seeds": 2122,
- "n_expert_test_pixels_distinct": 1265,
  "inputs_sha256": {
   "data/interim/citizen_science/inat_dealbata_clean.csv": "c24cea5f9bd003d30bd7f519e7ac1633bb4578a004bf997cc7b593124d0de776",
   "data/interim/expert_reference/expert_polygons_clean.gpkg": "cf6287c2842b8d5e067021bab07327e2eb61aac2bde0a70ee86e128453c50022",

@@ -82,7 +82,7 @@ was seen. They are working hypotheses, not formal statistical tests.
 sensitivity at the fixed area fraction between the two conditions
 (same test block): its mean, its standard deviation and the number of
 folds in which it has the same sign, with the sensitivity-by-area
-curve (5% to 30%) and the secondary metrics next to it. The
+curve (1% to 50%) and the secondary metrics next to it. The
 difference is reported and no decision threshold is applied, because
 the folds are few and unequal in size. Each question names the two
 conditions compared.
@@ -110,13 +110,14 @@ Scope is reassessed as experiments progress.
 Each question also lists its own risks.
 
 - **The secondary metrics may not separate the models.** The Boyce
-  index is near 0.99 for every model so far and, being rank-based,
-  cannot rank models whose curves all rise monotonically (Hirzel et
-  al., 2006). ROC-AUC against background counts an unrecorded acacia
-  in the background as an error, so its maximum is below 1 and not
-  known here (Phillips et al., 2009). The primary metric avoids both
-  by never labelling background as absence; its literature is not yet
-  read. See [`methodology.md`](methodology.md#evaluation).
+  index, being rank-based, cannot rank models whose curves all rise
+  monotonically (Hirzel et al., 2006), and is not computed in the
+  curve (too little background per block). ROC-AUC against background
+  counts an unrecorded acacia in the background as an error, so its
+  maximum is below 1 and not known here (Phillips et al., 2009). The
+  primary metric avoids both by never labelling background as absence;
+  its literature is not yet read. See
+  [`methodology.md`](methodology.md#evaluation).
 - **Spatial blocks have no buffer between them.** Training and test
   pixels on either side of a block border can be close, which can
   inflate scores (Karasiak et al., 2022; Ratsakatika et al., 2026).
@@ -140,8 +141,8 @@ with expert reference data?
 
 **Hypotheses:** H₀: adding expert data does not change performance.
 H₁: performance increases with the fraction of expert data. H₁ was
-written after the curve had been observed, so this is not a
-pre-registered test.
+written after the earlier curve (Random Forest) had been observed, so
+this is not a pre-registered test.
 
 **Reported:** 90% against 0% of the expert polygons. The pooled test
 set (citizen-science and expert presences together) is the main one,
@@ -158,11 +159,13 @@ supervisor:
 [`thesis/notes.md`](../thesis/notes.md#curva-100-mais-ciencia-cidada)).
 The mixing unit is the polygon, sampled in a
 nested order; the percentages are of the 1 457 polygons that hold at
-least one pixel with a stored embedding, of the 1 849 in the district;
-one spatial test set per seed is reused at every level
-and always contains both sources; results are averaged over five
-seeds. Reasoning:
-[`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
+least one pixel with a stored embedding, of the 1 849 in the district.
+Validation is leave-one-block-out over the 26 blocks of 10 km with at
+least 5 presences of either source (15 with citizen science, 18 with
+expert pixels, 6 with both); each fold's test set holds both sources
+of its block, at every level. Results are pooled over held-out
+presences and also given per fold. Reasoning:
+[`thesis/notes.md`](../thesis/notes.md#curva-presence-only).
 
 **Classifier:** presence-only, chosen by a method-selection step that
 compares true one-class models (Isolation Forest, One-Class SVM; no
@@ -183,23 +186,31 @@ confirm:
 notebook
 [`presence_only_method_selection.ipynb`](../notebooks/07_foundation_models/presence_only_method_selection.ipynb).
 
-**Measured:** the curve is not run yet under this classifier and
-metric (task in [`docs/todo.md`](todo.md)). The script
-[`experiments/effort_reduction_curve/run.py`](../experiments/effort_reduction_curve/run.py)
-is rewritten for it.
+**Measured (one run, 2026-11-17; to confirm with the supervisor):**
+pooled sensitivity at 10% of area rises from 0.531 at 0% to 0.692 at
+90% of the expert polygons (paired by fold: +0.181, sd 0.221, 18 of
+26 folds up); on the expert presences alone from 0.637 to 0.933 (17 of
+17 folds up); on the citizen-science presences alone it does not move
+(0.411 to 0.417). The curve saturates by 50%. The expert-only model
+scores 0.983 on expert presences and 0.381 on citizen-science ones,
+below every level that keeps the citizen-science base. Tables in
+`results/effort_reduction_curve/`, plot in
+[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb),
+full reading and caveats in
+[`thesis/notes.md`](../thesis/notes.md#curva-presence-only).
 
-**Known from the data, before running:** expert presences may be
-easier to separate from the background than citizen-science ones:
-55.0% of expert pixels fall in the COS 2023 "Florestas de acácias"
-class, against 17.9% of citizen-science presences
+**Known from the data:** expert presences may be easier to separate
+from the background than citizen-science ones: 55.0% of expert pixels
+fall in the COS 2023 "Florestas de acácias" class, against 17.9% of
+citizen-science presences
 ([`thesis/notes.md`](../thesis/notes.md#diagnosticos-curva-plana)).
 The independent units are polygons and 10 km blocks.
 Sensitivity of the curve to a buffer between training and test:
 [`methodology.md`](methodology.md#validation).
 
 **Not measured:** the curve with Sentinel-2 features (not planned: see RQ4);
-the curve diagnostics (forest-only background, redundancy, label
-purity) split by source of the test presences.
+the curve under a forest-only background; the redundancy and
+label-purity diagnostics split by source of the test presences.
 
 **Risks:**
 
@@ -391,9 +402,13 @@ reported without attributing its cause to distance (see Risks).
 - **Folds:** the leave-one-block-out folds of RQ1 vary the test block,
   and with it the training set and the test background.
 - **Test set:** the expert pixels, against the background points of
-  the seed's test blocks. The 21 expert pixels that are also the pixel
+  the fold's test block. The 21 expert pixels that are also the pixel
   of a citizen-science presence are left out, so no test pixel trains
   this model.
+- **Starting point:** on all expert presences, the citizen-science-only
+  model reaches 0.637 sensitivity at 10% of area, against 0.983 for
+  the expert-only model (RQ1 curve,
+  [`thesis/notes.md`](../thesis/notes.md#curva-presence-only)).
 - **Near and far:** distance from each expert polygon to the nearest
   citizen-science training presence; near is up to 1 km, far is beyond
   1 km, inside the district only.
@@ -404,7 +419,7 @@ reported without attributing its cause to distance (see Risks).
   near), the test set holds 1 251 near polygons (1 961 pixels) and 205
   far ones (789 pixels). Counts from
   [`design_counts.ipynb`](../notebooks/05_data_integration/design_counts.ipynb);
-  the counts per seed are not made yet.
+  the counts per fold are not made yet.
 - **Product:** a feature-space dissimilarity map (area of
   applicability) as a confidence layer for the final map.
 - **Status:** not run. No part of this question uses Sentinel-2:

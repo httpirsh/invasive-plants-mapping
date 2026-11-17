@@ -37,8 +37,10 @@ reasoning, with no source found.
   train and test sets too similar.
 - **Adopted (to confirm with the supervisor): leave-one-block-out
   over the 10 km blocks** with at least 5 presences — 15 folds in the
-  citizen-science arm — each block the test set once. Reasoning:
-  [`thesis/notes.md`](../thesis/notes.md#rq1-presence-only).
+  citizen-science arm, 26 in the curve, where a block qualifies with
+  either source — each block the test set once. Reasoning:
+  [`thesis/notes.md`](../thesis/notes.md#rq1-presence-only),
+  [`thesis/notes.md`](../thesis/notes.md#curva-presence-only).
 - **Expert side: a buffer on top of the blocks (supervisor,
   recalled).** Expert polygons are contiguous patches, so a validation
   pixel can sit next to a training pixel inside a kept block. Buffer
@@ -55,12 +57,16 @@ reasoning, with no source found.
   as a sensitivity analysis (my decision).**
   The papers read agree that blocks alone leave residual proximity
   across block borders and recommend blocks combined with a buffer.
-  The proximity counts and the buffer effect are to be measured again
-  under leave-one-block-out with the RQ1 classifier (task in
-  [`todo.md`](todo.md)); script
-  [`compare_buffer.py`](../experiments/effort_reduction_curve/compare_buffer.py),
-  to be rewritten for it. Criterion and the earlier measurement:
-  `thesis/notes.md`, linked above.
+  **Measured** for the RQ1 curve under leave-one-block-out: dropping
+  the training points within 300 m or 1 km of any test point of the
+  fold changes sensitivity at 10% of area by at most 0.006 (mean paired
+  difference per fold), leaves the 90% − 0% difference unchanged and
+  meets the pre-written criterion in all 8 comparisons at both
+  distances; at 1 km up to 23% of a fold's training presences are
+  removed. Tables in `results/effort_reduction_curve_buffer_comparison/`
+  (script
+  [`compare_buffer.py`](../experiments/effort_reduction_curve/compare_buffer.py)).
+  Criterion and reading: `thesis/notes.md`, linked above.
 - **Open: independent validation**, with a reference not drawn from
   the citizen-science source, so that biased training data are not
   evaluated only on equally biased test data. Plan: compare the
@@ -125,7 +131,7 @@ same paper's classifier-dependent result.
 fraction of predicted area.** The landscape is ranked by score, the
 top X% of area is the predicted *Acacia* extent, and sensitivity is
 the fraction of held-out presences inside it; the sensitivity-by-area
-curve from 5% to 30% is reported, with the number at 10% as the
+curve from 1% to 50% is reported, with the number at 10% as the
 primary one (my choice, fixed before running; no source). The
 background of the test block is the sample of its landscape, so the
 metric is rank-based within each fold and pooled over held-out
@@ -137,8 +143,11 @@ of Phillips et al. (2006) and the partial ROC of Peterson et al.
 (2008) — to confirm before treating it as established. Reasoning:
 [`thesis/notes.md`](../thesis/notes.md#rq1-presence-only).
 
-**Secondary: ROC-AUC and the continuous Boyce index** (Hirzel et al.,
-2006), used in every notebook of the effort-reduction curve so far.
+**Secondary: ROC-AUC per fold against the block background.** The
+continuous Boyce index (Hirzel et al., 2006) is computed only where a
+test set has enough background for its windows; under
+leave-one-block-out a block holds 5–41 background points, so the curve
+does not report it ([`thesis/notes.md`](../thesis/notes.md#curva-presence-only)).
 Never report a metric without stating what was evaluated, on which
 data, and under which split.
 

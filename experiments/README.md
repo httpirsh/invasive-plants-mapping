@@ -5,18 +5,19 @@ research question in
 [`docs/research_questions.md`](../docs/research_questions.md).
 Subfolders are created when the first experiment is run.
 
-- `effort_reduction_curve/run.py`: the effort-reduction curve (RQ1).
-  Writes to `results/effort_reduction_curve/`; read and plotted by
-  `notebooks/07_foundation_models/effort_reduction_curve.ipynb`. With
-  `--background forest_only` it writes the robustness check to
-  `results/effort_reduction_curve_forest_only/` (no notebook reads it
-  since 2026-11-17).
-  With `--buffer-m METRES` it drops the training points within that
-  distance of a test point and writes to
-  `results/effort_reduction_curve_buffer_<METRES>m/`.
+- `effort_reduction_curve/run.py`: the effort-reduction curve (RQ1),
+  leave-one-block-out, presence-background logistic regression,
+  sensitivity at a fixed fraction of predicted area. Writes to
+  `results/effort_reduction_curve/`; read and plotted by
+  `notebooks/07_foundation_models/effort_reduction_curve.ipynb`.
+  With `--buffer-m METRES` it drops, in each fold, the training points
+  within that distance of a test point of the fold and writes to
+  `results/effort_reduction_curve_buffer_<METRES>m/`. The
+  `--background forest_only` option still exists but is not run under
+  this design (`results/README.md`).
 - `effort_reduction_curve/compare_buffer.py`: compares the runs with
   `--buffer-m 300` and `--buffer-m 1000` with the curve without
-  buffer, paired by seed. Run after them; writes to
+  buffer, paired by fold. Run after them; writes to
   `results/effort_reduction_curve_buffer_comparison/`.
 
 ## What goes here and what goes in `notebooks/`

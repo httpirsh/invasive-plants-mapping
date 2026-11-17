@@ -123,7 +123,11 @@ obtained.
   history up to commit `1ed5b46`).
 - **Status:** the background pool shared across the whole
   effort-reduction curve (RQ1); not yet confirmed by
-  the supervisor as final.
+  the supervisor as final. Since 2026-11-17 it enters the models only
+  as an unlabelled sample of the landscape (training of the
+  presence-background classifier and the area measured by the
+  metric), never as absence
+  ([`thesis/notes.md`](../thesis/notes.md#rq1-presence-only)).
 
 ### TESSERA embeddings — forest-only background pool (2026-11-13)
 
@@ -148,8 +152,11 @@ obtained.
   file was written on 2026-11-13 by
   `forest_only_background_check.ipynb`, with the same code (notebook
   deleted on 2026-11-17; in the Git history up to commit `1ed5b46`).
-- **Status:** used only as a harder background in the robustness
-  check of the effort-reduction curve (RQ1).
+- **Status:** used only in the robustness check of the earlier
+  effort-reduction curve (Random Forest); that check is obsolete and
+  not re-run under the presence-only design of 2026-11-17
+  ([`results/README.md`](../results/README.md)). The file stays as
+  built.
 
 ### TESSERA embeddings — patch access (2026-11-03)
 
