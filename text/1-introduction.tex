@@ -110,6 +110,56 @@ thesis.}
 \label{tab:introduction-problems}
 \end{table}
 
+Figure~\ref{fig:introduction-pipeline} gives an overview of the
+pipeline this work builds and evaluates: each citizen-science
+observation becomes a labelled pixel, the pixel is represented by a
+foundation-model embedding, a presence-only classifier is trained on
+those embeddings, and the classifier produces the species map. Expert
+polygons stay outside the main flow: they are the test reference and,
+for the first question, are added to the training data in increasing
+fractions. The figure also places each research question at the step
+it acts on.
+
+\begin{figure}[htb]
+\centering
+\begin{tikzpicture}[
+  node distance=5mm and 7mm,
+  step/.style={draw, rounded corners=2pt, align=center, minimum height=11mm,
+    text width=24mm, font=\small, inner sep=2pt},
+  expert/.style={step, dashed},
+  note/.style={align=center, font=\scriptsize, text width=26mm},
+  rq/.style={font=\scriptsize\bfseries},
+  flow/.style={-{Latex[length=2mm]}, thick},
+  dflow/.style={flow, dashed}
+]
+\node[step] (obs) {Citizen-science\\observation};
+\node[step, right=of obs] (lab) {Reference\\pixel label};
+\node[step, right=of lab] (emb) {Embedding\\(TESSERA)};
+\node[step, right=of emb] (clf) {Presence-only\\classifier};
+\node[step, right=of clf] (map) {\emph{A.~dealbata} map\\+ confidence};
+\node[expert, below=9mm of clf] (exp) {Expert polygons};
+
+\node[note, below=1mm of obs] {iNaturalist,\\research grade};
+\node[note, below=1mm of lab] {10~m pixel, 2023};
+\node[note, below=1mm of emb] {EO foundation model};
+\node[note, below=1mm of clf] {presence vs.\\background};
+\node[note, below=1mm of map] {Coimbra district};
+\node[note, below=1mm of exp] {test reference;\\added to training 0--100\%};
+
+\draw[flow] (obs) -- node[rq, above] {RQ2} (lab);
+\draw[flow] (lab) -- (emb);
+\draw[flow] (emb) -- (clf);
+\draw[flow] (clf) -- (map);
+\draw[dflow] (exp) -- node[rq, right] {RQ1} (clf);
+\node[rq, above=1mm of emb] {RQ4};
+\node[rq, above=1mm of map] {RQ3};
+\end{tikzpicture}
+\caption{Overview of the proposed pipeline. Each research question is
+placed at the step it acts on; RQ4 replaces the embedding step by
+Sentinel-2 features.}
+\label{fig:introduction-pipeline}
+\end{figure}
+
 \section{Research Questions and Goals}
 \label{sec:introduction-rqs}
 
