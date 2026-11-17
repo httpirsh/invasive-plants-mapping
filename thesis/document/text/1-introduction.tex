@@ -147,7 +147,8 @@ it acts on.
 \node[note, below=1mm of map] {Coimbra district};
 \node[note, below=1mm of exp] {test reference;\\added to training\\0--100\%};
 
-\draw[flow] (obs) -- node[rq, above=1pt] {RQ2} (lab);
+\draw[flow] (obs) -- (lab);
+\path (obs.north east) -- (lab.north west) node[rq, midway, above=1mm] {RQ2};
 \draw[flow] (lab) -- (emb);
 \draw[flow] (emb) -- (clf);
 \draw[flow] (clf) -- (map);
