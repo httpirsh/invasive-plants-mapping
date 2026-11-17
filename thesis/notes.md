@@ -51,11 +51,11 @@ Porque esta ordem se defende:
 
 Cenários em [Scope](../docs/research_questions.md#scope).
 
-**Na tese:** ✅ Parcial. A ordem de prioridade das três perguntas
-aprovadas está em
+**Na tese:** ✅ Parcial. A ordem de prioridade das quatro perguntas
+está em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
-(secção Research Questions); a ordem das quatro perguntas ainda não
-foi aplicada.
+(secção 1.2 Research Questions and Goals, 2026-11-17); o desenho de
+cada uma fica para o Proposed Work.
 
 ### Introdução para um júri de informática
 
@@ -176,8 +176,8 @@ final, não como histórico extenso.
 *Preparação para a defesa: explicar como a literatura foi pesquisada,
 se perguntarem. Ainda não executado. Não entra no texto do relatório,
 cujo capítulo de trabalho relacionado é uma revisão narrativa por
-subtema (ver
-[Estrutura do documento](#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável)).*
+subtema, como nos relatórios de referência em
+`thesis/guidance_example/`.*
 
 Serve para trocar "parece pouco explorado" por uma afirmação
 documentada:
@@ -212,8 +212,7 @@ A lista de leitura atual está em
 [`docs/literature.md`](../docs/literature.md).
 
 **Na tese:** não entra no texto; é preparação para a defesa. O
-capítulo de trabalho relacionado é uma revisão narrativa (ver
-[Estrutura do documento](#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável)).
+capítulo de trabalho relacionado é uma revisão narrativa.
 
 ## Decisões
 
@@ -317,8 +316,6 @@ orientador):
   RQ1 (Revisão de 2026-11-17).
 
 **[Documento e entrega](#decisões-documento-e-entrega)**
-- [Estrutura do documento](#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável)
-  — minha.
 - [Lista de literatura](#lista-de-literatura-releitura-integral-e-limpeza)
   — minha; revisões até 2026-11-17.
 - [Identidade da tese](#identidade-da-tese-confirmada-título-mestrado-orientadores-idioma-e-data-da-entrega)
@@ -429,11 +426,12 @@ Até o orientador responder, o desenho aprovado é este. Desde
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq3--transferability-away-from-the-sampled-area).
 
-**Na tese:** ✅ Parcial. O enunciado da RQ3 e a estatística do
-observador dominante já estão em
+**Na tese:** ✅ Parcial. A estatística do observador dominante está em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
-(que diz 88% das presenças limpas; o valor é 90%, por atualizar);
-a fundamentação completa fica para a Metodologia.
+(secção 1.1, que diz 88% das presenças limpas; o valor é 90%, por
+atualizar). O enunciado aprovado foi substituído na secção 1.2
+(2026-11-17) pela RQ3 atual, a confirmar com o orientador; a
+fundamentação completa fica para o Proposed Work.
 
 ### RQ3: proposta de redesenho — diagnosticar primeiro se a concentração da amostragem prejudica o modelo {#rq3-proposta-redesenho-diagnostico-primeiro}
 
@@ -545,8 +543,8 @@ contagens são verificação minha, ad-hoc (script não guardado).
 
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq3--transferability-away-from-the-sampled-area).
 
-**Na tese:** ⏳ Ainda não escrita. O enunciado da RQ3 na introdução
-não muda enquanto o orientador não responder.
+**Na tese:** ❌ Superada (ver a Revisão abaixo); a RQ3 atual está na
+secção 1.2 da Introdução desde 2026-11-17.
 
 **Revisão (2026-11-13, revisão de consistência):** estado:
 substituída. O desenho desta proposta foi reduzido na
@@ -615,9 +613,11 @@ científica. Serve para a forma, não é para citar.
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#main-question-and-objectives);
 `CLAUDE.md`.
 
-**Na tese:** ⏳ Ainda não aplicada. Os enunciados em
+**Na tese:** ✅ Parcial. A secção 1.2 de
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
-são os aprovados.
+(2026-11-17) segue esta estrutura: pergunta principal, quatro
+perguntas, objetivo geral e objetivos específicos; as hipóteses ficam
+para o Proposed Work (4.3.4).
 
 **Revisão (2026-11-13, revisão de consistência):** estado: a
 reescrita proposta nesta entrada foi substituída pela
@@ -727,9 +727,9 @@ sobre `inat_dealbata_clean.csv` e `expert_polygons_clean.gpkg`.
 regras e testes iniciais em
 [Máscara de segmentação](#máscara-de-segmentação-testar-várias-abordagens).
 
-**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia). O
-enunciado da RQ2 na introdução é o aprovado e não muda enquanto o
-orientador não responder.
+**Na tese:** ✅ Parcial. O enunciado da RQ2 (máscara e filtros) está
+na secção 1.2 da Introdução desde 2026-11-17, a confirmar com o
+orientador; o desenho fica para o Proposed Work.
 
 ### Reformulação em quatro perguntas, centrada na substituição dos dados de especialistas {#reformulacao-quatro-perguntas}
 
@@ -803,8 +803,9 @@ das regras da máscara.
 As entradas anteriores deste ficheiro usam a numeração antiga (RQ1
 curva e comparação, RQ2 máscara, RQ3 concentração).
 
-**Na tese:** ⏳ Ainda não aplicada. A Introdução tem os enunciados
-aprovados pelo orientador, que não mudam enquanto ele não responder.
+**Na tese:** ❌ Superada pela renumeração (Revisão abaixo); a versão
+atual das quatro perguntas está na secção 1.2 da Introdução desde
+2026-11-17.
 
 **Revisão (2026-11-13, mais tarde no mesmo dia):** a numeração das
 perguntas mudou. O que nesta entrada é a "RQ1" (dos pontos aos dados
@@ -911,8 +912,9 @@ Diferenças emparelhadas por semente, face a 0%:
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
 [`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
 
-**Na tese:** ⏳ Ainda não aplicada (Introdução com os enunciados
-aprovados; Metodologia e Resultados preliminares por escrever).
+**Na tese:** ✅ Parcial. A pergunta única (RQ4) está na secção 1.2 da
+Introdução desde 2026-11-17; Proposed Work e resultado preliminar por
+escrever.
 
 **Revisão (2026-11-13, mais tarde no mesmo dia):** a numeração das
 perguntas mudou. O que nesta entrada é a "RQ1" (dos pontos aos dados
@@ -1061,8 +1063,12 @@ reformulação e à leitura de "área de vegetação mais próxima".
 **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#secondary-questions);
 [`docs/meetings/2026-11-17.md`](../docs/meetings/2026-11-17.md).
 
-**Na tese:** ⏳ Ainda não aplicada. A Introdução tem os enunciados
-aprovados pelo orientador, que não mudam enquanto ele não responder.
+**Na tese:** ✅ Parcial. As quatro perguntas, com esta numeração e
+esta redação, estão na secção 1.2 de
+[`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
+desde 2026-11-17 (substituíram os três enunciados aprovados; a
+confirmação pelo orientador continua pendente). Hipóteses e desenho
+ficam para o Proposed Work.
 
 **Revisão (2026-11-13, ao fim do dia).** Decisão minha, por mérito do
 desenho: proposta (a confirmar com o orientador).
@@ -1123,6 +1129,21 @@ Três correções ao texto acima, sem mudar o desenho:
   pontos de fundo ficam entre 50 m e 71 m de uma presença.
 - **Resultados da curva:** estão em `results/effort_reduction_curve/`
   ([script da curva](#curva-script-experiments)).
+
+**Revisão (2026-11-17, mapa da espécie).** Decisão minha. O quinto
+objetivo específico ("produzir o mapa de *A. dealbata* da área de
+estudo, com mapa de confiança") deixa de ser objetivo e passa a
+produto do segundo semestre. **Porquê:** era o único objetivo sem
+pergunta nem hipótese associada, e a estrutura adotada liga cada
+objetivo específico a uma RQ; o mapa mantém-se porque a proposta pede
+classificadores de mapeamento e o mapa de confiança já está desenhado
+na RQ3, mas sem verdade de terreno para toda a área só pode ser
+apresentado como previsão do modelo, não como mapa validado.
+**Fundamentação:** Meyer & Pebesma (2021) para o mapa de confiança; o
+resto é raciocínio meu. **Onde:**
+[`docs/research_questions.md`](../docs/research_questions.md#main-question-and-objectives);
+na tese, 4.1 (Proposed Approach) e o plano do segundo semestre, ainda
+não escritos.
 
 ### Revisão de consistência de 2026-11-13: ajustes ao desenho e limpeza {#revisao-consistencia-2026-11-13}
 
@@ -1298,8 +1319,10 @@ muda. As RQ1 a RQ4 ficam como estão.
 ([`6-abstract-EN.tex`](document/frontmatter/6-abstract-EN.tex),
 2026-11-17) já usa esta formulação (ciência cidadã a reduzir a
 dependência dos dados de especialistas, com a formulação do objetivo da
-proposta em vez de "substituir"). A Introdução ainda tem os enunciados
-aprovados pelo orientador; o Resumo em português já está escrito (`6-abstract-PT.tex`).
+proposta em vez de "substituir"). A Introdução (secção 1.2,
+2026-11-17) tem a pergunta principal com "replace" e a sua leitura
+como diferença de desempenho; o Resumo em português já está escrito
+(`6-abstract-PT.tex`).
 
 ## Decisões: dados de referência
 
@@ -3507,38 +3530,6 @@ presence-only escolhido na RQ1, a regressão logística presença-fundo
 ([#rq1-presence-only](#rq1-presence-only)).
 
 ## Decisões: documento e entrega
-
-### Estrutura do documento: seguir um relatório de referência de outro aluno, onde for aplicável
-
-*Decisão minha.*
-
-**O que decidi:** usar dois relatórios intermédios do mesmo
-departamento como referência de estrutura:
-[Gonçalo Santos, janeiro de 2026](guidance_example/1768249601_Entrega_intermedia-1.pdf)
-e
-[Cláudia Torres, janeiro de 2026](guidance_example/Tese_Intermedia____Claudia_Torres.pdf).
-
-**O que têm:** capa, declaração de uso de IA, resumo em inglês e
-português, listas de acrónimos, figuras e tabelas; depois Introduction,
-Background, State of the Art, Proposed Work (com descrição dos dados,
-plano de trabalho e avaliação de risco) e Conclusion and Future Work.
-Nenhum tem capítulo de Resultados.
-
-**Estado da arte:** os dois escrevem uma revisão narrativa por
-subtema, fechada com uma síntese curta. Nenhum descreve bases de dados
-pesquisadas, contagens de triagem ou diagrama PRISMA. O meu capítulo
-de trabalho relacionado segue a mesma forma; o
-[protocolo de pesquisa](#protocolo-de-pesquisa-da-literatura) fica
-como preparação para a defesa, não para o texto.
-
-**Porquê:** exemplos reais do mesmo departamento, já avaliados,
-calibram o nível de detalhe esperado.
-
-**Em aberto:** rever capítulo a capítulo, à medida que cada um for
-escrito, o que vale a pena imitar.
-
-**Na tese:** ✅ Parcial. `1-introduction.tex` existe; os restantes
-capítulos estão por escrever à luz desta referência.
 
 ### Lista de literatura: releitura integral e limpeza
 

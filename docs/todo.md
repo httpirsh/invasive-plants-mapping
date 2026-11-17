@@ -14,11 +14,13 @@ novas experiências antes da entrega (a curva da RQ1 já foi recorrida
 com o classificador presence-only a 2026-11-17). Numeração das perguntas:
 [thesis/notes.md](../thesis/notes.md#renumeracao-perguntas-2026-11-13).
 
-- [ ] Decidir o mapeamento dos capítulos de `thesis/document/text/`
-  para a forma de relatório intermédio.
-- [ ] Rever a estrutura de cada capítulo face aos relatórios de
-  referência, à medida que for escrito
-  ([thesis/notes.md](../thesis/notes.md#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável)).
+- [x] Aplicar ao manuscrito a estrutura do relatório do Gonçalo
+  (`thesis/guidance_example/`): esqueletos dos capítulos e secção 1.2
+  da Introdução escritos a 2026-11-17.
+- [ ] Introdução 1.1: a tabela de problemas ainda usa a numeração
+  antiga das perguntas e diz que o fundo vem de observações de outras
+  espécies; rever ao escrever o Proposed Work
+  ([thesis/notes.md](../thesis/notes.md#revisao-consistencia-2026-11-13)).
 - [ ] Máscara de segmentação: apresentar as duas regras,
   fundamentadas na literatura, com a comparação planeada na RQ2
   ([thesis/notes.md](../thesis/notes.md#rq2-proposta-mascara)).

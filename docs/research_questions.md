@@ -57,9 +57,14 @@ training data for mapping *A. dealbata* in the Coimbra district.
    and far from the sampled area (RQ3).
 4. To compare TESSERA-based and Sentinel-2-based models, with all
    observations and with few (RQ4).
-5. To produce the *A. dealbata* map of the study area, with a
-   confidence map. Whether the model separates *A. dealbata* from
-   other *Acacia* species is not tested and is left as future work.
+
+**Product (not an objective, no question or hypothesis of its own):**
+the *A. dealbata* map of the study area, with the confidence map from
+RQ3, produced in the second semester from the RQ1 classifier.
+Presented as what the model predicts, not as a validated map: no
+ground truth covers the whole area, and whether the model separates
+*A. dealbata* from other *Acacia* species is not tested and is left as
+future work.
 
 **Common context:** *Acacia dealbata*, Coimbra district, 2023 imagery,
 research-grade iNaturalist observations from 2021–2025, 90% of them
