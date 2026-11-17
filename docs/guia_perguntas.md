@@ -139,6 +139,46 @@ sementes, ROC-AUC):
 | 100% + ciência cidadã | 0,906 | 0,993 | 0,799 | 0,924 |
 | Só especialistas (referência) | 0,854 | 0,994 | 0,677 | 0,873 |
 
+**Métrica (eixo vertical): ROC-AUC.**
+
+- **O que o modelo faz:** para cada sítio do mapa dá uma **nota** de 0
+  a 1 que diz quão parecido o sítio é com acácia. Não diz "é" ou "não
+  é" acácia: dá só a nota.
+- **Que pontos usamos para o avaliar:** na zona de teste há dois tipos
+  de pontos:
+  - **sítios onde sabemos que há acácia** (as presenças);
+  - **pontos ao acaso na paisagem** (o fundo): eucaliptal, pinhal,
+    campo, estrada… quase sempre sem acácia.
+- **A métrica:** junta-se um sítio com acácia e um ponto de fundo, e
+  vê-se se o modelo dá nota mais alta ao sítio com acácia; a ROC-AUC é
+  a fração de pares em que acerta (0,5 = tanto faz como atirar uma
+  moeda; 1 = acerta sempre).
+
+(Porquê a ROC-AUC: não precisa de escolher um corte do tipo "acima de 0,5 é
+acácia"; limitação: o fundo pode ter acácia não registada, por isso nunca
+chega a 1 e o máximo possível é desconhecido — Phillips et al., 2009.)
+
+**O gráfico em resumo**
+([`curve_by_source.png`](../results/effort_reduction_curve/curve_by_source.png);
+eixo horizontal: % de polígonos de especialistas juntos à ciência
+cidadã; faixa: variação entre as cinco sementes; marcadores ocos aos
+100%: modelo só de especialistas). Lido pela linha do Random Forest:
+
+- **Esquerda (todas as presenças de teste): a linha é quase plana.**
+  Juntar especialistas quase não melhora o resultado global. É a
+  resposta principal da RQ1.
+- **Meio (só presenças de especialistas): fáceis de reconhecer.** Mesmo
+  sem nenhum dado de especialista no treino, o modelo já os reconhece
+  muito bem; juntá-los melhora só um pouco.
+- **Direita (só presenças de ciência cidadã): mais difíceis.** A linha
+  fica abaixo das dos outros painéis, e o modelo só de especialistas
+  cai bastante: quem treina só com especialistas reconhece pior os
+  sítios que os cidadãos fotografam (ver a cautela sobre o teste global, abaixo).
+- **Direita: a faixa verde (Logistic Regression) é muito larga.** O
+  resultado depende muito da zona testada. Uma das sementes tem muito
+  poucas presenças de ciência cidadã no teste; que isto explique a
+  variação é uma hipótese provável, não testada.
+
 Diferenças emparelhadas, 90% menos 0%:
 
 - **Random Forest, teste global:** +0,004 (dp 0,005), positiva em

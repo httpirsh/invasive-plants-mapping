@@ -1,314 +1,135 @@
-# Próxima Reunião com o Orientador — data por marcar
+# Próxima Reunião com o Orientador — 2026-11-17
 
 > Fila viva do que levar à próxima reunião. Decisões já tomadas ficam
 > em [`thesis/notes.md`](../../thesis/notes.md#decisões); a reunião
 > anterior está em [`2026-11-05.md`](2026-11-05.md).
 
+## Formulação das perguntas: quatro perguntas, centradas na substituição (proposta minha, a confirmar)
+
+Reorganizei as perguntas:
+
+- **Principal:** em que medida a ciência cidadã, via embeddings de
+  foundation models, pode substituir os dados de especialistas como
+  **dados de treino** (o teste continua a ser de especialistas)?
+- **RQ1 (substituição):** um modelo só com ciência cidadã atinge o
+  desempenho de um treinado com dados de especialistas?
+- **RQ2 (pontos → dados de referência):** os filtros de grau/precisão
+  e a extensão do rótulo à mancha à volta alteram o desempenho?
+- **RQ3 (transferibilidade):** o desempenho desce perto → longe da
+  área amostrada?
+- **RQ4 (representação):** o TESSERA melhora o mapeamento face ao
+  Sentinel-2, com dados limpos, completos e poucos?
+
+
+### RQ2: máscara de segmentação e filtros de qualidade
+
+Proponho pôr a máscara de segmentação (que disse ser central) no
+centro da RQ2, junto com os filtros de qualidade das observações.
+
+- **Ideia:** ver se o modelo melhora quando cada observação passa de um
+  píxel à mancha à volta (crescimento de região ou superpíxeis), e
+  quando se aplicam os filtros de grau *research* e de precisão até
+  30 m.
+- **Como:** igual à curva da RQ1, só TESSERA. Ainda não corrido.
+
+### RQ3: o modelo piora longe das observações?
+
+As observações de ciência cidadã estão concentradas (quase todas de um
+observador). Antes de tentar corrigir isso, proponho medir se prejudica
+o modelo.
+
+- **Ideia:** treinar com ciência cidadã e comparar o desempenho nos
+  polígonos de especialistas perto (≤1 km) e longe (>1 km) das
+  observações.
+- **Produto:** um mapa de confiança que mostra onde o modelo está longe
+  dos dados de treino.
+- Ainda não corrido.
+
+
 ## Resultados a apresentar: curva de redução de esforço (RQ1)
 
-Corri a curva completa (0% a 100% de polígonos de especialistas sobre
-a base de ciência cidadã, só com TESSERA, presenças de 2021–2025),
-com as presenças de teste separadas por fonte.
+**O modelo:** aprende a distinguir dois tipos de pontos, **acácia**
+(presenças) e **fundo** (pontos ao acaso na paisagem), e dá a cada
+sítio uma nota de quão parecido é com acácia.
 
-- **Teste global** (ciência cidadã e especialistas juntos): o Random
-  Forest ganha cerca de 0,005 de ROC-AUC com os primeiros 10%–20% de
-  polígonos e não sobe mais (0,902 a 0%, 0,906 a 90%). A Logistic
-  Regression sobe 0,031 (0,893 → 0,924). A resposta depende do
-  classificador.
-- **Só nas presenças de especialistas:** o modelo só com ciência
-  cidadã já as ordena bem (ROC-AUC 0,976) e sobe para 0,993 com 90%
-  dos polígonos; o Boyce vai no sentido contrário (0,970 → 0,940).
-- **A 100%** (só especialistas, sem ciência cidadã) o teste global
-  cai para 0,854. A queda vem toda das presenças de teste de ciência
-  cidadã (0,812 → 0,677); nas de especialistas fica em 0,994. Não
-  quer dizer que o modelo só de especialistas seja pior: o teste de
-  ciência cidadã partilha provavelmente o enviesamento do treino.
-- **Fundo mais difícil:** contra um fundo só de tipos de floresta, o
-  teste global do Random Forest também não muda (0,950 a 0% e 0,952 a
-  90%). Esta verificação não está separada por fonte.
-- **Composição de habitat:** 55% dos píxeis de especialistas caem na
-  classe "floresta de acácias" da COS, contra 17,9% das presenças de
-  ciência cidadã. As presenças de especialistas podem ser mais fáceis
-  de separar do fundo, o que não é o mesmo que as duas fontes serem
-  equivalentes.
+**One-class:** testei o one-class que sugeriu (One-Class SVM, treinado
+só com acácia, sem fundo), mas ficou perto do acaso só com ciência
+cidadã e muito abaixo do modelo acácia vs. fundo sempre que a ciência
+cidadã entra no treino. Por isso a curva usa acácia vs. fundo (Random
+Forest).
 
-Valores por nível:
-[thesis/notes.md](../../thesis/notes.md#simplificacao-desenho-2026-11-13).
-Raciocínio:
-[thesis/notes.md](../../thesis/notes.md#rq2-curva-por-fonte).
+Curva completa (0–100% de polígonos de especialistas sobre a base de
+ciência cidadã, só TESSERA, presenças 2021–2025), testada por fonte.
 
-*Literatura:* nenhuma nova. A hipótese de que o desempenho sobe com
-os dados de especialistas foi escrita depois de ver a curva.
+![Curva de redução de esforço por fonte de teste](../../results/effort_reduction_curve/curve_by_source.png)
 
-A discutir:
+**Métrica (eixo vertical): ROC-AUC.**
 
-- **Confirmar a leitura:** o ganho é pequeno e pode ser próprio deste
-  piloto (uma região, só TESSERA, fundo partilhado ainda não
-  confirmado por ele), não uma conclusão sobre o valor dos dados de
-  especialistas em geral.
-- **Poucas unidades independentes:** os polígonos de teste vêm de 2 a
-  4 blocos de 10 km por semente, e as sementes reutilizam blocos.
-- **Classificador principal:** mantenho o Random Forest, mas a
-  Logistic Regression tem a média de ROC-AUC mais alta só com ciência
-  cidadã (0,874 contra 0,836).
-- **Unidade de esforço:** medi-o como percentagem de polígonos, não
-  por área nem por custo real de campo.
-- **Implicação prática:** numa nova recolha de campo, visar habitats e
-  locais ainda não cobertos pela ciência cidadã (p. ex. a faixa a
-  noroeste do distrito) pode valer mais do que mais polígonos do mesmo
-  tipo de mancha.
+- **O que o modelo faz:** para cada sítio do mapa dá uma **nota** de 0
+  a 1 que diz quão parecido o sítio é com acácia. Não diz "é" ou "não
+  é" acácia: dá só a nota.
+- **Que pontos usamos para o avaliar:** na zona de teste há dois tipos
+  de pontos:
+  - **sítios onde sabemos que há acácia** (as presenças);
+  - **pontos ao acaso na paisagem** (o fundo): eucaliptal, pinhal,
+    campo, estrada… quase sempre sem acácia.
+- **A métrica:** junta-se um sítio com acácia e um ponto de fundo, e
+  vê-se se o modelo dá nota mais alta ao sítio com acácia; a ROC-AUC é
+  a fração de pares em que acerta (0,5 = tanto faz como atirar uma
+  moeda; 1 = acerta sempre).
 
-## Propostas minhas, a confirmar
+(Porquê a ROC-AUC: não precisa de escolher um corte do tipo "acima de 0,5 é
+acácia"; limitação: o fundo pode ter acácia não registada, por isso nunca
+chega a 1 e o máximo possível é desconhecido — Phillips et al., 2009.)
 
-### Formulação das perguntas: quatro perguntas, centradas na substituição
+**O gráfico em resumo** (eixo horizontal: % de polígonos de
+especialistas juntos à ciência cidadã; faixa: variação entre as cinco
+sementes; marcadores ocos aos 100%: modelo só de especialistas).
+Lido pela linha do Random Forest:
 
-Reorganizei as perguntas para ficarem no âmbito da proposta de tese e
-escrevi-as como pergunta → objetivo geral → objetivos específicos →
-hipóteses (H₀/H₁). Concorda com a forma e com os enunciados? Hipóteses
-de trabalho ou testes estatísticos formais?
+- **Esquerda (todas as presenças de teste): a linha é quase plana.**
+  Juntar especialistas quase não melhora o resultado global. É a
+  resposta principal da RQ1.
+- **Meio (só presenças de especialistas): fáceis de reconhecer.** Mesmo
+  sem nenhum dado de especialista no treino, o modelo já os reconhece
+  muito bem; juntá-los melhora só um pouco.
+- **Direita (só presenças de ciência cidadã): mais difíceis.** A linha
+  fica abaixo das dos outros painéis, e o modelo só de especialistas
+  cai bastante: quem treina só com especialistas reconhece pior os
+  sítios que os cidadãos fotografam.
+- **Direita: a faixa verde (Logistic Regression) é muito larga.** O
+  resultado depende muito da zona testada. Uma das sementes tem muito
+  poucas presenças de ciência cidadã no teste; que isto explique a
+  variação é uma hipótese provável, não testada.
 
-- **Principal:** em que medida as observações de ciência cidadã,
-  transformadas em dados de referência e representadas por embeddings
-  de foundation models de observação da Terra, podem substituir os
-  dados de referência de especialistas como dados de treino no
-  mapeamento de *Acacia dealbata* no distrito de Coimbra?
-  - "Como dados de treino" (acrescentado a 2026-11-14): os dados de
-    especialistas continuam a ser a referência de teste; o que a
-    ciência cidadã substitui é o treino. "Substituir" mede-se pela
-    diferença de desempenho face a modelos treinados com dados de
-    especialistas. No contexto comum fica escrito que 90% das
-    presenças são de um observador. Origem:
-    [thesis/notes.md](../../thesis/notes.md#pergunta-principal-dados-de-treino).
-- **RQ1 (substituição):** em que medida um modelo treinado só com
-  observações de ciência cidadã atinge o desempenho de modelos
-  treinados com dados de referência de especialistas?
-- **RQ2 (dos pontos aos dados de referência):** em que medida os
-  filtros de grau e de precisão aplicados às observações de ciência
-  cidadã, e a extensão do rótulo de cada observação do píxel observado
-  à mancha de vegetação à sua volta, alteram o desempenho do
-  mapeamento?
-- **RQ3 (transferibilidade):** em que medida o desempenho do modelo
-  treinado com ciência cidadã desce dos locais perto da área amostrada
-  para os locais longe dela?
-- **RQ4 (representação):** em que medida os embeddings do TESSERA
-  melhoram o mapeamento face às features do Sentinel-2, quando
-  treinados com dados de ciência cidadã limpos, com todas as
-  observações e com poucas?
-- **O que muda face ao que aprovou:** a pergunta principal passa a
-  ser sobre a ciência cidadã substituir os dados de especialistas, em
-  vez da comparação TESSERA contra Sentinel-2; a pergunta da curva e a
-  da comparação de representações separam-se (RQ1 e RQ4); a máscara e
-  os filtros passam a ter pergunta própria (RQ2). A curva de redução
-  de esforço deixa de ser repetida com o Sentinel-2: a 5 de novembro
-  ficou decidido correr a experiência uma vez por representação, e
-  agora a RQ4 compara as representações só nos dois níveis de dados.
-- **Numeração:** cada pergunta só usa o que as anteriores definem.
-  RQ1, RQ2 e RQ3 só precisam do TESSERA; a RQ4 é a única que depende
-  do braço Sentinel-2, que está parado, e por isso vem no fim.
-- **Como meço as hipóteses:** pela diferença de ROC-AUC emparelhada
-  por semente (média, desvio-padrão, número de sementes com o mesmo
-  sinal). Reporto a diferença e não decido por limiar, porque há cinco
-  sementes e elas reutilizam blocos. O Boyce é só reportado.
-- **Fica de fora, como limitação declarada:** não testo se os
-  foundation models compensam o ruído dos rótulos (a RQ4 usa só dados
-  limpos), nem se o modelo separa a *A. dealbata* das outras acácias
-  (trabalho futuro).
+**Porque a curva deu plana, testei quatro explicações:**
 
-Objetivos e hipóteses completos:
-[research_questions.md](../research_questions.md#main-question-and-objectives).
+- **Fundo fácil demais?** Repeti com um fundo só de floresta: a curva
+  continua plana.
+- **Píxeis repetidos dentro dos polígonos?** Há redundância, mas não
+  chega para explicar.
+- **Erros nos rótulos de ciência cidadã?** Tirar as presenças mais
+  estranhas não melhora.
+- **Habitat:** a explicação mais provável. Os especialistas mapearam
+  sobretudo manchas de acacial, que a ciência cidadã já cobre; a
+  ciência cidadã cobre também pinhal, eucaliptal e matos.
 
-*Literatura:* nenhuma; é o ajuste das perguntas à proposta de tese, na
-forma de um guia de escrita de teses, não uma decisão metodológica.
-
-Origem:
-[thesis/notes.md](../../thesis/notes.md#renumeracao-perguntas-2026-11-13);
-[thesis/notes.md](../../thesis/notes.md#reformulacao-quatro-perguntas);
-versão anterior da formulação em
-[thesis/notes.md](../../thesis/notes.md#formulacao-pergunta-objetivos-hipoteses).
-
-### RQ2: máscara de segmentação e filtros de grau e de precisão
-
-Proponho que a máscara de segmentação, que disse ser central e que
-não pertencia a nenhuma pergunta, seja o centro da RQ2, junto com o
-efeito dos filtros de grau e de precisão.
-
-- **Hipóteses:** o desempenho é igual com e sem máscara, ou é
-  diferente. Nos dois sentidos: mais píxeis por observação podem
-  ajudar, píxeis errados podem prejudicar. O mesmo par para os
-  filtros: igual ou diferente com e sem os dois filtros.
-- **Condições de treino da máscara:** só o píxel observado,
-  crescimento de região e superpíxeis, as duas regras sobre os
-  embeddings TESSERA.
-- **Configuração da máscara, uma por regra, fixada antes de correr:**
-  crescimento de região com semelhança de cosseno de pelo menos 0,90
-  ao píxel observado, 4 vizinhos e no máximo 50 m; superpíxeis SLIC
-  com tamanho médio de 25 píxeis. Valores meus, sem fonte.
-- **Condições de treino dos filtros:** com ou sem os filtros de grau
-  *research* e de precisão até 30 m. A condição sem filtros junta 1 120
-  píxeis que já têm embedding guardado. As observações de coordenadas
-  escondidas ficam fora das duas. A janela 2021–2025 fica igual nas
-  duas. Sem ablação passo a passo, e só com todas as observações.
-- **Níveis de dados da máscara:** as 2 465 presenças e uma subamostra
-  ao acaso de 150.
-- **Resto igual à curva (RQ1)**, só com TESSERA.
-- **Por correr:** a máscara precisa de uma extração de janelas
-  TESSERA à volta das observações, que ainda não aprovei.
-- **Porque não é uma pergunta sobre reduzir as observações:** todas as
-  presenças estão a 2 anos ou menos de 2023, por isso um filtro de
-  recência teria pouco para ordenar; e a curva está perto do teto,
-  por isso reduzir ao acaso diria pouco e repetiria Ball et al.
-  (2026).
-- **Fica de fora:** a regra dos polígonos da COS (cobre cerca de 17%
-  dos pontos e é circular com a validação independente).
-- **Risco a discutir:** não haver diferença mesmo com 150 presenças.
-
-*Literatura:* Rivier et al. (2024) e Raine et al. (2022) para os
-superpíxeis; Zhang et al. (2021) para o crescimento de região (crescem
-pela confiança de um classificador, não por semelhança à semente).
-Raine et al. (2026) já propagam pontos por semelhança em features
-congeladas de um foundation model, em imagens subaquáticas e com
-vários pontos de várias classes. Não encontrei trabalho que junte
-propagação de ponto para mancha, pontos só de presença de ciência
-cidadã e embeddings de satélite congelados: possível contributo. Nenhum artigo
-lido dá valores utilizáveis para a configuração da máscara. A
-comparação com e sem filtros é adaptada das ablações de um fator de
-Ball et al. (2026).
-
-Origem:
-[thesis/notes.md](../../thesis/notes.md#rq2-proposta-mascara);
-[thesis/notes.md](../../thesis/notes.md#renumeracao-perguntas-2026-11-13).
-
-### RQ3: medir a concentração espacial só com perto contra longe
-
-Em vez de partir do princípio de que o observador dominante é um
-enviesamento a corrigir, diagnosticar primeiro se a concentração da
-amostragem prejudica o modelo.
-
-- **Experiência:** treinar com ciência cidadã (TESSERA) e avaliar nos
-  píxeis de especialistas, perto (até 1 km) e longe (mais de 1 km,
-  dentro do distrito) do ponto de treino mais próximo. Ficam de fora
-  do teste os 21 píxeis que são também píxel de uma presença de
-  ciência cidadã. As cinco
-  sementes variam os blocos de teste, como na curva.
-- **Produto:** mapa de confiança por dissemelhança aos dados de
-  treino.
-- **Hipótese:** o desempenho é igual perto e longe, ou é mais baixo
-  longe. Uso "concentração" em vez de "enviesamento" porque é o que de
-  facto medimos: o observador dominante é fiável e cobre bem a zona
-  dele.
-- **A pergunta que aprovou** (os foundation models amplificam ou
-  atenuam o efeito, face às features convencionais) fica de fora:
-  exigiria repetir esta experiência com o Sentinel-2, também nos
-  píxeis de especialistas. A RQ4 compara as representações só nos
-  dois níveis de dados.
-- **Fica de fora, como trabalho futuro:** a comparação entre o
-  observador dominante e os outros, o desbaste espacial, a camada de
-  estradas e a segunda região.
-- **Dados:** 1 645 polígonos a 1 km ou menos de uma observação (1 643
-  no distrito) e 206
-  polígonos do distrito a mais de 1 km, entre 1,0 e 8,2 km (contagem
-  em [`design_counts.ipynb`](../../notebooks/05_data_integration/design_counts.ipynb)).
-- **Risco a discutir:** perto e longe diferem também no tamanho dos
-  polígonos (mediana de 77 m² perto e 2 788 m² longe) e um pouco na
-  ocupação do solo, por isso reporto a diferença sem atribuir a causa
-  à distância.
-
-*Literatura:* Meyer & Pebesma (2021) para o mapa de confiança;
-Ratsakatika et al. (2026, preprint) usam-no com embeddings mas
-declaram que a exatidão fora da área não foi testada. Não encontrei
-precedente com ciência cidadã concentrada num observador (pesquisa
-rápida): possível contributo.
-
-Origem:
-[thesis/notes.md](../../thesis/notes.md#rq3-proposta-redesenho-diagnostico-primeiro);
-[thesis/notes.md](../../thesis/notes.md#renumeracao-perguntas-2026-11-13).
-
-## Para informar
-
-- **Numeração das perguntas e limitações (não bloqueante):** as
-  perguntas estão numeradas de modo que cada uma só usa o que as
-  anteriores definem: RQ1 curva de redução de esforço, RQ2 dos pontos
-  aos dados de referência, RQ3 transferibilidade, RQ4 TESSERA contra
-  Sentinel-2. A leitura de "área de vegetação mais próxima" como
-  extensão do rótulo à mancha continua por confirmar (está nas
-  Perguntas). Limitações que declaro:
-  não testo se os foundation models compensam o ruído dos rótulos, e a
-  incerteza de cada observação só entra pelo filtro de precisão e pela
-  máscara, não no modelo.
-  *Literatura:* nenhuma; é organização das perguntas e âmbito.
-  Origem:
-  [thesis/notes.md](../../thesis/notes.md#renumeracao-perguntas-2026-11-13).
-- **Janela temporal das observações (não bloqueante):** uso só
-  observações do iNaturalist de 2021–2025, todas tratadas como
-  representativas do povoamento de 2023. 2026 fica de fora porque o
-  ano estava incompleto no download e por causa da possível rebrota
-  depois dos incêndios de 2025. Ficam 2 465 presenças, 90% do
-  Observador A.
-  *Literatura:* Ball et al. (2026) e Gillespie et al. (2024) tratam
-  observações de vários anos como um ano de referência; para a largura
-  da janela (± 2 anos) não li nenhuma fonte.
-  Origem:
-  [thesis/notes.md](../../thesis/notes.md#janela-temporal-2021-2025).
-- **Fundo uniforme reconstruído (não bloqueante):** o fundo foi
-  reconstruído em 2026-11-13 com a zona-tampão de 50 m à volta das
-  2 465 presenças de 2021–2025; mesma semente e mesmo número de
-  pontos. O ROC-AUC global coincide a 0,002 com o fundo anterior; o
-  Boyce global a 100% passou de 0,930 para 0,969.
-  *Literatura:* nenhuma; é proveniência dos dados.
-  Origem:
-  [thesis/notes.md](../../thesis/notes.md#fundo-uniforme-reconstruido-2465).
 
 ## Perguntas
 
-- **Máscara de segmentação, "considerar a área de vegetação mais
-  próxima":** quis dizer estender o rótulo à mancha à volta da
-  observação, ou só levar o ponto para dentro da vegetação mais
-  próxima? Estou a assumir a primeira leitura (origem:
-  [thesis/notes.md](../../thesis/notes.md#máscara-de-segmentação-testar-várias-abordagens)).
-- **Validação independente da curva (RQ1):** o plano é comparar as
-  previsões com a classe "Florestas de acácias" da COS 2023, como
-  referência que não vem da ciência cidadã nem dos polígonos de
-  especialistas. Confirmar que os polígonos foram feitos sem apoio da
-  COS, e que a comparação faz sentido mesmo com 56% dos polígonos
-  dentro dessa classe (origem:
-  [`data/README.md`](../../data/README.md#acacia-dealbata-expert-reference-polygons)).
-- **Polígonos `classifica = 0` como ausências só no teste:** decidiu
-  que não entram no estudo. Os que caem em vegetação (56% dos 5 013)
-  podem servir de ausências verificadas apenas na avaliação, nunca no
-  treino, como segundo conjunto de teste ao lado do teste contra
-  fundo? São ausências fiáveis nessas áreas, e como foram escolhidos?
-  O treino (presenças contra fundo) não muda. Ainda não contei quantos
-  ficam no distrito e nos blocos de teste.
-  - **Porque peço:** sem ausências confirmadas não meço falsos
-    positivos. Os negativos do teste são pontos de fundo, de classe
-    desconhecida: quando o modelo prevê acácia num deles, não sei se
-    errou ou se há lá acácia. Fico sem saber quanto o mapa
-    sobrestima a espécie, que é o erro que mais pesa para quem o usa
-    no terreno (leitura minha).
-  - **O que tenho hoje não o resolve:** o índice de Boyce está
-    saturado (cerca de 0,99) e o teste só com presenças de
-    especialistas tem 0,02 de folga até ao teto.
-  - **O que ganhava:** exatidão do utilizador e do produtor para a
-    classe acácia, em vegetação parecida com a que o modelo confunde,
-    medida com dados que já existem e sem mexer no treino.
-  *Literatura:* Phillips et al. (2009): o enviesamento do fundo só se
-  vê com dados independentes de presença-ausência (origem:
-  [thesis/notes.md](../../thesis/notes.md#usar-os-dados-de-especialistas-com-limpeza)).
-- **Trabalhos do grupo que não encontrei publicados:** posso ler os
-  resumos ou apresentações de (1) Majchrzak, Duarte, Fonte e Bogawski
-  (2025, 2026), fenologia da floração da *A. dealbata* na Lousã com
-  Sentinel-2 e iNaturalist, por causa da janela de floração para
-  Portugal central que tenho em aberto; (2) "Impacts of Equal and
-  Proportional Allocations in Accuracy Assessment of a Rare Class"
-  (EARSeL 2024), por causa da avaliação; (3) a segmentação fracamente
-  supervisionada para reduzir o esforço de anotação de invasoras
-  lenhosas (EARSeL 2024), por causa da máscara?
-  *Literatura:* só vi os títulos, nos perfis ORCID e CiênciaVitae; não
-  sei o que concluem (origem:
-  [thesis/notes.md](../../thesis/notes.md#lista-de-literatura-releitura-integral-e-limpeza)).
-- **invasoras.pt:** se as presenças de ciência cidadã ficarem poucas,
-  faz sentido juntar observações dessa plataforma? Quem a gere?
-  (origem:
-  [2026-11-04.md](2026-11-04.md#presenças-de-a-dealbata-7-943--3-000)).
-- **Apresentação da Lucie Radová:** faz sentido falar com ela?
-  (origem: [2026-11-04.md](2026-11-04.md#3-para-informar)).
+- **Máscara, "área de vegetação mais próxima":** estender o rótulo à
+  mancha à volta, ou só levar o ponto para dentro da vegetação mais
+  próxima? Assumo a primeira leitura.
+
+- **Validação independente da curva (RQ1):** plano é comparar com
+  "Florestas de acácias" (COS 2023). Confirmar que os polígonos foram
+  feitos sem apoio da COS — 56% caem nessa classe.
+
+- **Polígonos `classifica = 0` como ausências só no teste:** não
+  entram no estudo, mas os que caem em vegetação (56% dos 5 013)
+  podem servir de ausências verificadas, só na avaliação (treino
+  presença-vs-fundo não muda)? São fiáveis, e como foram escolhidos?
+
+  Sem ausências confirmadas não meço falsos positivos (o Boyce já
+  satura perto de 0,99); ganhava exatidão do utilizador/produtor para
+  acácia, com dados que já existem.
