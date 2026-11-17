@@ -94,9 +94,9 @@ perguntas de investigação.
 (abertura do capítulo e secção Motivation); a tabela do manuscrito
 usa a numeração das três perguntas aprovadas. O diagrama do pipeline
 ainda não foi feito. A Introdução ainda cita `zhu2026` para a linha
-das outras regiões; a entrada da bibliografia tem o autor errado (é
-Stewart et al.) e a fonte certa para essa linha é Yang et al. (2026).
-Por corrigir no manuscrito. Duas outras linhas da tabela já não
+das outras regiões; a entrada da bibliografia já tem o autor certo
+(Stewart et al., corrigido a 2026-11-17), mas a fonte certa para essa
+linha é Yang et al. (2026). Por corrigir no manuscrito. Duas outras linhas da tabela já não
 correspondem ao desenho (fundo e citação de Ball et al.); ver a
 [revisão de consistência](#revisao-consistencia-2026-11-13).
 
@@ -1094,7 +1094,8 @@ variograma) ficou fechado, e fiz mais o seguinte:
 
 **Na tese (atualizado na segunda parte):** ⏳ Ainda não escrita
 (Metodologia). As divergências acima ficam por corrigir quando eu
-pedir alterações ao manuscrito.
+pedir alterações ao manuscrito. As de `references.bib` foram
+corrigidas a 2026-11-17.
 
 **Revisão (2026-11-13, terceira parte).** Duas coisas que as partes
 anteriores davam como não contadas ou sem script.
@@ -2811,9 +2812,11 @@ espacial; a entrada `zhu2026` do manuscrito tem o autor errado.
 
 **Onde:** [`docs/literature.md`](../docs/literature.md).
 
-**Na tese:** ⏳ Ainda não aplicada. `references.bib` e a Introdução
-ainda têm `zhu2026` com o autor errado; `feng2025` e `karasiak2022`
-estão com a versão anterior à publicação (ver a [revisão de consistência](#revisao-consistencia-2026-11-13)).
+**Na tese:** ✅ Parcial (2026-11-17). Em `references.bib`, `zhu2026`
+tem agora os autores certos (Stewart, Fang, Corley & Zhu) e `feng2025`
+e `karasiak2022` as versões publicadas. Falta a Introdução: ainda cita
+`zhu2026` para a linha da transferência para outras regiões, que
+devia citar Yang et al. (2026) (ver a [revisão de consistência](#revisao-consistencia-2026-11-13)).
 
 **Revisão (2026-11-14):** pesquisa web para testar os gaps e cinco
 entradas novas. Ficam 36 entradas.

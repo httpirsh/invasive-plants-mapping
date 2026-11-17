@@ -1035,9 +1035,7 @@ Not papers, but relevant:
 - **Sightings Map of Invasive Plants in Portugal** — citizen-science
   dataset by the Centre for Functional Ecology, University of
   Coimbra (invasoras.pt), published on GBIF. Different platform and
-  observer pool from iNaturalist: candidate extra presences or a
-  cross-platform test for RQ3. See
-  [Species Scope](research_questions.md#species-scope-proposed).
+  observer pool from iNaturalist: candidate extra presences, not used.
 
 ## What Has Already Been Done
 
@@ -1079,9 +1077,9 @@ None of these, on its own, is this thesis's novelty.
 
 ## Gap
 
-Each ingredient has prior work; their intersection — **EO foundation
-models + invasive plant mapping + citizen-science reference data,
-with explicit evaluation of sparsity and spatial bias** — appears
+Each ingredient has prior work; their intersection — **citizen
+science as a substitute for expert reference data in training, for
+an invasive plant, with EO foundation-model embeddings** — appears
 underexplored:
 
 - Ball et al. (2026): foundation models + label efficiency, but tree
