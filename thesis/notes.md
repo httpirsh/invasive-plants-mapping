@@ -1322,9 +1322,8 @@ decisão não muda.
 
 ### Janela temporal das observações: só 2021–2025 {#janela-temporal-2021-2025}
 
-*Decisão minha, de 2026-11-13. O orientador ainda não foi informado;
-está como ponto informativo na
-[fila da próxima reunião](../docs/meetings/2026-11-17.md).*
+*Decisão minha, de 2026-11-13. Não levada ao orientador: dou-a por
+resolvida (2026-11-17).*
 
 **O que decidi:**
 - Todas as presenças de *A. dealbata* são tratadas como representativas
@@ -1718,6 +1717,11 @@ ele decidiu a 2026-11-05, por isso vale como proposta até ele
 responder; está na fila da
 [próxima reunião](../docs/meetings/2026-11-17.md), em "O que muda
 face ao que aprovou".
+
+**Revisão (2026-11-17):** não levei este ponto à reunião de
+2026-11-17; dou-o por resolvido como decisão minha. Continua a
+contrariar o que o orientador decidiu a 2026-11-05, e ele não
+respondeu sobre isto.
 
 ### Classificador presença-vs-fundo (ciência cidadã): Random Forest, por agora
 
@@ -2880,6 +2884,10 @@ novas, de trabalhos dos meus orientadores. Ficam 38 entradas.
   (floração da *A. dealbata* na Lousã, avaliação de uma classe rara,
   segmentação fracamente supervisionada de invasoras); See et al.
   (2016) e Fonte et al. (2024), públicos mas não obtidos.
+
+**Revisão (2026-11-17):** não pedi os três trabalhos do grupo na
+reunião de 2026-11-17; dou o ponto por resolvido e ficam fora da
+lista por ler.
 
 ### Identidade da tese confirmada: título, mestrado, orientadores, idioma e data da entrega
 
