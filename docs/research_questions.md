@@ -63,9 +63,12 @@ training data for mapping *A. dealbata* in the Coimbra district.
 
 **Common context:** *Acacia dealbata*, Coimbra district, 2023 imagery,
 research-grade iNaturalist observations from 2021–2025, 90% of them
-from one observer, TESSERA vs. Sentinel-2 features; performance
-measured with ROC-AUC and the continuous Boyce index under 10 km
-spatial block holdout.
+from one observer, TESSERA vs. Sentinel-2 features; a presence-only
+classifier; performance measured as sensitivity at a fixed fraction of
+predicted area under leave-one-block-out over 10 km blocks, with
+ROC-AUC and the continuous Boyce index as secondary metrics (to
+confirm with the supervisor; the area fraction, 10%, is my choice:
+[`thesis/notes.md`](../thesis/notes.md#rq1-presence-only)).
 
 **What "replace" means here:** the difference in performance between
 models trained on citizen-science observations and models trained
@@ -75,12 +78,14 @@ with expert reference data. Expert data remain the test reference.
 alternative (H₁), each marked as written before or after its result
 was seen. They are working hypotheses, not formal statistical tests.
 
-**What is reported for every hypothesis:** the per-seed difference in
-ROC-AUC between the two conditions (same test blocks): its mean, its
-standard deviation and the number of seeds in which it has the same
-sign, with the Boyce index next to it. The difference is reported and
-no decision threshold is applied, because there are five seeds and
-they reuse blocks. Each question names the two conditions compared.
+**What is reported for every hypothesis:** the per-fold difference in
+sensitivity at the fixed area fraction between the two conditions
+(same test block): its mean, its standard deviation and the number of
+folds in which it has the same sign, with the sensitivity-by-area
+curve (5% to 30%) and the secondary metrics next to it. The
+difference is reported and no decision threshold is applied, because
+the folds are few and unequal in size. Each question names the two
+conditions compared.
 
 ## Secondary Questions
 
@@ -104,13 +109,14 @@ Scope is reassessed as experiments progress.
 
 Each question also lists its own risks.
 
-- **The metrics may not separate the models.** The Boyce index is
-  near 0.99 for every model so far and, being rank-based, cannot rank
-  models whose curves all rise monotonically (Hirzel et al., 2006).
-  Presence-background ROC-AUC has a maximum below 1 that is not known
-  here (Phillips et al., 2009). So "no difference" could come from the
-  metric rather than the models. See
-  [`methodology.md`](methodology.md#evaluation).
+- **The secondary metrics may not separate the models.** The Boyce
+  index is near 0.99 for every model so far and, being rank-based,
+  cannot rank models whose curves all rise monotonically (Hirzel et
+  al., 2006). ROC-AUC against background counts an unrecorded acacia
+  in the background as an error, so its maximum is below 1 and not
+  known here (Phillips et al., 2009). The primary metric avoids both
+  by never labelling background as absence; its literature is not yet
+  read. See [`methodology.md`](methodology.md#evaluation).
 - **Spatial blocks have no buffer between them.** Training and test
   pixels on either side of a block border can be close, which can
   inflate scores (Karasiak et al., 2022; Ratsakatika et al., 2026).
@@ -158,36 +164,36 @@ and always contains both sources; results are averaged over five
 seeds. Reasoning:
 [`thesis/notes.md`](../thesis/notes.md#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
 
-**Classifiers:** presence-vs-background. Random Forest is the main
-classifier and Logistic Regression is reported as a second one. Why:
-[`thesis/notes.md`](../thesis/notes.md#rq2-curva-por-fonte).
+**Classifier:** presence-only, chosen by a method-selection step that
+compares true one-class models (Isolation Forest, One-Class SVM; no
+background in training) with presence-background models that use the
+background as an unlabelled sample of the landscape (L2 logistic
+regression, MaxEnt), each with a small hyperparameter sweep under the
+shared protocol. **Measured (to confirm with the supervisor):** the
+best configurations of the presence-background models beat the best
+one-class configurations at every area fraction; pooled sensitivity at
+10% of area is 0.410 for the logistic regression (`C=10`), 0.334 for
+MaxEnt (linear + quadratic features), 0.258 for the One-Class SVM and
+0.188 for the Isolation Forest (chance 0.10). PCA reconstruction, a
+small autoencoder and their ensembles with the Isolation Forest were
+tested and stay near chance. The logistic regression with `C=10` is
+the classifier of the curve. Why, criterion, caveats and what is to
+confirm:
+[`thesis/notes.md`](../thesis/notes.md#rq1-presence-only);
+notebook
+[`presence_only_method_selection.ipynb`](../notebooks/07_foundation_models/presence_only_method_selection.ipynb).
 
-**Measured (TESSERA, 2021–2025 presences; not yet confirmed by the
-supervisor):** the answer depends on the classifier and on the test
-presences. On the pooled test set, Random Forest gains about 0.005
-ROC-AUC with the first 10% to 20% of expert polygons and no more after
-(0.902 at 0%, 0.906 at 90% and at 100%); Logistic Regression gains
-0.031. On expert presences alone, the citizen-science-only Random
-Forest reaches 0.976, against 0.994 for the expert-only model. The
-expert-only model scores lower on the pooled test set (0.854) only
-because of the citizen-science test presences (0.677, against 0.799
-for 100% plus citizen science), which likely share the sampling bias
-of the training data.
+**Measured:** the curve is not run yet under this classifier and
+metric (task in [`docs/todo.md`](todo.md)). The script
+[`experiments/effort_reduction_curve/run.py`](../experiments/effort_reduction_curve/run.py)
+is rewritten for it.
 
-**Reading:** the citizen-science-only model ranks the sites mapped by
-experts well. That may reflect expert presences that are easier to
-separate from the background (55.0% of expert pixels fall in the COS
-2023 "Florestas de acácias" class, against 17.9% of citizen-science
-presences), not that the two sources are equivalent. The independent
-units are polygons and 10 km blocks, and seeds reuse blocks, so
-agreement between seeds is not independent evidence.
-
-Values per level, paired differences, the Boyce index and caveats:
-[`thesis/notes.md`](../thesis/notes.md#simplificacao-desenho-2026-11-13);
-script
-[`experiments/effort_reduction_curve/run.py`](../experiments/effort_reduction_curve/run.py);
-tables in `results/effort_reduction_curve/`; figure and reading in
-[`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
+**Known from the data, before running:** expert presences may be
+easier to separate from the background than citizen-science ones:
+55.0% of expert pixels fall in the COS 2023 "Florestas de acácias"
+class, against 17.9% of citizen-science presences
+([`thesis/notes.md`](../thesis/notes.md#diagnosticos-curva-plana)).
+The independent units are polygons and 10 km blocks.
 Sensitivity of the curve to a buffer between training and test:
 [`methodology.md`](methodology.md#validation).
 
@@ -208,11 +214,11 @@ often have inverse biases; an analogy only, since here experts and the
 dominant observer visited the same places. That the expert end of the
 curve is biased differently, not bias-free, rests on this project's
 own habitat-composition result. The curve design itself has no
-literature precedent checked yet. Random Forest: Domingo et al. (2023)
-for *A. dealbata* presence/absence; Yang et al. (2026) on embeddings;
-Ball et al. (2026) include it as a baseline, below a small neural
-network and well above Logistic Regression; in Mouta et al. (2021) it
-is one of eight fused classifiers.
+literature precedent checked yet. Presence-only classifier: Rapinel &
+Hubert-Moy (2021) on background vs. pseudo-absences; Phillips et al.
+(2009) on background as an unlabelled sample; Deng et al. (2018),
+Mack & Waske (2017), Li & Guo (2010) on presence-background methods
+against true one-class ones.
 
 **Expert reference labels (adopted):** *A. dealbata* polygons sent by
 the supervisor; provenance and counts in
@@ -295,9 +301,9 @@ training with them, with all observations.
   show, since the RQ1 curve is near its ceiling with all data. The
   filter comparison runs with all observations only.
 - **Only the training labels change.** Test set (the filtered one),
-  background pool, Random Forest, 10 km blocks and five seeds are
-  those of RQ1. TESSERA only: the question is about the labels, not
-  the representation.
+  background pool, classifier, folds and metric are those of RQ1.
+  TESSERA only: the question is about the labels, not the
+  representation.
 - **Comparison between the two mask rules is descriptive**, with the
   number of pixels each adds per observation.
 - **Leakage:** mask pixels and unfiltered observations that fall in a
@@ -365,9 +371,9 @@ area to locations far from it?
 
 **Hypotheses (written before running):** H₀: no difference in
 performance between near and far locations. H₁: performance is lower
-far from the sampled area. Known beforehand from RQ1: the
-citizen-science-only model reaches 0.976 ROC-AUC on expert presences
-overall.
+far from the sampled area. The RQ1 value of the citizen-science-only
+model on expert presences, the starting point of this question, is not
+measured yet under the current classifier and metric.
 
 **Reported:** far against near expert polygons. The difference is
 reported without attributing its cause to distance (see Risks).
@@ -378,11 +384,12 @@ reported without attributing its cause to distance (see Risks).
   and their points occupy 15 of the 39 blocks of 10 km that hold
   presences (EPSG:32629 grid, as in the experiments). That is
   concentration; whether it harms the model is what is measured.
-- **Model:** in each seed, the citizen-science-only (0%) model of RQ1:
-  the same draw of test blocks, trained on the citizen-science
-  presences and background points outside them, with TESSERA.
-- **Seeds:** the five seeds vary the test blocks, as in RQ1, and with
-  them the training set and the test background.
+- **Model:** in each fold, the citizen-science-only (0%) model of RQ1:
+  the same test block, trained on the citizen-science presences
+  outside it (and, for a presence-background classifier, the
+  background points outside it), with TESSERA.
+- **Folds:** the leave-one-block-out folds of RQ1 vary the test block,
+  and with it the training set and the test background.
 - **Test set:** the expert pixels, against the background points of
   the seed's test blocks. The 21 expert pixels that are also the pixel
   of a citizen-science presence are left out, so no test pixel trains
@@ -448,9 +455,9 @@ at the small data level.
 
 **Design:**
 
-- **Only the representation changes.** Same Random Forest, test set,
-  background pool, 10 km blocks and five seeds as RQ1; all
-  representations come from the same reference year.
+- **Only the representation changes.** Same classifier, test set,
+  background pool, folds and metric as RQ1; all representations come
+  from the same reference year.
 - **Two data levels:** all 2 465 presences and the random subsample of
   150 used in RQ2.
 - **Citizen-science training data only.** The effort-reduction curve
@@ -468,9 +475,11 @@ at the small data level.
 - The Sentinel-2 extraction may stay too costly to run.
 - With all observations the models may be too close to the ceiling of
   the metrics to be separated.
-- Random Forest may understate the embeddings: in Koukos et al. (2026)
-  the distance between engineered features and TESSERA is 8.4 points
-  of macro F1 with Random Forest and 1.1 with a neural network.
+- A light classifier may understate the embeddings: in Koukos et al.
+  (2026) the distance between engineered features and TESSERA is 8.4
+  points of macro F1 with Random Forest and 1.1 with a neural network.
+  Whether this holds for the presence-only classifier chosen in RQ1 is
+  not known.
 
 **Grounded in:** the representation comparison follows Ball et al.
 (2026), whose conventional arm combines Sentinel-1 and Sentinel-2; not
@@ -488,9 +497,11 @@ small level.
 **Pixel-level classification trained on points, applied
 wall-to-wall.** The classifier is trained on the 10 m pixel at each
 observation (Sentinel-2 features or foundation-model embedding), then
-applied to every pixel of the study area. The task is binary, *Acacia*
-presence vs. background; the *Acacia* map is the predicted probability
-per pixel.
+applied to every pixel of the study area. The task is presence-only:
+the classifier learns from *Acacia* presences, with the background at
+most as an unlabelled sample of the landscape, never as absence; the
+*Acacia* map is the per-pixel score (relative suitability, not a
+probability of presence against absence).
 
 **Grounded in:** Brown et al. (2025) — findings in `literature.md`.
 

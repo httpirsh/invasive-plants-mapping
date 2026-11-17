@@ -6,7 +6,10 @@ porquê. O estado atual do desenho está em
 [`docs/methodology.md`](../docs/methodology.md); aqui fica o raciocínio.
 
 Cada entrada segue a mesma forma: quem decidiu, **O que decidi**,
-**Porquê**, **Fundamentação**, **Onde**, **Na tese**.
+**Porquê**, **Fundamentação**, **Onde**, **Na tese**. O texto e a
+data de uma entrada nunca mudam; o que muda depois entra num bloco
+**Revisão** datado no fim da entrada, e o estado atual de cada uma
+está no [índice das decisões](#decisões).
 
 ## Para dizer
 
@@ -21,14 +24,17 @@ manuscrito ainda tem as três perguntas que ele aprovou.*
 
 > "Tenho noção de que as perguntas são ambiciosas. Por isso estão
 > ordenadas de modo que cada uma só usa o que as anteriores definem: a
-> RQ1 é o núcleo e já está medida; a RQ2 e a RQ3 reutilizam o modelo
+> RQ1 é o núcleo, com o protocolo fechado e a curva a recorrer com o
+> classificador presence-only; a RQ2 e a RQ3 reutilizam o modelo
 > e os dados da RQ1, só com TESSERA; a RQ4 é a única que depende do
 > Sentinel-2 e fica para o fim. Vou ajustando consoante o que os dados
 > e o tempo permitirem."
 
 Porque esta ordem se defende:
-- A RQ1 sozinha já responde ao objetivo principal da proposta e ao
-  objetivo 3: é um resultado completo.
+- A RQ1 sozinha responde ao objetivo principal da proposta e ao
+  objetivo 3: é um resultado completo assim que a curva for recorrida
+  com o classificador escolhido em
+  [RQ1 passa a presence-only](#rq1-presence-only).
 - A RQ2 responde ao objetivo 1 da proposta. A parte dos filtros corre
   com os embeddings já guardados; a máscara precisa de uma extração de
   janelas TESSERA.
@@ -78,7 +84,7 @@ resolver.
 |---|---|---|
 | Enviesamento espacial: as observações concentram-se perto de estradas e trilhos (Dimson et al., 2023) | Sampling bias / dataset bias | RQ3 |
 | Poucos observadores: 90% das 2 465 presenças são de uma só pessoa | Dados de treino pouco diversos | RQ3 |
-| Só presenças, sem ausências (Phillips et al., 2009) | Positive-unlabeled learning | Presença vs. fundo (pontos aleatórios) |
+| Só presenças, sem ausências (Phillips et al., 2009) | Positive-unlabeled learning | Classificador presence-only na RQ1; o fundo entra só como amostra da paisagem, nunca como ausência |
 | Rótulos com ruído: localização imprecisa, píxeis mistos (Ball et al., 2026) | Label noise | Pipeline de preparação dos dados; RQ2 (filtros de grau e de precisão, máscara) |
 | Poucos dados | Data efficiency / few labels | Nível de 150 presenças na RQ2 e na RQ4 |
 | Observações de anos diferentes das imagens (Ball et al., 2026) | Desfasamento temporal entre dados e rótulos | Ano único 2023; filtro de fogo |
@@ -96,8 +102,9 @@ usa a numeração das três perguntas aprovadas. O diagrama do pipeline
 ainda não foi feito. A Introdução ainda cita `zhu2026` para a linha
 das outras regiões; a entrada da bibliografia já tem o autor certo
 (Stewart et al., corrigido a 2026-11-17), mas a fonte certa para essa
-linha é Yang et al. (2026). Por corrigir no manuscrito. Duas outras linhas da tabela já não
-correspondem ao desenho (fundo e citação de Ball et al.); ver a
+linha é Yang et al. (2026). Por corrigir no manuscrito. Duas outras
+linhas da tabela já não correspondem ao desenho (fundo e citação de
+Ball et al.); ver a
 [revisão de consistência](#revisao-consistencia-2026-11-13).
 
 ### Metodologias abandonadas
@@ -112,11 +119,26 @@ Abandoned Methodologies".*
   Passei a presença vs. fundo, e a RQ1 deixou de ter um "limite
   superior" fixo para passar a uma curva de redução de esforço. Ver
   [Multiclasse abandonado](#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo).
-- **One-class verdadeiro (Isolation Forest e one-class SVM).** Testado
-  nos dois braços, perdeu sempre para presença vs. fundo, e sob um
-  fundo só de floresta caiu para perto do acaso: sem exemplos
-  negativos, reconhecia "isto não é vegetação" e não a acácia. Ficou o
-  Random Forest. Ver a mesma entrada.
+- **One-class puro (Isolation Forest, one-class SVM, PCA e ensemble
+  PCA + Isolation Forest).** Testado duas vezes. Primeiro com ROC-AUC
+  e Boyce contra o fundo: perdeu sempre para presença vs. fundo e, sob
+  um fundo só de floresta, caiu para perto do acaso. O orientador
+  contestou essa avaliação (assumia que o fundo não tem acácia) e
+  pediu para reabrir; no protocolo novo (leave-one-block-out,
+  sensitivity a 10% de área, fundo só como amostra da paisagem) todos
+  os one-class ficaram abaixo de todos os presença-fundo (melhor
+  one-class 0,230 contra 0,365). Ver
+  [One-class reaberto](#one-class-reaberto-avaliação-sem-fundo-sensitivity-grelha-espacial-e-ensemble-pca--isolation-forest)
+  e [RQ1 passa a presence-only](#rq1-presence-only).
+- **Random Forest presença-vs-fundo.** Foi o classificador da curva
+  até 2026-11-17. Usa o fundo como classe 0, ou seja, como
+  pseudo-ausência (Rapinel & Hubert-Moy, 2021), que é o pressuposto
+  que o orientador contestou: não é presence-only. Os números da
+  curva, da zona-tampão e do fundo só de floresta obtidos com ele
+  ficam como registo, não como resultado. Passou a regressão logística
+  presença-fundo, com o fundo como amostra não rotulada. Ver
+  [Random Forest](#classificador-presença-vs-fundo-ciência-cidadã-random-forest-por-agora)
+  e [RQ1 passa a presence-only](#rq1-presence-only).
 - **Afinar o foundation model (fine-tuning).** A proposta da tese pede
   fine-tuning; uso embeddings congelados com um classificador leve. É
   um desvio à proposta, não algo testado e largado. Razões: o
@@ -180,15 +202,115 @@ documentada:
 A lista de leitura atual está em
 [`docs/literature.md`](../docs/literature.md).
 
+**Na tese:** não entra no texto; é preparação para a defesa. O
+capítulo de trabalho relacionado é uma revisão narrativa (ver
+[Estrutura do documento](#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável)).
+
 ## Decisões
 
-Agrupadas por tema:
+Agrupadas por tema. Índice com o estado de cada entrada a 2026-11-17
+(o detalhe está na linha em itálico de cada entrada e nos seus blocos
+"Revisão"; "a confirmar" = proposta minha ainda sem resposta do
+orientador):
 
-- [Âmbito e perguntas](#decisões-âmbito-e-perguntas)
-- [Dados de referência](#decisões-dados-de-referência)
-- [RQ1: desenho e resultados](#decisões-rq1-desenho-e-resultados)
-- [Validação e Sentinel-2](#decisões-validação-e-sentinel-2)
-- [Documento e entrega](#decisões-documento-e-entrega)
+**[Âmbito e perguntas](#decisões-âmbito-e-perguntas)**
+- [Só *Acacia dealbata*](#só-acacia-dealbata) — minha, a confirmar.
+- [RQ3 aprovada](#rq3-aprovada) — orientador; a forma de a medir tem
+  proposta a confirmar.
+- [RQ3: proposta de redesenho](#rq3-proposta-redesenho-diagnostico-primeiro)
+  — substituída (2026-11-13) pela simplificação e pela renumeração.
+- [Formulação das perguntas](#formulacao-pergunta-objetivos-hipoteses)
+  — substituída (2026-11-13); guarda os enunciados aprovados pelo
+  orientador.
+- [RQ2: a máscara passa a ser a pergunta](#rq2-proposta-mascara) — a
+  confirmar; integrada na reformulação (RQ2 = filtros e máscara).
+- [Reformulação em quatro perguntas](#reformulacao-quatro-perguntas)
+  — a confirmar; a numeração foi substituída pela renumeração.
+- [Simplificação do desenho](#simplificacao-desenho-2026-11-13) — a
+  confirmar; a numeração foi substituída pela renumeração.
+- [Renumeração das perguntas](#renumeracao-perguntas-2026-11-13) — a
+  confirmar; numeração e desenho atuais das RQ2 e RQ3.
+- [Revisão de consistência de 2026-11-13](#revisao-consistencia-2026-11-13)
+  — a confirmar (teste da RQ3, limitação da RQ2); o resto é limpeza
+  feita.
+- [Pergunta principal: "como dados de treino"](#pergunta-principal-dados-de-treino)
+  — a confirmar.
+
+**[Dados de referência](#decisões-dados-de-referência)**
+- [Usar os dados de especialistas, com limpeza](#usar-os-dados-de-especialistas-com-limpeza)
+  — minha; a exclusão dos `classifica = 0` é do orientador.
+- [Só observações *research*](#só-observações-research-nos-dois-lados)
+  — minha.
+- [Precisão da localização](#precisão-da-localização-tirar-acima-de-30-m-manter-as-sem-valor)
+  — minha; teste repetido com 2021–2025 (Revisão de 2026-11-15).
+- [Janela temporal 2021–2025](#janela-temporal-2021-2025) — minha;
+  dada por resolvida a 2026-11-17.
+- [Uma observação por píxel](#uma-observação-por-píxel-nos-conflitos-fica-a-presença)
+  — minha.
+- [Observer A: todas as observações](#observer-a-todas-as-observações-no-modelo-principal)
+  — minha.
+- [Máscara de segmentação: testar várias abordagens](#máscara-de-segmentação-testar-várias-abordagens)
+  — orientador; a regra concreta está na renumeração (decisão 5).
+- [Manifesto de ficheiros derivados](#manifesto-ficheiros-derivados)
+  — minha; organização do repositório.
+
+**[RQ1: desenho e resultados](#decisões-rq1-desenho-e-resultados)**
+- [Multiclasse abandonado; curva de redução de esforço](#multiclasse-abandonado-rq1-passa-a-uma-curva-de-redução-de-esforço-presença-vs-fundo)
+  — orientador (pontos 1 a 4) e minha; o ponto 7 (Random Forest) foi
+  superado a 2026-11-17.
+- [Random Forest](#classificador-presença-vs-fundo-ciência-cidadã-random-forest-por-agora)
+  — superada a 2026-11-17.
+- [Braço de especialistas](#braço-de-especialistas-one-class-svm-e-random-forest-confirmados-100-especialistas)
+  — minha; os números são do Random Forest e já não contam como
+  resultado.
+- [One-class reaberto](#one-class-reaberto-avaliação-sem-fundo-sensitivity-grelha-espacial-e-ensemble-pca--isolation-forest)
+  — orientador (direção) e minha; a métrica desta entrada foi
+  substituída no mesmo dia.
+- [RQ1 passa a presence-only](#rq1-presence-only) — minha, a
+  confirmar; desenho atual da RQ1 (classificador, métrica, protocolo).
+- [Curva completa 0%–100%](#curva-de-redução-de-esforço-completa-0100-com-fundo-e-bloco-de-teste-fixos)
+  — minha; o desenho mantém-se, os números são do Random Forest e a
+  curva é recorrida.
+- [Fundo só de floresta](#curva-fundo-so-floresta) — minha; números do
+  Random Forest, a recorrer ou a marcar.
+- [Diagnósticos da curva plana](#diagnosticos-curva-plana) — minha;
+  ficam como factos dos dados.
+- [Limites do Boyce](#metricas-limites-boyce) — minha; ROC-AUC e Boyce
+  passaram a métricas secundárias.
+- [Fundo partilhado uniforme](#rq1-fundo-uniforme-nao-cos) — minha; o
+  fundo passou a amostra da paisagem, nunca ausência.
+- [Fundo uniforme reconstruído](#fundo-uniforme-reconstruido-2465) —
+  registo de proveniência.
+- [Curva por fonte das presenças de teste](#rq2-curva-por-fonte) — a
+  confirmar; números do Random Forest, a curva é recorrida.
+- [Curva passa a script](#curva-script-experiments) — minha;
+  organização do repositório.
+- [Fundo de floresta pelo script](#fundo-floresta-script-experiments)
+  — minha; organização do repositório.
+- [Nível 100% + ciência cidadã](#curva-100-mais-ciencia-cidada) — a
+  confirmar; números do Random Forest, a curva é recorrida.
+
+**[Validação e Sentinel-2](#decisões-validação-e-sentinel-2)**
+- [Zona-tampão](#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)
+  — minha; a análise de sensibilidade foi feita com o Random Forest e
+  fica a recorrer.
+- [Sentinel-2 bruto via Earth Search](#sentinel-2-bruto-via-earth-search-aws-sem-conta-alinhado-à-grelha-da-tessera)
+  — minha.
+- [Sentinel-2 por extração em pontos](#sentinel-2-na-rq1-avançar-já-por-extração-em-pontos-não-raster-completo)
+  — revertida no mesmo dia.
+- [Features do Sentinel-2](#conjunto-de-features-do-sentinel-2-na-rq1-compósito-anual-ball-et-al-fenologia-da-floração-como-extensão-por-ablação-domingo-et-al)
+  — proposta a confirmar; o classificador do braço passa a ser o da
+  RQ1 (Revisão de 2026-11-17).
+
+**[Documento e entrega](#decisões-documento-e-entrega)**
+- [Estrutura do documento](#estrutura-do-documento-seguir-um-relatório-de-referência-de-outro-aluno-onde-for-aplicável)
+  — minha.
+- [Lista de literatura](#lista-de-literatura-releitura-integral-e-limpeza)
+  — minha; revisões até 2026-11-17.
+- [Identidade da tese](#identidade-da-tese-confirmada-título-mestrado-orientadores-idioma-e-data-da-entrega)
+  — facto fixo.
+- [Primeira entrega](#primeira-entrega-relatório-intermédio-início-de-janeiro-de-2027)
+  — facto do calendário; âmbito meu, com as exceções das Revisões.
 
 Numeração das perguntas. Cada entrada usa a numeração do momento em
 que foi escrita:
@@ -304,7 +426,8 @@ a fundamentação completa fica para a Metodologia.
 *Proposta minha (a confirmar com o orientador). Muda o desenho de uma
 pergunta que ele aprovou, por isso não é adotada antes de ele
 responder. Na fila da
-[próxima reunião](../docs/meetings/2026-11-17.md).*
+[próxima reunião](../docs/meetings/2026-11-17.md). Estado:
+substituída a 2026-11-13 (Revisão no fim).*
 
 **O que decidi (como proposta):**
 
@@ -421,7 +544,8 @@ hoje a RQ3 da [renumeração](#renumeracao-perguntas-2026-11-13). O texto acima 
 
 *Proposta minha (a confirmar com o orientador). Reescreve enunciados
 que ele aprovou; os aprovados valem até ele responder. Na fila da
-[próxima reunião](../docs/meetings/2026-11-17.md).*
+[próxima reunião](../docs/meetings/2026-11-17.md). Estado:
+substituída a 2026-11-13 (Revisão no fim).*
 
 **O que decidi (como proposta):** reescrever a pergunta principal e as
 três RQ na estrutura de um guia de escrita de teses (tesify.pt):
@@ -1682,6 +1806,16 @@ Os restantes: decisão minha.*
   por omissão em braços futuros. Pode ser reaberto como diagnóstico
   pontual se um resultado parecer inesperado.
 
+**Revisão (2026-11-17):** cláusula acima superada nesse ponto. O
+orientador pediu, na reunião de 2026-11-17, para reabrir a comparação
+one-class, porque a avaliação usada aqui (ROC-AUC e Boyce contra o
+fundo) continuava a assumir que o fundo não tem acácia, mesmo
+treinando os modelos só com presenças — o pressuposto que um one-class
+deveria evitar. Ver
+[nova entrada](#one-class-reaberto-avaliação-sem-fundo-sensitivity-grelha-espacial-e-ensemble-pca--isolation-forest).
+O resto desta entrada (Random Forest presença-vs-fundo como
+classificador principal da RQ1) não muda.
+
 **Outras consequências:**
 - **Outras plantas sem uso ativo (2026-11-10).** O conjunto fica
   documentado em
@@ -1724,9 +1858,19 @@ face ao que aprovou".
 contrariar o que o orientador decidiu a 2026-11-05, e ele não
 respondeu sobre isto.
 
+**Revisão (2026-11-17, mais tarde no mesmo dia):** o ponto 7
+(presença vs. fundo com Random Forest) ficou superado. O Random Forest
+usa o fundo como pseudo-ausência e foi abandonado; o classificador da
+curva passa a ser a regressão logística presença-fundo, com o fundo
+como amostra não rotulada. A frase da primeira Revisão de 2026-11-17
+("o resto desta entrada ... não muda") deixou de valer nesse ponto.
+Os pontos 1, 2, 4, 5 e 6 mantêm-se. Ver
+[RQ1 passa a presence-only](#rq1-presence-only).
+
 ### Classificador presença-vs-fundo (ciência cidadã): Random Forest, por agora
 
-*Decisão minha, não confirmada pelo orientador.*
+*Decisão minha, não confirmada pelo orientador. Superada a
+2026-11-17 (Revisão no fim).*
 
 **O que decidi:** Random Forest como classificador único da RQ1. A
 Logistic Regression fica como referência barata.
@@ -1755,7 +1899,20 @@ fundidos e fica em terceiro. Eskandari et al. (2025) saiu da lista
 
 **Onde:** [`presence_background_citizen_science.ipynb`](../notebooks/07_foundation_models/presence_background_citizen_science.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia).
+**Na tese:** ❌ Superada pela entrada
+[RQ1 passa a presence-only](#rq1-presence-only); a Introdução ainda
+não nomeia o classificador, por isso não há texto a corrigir.
+
+**Revisão (2026-11-17): superada.** O Random Forest treinado com o
+fundo como classe 0 é um classificador presença/ausência que usa o
+fundo como pseudo-ausência (Rapinel & Hubert-Moy, 2021, em
+`docs/literature.md`), não um método presence-only. Depois da reunião
+de 2026-11-17 decidi que o classificador da RQ1 tem de ser
+presence-only; o Random Forest passa a metodologia abandonada, com
+esta razão objetiva. Ver
+[RQ1 passa a presence-only](#rq1-presence-only). Os números da curva
+obtidos com ele ficam válidos como registo do que foi medido, não como
+resultado da RQ1.
 
 ### Braço de especialistas: one-class SVM e Random Forest confirmados (100% especialistas)
 
@@ -1788,7 +1945,352 @@ esta adaptação.
 
 **Onde:** [`expert_arm_classifiers.ipynb`](../notebooks/07_foundation_models/expert_arm_classifiers.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia).
+**Na tese:** ❌ Superada no classificador: o Random Forest foi
+abandonado a 2026-11-17 e os números desta entrada (ROC-AUC e Boyce
+contra o fundo) deixam de contar como resultado; ficam como registo.
+Ver [RQ1 passa a presence-only](#rq1-presence-only).
+
+### One-class reaberto: avaliação sem fundo (sensitivity), grelha espacial e ensemble PCA + Isolation Forest
+
+*Reunião com o orientador, 2026-11-17. A reabertura e a direção geral
+(grelha espacial, sensitivity em vez de ROC-AUC, ensemble com
+autoencoder e isolation forest, por só haver presenças e poucos dados
+no braço de ciência cidadã) são decisão dele. A implementação concreta
+abaixo é minha, escolhida pela opção mais simples em cada ponto em
+aberto, não confirmada pelo orientador.*
+
+**O que decidi:**
+
+1. **Reabrir a comparação one-class** de
+   [`one_class_method_selection.ipynb`](../notebooks/07_foundation_models/one_class_method_selection.ipynb),
+   descartada a 2026-11-10 (ver Revisão acima): essa comparação treinava
+   os modelos só com presenças, mas avaliava-os com ROC-AUC e Boyce
+   contra o fundo aleatório — continuava a assumir que o fundo não tem
+   acácia.
+2. **Métrica: sensitivity em presenças de teste, sem nenhum ponto de
+   fundo na avaliação.** Limiar fixado antes de correr: percentil 90
+   dos scores de anomalia no treino (10% de contaminação esperada),
+   igual para todos os modelos — é o valor já testado em
+   `one_class_method_selection.ipynb` (`contamination=0.1`/`nu=0.10`),
+   não um valor novo.
+3. **Divisão espacial: reaproveitar a grelha de 10 km já usada**
+   (85 blocos cobrindo presenças e fundo), em leave-one-block-out sobre
+   os blocos com presenças de ciência cidadã, em vez de uma grelha nova
+   4x4 e em vez do sorteio aleatório de 20% em 5 sementes já usado
+   nesse notebook. Mais simples de implementar (código já existe para
+   os blocos) e mais exaustivo do que o sorteio (cada bloco serve de
+   teste exatamente uma vez).
+4. **Autoencoder = reconstrução por PCA**, com componentes suficientes
+   para 90% da variância das presenças de treino, em vez de uma rede
+   neuronal. É a forma mais simples de autoencoder (equivalência
+   PCA/autoencoder linear, Baldi & Hornik, 1989) e a mais adequada a
+   poucos dados: uma rede neuronal precisaria de mais dados para
+   aprender uma reconstrução útil, o que contraria a própria razão
+   dada para sugerir um autoencoder.
+5. **Ensemble = média dos scores estandardizados (z-score)** do
+   Isolation Forest e do erro de reconstrução do PCA, com o mesmo
+   limiar do ponto 2 aplicado ao score combinado. Combinação mais
+   simples, sem pesos a afinar.
+6. **Âmbito: só o braço de ciência cidadã** (onde está o problema de
+   poucos dados); o braço de especialistas não é refeito.
+
+**Porquê:** o orientador pediu a reabertura e deu a razão (só
+presenças, poucos dados, risco de haver acácia não registada no
+fundo); os pontos 2 a 6 seguem a instrução de decidir sempre pela
+opção mais simples quando o desenho exato não foi especificado.
+
+**Resultado:** 39 blocos de 10 km têm pelo menos uma presença; só 15
+têm 5 ou mais (o mesmo piso de 5 já usado no notebook anterior) e
+servem de fold de teste, cada um uma vez (entre 7 e 819 presenças de
+teste por fold). Sensitivity média (dp) nos 15 folds: Isolation Forest
+0,916 (0,068); ensemble PCA + Isolation Forest 0,876 (0,119); One-Class
+SVM 0,849 (0,110); PCA 0,815 (0,158). Como o limiar é o percentil 10
+dos próprios scores de treino, 0,90 é o valor esperado quando um bloco
+de teste se parece com os de treino; só o Isolation Forest fica nesse
+nível ou acima, por isso é o que generaliza melhor entre os 15 blocos
+nesta corrida — o ensemble não melhora sobre o Isolation Forest sozinho
+(o PCA, com mais variância, puxa-o para baixo). Corrida única, sem
+afinação de hiperparâmetros; não comparável aos números de ROC-AUC/Boyce
+do notebook anterior (métrica, divisão espacial e uso do fundo são
+todos diferentes).
+
+**Não decidido:** isto não muda, por si só, o classificador principal
+da curva da RQ1 (continua o Random Forest presença-vs-fundo).
+
+**Fundamentação:** Baldi & Hornik (1989) para a equivalência entre PCA
+e um autoencoder linear. O resto (limiar de 10%, leave-one-block-out,
+média estandardizada no ensemble) é raciocínio meu, sem literatura
+própria procurada para esta combinação específica — nenhuma das
+comparações one-class já lidas
+([`docs/literature.md`](../docs/literature.md#one-class--positive-unlabeled-classification))
+testa isolation forest com autoencoder em ensemble.
+
+**Em aberto:**
+- Confirmar com o orientador que a implementação (grelha reaproveitada
+  em vez de 4x4, PCA em vez de rede neuronal, limiar de 10%)
+  corresponde ao que tinha em mente.
+- Hiperparâmetros não afinados (um só valor de contaminação/`nu`); só
+  um passe, como o notebook anterior.
+
+**Calendário:** exceção ao âmbito fechado do relatório intermédio —
+corre antes da entrega de janeiro de 2027, porque corrige a avaliação
+da própria RQ1. Ver
+[Revisão em "Primeira entrega"](#primeira-entrega-relatório-intermédio-início-de-janeiro-de-2027).
+
+**Onde:** [`docs/meetings/2026-11-17.md`](../docs/meetings/2026-11-17.md);
+[`one_class_background_free_evaluation.ipynb`](../notebooks/07_foundation_models/one_class_background_free_evaluation.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia). A métrica
+desta entrada (sensitivity com limiar tirado do treino) foi
+substituída no mesmo dia; ver a Revisão abaixo e
+[RQ1 passa a presence-only](#rq1-presence-only).
+
+**Revisão (2026-11-17, mesmo dia): a leitura do resultado estava
+errada.** Com o limiar tirado do percentil 10 dos scores de treino, a
+sensitivity mede só se as presenças de teste se parecem com as de
+treino; não mede se o modelo distingue acácia do resto da paisagem. Um
+modelo que dá scores quase iguais a tudo fica perto de 0,90 em
+qualquer bloco. Logo, "o Isolation Forest generaliza melhor" não é
+suportado por estes dados — pode só significar que os seus scores são
+pouco informativos (foi o que pior separou presenças do fundo no teste
+antigo, ROC-AUC 0,57). O que esta corrida mostra é que uma avaliação
+literalmente só com presenças não discrimina modelos. A métrica passa a
+sensitivity a uma fração fixa de área prevista, em
+[RQ1 passa a presence-only](#rq1-presence-only); o notebook tem a
+leitura corrigida na secção 4.
+
+### RQ1 passa a presence-only: seleção entre one-class puro e presença-fundo, sensitivity a área fixa, leave-one-block-out {#rq1-presence-only}
+
+*Decisão minha de 2026-11-17, na sequência da reunião do mesmo dia. O
+orientador pediu um modelo só com presenças, grelha espacial e
+sensitivity; que o Random Forest atual não cumpre isso, e o desenho
+concreto abaixo, são meus, a confirmar com ele nos pontos assinalados.*
+
+**O que decidi:**
+
+1. **O classificador principal da RQ1 passa a ser presence-only.** O
+   Random Forest presença-vs-fundo usa o fundo como pseudo-ausência
+   (ver Revisão na
+   [entrada do Random Forest](#classificador-presença-vs-fundo-ciência-cidadã-random-forest-por-agora)),
+   que é o pressuposto que o orientador contestou.
+2. **Dois sentidos de presence-only entram na seleção de método, no
+   mesmo protocolo:** (a) one-class puro, sem fundo no treino —
+   Isolation Forest, One-Class SVM, PCA e o ensemble PCA + Isolation
+   Forest, o que o orientador nomeou; (b) presença-fundo com o fundo
+   como amostra *não rotulada* da paisagem — MaxEnt ou PU-learning,
+   método concreto por escolher. O vencedor passa a classificador da
+   curva. Medir os dois responde ao que ele pediu (a) e ao que a
+   literatura lida aponta (b).
+3. **Protocolo único:** leave-one-block-out nos blocos de 10 km com
+   pelo menos 5 presenças (15 no braço de ciência cidadã), como em
+   `one_class_background_free_evaluation.ipynb`.
+4. **Métrica principal: sensitivity a uma fração fixa de área
+   prevista.** Ordena-se a paisagem pelo score; os X% de área com
+   score mais alto são a previsão de acácia; a sensitivity é a fração
+   das presenças de teste que cai lá dentro. Reporta-se a curva
+   sensitivity × área de 5% a 30% e um número principal numa fração
+   fixada antes de correr — **a fração ainda não está fixada.**
+   ROC-AUC e Boyce passam a secundárias, com a ressalva já
+   documentada.
+5. **O fundo entra na avaliação só como amostra da paisagem**, para
+   saber o que são X% de área; nunca é rotulado como ausência, por
+   isso uma acácia não registada no fundo não conta como erro. Em (b)
+   entra também no treino, como não rotulado.
+6. **A curva da RQ1 é recorrida com o classificador vencedor.** Até
+   lá, os números atuais ficam marcados nos docs como obtidos com o
+   Random Forest.
+
+**Porquê:** a objeção do orientador ("não assumir que não há acácia no
+fundo") não se resolve só com a métrica — o Random Forest assume-o no
+treino, e a ROC-AUC assume-o na avaliação (cada ponto de fundo com
+score alto conta como falso positivo). Avaliar literalmente só com
+presenças também não serve: a corrida de hoje mostrou que não
+discrimina modelos. A sensitivity a área fixa é a única forma que
+encontrei de cumprir as duas coisas: nunca rotular fundo como ausência
+e penalizar um modelo que marca tudo como acácia.
+
+**Fundamentação:** Rapinel & Hubert-Moy (2021): fundo com classificador
+presença/ausência = pseudo-ausências, confusão em 42% dos estudos.
+Phillips et al. (2009): fundo como amostra não rotulada da paisagem.
+Deng et al. (2018), Mack & Waske (2017), Li & Guo (2010), Li, Guo &
+Elkan (2011, só resumo): métodos (b) batem one-class puros em todas as
+comparações lidas. Hirzel et al. (2006): mesma lógica
+presença-vs-disponível do Boyce. **Para a métrica, não li:** julgo que
+é a lógica da taxa de omissão contra área prevista (Phillips et al.,
+2006) e da ROC parcial (Peterson et al., 2008) — a confirmar antes de
+a tratar como estabelecida; até lá é raciocínio meu com fontes por
+ler. Para a seleção (a) contra (b) neste desenho não encontrei
+precedente lido.
+
+**Em aberto:**
+- Confirmar com o orientador: que (b) é aceitável como presence-only;
+  que usar o fundo para medir área é aceitável; a grelha reaproveitada
+  em vez de 4x4; a fração de 10%.
+- Ler Phillips et al. (2006) e Peterson et al. (2008).
+- MaxEnt (`elapid`, não instalado) como alternativa à regressão
+  logística em (b), se o orientador o preferir.
+
+**Fixado antes de correr (2026-11-17, opção mais simples em cada
+ponto):** fração de área principal 10% (escolha minha, sem fonte; a
+curva 5–30% é reportada); método (b) = regressão logística L2
+presença-vs-fundo, `class_weight="balanced"`, sem afinação; a amostra
+da paisagem é o fundo do próprio bloco de teste (15–40 pontos), e a
+métrica é calculada por ordenação dentro do bloco e agrupada sobre as
+2 464 presenças fora-de-fold; critério: vence o candidato com a maior
+sensitivity agrupada a 10%, diferenças abaixo de 0,02 resolvidas pelo
+menor desvio-padrão entre folds; o Random Forest entra só como
+referência.
+
+**Resultado (2026-11-17,
+[`presence_only_method_selection.ipynb`](../notebooks/07_foundation_models/presence_only_method_selection.ipynb)):**
+sensitivity agrupada a 10% de área (acaso = 0,10): regressão logística
+(b) **0,365**; Random Forest (referência) 0,321; One-Class SVM 0,230;
+Isolation Forest 0,165; ensemble PCA + Isolation Forest 0,156; PCA
+0,120. Por fold (média, dp): 0,406 (0,165); 0,351 (0,154); 0,271
+(0,130); 0,159 (0,117); 0,145 (0,125); 0,089 (0,087).
+
+- **Decisão pelo critério (primeira corrida; ver Revisão abaixo): a
+  regressão logística presença-fundo é o classificador da curva da
+  RQ1.** Bate o melhor one-class por 0,135,
+  em todas as frações de 5% a 30%. O ensemble que o orientador nomeou
+  fica perto do acaso. Concorda com todas as comparações lidas em
+  `docs/literature.md`.
+- **Eixo antigo contra novo, no mesmo protocolo:** o Random Forest
+  fica abaixo da regressão logística (0,321 contra 0,365; à frente em
+  5 blocos, atrás em 8, empate em 2). Os dois presença-fundo estão
+  próximos; a distância grande é para a família one-class.
+- **Valores absolutos baixos — hipóteses, não testadas:** os 15 blocos
+  são os densos em acácia, por isso parte do fundo deles é
+  provavelmente acácia ou vegetação parecida, que a métrica conta como
+  área e não como erro; e ordenar dentro de um bloco é mais difícil do
+  que a ROC-AUC global, que ganha com as diferenças entre blocos. Só a
+  comparação entre modelos é lida, não o nível.
+- Uma corrida, sem afinação; resolução de ~3% por presença, suavizada
+  pela agregação.
+
+**Revisão (2026-11-17, segunda corrida, mesmo notebook):** instalei o
+`elapid` (acrescentado a `requirements.txt`) e juntei dois candidatos
+(b), com o critério inalterado: **MaxEnt** só com variáveis lineares
+(com *hinge* e produtos, 128 dimensões dariam milhares de variáveis
+para ~2 300 presenças) e **biased SVM** (SVC RBF,
+`class_weight="balanced"`, presenças contra fundo dos blocos de
+treino). O PU-learning de Elkan & Noto não corre à parte: o seu score é
+uma reescala monótona do classificador presença-vs-não-rotulado, logo
+numa métrica por ordenação dá o mesmo que a regressão logística
+(raciocínio meu; Elkan & Noto, 2008, não lido). Resultado a 10% de
+área: **biased SVM 0,368**, regressão logística 0,365, Random Forest
+0,321, MaxEnt 0,294; os one-class como antes. Por fold (média, dp):
+0,404 (0,149); 0,406 (0,165); 0,351 (0,154); 0,348 (0,146).
+
+- **A decisão passa, pelo critério, para o biased SVM:** os dois
+  primeiros estão dentro da margem de 0,02 (0,003 de diferença) e o
+  desempate pelo desvio-padrão dá o SVM. Lido sem o critério, é um
+  empate: por fold o SVM está à frente em 7 blocos, atrás em 5,
+  empatado em 3. A regressão logística é mais simples e muito mais
+  barata (a curva treina com até ~21 500 presenças); se o orientador a
+  preferir, estes números não o contrariam. Levo-lhe os dois.
+- **O resultado robusto é o de família:** todos os (b) batem todos os
+  (a) em todas as frações; o melhor one-class fica 0,138 abaixo do
+  vencedor.
+- O MaxEnt linear é o mais fraco dos (b) a 10% e iguala os outros a
+  partir de 15%; com variáveis lineares está perto de uma regressão
+  logística regularizada, por isso não se esperava grande diferença;
+  parâmetros por omissão, não afinados.
+
+**Revisão (2026-11-17, mais tarde no mesmo dia; decisão minha):**
+dois cortes na lista de modelos e uma limpeza.
+
+- **O biased SVM sai.** Fui eu que o acrescentei na segunda corrida,
+  sem fonte lida (o nome vem do PU-learning, Liu et al., 2003, não
+  lido; no notebook é só um SVC RBF presenças contra fundo com
+  `class_weight="balanced"`), para a comparação (a)/(b) ter um kernel
+  de cada lado. Empatou com a regressão logística (0,003) e é muito
+  mais caro para a curva. Sem ele, **a regressão logística vence o
+  critério sem desempate** (0,365 contra 0,294 do MaxEnt) e é o
+  classificador da curva; a opção mais simples, como pedido na
+  reunião.
+- **O Random Forest sai de todos os ficheiros de estado atual.** Não
+  é um presence-only: usa o fundo como pseudo-ausência, logo todos os
+  seus números (curva, zona-tampão, 0,976 da RQ3, verificação de fundo
+  só-floresta) deixam de valer como resultados e foram retirados de
+  `docs/research_questions.md`, `docs/methodology.md` e
+  `docs/todo.md` em vez de ficarem marcados; as pastas
+  `results/effort_reduction_curve*` levam `OBSOLETE.md` e os
+  notebooks que o usaram ficam com nota no topo. A linha "ref. Random
+  Forest" do notebook de seleção também sai na próxima corrida. Os
+  diagnósticos da curva plana (redundância, habitat, pureza) ficam
+  como factos dos dados; a curva que explicavam já não existe.
+- **Também o braço Sentinel-2 (RQ4)** deixa de prever "Random Forest e
+  regressão logística": passa a usar só o classificador da RQ1
+  (Revisão na entrada do Sentinel-2).
+- **Em aberto:** se o PCA (e com ele o ensemble PCA + Isolation
+  Forest, que respondia ao pedido do orientador) sai da lista; depende
+  de decidir primeiro se há forma de melhorar os one-class. O notebook
+  é recorrido uma vez, quando a lista fechar.
+
+**Revisão (2026-11-17, terceira corrida; notebook reescrito e corrido
+uma só vez, com critérios fixados antes):** para fechar a lista,
+corri um varrimento pequeno nas duas famílias, nos mesmos 15 folds
+(28 configurações): Isolation Forest (`max_samples`, `max_features`),
+One-Class SVM (`nu` × gamma), PCA a 20 dimensões antes de cada um,
+autoencoder 128–32–128 (`MLPRegressor`) no lugar do PCA e os ensembles
+autoencoder/PCA + Isolation Forest; do lado (b), regressão logística
+(`C` 0,01 a 10) e MaxEnt (linear ou linear + quadrática × multiplicador
+de regularização 0,5 / 1,5 / 4). Um texto que recebi recomendava
+MaxEnt afinado (via `maxnet` + ENMeval) com validação por blocos,
+Boyce, AUC e fração de área prevista: a avaliação é a que já tínhamos,
+e a afinação é o que faltava; a parte do ensemble biomod2 (MaxEnt + RF
++ BRT) não segue, por usar pseudo-ausências e por serem mais modelos.
+Critérios escritos antes: (1) se nenhum one-class chegar a 0,30 a 10%
+de área, a lista one-class fecha com Isolation Forest e One-Class SVM;
+(2) melhor regressão logística contra melhor MaxEnt, margem 0,02 a
+favor da regressão. Ressalva declarada: a melhor configuração é
+escolhida nos mesmos folds que a reportam, nas duas famílias; sem CV
+aninhada.
+
+- **Resultado a 10% de área (melhor configuração de cada modelo):**
+  regressão logística `C=10` **0,410** (por fold 0,415, dp 0,161);
+  MaxEnt linear + quadrática, multiplicador 4, 0,334 (0,357; 0,127);
+  One-Class SVM `nu=0,2`, gamma 2× 0,258; PCA20 → One-Class SVM 0,233;
+  Isolation Forest `max_features=0,5` 0,188; ensemble autoencoder +
+  IF 0,163; autoencoder 0,140.
+- **Decisão (critério 1): o PCA, o autoencoder e os ensembles saem.**
+  Nenhum one-class chega a 0,30; o varrimento moveu-os pouco (OCSVM
+  0,230 → 0,258; IF 0,165 → 0,188). O autoencoder não linear fica
+  perto do acaso como o PCA, e o ensemble com o Isolation Forest não
+  bate o Isolation Forest sozinho. O pedido do orientador (ensemble
+  autoencoder + isolation forest) fica testado e registado aqui; a
+  lista one-class da RQ1 é Isolation Forest e One-Class SVM.
+- **Decisão (critério 2): a regressão logística, `C=10`, é o
+  classificador da curva**, 0,076 acima do melhor MaxEnt. O `C=10` é
+  o extremo da grelha (o número sobe monotonamente com menos
+  regularização: 0,326 / 0,348 / 0,365 / 0,410); não explorei mais,
+  porque a escolha é feita nos folds de teste e a resolução por bloco é
+  grosseira. A confirmar na curva ou no braço de especialistas antes de
+  dizer mais do que "menos regularização ajuda aqui".
+- O resultado de família mantém-se: as melhores configurações de (b)
+  batem as melhores de (a) em todas as frações de área.
+- O MaxEnt só ganhou com variáveis quadráticas sob regularização forte;
+  com regularização fraca as quadráticas prejudicam (0,239 a 10%).
+- As duas corridas anteriores (com Random Forest e biased SVM) ficam só
+  nesta entrada; o notebook foi reescrito e tem uma única corrida.
+
+**Impacto a jusante (tudo a recorrer ou a marcar):** curva da RQ1
+(`results/effort_reduction_curve/`, números em
+`docs/research_questions.md`), análise de sensibilidade à zona-tampão
+(calculada em ROC-AUC do Random Forest), valor "0,976" que a RQ3
+assume como ponto de partida, secções Validation/Evaluation/Baseline de
+`docs/methodology.md`, resumo do desenho na Introdução do manuscrito
+(a Introdução não nomeia o classificador nem a métrica — verificado por
+grep; nada a corrigir lá por agora).
+
+**Onde:** [`docs/research_questions.md`](../docs/research_questions.md#rq1--citizen-science-as-a-substitute-for-expert-data);
+[`docs/methodology.md`](../docs/methodology.md#evaluation);
+[`docs/meetings/2026-11-17.md`](../docs/meetings/2026-11-17.md);
+[`presence_only_method_selection.ipynb`](../notebooks/07_foundation_models/presence_only_method_selection.ipynb).
+
+**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia); o Random
+Forest entra como metodologia abandonada, com a razão do ponto 1.
 
 ### Curva de redução de esforço completa: 0%–100%, com fundo e bloco de teste fixos
 
@@ -1844,7 +2346,11 @@ publicado. O resto é raciocínio meu.
 
 **Onde:** [`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia).
+**Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia). O desenho
+(polígonos como unidade, amostragem encaixada, teste fixo) mantém-se;
+os números desta entrada são do Random Forest e não entram como
+resultado. A curva é recorrida com o classificador de
+[RQ1 passa a presence-only](#rq1-presence-only).
 
 **Revisão (2026-11-14):** a curva ganha um nível "100% especialistas
 + ciência cidadã" no fim da parte aditiva; o "100%" desta entrada (só
@@ -1888,7 +2394,10 @@ escolha minha. Esta verificação não substitui o fundo partilhado.
 
 **Onde:** [`forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia).
+**Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia). Os valores
+(Random Forest, ROC-AUC e Boyce contra o fundo) deixam de contar como
+resultado a 2026-11-17; a verificação fica a recorrer ou a marcar
+([RQ1 passa a presence-only](#rq1-presence-only)).
 
 **Revisão (2026-11-13):** os valores do **Resultado** acima e o
 ponto 3 são da execução de 2026-11-07, anterior à janela 2021–2025 e
@@ -1950,7 +2459,10 @@ permutação são técnicas padrão, a aplicação a embeddings é minha.
 [`expert_polygon_geographic_diversity.ipynb`](../notebooks/07_foundation_models/expert_polygon_geographic_diversity.ipynb),
 [`label_purity_check.ipynb`](../notebooks/07_foundation_models/label_purity_check.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia).
+**Na tese:** ⏳ Ainda não escrita (Resultados/Metodologia). Os três
+diagnósticos ficam como factos dos dados; a curva que explicavam
+(Random Forest) já não existe como resultado
+([RQ1 passa a presence-only](#rq1-presence-only)).
 
 **Revisão (2026-11-13, revisão de consistência):** a célula do teste
 sem as presenças isoladas tinha um erro: tirava-as também do conjunto
@@ -2018,7 +2530,9 @@ código é minha.
 **Onde:** [`src/evaluation.py`](../src/evaluation.py);
 [`docs/methodology.md`](../docs/methodology.md#evaluation).
 
-**Na tese:** ⏳ Ainda não escrita (Metodologia/Resultados).
+**Na tese:** ⏳ Ainda não escrita (Metodologia/Resultados). Desde
+2026-11-17 ROC-AUC e Boyce são métricas secundárias; a principal é a
+sensitivity a área fixa ([RQ1 passa a presence-only](#rq1-presence-only)).
 
 ### RQ1: fundo partilhado de pontos aleatórios uniformes {#rq1-fundo-uniforme-nao-cos}
 
@@ -2065,7 +2579,10 @@ robustez.
 
 **Onde:** [`forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (Metodologia/Resultados).
+**Na tese:** ⏳ Ainda não escrita (Metodologia/Resultados). Desde
+2026-11-17 o fundo entra só como amostra da paisagem, nunca como
+ausência (ponto 5 de [RQ1 passa a presence-only](#rq1-presence-only));
+o conjunto de pontos é o mesmo.
 
 ### Fundo uniforme reconstruído a partir das 2 465 presenças {#fundo-uniforme-reconstruido-2465}
 
@@ -2104,7 +2621,10 @@ proveniência.
 **Onde:** curva completa com o fundo novo feita pela secção 8 de
 [`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (Metodologia).
+**Na tese:** ⏳ Ainda não escrita (Metodologia). O "efeito nos
+resultados" acima é em Random Forest e já não conta como resultado
+([RQ1 passa a presence-only](#rq1-presence-only)); a proveniência do
+fundo mantém-se.
 
 **Revisão (2026-11-13, mais tarde no mesmo dia):** a numeração das
 perguntas mudou. O que nesta entrada é a "RQ1" (dos pontos aos dados
@@ -2190,7 +2710,10 @@ redundância, pureza) não foram separados por fonte.
 As entradas anteriores sobre a curva
 descrevem as corridas com todos os anos ou com o fundo antigo.
 
-**Na tese:** ⏳ Ainda não escrita (Resultados preliminares).
+**Na tese:** ⏳ Ainda não escrita (Resultados preliminares). Os
+números são do Random Forest e da Logistic Regression em ROC-AUC
+contra o fundo; desde 2026-11-17 não contam como resultado e a curva
+é recorrida ([RQ1 passa a presence-only](#rq1-presence-only)).
 
 **Revisão (2026-11-13, mais tarde no mesmo dia):** a numeração das
 perguntas mudou. O que nesta entrada é a "RQ1" (dos pontos aos dados
@@ -2430,7 +2953,10 @@ mudar); [`docs/research_questions.md`](../docs/research_questions.md#rq1--citize
 corridas de novo e ficam sem o nível novo.
 
 **Na tese:** ⏳ Ainda não escrita (Metodologia e Resultados
-preliminares, ainda esqueletos).
+preliminares, ainda esqueletos). O desenho do nível novo mantém-se;
+os números são do Random Forest e da Logistic Regression em ROC-AUC e
+desde 2026-11-17 não contam como resultado
+([RQ1 passa a presence-only](#rq1-presence-only)).
 
 **O que deu (corrida de 2026-11-14, `results/effort_reduction_curve/`,
 commit `5add326`):**
@@ -2652,7 +3178,9 @@ tabelas em `results/effort_reduction_curve_buffer_300m/`,
 [`docs/methodology.md`](../docs/methodology.md#validation).
 
 **Na tese:** ⏳ Ainda não escrita. A análise de sensibilidade pertence
-à Metodologia (validação) e aos resultados da RQ1.
+à Metodologia (validação) e aos resultados da RQ1. Foi calculada em
+ROC-AUC do Random Forest; desde 2026-11-17 fica a recorrer com o
+classificador da RQ1 ([RQ1 passa a presence-only](#rq1-presence-only)).
 
 ### Sentinel-2 bruto: via Earth Search (AWS), sem conta, alinhado à grelha da TESSERA
 
@@ -2734,6 +3262,13 @@ pelo texto integral; Domingo et al. (2023), texto integral. Resumos em
 
 **Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia).
 
+**Revisão (2026-11-17):** a escolha de "Random Forest e regressão
+logística" para o braço Sentinel-2 fica superada: o Random Forest
+presença-vs-fundo foi abandonado na RQ1 (usa o fundo como
+pseudo-ausência), e o braço passa a usar só o classificador
+presence-only escolhido na RQ1, a regressão logística presença-fundo
+([#rq1-presence-only](#rq1-presence-only)).
+
 ## Decisões: documento e entrega
 
 ### Estrutura do documento: seguir um relatório de referência de outro aluno, onde for aplicável
@@ -2776,8 +3311,9 @@ capítulos estão por escrever à luz desta referência.
 partir do texto integral, corrigir os resumos e eliminar as que não
 apoiam nenhuma decisão.
 
-**Resultado:** ficam 31 entradas. 25 lidas na íntegra; Dimson et al. (2023) só na versão
-submetida (o artigo publicado está bloqueado); três só pelo resumo
+**Resultado:** ficam 31 entradas. 25 lidas na íntegra; Dimson et al.
+(2023) só na versão submetida (o artigo publicado está bloqueado);
+três só pelo resumo
 (Li, Guo & Elkan 2011; Li & Guo 2010; Mack & Waske 2017); duas não
 publicadas (grupo de Cambridge, apresentação da Radová).
 
@@ -2947,3 +3483,11 @@ causa.
 - **"RQ2 e RQ3 só no plano de trabalho":** na numeração atual são a
   RQ2, a RQ3 e a RQ4; a RQ1 (curva, só TESSERA) é o resultado
   preliminar. Ver a [tabela de numeração](#decisões).
+
+**Revisão (2026-11-17):** nova exceção a "sem novas experiências nem
+código", pela mesma razão da de 2026-11-13: a comparação one-class
+reaberta a pedido do orientador
+([`thesis/notes.md`](#one-class-reaberto-avaliação-sem-fundo-sensitivity-grelha-espacial-e-ensemble-pca--isolation-forest))
+corrige a avaliação da própria RQ1 que vai no relatório de janeiro, por
+isso corre antes da entrega e não fica para "Depois da defesa
+intermédia".

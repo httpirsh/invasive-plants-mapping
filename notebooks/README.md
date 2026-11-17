@@ -31,6 +31,8 @@ Run order: `02_citizen_science/acacia_observations` →
 `05_data_integration/segmentation_mask` →
 `05_data_integration/background_pools` →
 `07_foundation_models/one_class_method_selection` →
+`07_foundation_models/one_class_background_free_evaluation` →
+`07_foundation_models/presence_only_method_selection` →
 `07_foundation_models/presence_background_citizen_science` →
 `07_foundation_models/expert_arm_classifiers` →
 `07_foundation_models/effort_reduction_curve` →
@@ -42,7 +44,10 @@ Run order: `02_citizen_science/acacia_observations` →
 `07_foundation_models/effort_reduction_curve` and
 `07_foundation_models/forest_only_background_check` only read results:
 run `experiments/effort_reduction_curve/run.py` before them, the second
-time with `--background forest_only`.
+time with `--background forest_only`. The notebooks from
+`presence_background_citizen_science` to `label_purity_check` ran under
+the RQ1 protocol superseded on 2026-11-17 and say so at the top; the
+current method selection is `presence_only_method_selection`.
 
 `05_data_integration/design_counts` only counts, from the stored
 files, what `docs/research_questions.md` cites; run it again when the

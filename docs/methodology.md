@@ -35,8 +35,10 @@ reasoning, with no source found.
 
 - Random splits alone are not acceptable: nearby observations make
   train and test sets too similar.
-- **Adopted: spatial block holdout, 10 km blocks**, five spatial
-  splits, used in every experiment so far.
+- **Adopted (to confirm with the supervisor): leave-one-block-out
+  over the 10 km blocks** with at least 5 presences — 15 folds in the
+  citizen-science arm — each block the test set once. Reasoning:
+  [`thesis/notes.md`](../thesis/notes.md#rq1-presence-only).
 - **Expert side: a buffer on top of the blocks (supervisor,
   recalled).** Expert polygons are contiguous patches, so a validation
   pixel can sit next to a training pixel inside a kept block. Buffer
@@ -53,19 +55,12 @@ reasoning, with no source found.
   as a sensitivity analysis (my decision).**
   The papers read agree that blocks alone leave residual proximity
   across block borders and recommend blocks combined with a buffer.
-  In the five splits of the RQ1 curve, the presences in training that
-  lie close to a test point are 17 of 21 507 within 30 m, 445 (2.1%)
-  within 300 m and 1 821 (8.5%) within 1 km, the last ranging from
-  under 1% to 27% between seeds
-  ([`design_counts.ipynb`](../notebooks/05_data_integration/design_counts.ipynb)).
-  Removing every training point within 300 m or 1 km of a test point
-  leaves the 90% against 0% difference of RQ1 within 0.0014 ROC-AUC,
-  with the same sign; with 1 km, ROC-AUC at fixed levels falls by up
-  to 0.0075, so the levels without buffer are slightly optimistic.
-  Whether that fall comes from less proximity or from less training
-  data was not tested. Table and criterion: `thesis/notes.md`, linked
-  above; script
-  [`compare_buffer.py`](../experiments/effort_reduction_curve/compare_buffer.py).
+  The proximity counts and the buffer effect are to be measured again
+  under leave-one-block-out with the RQ1 classifier (task in
+  [`todo.md`](todo.md)); script
+  [`compare_buffer.py`](../experiments/effort_reduction_curve/compare_buffer.py),
+  to be rewritten for it. Criterion and the earlier measurement:
+  `thesis/notes.md`, linked above.
 - **Open: independent validation**, with a reference not drawn from
   the citizen-science source, so that biased training data are not
   evaluated only on equally biased test data. Plan: compare the
@@ -84,7 +79,7 @@ use random splits.
 ## Baseline
 
 The simplest credible approach: Sentinel-2 spectral-temporal features
-with the same presence-vs-background Random Forest used for the
+with the same presence-only classifier chosen in RQ1 for the
 embeddings (see
 [RQ4](research_questions.md#rq4--foundation-models-vs-conventional-features)).
 It answers *how well can this be done without foundation models?*
@@ -111,7 +106,7 @@ It answers *how well can this be done without foundation models?*
 **Grounded in:** Sentinel-2 at 10 m for *Acacia* — Mouta et al. (2021);
 Domingo et al. (2023). Flowering-season features — Domingo et al.
 (2023); Martins et al. (2016). Presence vs. random pseudo-absences
-evaluated with ROC — Mouta et al. (2021). Random Forest — see
+evaluated with ROC — Mouta et al. (2021). Classifier — see
 [RQ1](research_questions.md#rq1--citizen-science-as-a-substitute-for-expert-data).
 
 ## Foundation Models
@@ -126,9 +121,26 @@ same paper's classifier-dependent result.
 
 ## Evaluation
 
-**Adopted: ROC-AUC and the continuous Boyce index** (Hirzel et al.,
-2006), used in every notebook of the effort-reduction curve. Never report a metric without
-stating what was evaluated, on which data, and under which split.
+**Primary (to confirm with the supervisor): sensitivity at a fixed
+fraction of predicted area.** The landscape is ranked by score, the
+top X% of area is the predicted *Acacia* extent, and sensitivity is
+the fraction of held-out presences inside it; the sensitivity-by-area
+curve from 5% to 30% is reported, with the number at 10% as the
+primary one (my choice, fixed before running; no source). The
+background of the test block is the sample of its landscape, so the
+metric is rank-based within each fold and pooled over held-out
+presences. The background pool serves only to
+measure area; no background point is labelled as absence, so an
+unrecorded acacia there is never counted as an error. Literature not
+yet read: this is believed to be the omission-rate-against-area logic
+of Phillips et al. (2006) and the partial ROC of Peterson et al.
+(2008) — to confirm before treating it as established. Reasoning:
+[`thesis/notes.md`](../thesis/notes.md#rq1-presence-only).
+
+**Secondary: ROC-AUC and the continuous Boyce index** (Hirzel et al.,
+2006), used in every notebook of the effort-reduction curve so far.
+Never report a metric without stating what was evaluated, on which
+data, and under which split.
 
 **Known limits of the Boyce index as computed here**
 (`src/evaluation.py`):

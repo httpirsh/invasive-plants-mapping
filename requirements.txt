@@ -13,3 +13,4 @@ requests
 odc-stac
 pystac-client
 rioxarray
+elapid

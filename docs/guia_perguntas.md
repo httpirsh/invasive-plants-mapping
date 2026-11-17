@@ -11,6 +11,12 @@
 > Não tem decisões novas. Todos os números vêm desses ficheiros ou de
 > `results/effort_reduction_curve/` (execuções de 2026-11-13 e
 > 2026-11-14).
+>
+> **Desatualizado desde 2026-11-17:** o Random Forest presença-vs-fundo
+> e os seus números (curva, zona-tampão, 0,976) foram abandonados; a
+> RQ1 passou a presence-only (regressão logística presença-fundo,
+> sensitivity a área fixa, leave-one-block-out). Ver
+> [`thesis/notes.md`](../thesis/notes.md#rq1-presence-only).
 
 ## 1. A ideia da tese numa página
 
