@@ -24,11 +24,12 @@ Folder names and question numbers:
   `notebooks/02_citizen_science/acacia_observations.ipynb` on every
   run.
 
-Obsolete folders (each holds an `OBSOLETE.md` saying why):
+Deleted folders (their files are in the Git history):
 
 - `effort_reduction_curve_forest_only/` — the curve under a
   forest-only background, run with the presence-vs-background Random
   Forest under five random block holdouts, superseded on 2026-11-17 by
   the presence-only design of RQ1 (`thesis/notes.md#rq1-presence-only`)
-  and not re-run. The other curve folders were regenerated on
+  and not re-run; deleted on 2026-11-17, last present at commit
+  `7197628`. The other curve folders were regenerated on
   2026-11-17 by the rewritten scripts (`run.json` in each).
