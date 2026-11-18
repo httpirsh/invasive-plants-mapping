@@ -105,9 +105,12 @@ perguntas de investigação.
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
 (abertura do capítulo e secção 1.1 Context and Motivation); a tabela
 do manuscrito usa a numeração das três perguntas aprovadas. O
-diagrama do pipeline está na secção 1.1 (Figura
-`fig:introduction-pipeline`, TikZ, 2026-11-17), com cada pergunta na
-etapa em que atua. A Introdução ainda cita `zhu2026` para a linha
+diagrama do pipeline está na secção 1.2, a seguir às quatro perguntas
+(Figura `fig:introduction-pipeline`, TikZ, movida a 2026-11-17), com
+cada pergunta na etapa em que atua. A motivação da secção 1.1 cita
+desde 2026-11-18 o IFN6 (inventário decenal, 8,4 mil ha de
+povoamentos de acácia em 2015) e o relatório EFFIS 2024 (fogos
+recorrentes), ambos em `docs/literature.md`. A Introdução ainda cita `zhu2026` para a linha
 das outras regiões; a entrada da bibliografia já tem o autor certo
 (Stewart et al., corrigido a 2026-11-17), mas a fonte certa para essa
 linha é Yang et al. (2026). Por corrigir no manuscrito. Duas outras

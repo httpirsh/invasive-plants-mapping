@@ -6,10 +6,10 @@ must be revisited after a broader search (protocol in
 [`thesis/notes.md`](../thesis/notes.md#protocolo-de-pesquisa-da-literatura)).
 
 Every entry was re-read on 2026-11-11 from the full text where it
-could be obtained. Seven entries were added on 2026-11-14 and three on
-2026-11-17 (marked in their status), read from the PDF or web page
-converted to text; on 2026-11-17 two entries also went from abstract
-only to read in full. Each paper has a status:
+could be obtained. Seven entries were added on 2026-11-14, three on
+2026-11-17 and three on 2026-11-18 (marked in their status), read from
+the PDF or web page converted to text; on 2026-11-17 two entries also
+went from abstract only to read in full. Each paper has a status:
 
 - **Read** — full text read end to end; the summary is checked against
   it. Figures were read from captions and text, not viewed, and
@@ -1082,6 +1082,97 @@ cannot be assumed after a burn. **What it does not:** the burns were
 prescribed, in 5 × 5 m plots, not wildfires, and the paper has no
 remote sensing. Stand persistence appears only as one introduction
 sentence citing Boland (1986) and as undisturbed control plots.
+
+**Dessì, Podda, Brundu, Lozano, Carrouée, Marchante, Marchante, Petit,
+Porceddu & Bacchetta (2021).** Seed germination ecophysiology of
+*Acacia dealbata* Link and *Acacia mearnsii* De Wild.: two invasive
+species in the Mediterranean Basin. *Sustainability*, 13(21), 11588.
+DOI: [10.3390/su132111588](https://doi.org/10.3390/su132111588)
+— *Read (added 2026-11-18; open access, copy in
+[`docs/literature/`](literature/dessi_2021_acacia_seed_germination.pdf))*
+
+Laboratory germination study with seeds collected in 2018 in Sardinia,
+Corsica, Provence and Beira Baixa (Portugal). *A. dealbata* seeds have
+physical dormancy: without scarification germination peaks at about
+55% at 25 °C; with scarification it exceeds 95% at nearly all
+temperatures, and all non-germinated scarified seeds remained viable,
+which the authors read as a persistent soil seed bank. Germination
+triggered by heat or fire, and viability "for many years or even
+decades", are cited from other work (including Passos et al. 2017,
+below: about 70% germination after exposure to 60 °C), not measured
+here.
+
+**What it supports:** the mechanism behind post-fire reinvasion,
+complementing Riveiro et al. (2025), which observes it in the field in
+the Coimbra district. **What it does not:** field seed-bank density or
+longevity in Portugal.
+
+**Passos, Marchante, Pinho & Marchante (2017).** What we don't seed:
+the role of long-lived seed banks as hidden legacies of invasive
+plants. *Plant Ecology*, 218(11–12), 1313–1324.
+DOI: [10.1007/s11258-017-0770-6](https://doi.org/10.1007/s11258-017-0770-6)
+— *To obtain (closed access, no open copy; a copy was requested from
+the first author on 2026-11-18)*
+
+Field study of *A. dealbata* seed banks at sites in central Portugal.
+Known only through Dessì et al. (2021) above; not cited until read.
+
+### Forest statistics and fire in Portugal
+
+**ICNF (2019).** 6.º Inventário Florestal Nacional, IFN6: relatório
+final (ano de referência 2015). Instituto da Conservação da Natureza
+e das Florestas, Lisboa, November 2019, 284 pp.
+[PDF](https://www.icnf.pt/api/file/doc/c8cc40b3b7ec8541)
+— *Read (added 2026-11-18; sections on method and invasive species,
+tables 106, 508 and 509; copy in
+[`docs/literature/`](literature/icnf_2019_ifn6_relatorio_final.pdf))*
+
+Portugal's national forest inventory, produced once a decade:
+reference years 1995, 2005, 2010 and 2015, the 2015 edition published
+in 2019. Two-stage sampling: about 360 000 photo-points classified by
+photo-interpretation for land use, and about 12 000 field plots for
+vegetation. Invasive species follow the list of Decree-Law 92/2019.
+
+- **Stands dominated by acacias** (table 106): 2.7, 4.7, 5.5 and 8.4
+  thousand ha in 1995, 2005, 2010 and 2015, under 1% of the forest
+  area, with a ±10.6% sampling error on the 2015 value.
+- **Occurrence of *Acacia* sp. as an invader inside other stands**
+  (table 509): in 14% of the maritime-pine area, 19% of the
+  eucalyptus area, 7% of the oak area and 5% of shrubland and
+  pasture. These areas are not in the 8.4 thousand ha, which only
+  counts stands where acacia dominates.
+- **Abundance** (table 508): some invasive species occurs in 60% of
+  the maritime-pine area, mostly as "vestigial" or "dispersed" (19%
+  and 24%); "grouped" or "dense" in 18%.
+
+**What it supports:** the reference source for forest composition in
+Portugal is decennial and published four years after its field year,
+so species-level information is at least that old; acacias are far
+more present as invaders of other stands than as stands of their own.
+**What it does not:** the inventory is a sample, not a map; it gives
+no location of stands.
+
+**San-Miguel-Ayanz, Durrant, Boca et al. (2025).** Advance report on
+forest fires in Europe, Middle East and North Africa 2024. European
+Commission, Joint Research Centre, Publications Office of the EU,
+Luxembourg. EUR 40255, JRC141505.
+DOI: [10.2760/1264626](https://doi.org/10.2760/1264626)
+— *Read (added 2026-11-18; copy in
+[`docs/literature/`](literature/jrc_2025_effis_advance_report_2024.pdf))*
+
+EFFIS annual statistics from satellite-mapped burnt areas (fires of
+about 30 ha and above). In 2024 Portugal had 147 461 ha burnt in 735
+fires, "more than in the previous six years, although still far short
+of the extreme year of 2017"; nearly 90% of it in September, with the
+two largest EU fires of the year (over 35 000 ha at Reriz e Gafanhão,
+over 20 000 ha at Albergaria-a-Velha e Valmaior). Portugal was the
+most affected EU country in 2024 and the one with the most burnt area
+inside Natura 2000 sites. The EU total was 419 298 ha, slightly above
+the 2006–2023 average.
+
+**What it supports:** large fires are recurrent in Portugal and the
+centre of the country is where they concentrate. **What it does not:**
+nothing on causes or climate; no cumulative 2006–2024 figure.
 
 ### Weak supervision from point labels
 
