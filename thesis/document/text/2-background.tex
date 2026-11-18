@@ -231,10 +231,14 @@ where the photographer stood rather than where the plant is,
 resolution that distance is often a different pixel.
 
 These properties do not make the data unusable; they define what has
-to be done before using them. The first shapes the learning problem
-(Section~\ref{sec:background-po-background}), the second the
-validation (Section~\ref{sec:background-po-spatial}), and the third
-the preparation pipeline that turns points into labelled pixels
+to be done before using them. The first, the lack of confirmed
+absences, shapes the learning problem, treated in the section on
+background sampling (Section~\ref{sec:background-po-background}); the
+second, the opportunistic sampling, shapes the validation, treated in
+the section on spatial autocorrelation and block cross-validation
+(Section~\ref{sec:background-po-spatial}); and the third, the uneven
+quality of each record, shapes the preparation pipeline that turns
+points into labelled pixels, described in the Proposed Work
 (Chapter~\ref{sec:proposed-work}).
 
 \section{Presence-Only Learning and Spatial Validation}
@@ -308,7 +312,8 @@ comparison of TESSERA and AlphaEarth against Sentinel features for
 old-growth forest, the advantage of the embeddings narrowed from 0.08
 to 0.04 PR-AUC once a 10~km buffer separated training from test folds
 \cite{ratsakatika2026}. The \emph{Acacia} mapping studies in Iberia
-cited in Section~\ref{sec:background-iap-acacia} all used random
+cited in the section on \emph{A.~dealbata} in Portugal
+(Section~\ref{sec:background-iap-acacia}) all used random
 splits \cite{martins2016,mouta2021,domingo2023}, so their accuracies
 are not comparable with a spatially validated result.
 
@@ -327,9 +332,10 @@ reference data, by giving each pixel an embedding usable with a light
 classifier and no fine-tuning. Citizen science offers reference data
 at a scale and continuity that specialists cannot, but as presences
 only, concentrated where observers go, with uneven positional quality.
-Combining the two raises the two methodological questions of
-Section~\ref{sec:background-po}, which
-Chapter~\ref{sec:proposed-work} turns into the design: how to learn
+Combining the two raises the two methodological questions of the
+section on presence-only learning and spatial validation
+(Section~\ref{sec:background-po}), which the Proposed Work
+(Chapter~\ref{sec:proposed-work}) turns into the design: how to learn
 and evaluate from presences without treating the rest of the landscape
 as absence, and how to validate over space so that the result says
 something about places the observers never visited.

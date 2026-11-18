@@ -131,7 +131,8 @@ Each ingredient above -- foundation models for mapping, citizen
 science as reference data, and an invasive plant as the target -- has
 been studied on its own or in pairs, but their combination, with an
 explicit measure of how far citizen-science data can stand in for
-expert data, has not (Chapter~\ref{sec:state-of-the-art}). The main
+expert data, has not, as the literature reviewed in the State of the
+Art (Chapter~\ref{sec:state-of-the-art}) shows. The main
 question of this dissertation is:
 
 \begin{quote}
@@ -246,16 +247,18 @@ dissertation. It is broken down into the following specific goals:
 RQ1 alone constitutes a complete result and is the core deliverable
 of this work, answering the main objective of the MAP.INVADER project
 proposal this dissertation is part of; a preliminary version of its
-curve is reported in Section~\ref{sec:proposed-work-preliminary}. The
+curve is reported in the preliminary experiment of the Proposed Work
+(Section~\ref{sec:proposed-work-preliminary}). The
 full design of each question, including hypotheses, validation and
-metric, is given in Chapter~\ref{sec:proposed-work}. Besides these
+metric, is given in the experimental design of the Proposed Work
+(Chapter~\ref{sec:proposed-work}). Besides these
 answers, the work produces the \emph{A.~dealbata} map of the study
 area, with its confidence map, as a product of the second semester:
 it is presented as what the model predicts, not as a validated map,
 since no ground truth covers the whole area.
 
-Table~\ref{tab:introduction-problems} returns to the problems of
-Section~\ref{sec:introduction-motivation} and says where each one is
+Table~\ref{tab:introduction-problems} returns to the problems raised in
+the motivation (Section~\ref{sec:introduction-motivation}) and says where each one is
 addressed.
 
 \begin{table}[htb]
@@ -269,11 +272,11 @@ Sampling / dataset bias & RQ3 \\
 \hline
 A single observer made most observations (83\% overall, 88\% of the
 cleaned presences used in this thesis) & Low training-data diversity &
-RQ3; observer balancing (Chapter~\ref{sec:proposed-work}) \\
+RQ3; observer balancing (Proposed Work, Chapter~\ref{sec:proposed-work}) \\
 \hline
 Citizen science records only presences, never confirmed absences
 \cite{phillips2009} & Positive-unlabelled learning & Uniform-random
-background pool (Chapter~\ref{sec:proposed-work}) \\
+background pool (Proposed Work, Chapter~\ref{sec:proposed-work}) \\
 \hline
 Imprecise locations and mixed pixels \cite{ball2026} & Label noise &
 RQ2 \\
@@ -282,11 +285,11 @@ Limited volume of reference data & Data efficiency & RQ1; RQ4 \\
 \hline
 Observations recorded in years other than the satellite imagery
 \cite{ball2026} & Temporal mismatch between data and imagery & Single
-reference year; disturbance filter (Chapter~\ref{sec:proposed-work}) \\
+reference year; disturbance filter (Proposed Work, Chapter~\ref{sec:proposed-work}) \\
 \hline
 Nearby observations inflate accuracy estimates \cite{karasiak2022} &
 Data leakage / spatial autocorrelation & Spatial validation
-(Chapter~\ref{sec:proposed-work}) \\
+(Proposed Work, Chapter~\ref{sec:proposed-work}) \\
 \hline
 Weaker transfer of embeddings to new regions \cite{zhu2026} &
 Distribution shift & RQ3 \\
