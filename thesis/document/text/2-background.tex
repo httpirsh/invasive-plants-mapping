@@ -116,14 +116,7 @@ wall-to-wall. The pixels whose class is known are the reference data.
 They serve two roles that must be kept apart: training the model, and
 evaluating the map it produces on pixels the model has not seen.
 
-Reference data for a species are produced by specialists, in two
-ways. Field visits confirm the species at a location and give a point
-or a small plot. Visual interpretation of very-high-resolution imagery
-delimits whole stands as polygons, which is how the expert data used
-in this work were made, over 30~cm orthoimagery of 2023. Both are
-reliable, both are slow, and both are produced for one area and one
-year. The scarcity of reference data, not of imagery, is the limiting
-factor of supervised species mapping.
+Reference data can come from any source whose labels one is willing to trust. The conventional source is specialists, in two ways: field visits confirm the species at a location and give a point or a small plot, and visual interpretation of very-high-resolution imagery delimits whole stands as polygons, which is how the expert data used in this work were made, over 30 cm orthoimagery of 2023. Both are reliable, both are slow, and both are produced for one area and one year. Citizen-science observations are a second source, far cheaper and continuous but made of single points of uneven quality (Section 2.4); turning them into reference data usable at pixel level is one object of this dissertation. The scarcity of reliable reference data, not of imagery, is the limiting factor of supervised species mapping. In this work both sources are used as reference data, for training and for testing; what is asked is how far the cheap source can stand in for the expensive one.
 
 \section{Earth Observation Foundation Models}
 \label{sec:background-fm}
