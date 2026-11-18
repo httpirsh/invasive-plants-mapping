@@ -272,8 +272,12 @@ seen. There are two ways to train without the second class.
 
 \emph{One-class methods} use the presences alone. They learn what a
 presence pixel looks like and score every other pixel by how much it
-resembles one; the one-class support vector machine and the isolation
-forest are examples.
+resembles one. The one-class support vector machine does this by
+fitting a boundary that encloses the presences in feature space as
+tightly as possible, and scores a pixel by its distance to that
+boundary. The isolation forest takes the opposite view: it builds
+random trees that split the data, and a pixel that gets isolated in
+few splits is unlike the presences and gets a low score.
 
 \emph{Presence-background methods} create a second class by sampling
 the landscape. A set of pixels is drawn at random over the whole study
