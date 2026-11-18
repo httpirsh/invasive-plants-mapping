@@ -10,8 +10,21 @@ No.~92/2019). It forms dense stands that outcompete native vegetation,
 and knowing where it currently grows is a prerequisite for any control
 effort. Producing an up-to-date map over a large area is nonetheless
 difficult: the species must be told apart from visually similar trees
-and shrubs in a satellite image, and the land it occupies changes from
-year to year.
+and shrubs in a satellite image, the land it occupies changes from
+year to year, and the reference data needed to train and check a
+classifier are slow and expensive to collect.
+
+This work, carried out within the MAP.INVADER project on Earth
+Observation methods for mapping invasive alien plants, investigates
+whether two recent developments, citizen-science observations and
+Earth Observation foundation models, can reduce the dependency on that
+expert-collected reference data for mapping \emph{A.~dealbata} in the
+Coimbra district. This intermediate report reviews the relevant
+literature, defines the approach and its evaluation, and reports a
+first experiment.
+
+\section{Context and Motivation}
+\label{sec:introduction-motivation}
 
 Satellites make it possible to observe vegetation repeatedly and at
 scale. The Sentinel-2 mission, for example, revisits the same location
@@ -25,11 +38,24 @@ flowering period \cite{domingo2023,martins2016}.
 Classifying pixels requires reference data: locations where the
 species is known to be present (and, ideally, known to be absent),
 used to train and evaluate the classifier. Collecting this data in the
-field is slow and expensive, which limits how much of it is ever
-available for a given study area -- this is the starting constraint
-that motivates this thesis.
+field is slow and expensive.
 
-Two developments offer a way to work within that constraint. The
+Reference data of this kind are usually produced by specialists:
+field visits to confirm the species, or careful interpretation of
+very-high-resolution images by someone who knows what to look for.
+The result is reliable and delimits stands rather than single points,
+but it is produced once, for one area and one year, and every new area
+or new year costs the same expert time again. This is what keeps
+species-level maps rare and quickly outdated. Citizen science offers
+the opposite trade-off: observations made by non-specialists, with a
+photograph and a location of limited precision, identified by other
+users rather than by an expert, but collected continuously and over
+the whole country at no cost to the mapping effort. If these
+observations could do part of the work that expert data does today,
+maps could be produced for more areas and updated more often than
+expert surveys allow.
+
+Two developments offer a way to work within that cost. The
 first is \emph{Earth Observation foundation models}: models
 pre-trained on large volumes of satellite imagery that turn each pixel
 into a fixed-length vector, or \emph{embedding}, capturing structure
@@ -49,14 +75,6 @@ systematic: a citizen-science dataset is a set of points where someone
 happened to look and recognise the species, not a designed survey, and
 it almost never records a confirmed absence.
 
-This thesis asks whether foundation-model embeddings make it possible
-to map an invasive plant accurately from this kind of cheap, imperfect
-reference data, and how much performance is still gained by adding
-progressively costlier, expert-collected data on top of it.
-
-\section{Context and Motivation}
-\label{sec:introduction-motivation}
-
 Combining citizen science with Earth Observation foundation models is
 attractive because the two weaknesses are complementary in principle:
 citizen science is cheap but biased and incomplete, while foundation
@@ -65,6 +83,19 @@ free across tasks. Whether that combination actually works for a
 specific invasive species in a specific region is an open empirical
 question, not something that follows automatically from either
 technology on its own.
+
+Keeping such maps current matters more for a species that benefits
+from disturbance. In burnt stands in the Coimbra district, fire
+promoted \emph{A.~dealbata} seed germination and no treatment
+prevented regeneration within three years \cite{riveiro2025}, so a
+burnt area where the species was present is a likely site of
+reinvasion rather than a cleared one.
+If wildfire frequency in Portugal rises with climate change
+\textbf{[source needed]}, the ground open to this kind of expansion
+grows with it. A map
+of current stands that is cheap to produce and to repeat is what makes
+it possible to anticipate where control will be needed, instead of
+recording the invasion after it has spread.
 
 Several concrete problems make it hard, each already observed in this
 thesis's own exploratory analysis of the Coimbra-district iNaturalist
