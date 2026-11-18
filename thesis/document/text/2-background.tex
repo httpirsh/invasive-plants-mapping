@@ -253,21 +253,50 @@ A standard classifier needs examples of both classes. With
 presence-only data the second class is missing, and two families of
 methods address it. One-class methods, such as the one-class support
 vector machine or the isolation forest, learn a description of the
-presences alone and score how far a new pixel is from it.
-Presence-background methods add a sample of the landscape, the
-\emph{background}, drawn at random over the study area, and train the
-classifier to separate presences from it. The background is not
-absence: the species may occur at a background point, and the model
-fitted this way must be read as a relative index of suitability, not
-as a probability of presence against absence \cite{phillips2006}.
+presences alone and score how far a new pixel is from it; they use no
+other pixel. Presence-background methods add a sample of the
+landscape, the \emph{background}, drawn at random over the study area,
+and train the classifier to separate presences from it.
+
+The background is \emph{not} absence. It is a sample of the landscape
+as a whole, and the species may occur at a background point. A model
+fitted against it must therefore be read as a relative index of
+suitability, a ranking of pixels, and not as a probability of presence
+against absence; this holds for MaxEnt, which was built on this
+reading, and equally for a logistic regression or any other classifier
+fitted with background pixels \cite{phillips2006}. \citet{phillips2009}
+make the same point from the other side: the background is an
+unlabelled sample, not a labelled one. The distinction is often lost.
 \citet{rapinel2021}, reviewing 136 one-class vegetation studies, find
-that the two readings are often confused, that the background should
-be drawn over the entire landscape including the surroundings of the
-presences, and that the usual number of background points is in the
-thousands. In the remote-sensing comparisons read for this work,
-methods that use the background as an unlabelled sample beat true
-one-class methods in every case, an advantage attributed to the
-information in the unlabelled data \cite{deng2018,li2011,li2010}.
+that 42\% confuse background with pseudo-absences, that the background
+should be drawn over the entire landscape including the surroundings
+of the presences, and that the usual number of background points is in
+the thousands.
+
+Two further families are often named apart but fall inside the second
+one. MaxEnt and the related point-process models are fitted against
+thousands of random background pixels and read as relative indices, so
+they are presence-background methods with a particular form of model
+\cite{phillips2006}. Explicit positive-unlabelled methods rescale a
+presence-versus-unlabelled classifier by the fraction of positives
+that are labelled; when that fraction is constant, the rescaling does
+not change the ranking, and a rank-based metric sees the same model
+\cite{elkan2008}. What separates the two real families is thus whether
+the unlabelled landscape is used at all. In the remote-sensing
+comparisons read for this work, methods that use it beat true
+one-class methods in every case: a presence-and-background network
+against the one-class support vector machine on aerial and satellite
+scenes \cite{deng2018}, MaxEnt against the same machine \cite{li2010},
+a positive-unlabelled method against the biased support vector machine
+and the one-class one \cite{li2011}, and, in the one study that
+compares the three families side by side, the biased support vector
+machine first, the one-class one behind, and even the best method
+performing poorly in many of the tasks \cite{mack2017}.
+\citet{elkan2008} give the reason: one-class methods ``ignore useful
+information that is present in the unlabeled examples''. The
+method-selection step of the Proposed Work
+(Chapter~\ref{sec:proposed-work}) reaches the same ordering on the
+data of this work.
 
 \subsubsection*{Sampling bias in the background}
 
@@ -291,8 +320,12 @@ form fixes the fraction of the study area the model is allowed to
 predict as presence and measures the fraction of test presences that
 fall inside it, so that two models are compared at equal predicted
 area \cite{phillips2006,peterson2008}. The background then serves only
-to measure area, and an unrecorded presence at a background point is
-never counted as an error.
+to measure that area: against a uniform random background, one minus
+the specificity is almost identical to the proportion of the area
+predicted present \cite{phillips2006}. An unrecorded presence at a
+background point is never counted as an error, in training or in
+evaluation. This is what makes ``the background is not absence'' true
+in practice and not only in the reading of the model.
 
 \subsection{Spatial autocorrelation and block cross-validation}
 \label{sec:background-po-spatial}

@@ -2408,9 +2408,22 @@ grep; nada a corrigir lá por agora).
 **Na tese:** ✅ Parcial. Os conceitos (one-class contra presença-fundo,
 fundo como amostra não rotulada e não como ausência, avaliação a área
 prevista igual segundo Phillips et al. 2006 e Peterson et al. 2008)
-estão na secção 2.5.1 do Background (2026-11-18); a seleção de método,
-o critério, os resultados e o Random Forest como metodologia abandonada
-(razão do ponto 1) ficam para o Proposed Work.
+estão na secção 2.5.1 do Background (2026-11-18). A 2.5.1 diz
+também (mesmo dia) que o MaxEnt e o PU-learning explícito caem na
+família presença-fundo (Phillips et al. 2006; lema 1 de Elkan & Noto
+2008), que os one-class puros perderam em todas as comparações lidas
+(Deng et al. 2018; Li & Guo 2010; Li, Guo & Elkan 2011; Mack & Waske
+2017), com a razão de Elkan & Noto, e que o fundo só mede a área na
+avaliação. **Mack & Waske (2017) é citado só pelo resumo** (texto
+completo com paywall; tese do autor na FU Berlin por descarregar à
+mão): a tese afirma apenas o que o resumo diz, as três famílias
+comparadas, o biased SVM em primeiro, o one-class SVM atrás, e mau
+desempenho do melhor método em muitas tarefas, sem números. A seleção
+de método, o critério, os resultados (0,410 contra 0,334, 0,258 e
+0,188), o MaxEnt corrido e perdido, a ressalva de que a extensão do
+lema de Elkan & Noto ao caso-controlo é raciocínio meu, e o Random
+Forest como metodologia abandonada (razão do ponto 1) ficam para o
+Proposed Work.
 
 ### Curva da RQ1 no desenho presence-only: leave-one-block-out com as duas fontes, sensitivity a 10% de área {#curva-presence-only}
 
