@@ -7,7 +7,7 @@
 \def\thesistype{msc}                                                     
 
 % docLanguage is the main language of the document. Possible options are: en,pt
-\def\docLanguage{en} 
+\def\docLanguage{en}
 
 \def\titleEN{Advancing the Mapping of Invasive Alien Plants by Combining Citizen Science, Earth Observation Foundation Models and Satellite Imagery}
 \def\subtitleEN{}
@@ -37,8 +37,8 @@
 
 
 \def\author{Íris Frias de Sousa}
-\def\dateEN{December 2026}
-\def\datePT{Dezembro 2026}
+\def\dateEN{January 2027}
+\def\datePT{Janeiro 2027}
 % ********************************** END CONFIGURATION ***************************************
 
 
@@ -66,10 +66,12 @@
 }
 
 \usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
 \usepackage{glossaries}
 \usepackage{tabularx}
 \usepackage{mathpazo}
-\usepackage{xcolor, soulutf8, afterpage}  
+\usepackage{xcolor, soul, afterpage}  
 \usepackage{emptypage}
 \usepackage{setspace}
 
@@ -235,10 +237,13 @@
 \mainmatter
 \setlength{\parskip}{0.7em}
 \input{text/1-introduction}
-\input{text/2-related-work}
-\input{text/3-methodology}
-\input{text/4-results}
+\input{text/2-background}
+\input{text/3-state-of-the-art}
+\input{text/4-proposed-work}
 \input{text/5-conclusion}
+% text/4-results.tex is kept for the final dissertation; the
+% intermediate report has no results chapter (preliminary results are
+% in Proposed Work).
 
 \bibliographystyle{plainnat} 
 %\bibliographystyle{apalike}

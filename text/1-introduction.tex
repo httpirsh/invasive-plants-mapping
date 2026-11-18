@@ -10,8 +10,21 @@ No.~92/2019). It forms dense stands that outcompete native vegetation,
 and knowing where it currently grows is a prerequisite for any control
 effort. Producing an up-to-date map over a large area is nonetheless
 difficult: the species must be told apart from visually similar trees
-and shrubs in a satellite image, and the land it occupies changes from
-year to year.
+and shrubs in a satellite image, the land it occupies changes from
+year to year, and the reference data needed to train and check a
+classifier are slow and expensive to collect.
+
+This work, carried out within the MAP.INVADER project on Earth
+Observation methods for mapping invasive alien plants, investigates
+whether two recent developments, citizen-science observations and
+Earth Observation foundation models, can reduce the dependency on that
+expert-collected reference data for mapping \emph{A.~dealbata} in the
+Coimbra district. This intermediate report reviews the relevant
+literature, defines the approach and its evaluation, and reports a
+first experiment.
+
+\section{Context and Motivation}
+\label{sec:introduction-motivation}
 
 Satellites make it possible to observe vegetation repeatedly and at
 scale. The Sentinel-2 mission, for example, revisits the same location
@@ -25,11 +38,36 @@ flowering period \cite{domingo2023,martins2016}.
 Classifying pixels requires reference data: locations where the
 species is known to be present (and, ideally, known to be absent),
 used to train and evaluate the classifier. Collecting this data in the
-field is slow and expensive, which limits how much of it is ever
-available for a given study area -- this is the starting constraint
-that motivates this thesis.
+field is slow and expensive.
 
-Two developments offer a way to work within that constraint. The
+Reference data of this kind are usually produced by specialists:
+field visits to confirm the species, or careful interpretation of
+very-high-resolution images by someone who knows what to look for.
+The result is reliable and delimits stands rather than single points,
+but it is produced once, for one area and one year, and every new area
+or new year costs the same expert time again. This is what keeps
+species-level maps rare and quickly outdated. Citizen science offers
+the opposite trade-off: observations made by non-specialists, with a
+photograph and a location of limited precision, identified by other
+users rather than by an expert, but collected continuously and over
+the whole country at no cost to the mapping effort. If these
+observations could do part of the work that expert data does today,
+maps could be produced for more areas and updated more often than
+expert surveys allow.
+
+The gap this leaves is visible in the official statistics. Portugal's
+national forest inventory, the reference source for forest
+composition, is produced once a decade from photo-points and field
+plots; its latest edition has 2015 as reference year and was published
+in 2019 \cite{icnf2019}. It recorded 8.4 thousand hectares of stands
+dominated by acacias, three times the 1995 figure, but as a sample it
+locates none of them, and it counts the species only where it
+dominates, although it also occurred in 14\% of the maritime-pine
+area and 19\% of the eucalyptus area. For a species that spreads
+inside other stands and re-establishes after fire, a decennial sample
+is not a map.
+
+Two developments offer a way to work within that cost. The
 first is \emph{Earth Observation foundation models}: models
 pre-trained on large volumes of satellite imagery that turn each pixel
 into a fixed-length vector, or \emph{embedding}, capturing structure
@@ -49,14 +87,6 @@ systematic: a citizen-science dataset is a set of points where someone
 happened to look and recognise the species, not a designed survey, and
 it almost never records a confirmed absence.
 
-This thesis asks whether foundation-model embeddings make it possible
-to map an invasive plant accurately from this kind of cheap, imperfect
-reference data, and how much performance is still gained by adding
-progressively costlier, expert-collected data on top of it.
-
-\section{Motivation}
-\label{sec:introduction-motivation}
-
 Combining citizen science with Earth Observation foundation models is
 attractive because the two weaknesses are complementary in principle:
 citizen science is cheap but biased and incomplete, while foundation
@@ -66,12 +96,168 @@ specific invasive species in a specific region is an open empirical
 question, not something that follows automatically from either
 technology on its own.
 
-Several concrete problems make it hard, each already observed in this
-thesis's own exploratory analysis of the Coimbra-district iNaturalist
-data, and each already associated with findings elsewhere in the
-literature:
+Keeping such maps current matters more for a species that benefits
+from disturbance. In burnt stands in the Coimbra district, fire
+promoted \emph{A.~dealbata} seed germination and no treatment
+prevented regeneration within three years \cite{riveiro2025}, so a
+burnt area where the species was present is a likely site of
+reinvasion rather than a cleared one.
+Large fires are recurrent: in 2024 Portugal was the most affected
+country in the European Union, with 147 thousand hectares burnt,
+almost all of them in one week of September and most of them in the
+centre of the country \cite{sanmiguel2025}. A map of current stands
+that is cheap to produce and to repeat is what makes it possible to
+anticipate where control will be needed, instead of recording the
+invasion after it has spread.
 
-\begin{table}[h]
+Using citizen-science observations as reference data raises problems
+of its own, all of them visible in the Coimbra-district iNaturalist
+data explored for this work. Observations cluster along roads and
+trails rather than where the species grows \cite{dimson2023}, and a
+single observer made most of them, so the data cover few of the
+conditions in which \emph{A.~dealbata} occurs. They record presences
+only, never a confirmed absence \cite{phillips2009}. Their positions
+are imprecise relative to a 10-metre pixel, and many were made in
+years other than the imagery \cite{ball2026}. They are few. And
+because nearby observations resemble each other, a model evaluated on
+points next to its training points looks better than it is
+\cite{karasiak2022}, a problem that grows when the model is applied
+away from where the observations were made \cite{zhu2026}.
+
+\section{Research Questions and Goals}
+\label{sec:introduction-rqs}
+
+Each ingredient above -- foundation models for mapping, citizen
+science as reference data, and an invasive plant as the target -- has
+been studied on its own or in pairs, but their combination, with an
+explicit measure of how far citizen-science data can stand in for
+expert data, has not (Chapter~\ref{sec:state-of-the-art}). The main
+question of this dissertation is:
+
+\begin{quote}
+To what extent can citizen-science observations, turned into
+reference data and represented by Earth Observation foundation-model
+embeddings, replace expert reference data as training data for
+mapping \emph{Acacia dealbata} in the Coimbra district?
+\end{quote}
+
+``Replace'' is read as a difference in performance between models
+trained on citizen-science observations and models trained with
+expert reference data, measured on the same expert-verified test
+locations; it is a question of degree, not a yes/no answer. Four
+secondary questions operationalise it, in order of priority. Each
+uses only what the questions before it define, and the one that
+depends on Sentinel-2 imagery comes last.
+
+\begin{itemize}
+  \item \textbf{RQ1 -- Citizen science as a substitute for expert
+  data.} To what extent does a model trained only on citizen-science
+  observations reach the performance of models trained with expert
+  reference data?
+  \item \textbf{RQ2 -- From point observations to reference data.} To
+  what extent do the grade and accuracy filters applied to
+  citizen-science observations, and the extension of each label from
+  the observed pixel to the vegetation patch around it, change the
+  performance of \emph{A.~dealbata} mapping?
+  \item \textbf{RQ3 -- Transferability away from the sampled area.}
+  To what extent does the performance of the citizen-science-trained
+  model drop from locations near the sampled area to locations far
+  from it?
+  \item \textbf{RQ4 -- Foundation models against conventional
+  features.} To what extent do TESSERA embeddings improve
+  \emph{A.~dealbata} mapping over Sentinel-2 features when trained on
+  cleaned citizen-science data, with all observations and with few?
+\end{itemize}
+
+Figure~\ref{fig:introduction-pipeline} places each question at the
+step of the pipeline it acts on. Each citizen-science observation
+becomes a labelled pixel, the pixel is represented by a
+foundation-model embedding, a presence-only classifier is trained on
+those embeddings, and the classifier produces the species map. RQ2
+acts on the passage from observation to label, RQ4 on the
+representation, and RQ3 on the map. Expert polygons stay outside the
+main flow: they are the test reference and, for RQ1, are added to the
+training data in increasing fractions.
+
+\begin{figure}[htb]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  node distance=4mm and 8mm,
+  stage/.style={draw, rounded corners=2pt, align=center, minimum height=10mm,
+    text width=25mm, font=\footnotesize, inner sep=2pt},
+  expert/.style={stage, dashed},
+  note/.style={align=center, font=\scriptsize, text width=25mm},
+  rq/.style={font=\scriptsize\bfseries},
+  flow/.style={-{Latex[length=2mm]}, thick},
+  dflow/.style={flow, dashed}
+]
+\node[stage] (obs) {Citizen-science\\observation};
+\node[stage, right=of obs] (lab) {Reference\\pixel label};
+\node[stage, right=of lab] (emb) {Embedding\\(TESSERA)};
+\node[stage, right=of emb] (clf) {Presence-only\\classifier};
+\node[stage, right=of clf] (map) {\emph{A.~dealbata} map\\+ confidence};
+\node[expert, below=9mm of clf] (exp) {Expert polygons};
+
+\node[note, below=1mm of obs] {iNaturalist,\\research grade};
+\node[note, below=1mm of lab] {10~m pixel, 2023};
+\node[note, below=1mm of emb] {EO foundation\\model};
+\node[note, below=1mm of clf, xshift=-4mm, text width=16mm] {presence vs.\\background};
+\node[note, below=1mm of map] {Coimbra district};
+\node[note, below=1mm of exp] {test reference;\\added to training\\0--100\%};
+
+\draw[flow] (obs) -- (lab);
+\path (obs.north east) -- (lab.north west) node[rq, midway, above=1mm] {RQ2};
+\draw[flow] (lab) -- (emb);
+\draw[flow] (emb) -- (clf);
+\draw[flow] (clf) -- (map);
+\draw[dflow] ([xshift=6mm]exp.north) -- node[rq, right=2pt] {RQ1} ([xshift=6mm]clf.south);
+\node[rq, above=1mm of emb] {RQ4};
+\node[rq, above=1mm of map] {RQ3};
+\end{tikzpicture}}
+\caption{Overview of the proposed pipeline. Each research question is
+placed at the step it acts on; RQ4 replaces the embedding step by
+Sentinel-2 features.}
+\label{fig:introduction-pipeline}
+\end{figure}
+
+Answering this question is the general objective of this
+dissertation. It is broken down into the following specific goals:
+
+\begin{itemize}
+  \item \textbf{Effort-reduction curve:} Measure the performance
+  gained by adding 10\% to 100\% of the expert polygons to a
+  citizen-science base, compare it with an expert-only model, and
+  report the performance of the citizen-science-only model on expert
+  reference data (RQ1).
+  \item \textbf{Reference-data pipeline:} Build and document the
+  process that turns citizen-science point observations into
+  reference data, and measure how its grade and accuracy filters, and
+  the extension of each label to the surrounding vegetation patch,
+  change performance (RQ2).
+  \item \textbf{Spatial transferability:} Measure the difference in
+  performance between locations near and far from the sampled area
+  (RQ3).
+  \item \textbf{Representation comparison:} Compare TESSERA-based and
+  Sentinel-2-based models, with all observations and with few (RQ4).
+\end{itemize}
+
+RQ1 alone constitutes a complete result and is the core deliverable
+of this work, answering the main objective of the MAP.INVADER project
+proposal this dissertation is part of; a preliminary version of its
+curve is reported in Section~\ref{sec:proposed-work-preliminary}. The
+full design of each question, including hypotheses, validation and
+metric, is given in Chapter~\ref{sec:proposed-work}. Besides these
+answers, the work produces the \emph{A.~dealbata} map of the study
+area, with its confidence map, as a product of the second semester:
+it is presented as what the model predicts, not as a validated map,
+since no ground truth covers the whole area.
+
+Table~\ref{tab:introduction-problems} returns to the problems of
+Section~\ref{sec:introduction-motivation} and says where each one is
+addressed.
+
+\begin{table}[htb]
 \centering
 \begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
 \hline
@@ -82,23 +268,24 @@ Sampling / dataset bias & RQ3 \\
 \hline
 A single observer made most observations (83\% overall, 88\% of the
 cleaned presences used in this thesis) & Low training-data diversity &
-RQ3; observer balancing \\
+RQ3; observer balancing (Chapter~\ref{sec:proposed-work}) \\
 \hline
 Citizen science records only presences, never confirmed absences
-\cite{phillips2009} & Positive-unlabelled learning & Background pool
-built from other-species observations (Chapter~\ref{sec:methodology}) \\
+\cite{phillips2009} & Positive-unlabelled learning & Uniform-random
+background pool (Chapter~\ref{sec:proposed-work}) \\
 \hline
 Imprecise locations and mixed pixels \cite{ball2026} & Label noise &
-Reference-data pipeline (Chapter~\ref{sec:methodology}) \\
+RQ2 \\
 \hline
-Limited volume of reference data & Data efficiency & RQ2 \\
+Limited volume of reference data & Data efficiency & RQ1; RQ4 \\
 \hline
 Observations recorded in years other than the satellite imagery
 \cite{ball2026} & Temporal mismatch between data and imagery & Single
-reference year; disturbance filter \\
+reference year; disturbance filter (Chapter~\ref{sec:proposed-work}) \\
 \hline
 Nearby observations inflate accuracy estimates \cite{karasiak2022} &
-Data leakage / spatial autocorrelation & Spatial validation \\
+Data leakage / spatial autocorrelation & Spatial validation
+(Chapter~\ref{sec:proposed-work}) \\
 \hline
 Weaker transfer of embeddings to new regions \cite{zhu2026} &
 Distribution shift & RQ3 \\
@@ -110,94 +297,36 @@ thesis.}
 \label{tab:introduction-problems}
 \end{table}
 
-\section{Research Questions}
-\label{sec:introduction-rqs}
-
-Each ingredient above -- foundation models for mapping, citizen
-science as reference data, and invasive species as the target -- has
-been studied on its own or in pairs, but their three-way combination,
-together with an explicit evaluation of data sparsity and spatial
-bias, has not (Chapter~\ref{sec:related-work}). This thesis's main
-question is:
-
-\begin{quote}
-How robust and data-efficient are Earth Observation foundation models
-for invasive plant mapping when trained with citizen-science reference
-data?
-\end{quote}
-
-This is treated as a question of degree, not a yes/no answer: EO
-foundation models may give more data-efficient representations, but
-their advantage may be limited by the quality, quantity and spatial
-distribution of citizen-science data. The thesis asks under what
-conditions they are useful, not only whether they are better.
-
-Three secondary questions operationalise this, in order of priority --
-RQ1 is the prerequisite and core deliverable, and each later question
-builds on it and on the same pipeline:
-
-\textbf{RQ1 -- Foundation models vs.\ conventional approaches.} To
-what extent do Earth Observation foundation-model representations
-improve invasive plant mapping over conventional spectral-temporal
-satellite features when trained on citizen-science labels, and how
-much performance is gained by progressively adding costlier expert
-reference data on top of it?
-
-\textbf{RQ2 -- Data efficiency.} How does the performance of EO
-foundation models compare with conventional approaches as
-citizen-science reference data are reduced by a filter that keeps the
-most recent and most reliable observations?
-
-\textbf{RQ3 -- Spatial sampling bias.} Do EO foundation-model
-representations amplify or mitigate the effect of spatial sampling
-bias in citizen-science observations, compared with conventional
-satellite features, when evaluated across geographically distinct
-regions?
-
-RQ1 alone already constitutes a complete contribution, answering the
-first and third objectives, and part of the second objective, of the
-MAP.INVADER project proposal this thesis is part of; RQ2 reuses the
-same pipeline, model and test set at a low extra cost; RQ3 is the most
-demanding, since it requires a second, geographically distinct study
-region, and is pursued only as time and data allow. The full design
-for each question, including how expert reference data enters RQ1 as a
-progressively added increment rather than a fixed point of comparison,
-is given in Chapter~\ref{sec:methodology}.
-
-\section{Contributions}
-\label{sec:introduction-contributions}
-
-Two contributions are intended: one already settled as a methodological
-design, and one still pending the experiments that will establish it.
-
-\textbf{A documented, evaluated pipeline} that turns raw
-citizen-science point observations into labelled satellite training
-data, addressing the proposal's first objective. Each cleaning and
-filtering step -- removing obscured coordinates, keeping only
-identification-confirmed (\emph{research-grade}) records, discarding
-imprecise locations, collapsing repeated observations onto the same
-pixel, among others -- is documented individually, and its effect on
-the final dataset is measured through a cumulative ablation rather
-than assumed. One step in particular, matching what citizen scientists
-tend to photograph (often low, understory plants) against what the
-satellite actually sees (the top of the canopy), has no precedent
-found in the literature reviewed so far
-(Chapter~\ref{sec:related-work}) and is treated as a candidate
-methodological contribution in its own right.
-
-\textbf{An empirical answer to RQ1--RQ3}, established through the
-experiments described in Chapter~\ref{sec:methodology} and reported in
-Chapter~\ref{sec:results}: how far conventional and foundation-model
-representations differ under citizen-science labels, how much of that
-gap closes as costlier expert data is progressively added, how
-performance degrades as citizen-science data are reduced, and whether
-foundation-model representations amplify or dampen the effect of
-spatial sampling bias. No result is anticipated here; what follows in
-this thesis is the account of how these questions were answered, not a
-restatement of answers assumed in advance.
-
-\section{Thesis Structure}
+\section{Document Structure}
 \label{sec:introduction-structure}
-\todo[inline]{To be written last, once Chapters~\ref{sec:related-work}
--- \ref{sec:conclusion} are no longer stubs, so each paragraph previews
-content that actually exists rather than a plan.}
+This document reports the work of the first semester and is
+organised in five chapters.
+
+\begin{itemize}
+  \item \textbf{Chapter~\ref{sec:introduction}, Introduction:}
+  presents the problem of mapping invasive plants in Portugal, the
+  motivation for combining citizen-science observations with Earth
+  Observation foundation models, the research questions and the goals
+  of this dissertation.
+  \item \textbf{Chapter~\ref{sec:background}, Background:} introduces
+  the concepts the rest of the document relies on: \emph{Acacia
+  dealbata} as an invasive plant in Portugal, Sentinel-2 imagery,
+  Earth Observation foundation models and TESSERA, citizen-science
+  data from iNaturalist, and presence-only learning with spatial
+  validation.
+  \item \textbf{Chapter~\ref{sec:state-of-the-art}, State of the
+  Art:} reviews the literature on mapping invasive plants from
+  satellite imagery, on citizen-science observations as reference
+  data, and on foundation-model embeddings for species mapping, and
+  identifies the gap this dissertation addresses.
+  \item \textbf{Chapter~\ref{sec:proposed-work}, Proposed Work:}
+  describes the proposed approach, the pipeline that turns
+  citizen-science observations into reference labels, the
+  experimental design for each research question, the datasets
+  prepared during the first semester, and a preliminary result for
+  RQ1. It ends with the work plan and the risk assessment.
+  \item \textbf{Chapter~\ref{sec:conclusion}, Conclusion and Future
+  Work:} summarises what was achieved in the first semester, what the
+  preliminary result does and does not yet show, and the steps planned
+  for the second semester.
+\end{itemize}

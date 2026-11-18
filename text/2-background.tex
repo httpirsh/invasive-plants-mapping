@@ -1,0 +1,331 @@
+\chapter{Background}
+\label{sec:background}
+
+This chapter introduces the concepts the rest of the document relies
+on: invasive alien plants and \emph{Acacia dealbata} in Portugal;
+satellite imagery and how a species is mapped from it; Earth
+Observation foundation models, in particular TESSERA; citizen-science
+observations and their properties; and the two methodological
+problems that follow from combining them, learning from presences
+only and validating a model over space.
+
+\section{Invasive Alien Plants}
+\label{sec:background-iap}
+
+Invasive alien plants are species introduced outside their native
+range that establish and spread without further human
+intervention.\todo{Source for the definition; none in the reading list
+yet.} Portugal regulates them through Decree-Law No.~92/2019, which
+lists the species considered invasive in the national territory;
+several \emph{Acacia} species are on that list, and the national
+forest inventory follows the same list when it records invasive
+species in its field plots \cite{icnf2019}.
+
+\subsection{\emph{Acacia dealbata} in Portugal}
+\label{sec:background-iap-acacia}
+
+\emph{Acacia dealbata} Link, the silver wattle, is a tree native to
+south-eastern Australia.\todo{Source for the introduction history and
+current extent in Portugal; none in the reading list.} It forms dense
+stands that exclude native vegetation and also occurs scattered
+inside stands of other species, where the forest inventory finds it
+far more often than as stands of its own
+(Section~\ref{sec:introduction-motivation}).
+
+Two traits of the species matter for this work. The first is its
+flowering period. \emph{A.~dealbata} flowers in late winter, when most
+of the surrounding vegetation does not, and the studies that have
+mapped it from satellite imagery in Iberia found their best signal in
+that period: with March imagery in central-eastern Portugal
+\cite{martins2016} and with the spectral differences between the
+pre-flowering, flowering and post-flowering months in Galicia
+\cite{domingo2023}. The second trait is its response to fire. The
+species keeps a persistent seed bank: its seeds have a physical
+dormancy that heat breaks, and scarified seeds germinate at almost all
+temperatures \cite{dessi2021}. In eight stands of the Coimbra district
+treated between 2018 and 2021, burning promoted germination, slashing
+stimulated resprouting, and no treatment prevented regeneration within
+three years \cite{riveiro2025}. A burnt stand is therefore not a
+cleared one.
+
+\subsection{Why mapping matters}
+\label{sec:background-iap-mapping}
+
+Control of an invasive plant starts from knowing where it is, and the
+cost of control grows with the area it has already occupied. The
+information available in Portugal at species level is coarse in time
+and space. The forest inventory is a decennial sample that locates no
+stand (Section~\ref{sec:introduction-motivation}). Land-cover maps
+such as the Carta de Uso e Ocupação do Solo (COS) have an
+\emph{Acacia} forest class, but with a minimum mapping unit of one
+hectare they do not resolve scattered presences, and they mix land use
+with land cover, which makes them a weak reference for 10~m
+classification \cite{fonte2020}. Recurrent large fires, concentrated
+in the centre of the country
+(Section~\ref{sec:introduction-motivation}), keep opening new ground
+for a species that regenerates after burning. A method that produces a
+species map cheaply, and can repeat it every year, is what the
+MAP.INVADER project, of which this dissertation is part, aims at.
+
+\section{Earth Observation}
+\label{sec:background-eo}
+
+Earth Observation is the measurement of the Earth's surface from
+satellites or aircraft. For vegetation mapping the relevant
+instruments are passive optical sensors, which record the sunlight
+reflected by the surface in several wavelength intervals, called
+spectral bands. Vegetation reflects strongly in the near-infrared and
+weakly in the red, so the relation between bands separates plants from
+soil and water, and different plants, with different leaf structure
+and phenology, differ in how that relation changes over the year.
+
+\subsection{Sentinel-2 and multispectral imagery}
+\label{sec:background-eo-sentinel2}
+
+Sentinel-2 is the optical mission of the European Copernicus
+programme. Two identical satellites carry a multispectral instrument
+with thirteen bands from the visible to the short-wave infrared, at
+10, 20 or 60~m depending on the band, and together revisit the same
+location every five days at the equator and more often at higher
+latitudes.\todo{Cite the ESA Sentinel-2 user guide or mission paper.}
+The data are free and open. The Level-2A product gives surface
+reflectance after atmospheric correction, together with a scene
+classification layer that flags clouds, cloud shadows and snow, which
+is the usual basis for masking unusable pixels \cite{ball2026}.
+
+A single Sentinel-2 image is a grid of pixels, each holding one
+reflectance value per band for one date. Because clouds hide the
+surface on many dates, studies rarely use single images. They build
+composites, for instance the median of all clear observations of a
+month or a season, and derive indices from pairs of bands, such as the
+normalised difference vegetation index. The \emph{Acacia} mapping
+studies cited above are of this kind: monthly composites and index
+differences between the flowering months \cite{domingo2023}, or one
+image per month from December to May \cite{mouta2021}. The set of such
+composites and indices for a pixel is its feature vector, and the
+choice of which months and which indices to include is a modelling
+decision made by hand.
+
+\subsection{Pixel-based classification and reference data}
+\label{sec:background-eo-classification}
+
+Mapping a species from these data is a supervised classification
+problem: a model learns, from pixels whose class is known, to assign a
+class to every other pixel, and the map is the result of applying it
+wall-to-wall. The pixels whose class is known are the reference data.
+They serve two roles that must be kept apart: training the model, and
+evaluating the map it produces on pixels the model has not seen.
+
+Reference data can come from any source whose labels one is willing to trust. The conventional source is specialists, in two ways: field visits confirm the species at a location and give a point or a small plot, and visual interpretation of very-high-resolution imagery delimits whole stands as polygons, which is how the expert data used in this work were made, over 30 cm orthoimagery of 2023. Both are reliable, both are slow, and both are produced for one area and one year. Citizen-science observations are a second source, far cheaper and continuous but made of single points of uneven quality (Section 2.4); turning them into reference data usable at pixel level is one object of this dissertation. The scarcity of reliable reference data, not of imagery, is the limiting factor of supervised species mapping. In this work both sources are used as reference data, for training and for testing; what is asked is how far the cheap source can stand in for the expensive one.
+
+\section{Earth Observation Foundation Models}
+\label{sec:background-fm}
+
+\subsection{Self-supervised pretraining and embeddings}
+\label{sec:background-fm-embeddings}
+
+The feature vector of Section~\ref{sec:background-eo-sentinel2} is
+designed by hand for each study. Earth Observation foundation models
+replace it with a representation learned from data: a large model
+pretrained on a large volume of unlabelled imagery, by a
+self-supervised objective that needs no reference data, and then
+reused for many downstream tasks without being trained again. For
+Earth Observation the reusable output is the \emph{embedding}: a
+fixed-length vector per pixel, or per small patch, that summarises
+what the model learned about that location from the full time series
+of observations. Several such products are published as data rather
+than as models, so that a user downloads the embeddings of an area and
+a year and never runs the foundation model \cite{zhu2026}. AlphaEarth,
+for example, provides 64-dimensional annual embeddings at 10~m for
+2017 to 2024, computed on 1.28~km tiles with spatial self-attention,
+so that a pixel's embedding also depends on its surroundings; only the
+embeddings are released, not the model \cite{brown2025}. Downstream
+use is then a light classifier on the embeddings. The two reasons to
+prefer a frozen embedding to fine-tuning in this work are practical
+and empirical: the models are either not released or restricted, and
+the TESSERA paper itself found no benefit from fine-tuning its encoder
+over using it frozen \cite{feng2025}.
+
+\subsection{TESSERA}
+\label{sec:background-fm-tessera}
+
+TESSERA is the foundation model used in this dissertation. It is a
+pixel-wise model: for each 10~m pixel it takes the year's Sentinel-2
+multispectral time series and Sentinel-1 radar time series, built from
+a random sample of valid dates, and produces a 128-dimensional
+embedding for that year \cite{feng2025}. The embeddings cover 2017 to
+2024 and are distributed through the GeoTessera library, so that the
+embeddings of an area can be read without running the model. Two
+properties follow from the pixel-wise design. First, the embedding of
+a pixel does not depend on the pixels around it, unlike AlphaEarth;
+the model's pretraining shuffles pixels globally to break spatial
+correlation, and the landscape context is not encoded
+\cite{feng2025,zhu2026}. Second, the embedding is annual: it
+summarises the whole year's time series, and a disturbance inside the
+year, such as a fire, changes it \cite{silva2026}. The model was
+evaluated on tree species, crops, biomass and canopy height with light
+classifiers on frozen embeddings, and in the comparison closest to
+this work it beat a seasonal Sentinel-1 and Sentinel-2 baseline on 18
+tree species in Trentino, reaching near-optimal weighted F1 with about
+5\% of the training parcels \cite{ball2026}. No evaluation of TESSERA
+on a species-occurrence or citizen-science task was found.
+
+\section{Citizen Science Data}
+\label{sec:background-cs}
+
+Citizen science is the participation of non-specialists in the
+collection of scientific data. In biodiversity it takes the form of
+species observations: a person records that a species was seen at a
+place and a date, usually with a photograph, on a platform that
+aggregates the records. The volume and the continuity of these records
+have no equivalent in professional surveys, which is why they are
+being used as training and evaluation data for species maps
+\cite{gillespie2024}.
+
+\subsection{iNaturalist}
+\label{sec:background-cs-inaturalist}
+
+iNaturalist is the platform used in this work. Each observation holds
+a date, coordinates, a photograph or sound, a taxon proposed by the
+observer, and a positional accuracy, the radius in metres within which
+the observer places the organism, which the observer may leave empty.
+Other users can propose identifications. An observation reaches
+\emph{research grade} when it has a date, a location and media, the
+organism is wild, and the community agrees on the identification at
+species level; research-grade observations are the ones exported to
+the Global Biodiversity Information Facility (GBIF).\todo{Cite the
+iNaturalist help page for the research-grade criteria.} Observations
+whose coordinates the observer or the platform obscures have their
+position randomised within a larger cell and cannot be used at pixel
+level. Studies that use iNaturalist as training data keep only
+research-grade observations and filter on positional accuracy, with
+thresholds that depend on the resolution of the imagery: 10~m for
+AlphaEarth's tree-genus evaluation \cite{brown2025} and 120~m for
+256~m image patches \cite{gillespie2024}.
+
+\subsection{Presence-only data and bias}
+\label{sec:background-cs-presence-only}
+
+Three properties of these observations distinguish them from
+reference data made by specialists. First, they are
+\emph{presence-only}. A record says that the species was seen at a
+point; the absence of a record says nothing, because no one may have
+looked there. Confirmed absences, which a field survey produces, do
+not exist in this kind of data \cite{phillips2009}. Second, the
+sampling is opportunistic. Observers record where they go, so records
+concentrate along roads, trails and accessible or disturbed places;
+for invasive plants in Hawaii, iNaturalist records were biased
+towards roads and disturbed vegetation while professional surveys
+tended towards less accessible, native-dominated sites
+\cite{dimson2023}. Third, the quality of each record is uneven. The
+research-grade label is an agreement indicator: it measures how
+reliable the identification is, not whether the position is accurate,
+and agreement among contributors cannot replace a comparison with
+reference data \cite{fonte2017}. The photograph's position may be
+where the photographer stood rather than where the plant is,
+``potentially some distance away'' \cite{fonte2017}, and at 10~m
+resolution that distance is often a different pixel.
+
+These properties do not make the data unusable; they define what has
+to be done before using them. The first shapes the learning problem
+(Section~\ref{sec:background-po-background}), the second the
+validation (Section~\ref{sec:background-po-spatial}), and the third
+the preparation pipeline that turns points into labelled pixels
+(Chapter~\ref{sec:proposed-work}).
+
+\section{Presence-Only Learning and Spatial Validation}
+\label{sec:background-po}
+
+\subsection{Background sampling}
+\label{sec:background-po-background}
+
+A standard classifier needs examples of both classes. With
+presence-only data the second class is missing, and two families of
+methods address it. One-class methods, such as the one-class support
+vector machine or the isolation forest, learn a description of the
+presences alone and score how far a new pixel is from it.
+Presence-background methods add a sample of the landscape, the
+\emph{background}, drawn at random over the study area, and train the
+classifier to separate presences from it. The background is not
+absence: the species may occur at a background point, and the model
+fitted this way must be read as a relative index of suitability, not
+as a probability of presence against absence \cite{phillips2006}.
+\citet{rapinel2021}, reviewing 136 one-class vegetation studies, find
+that the two readings are often confused, that the background should
+be drawn over the entire landscape including the surroundings of the
+presences, and that the usual number of background points is in the
+thousands. In the remote-sensing comparisons read for this work,
+methods that use the background as an unlabelled sample beat true
+one-class methods in every case, an advantage attributed to the
+information in the unlabelled data \cite{deng2018,li2011,li2010}.
+
+The random background carries a second problem. Because the presences
+are biased towards accessible places and the background is not, the
+model may learn where observers go rather than where the species
+grows; \citet{phillips2009} show that a fitted model ``might be closer
+to a model of survey effort than to a model of the true
+distribution'', and propose drawing the background from the records
+of other species collected in the same way, which share the bias. The
+same paper shows that the gain of such a correction is visible only
+against independent presence--absence data: scored against a random
+background, the corrected model looks worse. Evaluation inherits the
+problem. Without absences, the metrics are rank-based: how well the
+model places the held-out presences above the landscape at large. One
+form fixes the fraction of the study area the model is allowed to
+predict as presence and measures the fraction of test presences that
+fall inside it, so that two models are compared at equal predicted
+area \cite{phillips2006,peterson2008}. The background then serves only
+to measure area, and an unrecorded presence at a background point is
+never counted as an error.
+
+\subsection{Spatial autocorrelation and block cross-validation}
+\label{sec:background-po-spatial}
+
+Pixels close to each other are more alike than pixels far apart, in
+their reflectance, in their embeddings and in their class. When
+reference data are split at random into training and test sets, most
+test pixels have a training pixel nearby, and the test measures how
+well the model interpolates between neighbours rather than how well it
+maps new ground. \citet{karasiak2022} measure the effect on Sentinel-2
+forest classification: random cross-validation overestimated accuracy
+by 8 to 14 points relative to distant sites, and the overestimate
+disappeared when every test pixel was separated from the training set
+by a distance set from the data, about 20~km in their case. The remedy
+is to split by space rather than by pixel. In block cross-validation
+the study area is divided into blocks, each block is held out in turn,
+and all reference pixels inside it form the test set. Blocks alone
+leave residual proximity across the block borders, so the papers that
+compare designs recommend blocks combined with an exclusion buffer
+around the test set, with the buffer set to the range of spatial
+autocorrelation measured in the data, where underestimating the range
+is the unsafe direction \cite{lerest2014,mahoney2023}. For
+embedding-based models the design changes the conclusion: in a
+comparison of TESSERA and AlphaEarth against Sentinel features for
+old-growth forest, the advantage of the embeddings narrowed from 0.08
+to 0.04 PR-AUC once a 10~km buffer separated training from test folds
+\cite{ratsakatika2026}. The \emph{Acacia} mapping studies in Iberia
+cited in Section~\ref{sec:background-iap-acacia} all used random
+splits \cite{martins2016,mouta2021,domingo2023}, so their accuracies
+are not comparable with a spatially validated result.
+
+\section{Overall Analysis}
+\label{sec:background-overall}
+
+\emph{A.~dealbata} is a species worth mapping and hard to keep mapped:
+it spreads inside other stands, regenerates after fire, and the
+official sources that describe it are decennial samples or coarse
+land-cover maps. Sentinel-2 provides frequent, free, 10~m observations
+from which the species can be told apart, mainly through its winter
+flowering, but a supervised classifier needs reference pixels, and
+those are the expensive part. Foundation models such as TESSERA move
+the effort from designing features to collecting and aligning
+reference data, by giving each pixel an embedding usable with a light
+classifier and no fine-tuning. Citizen science offers reference data
+at a scale and continuity that specialists cannot, but as presences
+only, concentrated where observers go, with uneven positional quality.
+Combining the two raises the two methodological questions of
+Section~\ref{sec:background-po}, which
+Chapter~\ref{sec:proposed-work} turns into the design: how to learn
+and evaluate from presences without treating the rest of the landscape
+as absence, and how to validate over space so that the result says
+something about places the observers never visited.

@@ -3,12 +3,39 @@
 \section*{Abstract}
 \label{sec:abstract}
 
-\todo[inline]{Write once RQ1--RQ3 and the methodology are settled
-enough to summarize. See docs/research\_questions.md.}
+Invasive alien plants are among the main drivers of biodiversity loss,
+and controlling them requires up-to-date maps of where they grow.
+Satellite imagery can provide such maps, but the supervised classifiers
+it relies on need reference data, locations where the species is known
+to be present, and collecting these in the field is slow and costly.
+Existing distribution products are updated infrequently, are spatially
+coarse and rarely reach the species level.
+
+Citizen-science platforms such as iNaturalist hold thousands of free,
+georeferenced observations of invasive plants. Rich as they are, these
+data are isolated points of uneven positional and taxonomic quality,
+concentrated where observers happen to go, and they record presences
+only, never confirmed absences. Using them directly to train a
+satellite-based classifier is therefore not straightforward.
+
+Earth Observation foundation models, pre-trained on large volumes of
+satellite data, offer a possible way through. They turn each pixel into
+a general-purpose representation, an embedding, on which a light
+classifier can be trained from limited and noisy labels, potentially
+making citizen-science observations usable as reference data.
+
+This intermediate report, developed within the MAP.INVADER project,
+investigates to what extent citizen-science observations, turned into
+reference data and represented by foundation-model embeddings, can
+reduce the dependency on costly expert reference data for mapping
+\emph{Acacia dealbata} in the Coimbra district, Portugal. It reviews
+the use of citizen science and foundation models in Earth Observation,
+proposes a pipeline that converts point observations into training
+labels for satellite imagery, and sets out an evaluation that measures
+how much is gained by adding expert data to a citizen-science base.
 
 \section*{Keywords}
 \label{sec:keywords}
 
-\todo[inline]{e.g.\ invasive species mapping, Earth Observation
-foundation models, citizen science, remote sensing -- finalize once
-the methodology chapter is written.}
+Invasive alien plants; citizen science; Earth Observation foundation
+models; satellite imagery; species mapping; reference data.
