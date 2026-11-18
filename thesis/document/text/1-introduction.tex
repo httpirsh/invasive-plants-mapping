@@ -111,58 +111,6 @@ thesis.}
 \label{tab:introduction-problems}
 \end{table}
 
-Figure~\ref{fig:introduction-pipeline} gives an overview of the
-pipeline this work builds and evaluates: each citizen-science
-observation becomes a labelled pixel, the pixel is represented by a
-foundation-model embedding, a presence-only classifier is trained on
-those embeddings, and the classifier produces the species map. Expert
-polygons stay outside the main flow: they are the test reference and,
-for the first question, are added to the training data in increasing
-fractions. The figure also places each research question at the step
-it acts on.
-
-\begin{figure}[htb]
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tikzpicture}[
-  node distance=4mm and 8mm,
-  stage/.style={draw, rounded corners=2pt, align=center, minimum height=10mm,
-    text width=25mm, font=\footnotesize, inner sep=2pt},
-  expert/.style={stage, dashed},
-  note/.style={align=center, font=\scriptsize, text width=25mm},
-  rq/.style={font=\scriptsize\bfseries},
-  flow/.style={-{Latex[length=2mm]}, thick},
-  dflow/.style={flow, dashed}
-]
-\node[stage] (obs) {Citizen-science\\observation};
-\node[stage, right=of obs] (lab) {Reference\\pixel label};
-\node[stage, right=of lab] (emb) {Embedding\\(TESSERA)};
-\node[stage, right=of emb] (clf) {Presence-only\\classifier};
-\node[stage, right=of clf] (map) {\emph{A.~dealbata} map\\+ confidence};
-\node[expert, below=9mm of clf] (exp) {Expert polygons};
-
-\node[note, below=1mm of obs] {iNaturalist,\\research grade};
-\node[note, below=1mm of lab] {10~m pixel, 2023};
-\node[note, below=1mm of emb] {EO foundation\\model};
-\node[note, below=1mm of clf, xshift=-4mm, text width=16mm] {presence vs.\\background};
-\node[note, below=1mm of map] {Coimbra district};
-\node[note, below=1mm of exp] {test reference;\\added to training\\0--100\%};
-
-\draw[flow] (obs) -- (lab);
-\path (obs.north east) -- (lab.north west) node[rq, midway, above=1mm] {RQ2};
-\draw[flow] (lab) -- (emb);
-\draw[flow] (emb) -- (clf);
-\draw[flow] (clf) -- (map);
-\draw[dflow] ([xshift=6mm]exp.north) -- node[rq, right=2pt] {RQ1} ([xshift=6mm]clf.south);
-\node[rq, above=1mm of emb] {RQ4};
-\node[rq, above=1mm of map] {RQ3};
-\end{tikzpicture}}
-\caption{Overview of the proposed pipeline. Each research question is
-placed at the step it acts on; RQ4 replaces the embedding step by
-Sentinel-2 features.}
-\label{fig:introduction-pipeline}
-\end{figure}
-
 \section{Research Questions and Goals}
 \label{sec:introduction-rqs}
 
@@ -208,12 +156,60 @@ depends on Sentinel-2 imagery comes last.
   cleaned citizen-science data, with all observations and with few?
 \end{itemize}
 
-The main objective of this dissertation is therefore to assess to
-what extent citizen-science observations, turned into reference data
-and represented by foundation-model embeddings, can replace expert
-reference data as training data for mapping \emph{A.~dealbata} in the
-Coimbra district. To achieve it, the following specific goals have
-been set:
+Figure~\ref{fig:introduction-pipeline} places each question at the
+step of the pipeline it acts on. Each citizen-science observation
+becomes a labelled pixel, the pixel is represented by a
+foundation-model embedding, a presence-only classifier is trained on
+those embeddings, and the classifier produces the species map. RQ2
+acts on the passage from observation to label, RQ4 on the
+representation, and RQ3 on the map. Expert polygons stay outside the
+main flow: they are the test reference and, for RQ1, are added to the
+training data in increasing fractions.
+
+\begin{figure}[htb]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  node distance=4mm and 8mm,
+  stage/.style={draw, rounded corners=2pt, align=center, minimum height=10mm,
+    text width=25mm, font=\footnotesize, inner sep=2pt},
+  expert/.style={stage, dashed},
+  note/.style={align=center, font=\scriptsize, text width=25mm},
+  rq/.style={font=\scriptsize\bfseries},
+  flow/.style={-{Latex[length=2mm]}, thick},
+  dflow/.style={flow, dashed}
+]
+\node[stage] (obs) {Citizen-science\\observation};
+\node[stage, right=of obs] (lab) {Reference\\pixel label};
+\node[stage, right=of lab] (emb) {Embedding\\(TESSERA)};
+\node[stage, right=of emb] (clf) {Presence-only\\classifier};
+\node[stage, right=of clf] (map) {\emph{A.~dealbata} map\\+ confidence};
+\node[expert, below=9mm of clf] (exp) {Expert polygons};
+
+\node[note, below=1mm of obs] {iNaturalist,\\research grade};
+\node[note, below=1mm of lab] {10~m pixel, 2023};
+\node[note, below=1mm of emb] {EO foundation\\model};
+\node[note, below=1mm of clf, xshift=-4mm, text width=16mm] {presence vs.\\background};
+\node[note, below=1mm of map] {Coimbra district};
+\node[note, below=1mm of exp] {test reference;\\added to training\\0--100\%};
+
+\draw[flow] (obs) -- (lab);
+\path (obs.north east) -- (lab.north west) node[rq, midway, above=1mm] {RQ2};
+\draw[flow] (lab) -- (emb);
+\draw[flow] (emb) -- (clf);
+\draw[flow] (clf) -- (map);
+\draw[dflow] ([xshift=6mm]exp.north) -- node[rq, right=2pt] {RQ1} ([xshift=6mm]clf.south);
+\node[rq, above=1mm of emb] {RQ4};
+\node[rq, above=1mm of map] {RQ3};
+\end{tikzpicture}}
+\caption{Overview of the proposed pipeline. Each research question is
+placed at the step it acts on; RQ4 replaces the embedding step by
+Sentinel-2 features.}
+\label{fig:introduction-pipeline}
+\end{figure}
+
+Answering this question is the general objective of this
+dissertation. It is broken down into the following specific goals:
 
 \begin{itemize}
   \item \textbf{Effort-reduction curve:} Measure the performance
