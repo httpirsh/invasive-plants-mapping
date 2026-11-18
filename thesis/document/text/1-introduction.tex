@@ -110,49 +110,19 @@ that is cheap to produce and to repeat is what makes it possible to
 anticipate where control will be needed, instead of recording the
 invasion after it has spread.
 
-Several concrete problems make it hard, each already observed in this
-thesis's own exploratory analysis of the Coimbra-district iNaturalist
-data, and each already associated with findings elsewhere in the
-literature:
-
-\begin{table}[h]
-\centering
-\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
-\hline
-\textbf{Problem} & \textbf{In machine-learning terms} & \textbf{Addressed in} \\
-\hline
-Observations cluster near roads and trails \cite{dimson2023} &
-Sampling / dataset bias & RQ3 \\
-\hline
-A single observer made most observations (83\% overall, 88\% of the
-cleaned presences used in this thesis) & Low training-data diversity &
-RQ3; observer balancing \\
-\hline
-Citizen science records only presences, never confirmed absences
-\cite{phillips2009} & Positive-unlabelled learning & Background pool
-built from other-species observations (Chapter~\ref{sec:proposed-work}) \\
-\hline
-Imprecise locations and mixed pixels \cite{ball2026} & Label noise &
-Reference-data pipeline (Chapter~\ref{sec:proposed-work}) \\
-\hline
-Limited volume of reference data & Data efficiency & RQ2 \\
-\hline
-Observations recorded in years other than the satellite imagery
-\cite{ball2026} & Temporal mismatch between data and imagery & Single
-reference year; disturbance filter \\
-\hline
-Nearby observations inflate accuracy estimates \cite{karasiak2022} &
-Data leakage / spatial autocorrelation & Spatial validation \\
-\hline
-Weaker transfer of embeddings to new regions \cite{zhu2026} &
-Distribution shift & RQ3 \\
-\hline
-\end{tabularx}
-\caption{Practical problems in using citizen-science data with Earth
-Observation foundation models, and where each is addressed in this
-thesis.}
-\label{tab:introduction-problems}
-\end{table}
+Using citizen-science observations as reference data raises problems
+of its own, all of them visible in the Coimbra-district iNaturalist
+data explored for this work. Observations cluster along roads and
+trails rather than where the species grows \cite{dimson2023}, and a
+single observer made most of them, so the data cover few of the
+conditions in which \emph{A.~dealbata} occurs. They record presences
+only, never a confirmed absence \cite{phillips2009}. Their positions
+are imprecise relative to a 10-metre pixel, and many were made in
+years other than the imagery \cite{ball2026}. They are few. And
+because nearby observations resemble each other, a model evaluated on
+points next to its training points looks better than it is
+\cite{karasiak2022}, a problem that grows when the model is applied
+away from where the observations were made \cite{zhu2026}.
 
 \section{Research Questions and Goals}
 \label{sec:introduction-rqs}
@@ -282,6 +252,50 @@ answers, the work produces the \emph{A.~dealbata} map of the study
 area, with its confidence map, as a product of the second semester:
 it is presented as what the model predicts, not as a validated map,
 since no ground truth covers the whole area.
+
+Table~\ref{tab:introduction-problems} returns to the problems of
+Section~\ref{sec:introduction-motivation} and says where each one is
+addressed.
+
+\begin{table}[htb]
+\centering
+\begin{tabularx}{\textwidth}{|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|>{\raggedright\arraybackslash}X|}
+\hline
+\textbf{Problem} & \textbf{In machine-learning terms} & \textbf{Addressed in} \\
+\hline
+Observations cluster near roads and trails \cite{dimson2023} &
+Sampling / dataset bias & RQ3 \\
+\hline
+A single observer made most observations (83\% overall, 88\% of the
+cleaned presences used in this thesis) & Low training-data diversity &
+RQ3; observer balancing (Chapter~\ref{sec:proposed-work}) \\
+\hline
+Citizen science records only presences, never confirmed absences
+\cite{phillips2009} & Positive-unlabelled learning & Uniform-random
+background pool (Chapter~\ref{sec:proposed-work}) \\
+\hline
+Imprecise locations and mixed pixels \cite{ball2026} & Label noise &
+RQ2 \\
+\hline
+Limited volume of reference data & Data efficiency & RQ1; RQ4 \\
+\hline
+Observations recorded in years other than the satellite imagery
+\cite{ball2026} & Temporal mismatch between data and imagery & Single
+reference year; disturbance filter (Chapter~\ref{sec:proposed-work}) \\
+\hline
+Nearby observations inflate accuracy estimates \cite{karasiak2022} &
+Data leakage / spatial autocorrelation & Spatial validation
+(Chapter~\ref{sec:proposed-work}) \\
+\hline
+Weaker transfer of embeddings to new regions \cite{zhu2026} &
+Distribution shift & RQ3 \\
+\hline
+\end{tabularx}
+\caption{Practical problems in using citizen-science data with Earth
+Observation foundation models, and where each is addressed in this
+thesis.}
+\label{tab:introduction-problems}
+\end{table}
 
 \section{Document Structure}
 \label{sec:introduction-structure}

@@ -103,8 +103,10 @@ perguntas de investigação.
 
 **Na tese:** ✅ Os conceitos base e a tabela de problemas já estão em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
-(abertura do capítulo e secção 1.1 Context and Motivation); a tabela
-do manuscrito usa a numeração das três perguntas aprovadas. O
+(abertura do capítulo e secção 1.1 Context and Motivation, onde os
+problemas estão em prosa); a tabela de problemas está no fim da
+secção 1.2, depois dos objetivos, com a numeração das quatro
+perguntas atuais (movida e corrigida a 2026-11-18). O
 diagrama do pipeline está na secção 1.2, a seguir às quatro perguntas
 (Figura `fig:introduction-pipeline`, TikZ, movida a 2026-11-17), com
 cada pergunta na etapa em que atua. A motivação da secção 1.1 cita

@@ -17,9 +17,9 @@ com o classificador presence-only a 2026-11-17). Numeração das perguntas:
 - [x] Aplicar ao manuscrito a estrutura do relatório do Gonçalo
   (`thesis/guidance_example/`): esqueletos dos capítulos e secção 1.2
   da Introdução escritos a 2026-11-17.
-- [ ] Introdução 1.1: a tabela de problemas ainda usa a numeração
-  antiga das perguntas e diz que o fundo vem de observações de outras
-  espécies; rever ao escrever o Proposed Work
+- [x] Introdução: a tabela de problemas usava a numeração antiga das
+  perguntas e dizia que o fundo vinha de observações de outras
+  espécies; corrigida e movida para o fim da secção 1.2 a 2026-11-18
   ([thesis/notes.md](../thesis/notes.md#revisao-consistencia-2026-11-13)).
 - [ ] Máscara de segmentação: apresentar as duas regras,
   fundamentadas na literatura, com a comparação planeada na RQ2
