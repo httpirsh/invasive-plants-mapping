@@ -29,8 +29,8 @@ south-eastern Australia.\todo{Source for the introduction history and
 current extent in Portugal; none in the reading list.} It forms dense
 stands that exclude native vegetation and also occurs scattered
 inside stands of other species, where the forest inventory finds it
-far more often than as stands of its own
-(Section~\ref{sec:introduction-motivation}).
+far more often than as stands of its own, as the figures given in
+the motivation (Section~\ref{sec:introduction-motivation}) show.
 
 Two traits of the species matter for this work. The first is its
 flowering period. \emph{A.~dealbata} flowers in late winter, when most
@@ -54,15 +54,17 @@ cleared one.
 Control of an invasive plant starts from knowing where it is, and the
 cost of control grows with the area it has already occupied. The
 information available in Portugal at species level is coarse in time
-and space. The forest inventory is a decennial sample that locates no
-stand (Section~\ref{sec:introduction-motivation}). Land-cover maps
+and space. The forest inventory, described in the motivation
+(Section~\ref{sec:introduction-motivation}), is a decennial sample
+that locates no stand. Land-cover maps
 such as the Carta de Uso e Ocupação do Solo (COS) have an
 \emph{Acacia} forest class, but with a minimum mapping unit of one
 hectare they do not resolve scattered presences, and they mix land use
 with land cover, which makes them a weak reference for 10~m
 classification \cite{fonte2020}. Recurrent large fires, concentrated
-in the centre of the country
-(Section~\ref{sec:introduction-motivation}), keep opening new ground
+in the centre of the country, as the fire statistics in the
+motivation (Section~\ref{sec:introduction-motivation}) show, keep
+opening new ground
 for a species that regenerates after burning. A method that produces a
 species map cheaply, and can repeat it every year, is what the
 MAP.INVADER project, of which this dissertation is part, aims at.
@@ -116,7 +118,8 @@ wall-to-wall. The pixels whose class is known are the reference data.
 They serve two roles that must be kept apart: training the model, and
 evaluating the map it produces on pixels the model has not seen.
 
-Reference data can come from any source whose labels one is willing to trust. The conventional source is specialists, in two ways: field visits confirm the species at a location and give a point or a small plot, and visual interpretation of very-high-resolution imagery delimits whole stands as polygons, which is how the expert data used in this work were made, over 30~cm orthoimagery of 2023. Both are reliable, both are slow, and both are produced for one area and one year. Citizen-science observations are a second source, far cheaper and continuous but made of single points of uneven quality (Section~\ref{sec:background-cs}); turning them into reference data usable at pixel level is one object of this dissertation. The scarcity of reliable reference data, not of imagery, is the limiting factor of supervised species mapping. In this work both sources are used as reference data, for training and for testing; what is asked is how far the cheap source can stand in for the expensive one.
+Reference data can come from any source whose labels one is willing to trust. The conventional source is specialists, in two ways: field visits confirm the species at a location and give a point or a small plot, and visual interpretation of very-high-resolution imagery delimits whole stands as polygons, which is how the expert data used in this work were made, over 30~cm orthoimagery of 2023. Both are reliable, both are slow, and both are produced for one area and one year. Citizen-science observations are a second source, far cheaper and continuous but made of single points of uneven quality, as the section on citizen-science data
+(Section~\ref{sec:background-cs}) describes; turning them into reference data usable at pixel level is one object of this dissertation. The scarcity of reliable reference data, not of imagery, is the limiting factor of supervised species mapping. In this work both sources are used as reference data, for training and for testing; what is asked is how far the cheap source can stand in for the expensive one.
 
 \section{Earth Observation Foundation Models}
 \label{sec:background-fm}
@@ -124,8 +127,9 @@ Reference data can come from any source whose labels one is willing to trust. Th
 \subsection{Self-supervised pretraining and embeddings}
 \label{sec:background-fm-embeddings}
 
-The feature vector of Section~\ref{sec:background-eo-sentinel2} is
-designed by hand for each study. Earth Observation foundation models
+The feature vector built in the previous section, a hand-picked set
+of bands, indices and seasonal composites, is designed anew for each
+study. Earth Observation foundation models
 replace it with a representation learned from data: a large model
 pretrained on a large volume of unlabelled imagery, by a
 self-supervised objective that needs no reference data, and then
