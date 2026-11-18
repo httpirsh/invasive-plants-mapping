@@ -102,6 +102,7 @@ is a bug to fix, not a convenience. This is the single reference for
 | `data/processed_manifest.csv` | Record of what each derived file in `data/processed/` was built from | One row per file: hash, build date, builder, inputs with their hashes, seed, parameters; written only by the notebook that builds the file | Why a file is built that way (→ `data/README.md`, `thesis/notes.md`) |
 | `thesis/notes.md` | Decision log and defense prep | Full reasoning behind every decision (**Decisões**), talking points for the defense (**Para dizer**), and each entry's **Na tese** manuscript-sync status (see "Thesis Manuscript Sync" below) | Dataset provenance (→ `data/README.md`), the current adopted state on its own (→ `docs/research_questions.md`/`methodology.md`) |
 | `thesis/document/` | The actual LaTeX manuscript (synced with Overleaf, see `README.md`) | Chapter prose and the bibliography | Decision reasoning (→ `thesis/notes.md`), task tracking (→ `docs/todo.md`) |
+| `thesis/guidance_example/` | Reference reports for the manuscript's structure | The PDFs themselves | The writing rules taken from them (→ "Writing the Thesis Chapters" below) |
 | `notebooks/README.md`, `src/README.md`, `experiments/README.md`, `results/README.md` | Local orientation for that folder | What the folder is for, naming/run-order conventions; in `results/README.md`, also one line per obsolete `results/` folder | Research content, decisions — these folders hold code/outputs, not explanations |
 
 Three more rules that follow from this:
@@ -317,6 +318,56 @@ if a design changed) or complete a previously "⏳" entry. Do not treat
 this as reason to rewrite the entry's own reasoning or delete it —
 `thesis/notes.md` stays the full decision log regardless of what has
 been written into the manuscript yet.
+
+## Writing the Thesis Chapters
+
+Which chapter owns which content, when writing in `thesis/document/`.
+It follows the two reference reports in `thesis/guidance_example/`
+(Gonçalo Santos and Cláudia Torres, DEI intermediate reports, January
+2026), which are structural examples, not sources to cite. The
+manuscript follows the same one-owner rule as the repository: each
+concept, study or number is written in one chapter, and any other
+chapter that needs it uses a cross-reference
+(`Section~\ref{...}`) instead of explaining it again.
+
+- **Introduction:** the problem and why it matters, with the few
+  figures that show it; the research questions and goals; one bullet
+  per chapter in Document Structure. Figures on the problem live here
+  and later chapters point back to them.
+- **Background:** the concepts needed to follow the rest, in the order
+  they are used. Each concept gets what it is, its source and at most
+  one example, plus, where useful, one sentence on how this work uses
+  it. No comparison of studies, no other studies' results, no verdict
+  on which method is better. A citation here supports a definition or
+  a fact; when a study is itself the subject (what it did, on what
+  data, what it found), that text belongs in the State of the Art.
+  The chapter ends with an Overall Analysis that adds nothing new.
+- **State of the Art:** the studies, grouped by approach and, inside
+  each group, in the order the field developed. For each study: what
+  it did, on what data, what it found (with its numbers and how it
+  was validated) and its limitation for this problem. Each section
+  compares the studies and ends with the limitation they share, which
+  leads to the next section. A concept defined in the Background is
+  not explained again, only referenced. The chapter ends with the
+  gap: what the literature does not answer and where this work sits;
+  where it helps, a table comparing the studies.
+- **Proposed Work:** this work only: the approach, the data and their
+  preparation, the experimental design, the preliminary experiment,
+  the work plan (Gantt, first semester estimated vs. actual) and the
+  risk table (ID, risk, probability, impact, mitigation). It cites the
+  State of the Art for why a choice was made and does not review the
+  literature again.
+- **Conclusion and Future Work:** about one page, no subsections, no
+  new content: the problem, what the report did and found, what comes
+  next.
+- **Lead-ins:** each chapter opens with a paragraph naming its sections
+  in order, and every section or subsection has at least a sentence or
+  two before the next heading, stating what it covers and in what
+  order, not its content.
+- **Before writing a paragraph,** check whether its definition, study
+  or number is already written in another chapter. If it is, write a
+  cross-reference instead; if it sits in the wrong chapter, say so and
+  propose the move, without moving it unasked.
 
 ## Writing Abandoned Methodologies
 
