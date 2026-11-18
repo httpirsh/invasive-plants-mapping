@@ -1380,6 +1380,15 @@ geometrias inválidas. Ficam 2 470 polígonos, todos presenças.
   dos especialistas; o lado negativo passou a ser o
   [fundo partilhado](#rq1-fundo-uniforme-nao-cos).
 
+**Revisão (2026-11-18, decisão minha):** a ideia de usar os
+`classifica = 0` que caem em vegetação como ausências verificadas só
+na avaliação (levada à reunião de 2026-11-17, sem resposta registada)
+fica fechada: não se usam em nenhuma fase, nem no treino nem na
+avaliação. A exclusão decidida acima mantém-se inteira; a avaliação da
+RQ1 passou a presence-only (sensitivity a área fixa, ver
+[RQ1 passa a presence-only](#rq1-presence-only)), que não precisa de
+ausências. Sem fonte nova; a pergunta deixa de ir ao orientador.
+
 **Como a COS foi usada:** quem diz se há *A. dealbata* é o rótulo do
 professor; a classe da COS num ponto dentro do polígono é só
 informativa. A COS mapeia manchas de pelo menos 1 ha, por isso um
