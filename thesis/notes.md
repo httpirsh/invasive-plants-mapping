@@ -104,7 +104,10 @@ perguntas de investigação.
 **Na tese:** ✅ Os conceitos base e a tabela de problemas já estão em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
 (abertura do capítulo e secção 1.1 Context and Motivation, onde os
-problemas estão em prosa); a tabela de problemas está no fim da
+problemas estão em prosa); os cinco conceitos estão desenvolvidos em
+[`thesis/document/text/2-background.tex`](document/text/2-background.tex)
+(capítulo escrito a 2026-11-18, uma secção por conceito, mais a 2.5
+sobre presence-only e validação espacial); a tabela de problemas está no fim da
 secção 1.2, depois dos objetivos, com a numeração das quatro
 perguntas atuais (movida e corrigida a 2026-11-18). O
 diagrama do pipeline está na secção 1.2, a seguir às quatro perguntas
@@ -378,7 +381,8 @@ identificadas só até ao género ou subgénero.
 
 **Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia). A
 introdução já nomeia a *A. dealbata* como alvo, sem justificar o
-âmbito.
+âmbito; a secção 2.1.1 do Background (2026-11-18) descreve a espécie
+(floração de inverno, regeneração após fogo), não a escolha do âmbito.
 
 ### RQ3 aprovada
 
@@ -1399,7 +1403,9 @@ GBIF. Não encontrei um estudo que compare usar ou não as *casual*
 tabela do pipeline, passo 3.
 
 **Na tese:** ✅ Parcial. Mencionada em resumo na Introdução (secção
-Contributions); o detalhe fica para a Metodologia.
+Contributions); o que é o *research grade* e o precedente de Gillespie
+et al. e Brown et al. estão na secção 2.4.1 do Background
+(2026-11-18); a decisão e as contagens ficam para a Metodologia.
 
 ### Precisão da localização: tirar acima de 30 m, manter as sem valor
 
@@ -1447,8 +1453,10 @@ não têm dados pontuais nem limiar de precisão posicional.
 [`acacia_observations.ipynb`](../notebooks/02_citizen_science/acacia_observations.ipynb);
 tabela do pipeline, passo 2.
 
-**Na tese:** ✅ Parcial. Mencionada em resumo na Introdução; o teste e
-o limiar ficam para a Metodologia.
+**Na tese:** ✅ Parcial. Mencionada em resumo na Introdução; o que é a
+`positional_accuracy` e os limiares de Brown et al. (10 m) e Gillespie
+et al. (120 m) estão na secção 2.4.1 do Background (2026-11-18); o
+teste e o limiar de 30 m ficam para a Metodologia.
 
 **Revisão (2026-11-15):** a tabela acima é das 3 441 observações
 *research* de todos os anos, porque o filtro dos anos (passo 13) vem
@@ -2366,8 +2374,12 @@ grep; nada a corrigir lá por agora).
 [`docs/meetings/2026-11-17.md`](../docs/meetings/2026-11-17.md);
 [`presence_only_method_selection.ipynb`](../notebooks/07_foundation_models/presence_only_method_selection.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia); o Random
-Forest entra como metodologia abandonada, com a razão do ponto 1.
+**Na tese:** ✅ Parcial. Os conceitos (one-class contra presença-fundo,
+fundo como amostra não rotulada e não como ausência, avaliação a área
+prevista igual segundo Phillips et al. 2006 e Peterson et al. 2008)
+estão na secção 2.5.1 do Background (2026-11-18); a seleção de método,
+o critério, os resultados e o Random Forest como metodologia abandonada
+(razão do ponto 1) ficam para o Proposed Work.
 
 ### Curva da RQ1 no desenho presence-only: leave-one-block-out com as duas fontes, sensitivity a 10% de área {#curva-presence-only}
 
@@ -3262,7 +3274,10 @@ limitação conhecida, nos dois braços e não só no dos especialistas.
 [`docs/methodology.md`](../docs/methodology.md#validation).
 
 **Na tese:** ✅ Parcial. A validação espacial é referida em resumo na
-Introdução; o desenho da zona-tampão fica para a Metodologia.
+Introdução; o conceito (fuga por autocorrelação, blocos, tampão ao
+alcance medido, Karasiak, Le Rest, Mahoney, Ratsakatika) está na
+secção 2.5.2 do Background (2026-11-18); o desenho da zona-tampão e o
+variograma ficam para a Metodologia.
 
 **Revisão (2026-11-13, revisão de consistência):** li mal o
 variograma. Pela tabela do notebook, a semivariância quase não muda
