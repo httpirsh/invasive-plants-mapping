@@ -124,6 +124,12 @@ Reference data can come from any source whose labels one is willing to trust. Th
 \section{Earth Observation Foundation Models}
 \label{sec:background-fm}
 
+A foundation model is a large model pretrained once, on data without
+labels, and reused for many tasks. This section describes what that
+means for Earth Observation, where the reusable product is an
+embedding per pixel, and then presents TESSERA, the model used in
+this dissertation.
+
 \subsection{Self-supervised pretraining and embeddings}
 \label{sec:background-fm-embeddings}
 
@@ -244,8 +250,19 @@ points into labelled pixels, described in the Proposed Work
 \section{Presence-Only Learning and Spatial Validation}
 \label{sec:background-po}
 
+Two of the properties of citizen-science data described above, the
+lack of absences and the concentration of records where observers go,
+raise two methodological questions that this section treats in turn:
+how to train and evaluate a classifier from presences alone, and how
+to validate it over space so that pixels next to the training data do
+not inflate the result.
+
 \subsection{Learning and evaluating from presences only}
 \label{sec:background-po-background}
+
+The missing class affects three things, taken here in order: the
+choice of classifier, the sample of the landscape that stands in for
+that class, and the evaluation of the result.
 
 \subsubsection*{Two families of methods}
 
