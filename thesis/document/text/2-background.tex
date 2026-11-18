@@ -81,7 +81,7 @@ weakly in the red, so the relation between bands separates plants from
 soil and water, and different plants, with different leaf structure
 and phenology, differ in how that relation changes over the year.
 
-\subsection{Sentinel-2 and multispectral imagery}
+\subsection{Sentinel-2 imagery and hand-designed features}
 \label{sec:background-eo-sentinel2}
 
 Sentinel-2 is the optical mission of the European Copernicus
@@ -206,7 +206,7 @@ thresholds that depend on the resolution of the imagery: 10~m for
 AlphaEarth's tree-genus evaluation \cite{brown2025} and 120~m for
 256~m image patches \cite{gillespie2024}.
 
-\subsection{Presence-only data and bias}
+\subsection{Presence-only data, sampling bias and positional error}
 \label{sec:background-cs-presence-only}
 
 Three properties of these observations distinguish them from
@@ -232,7 +232,8 @@ resolution that distance is often a different pixel.
 These properties do not make the data unusable; they define what has
 to be done before using them. The first, the lack of confirmed
 absences, shapes the learning problem, treated in the section on
-background sampling (Section~\ref{sec:background-po-background}); the
+learning and evaluating from presences only
+(Section~\ref{sec:background-po-background}); the
 second, the opportunistic sampling, shapes the validation, treated in
 the section on spatial autocorrelation and block cross-validation
 (Section~\ref{sec:background-po-spatial}); and the third, the uneven
@@ -243,8 +244,10 @@ points into labelled pixels, described in the Proposed Work
 \section{Presence-Only Learning and Spatial Validation}
 \label{sec:background-po}
 
-\subsection{Background sampling}
+\subsection{Learning and evaluating from presences only}
 \label{sec:background-po-background}
+
+\subsubsection*{Two families of methods}
 
 A standard classifier needs examples of both classes. With
 presence-only data the second class is missing, and two families of
@@ -266,6 +269,8 @@ methods that use the background as an unlabelled sample beat true
 one-class methods in every case, an advantage attributed to the
 information in the unlabelled data \cite{deng2018,li2011,li2010}.
 
+\subsubsection*{Sampling bias in the background}
+
 The random background carries a second problem. Because the presences
 are biased towards accessible places and the background is not, the
 model may learn where observers go rather than where the species
@@ -275,8 +280,12 @@ distribution'', and propose drawing the background from the records
 of other species collected in the same way, which share the bias. The
 same paper shows that the gain of such a correction is visible only
 against independent presence--absence data: scored against a random
-background, the corrected model looks worse. Evaluation inherits the
-problem. Without absences, the metrics are rank-based: how well the
+background, the corrected model looks worse.
+
+\subsubsection*{Evaluation without absences}
+
+Evaluation inherits the same problem. Without absences, the metrics
+are rank-based: how well the
 model places the held-out presences above the landscape at large. One
 form fixes the fraction of the study area the model is allowed to
 predict as presence and measures the fraction of test presences that
