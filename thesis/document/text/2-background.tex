@@ -267,15 +267,43 @@ nobody checked. The classifier's score therefore says how much a pixel
 looks like the presences compared with the landscape in general, and
 not how probable it is that the species is there \cite{phillips2006}.
 
-The literature gives two kinds of guidance on these methods. On
-practice, \citet{rapinel2021}, reviewing 136 one-class vegetation
-studies, find that the two readings of the score are often confused,
-that the background should cover the entire landscape, including the
+This reading of the score holds for any classifier fitted with
+background pixels: for MaxEnt, which was built on it, and equally for a
+logistic regression or a random forest \cite{phillips2006}.
+\citet{phillips2009} make the same point from the other side: the
+background is an unlabelled sample, not a labelled one. The distinction
+is often lost. \citet{rapinel2021}, reviewing 136 one-class vegetation
+studies, find that 42\% confuse background with pseudo-absences, that
+the background should cover the entire landscape, including the
 surroundings of the presences, and that it usually holds thousands of
-points. On performance, every remote-sensing comparison read for this
-work found presence-background methods better than true one-class
-ones, because the background, even unlabelled, carries information
-about what the species is not \cite{deng2018,li2011,li2010}.
+points.
+
+Two further families are often named apart but fall inside the second
+one. MaxEnt and the related point-process models are fitted against
+thousands of random background pixels and read as relative indices, so
+they are presence-background methods with a particular form of model
+\cite{phillips2006}. Explicit positive-unlabelled methods rescale a
+presence-versus-unlabelled classifier by the fraction of positives
+that are labelled; when that fraction is constant, the rescaling does
+not change the ranking, and a rank-based metric sees the same model
+\cite{elkan2008}. What separates the two real families is thus whether
+the unlabelled landscape is used at all.
+
+On that question the evidence is one-sided. In the remote-sensing
+comparisons read for this work, methods that use the landscape beat
+true one-class methods in every case: a presence-and-background
+network against the one-class support vector machine on aerial and
+satellite scenes \cite{deng2018}, MaxEnt against the same machine
+\cite{li2010}, a positive-unlabelled method against the biased support
+vector machine and the one-class one \cite{li2011}, and, in the one
+study that compares the three families side by side, the biased
+support vector machine first, the one-class one behind, and even the
+best method performing poorly in many of the tasks \cite{mack2017}.
+\citet{elkan2008} give the reason: one-class methods ``ignore useful
+information that is present in the unlabeled examples''. The
+method-selection step of the Proposed Work
+(Chapter~\ref{sec:proposed-work}) reaches the same ordering on the
+data of this work.
 
 \subsubsection*{Sampling bias in the background}
 
