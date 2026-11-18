@@ -143,8 +143,9 @@ mapping \emph{Acacia dealbata} in the Coimbra district?
 
 ``Replace'' is read as a difference in performance between models
 trained on citizen-science observations and models trained with
-expert reference data, measured on the same expert-verified test
-locations; it is a question of degree, not a yes/no answer. Four
+expert reference data, measured on the same held-out locations,
+which hold presences from both sources; it is a question of degree,
+not a yes/no answer. Four
 secondary questions operationalise it, in order of priority. Each
 uses only what the questions before it define, and the one that
 depends on Sentinel-2 imagery comes last.
@@ -176,8 +177,8 @@ foundation-model embedding, a presence-only classifier is trained on
 those embeddings, and the classifier produces the species map. RQ2
 acts on the passage from observation to label, RQ4 on the
 representation, and RQ3 on the map. Expert polygons stay outside the
-main flow: they are the test reference and, for RQ1, are added to the
-training data in increasing fractions.
+main flow: they are used as test data alongside citizen science and,
+for RQ1, are added to the training data in increasing fractions.
 
 \begin{figure}[htb]
 \centering
@@ -204,7 +205,7 @@ training data in increasing fractions.
 \node[note, below=1mm of emb] {EO foundation\\model};
 \node[note, below=1mm of clf, xshift=-4mm, text width=16mm] {presence vs.\\background};
 \node[note, below=1mm of map] {Coimbra district};
-\node[note, below=1mm of exp] {test reference;\\added to training\\0--100\%};
+\node[note, below=1mm of exp] {test data;\\added to training\\0--100\%};
 
 \draw[flow] (obs) -- (lab);
 \path (obs.north east) -- (lab.north west) node[rq, midway, above=1mm] {RQ2};

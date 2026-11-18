@@ -1333,7 +1333,29 @@ dependência dos dados de especialistas, com a formulação do objetivo da
 proposta em vez de "substituir"). A Introdução (secção 1.2,
 2026-11-17) tem a pergunta principal com "replace" e a sua leitura
 como diferença de desempenho; o Resumo em português já está escrito
-(`6-abstract-PT.tex`).
+(`6-abstract-PT.tex`). A 2026-11-18 a leitura de "replace" na
+secção 1.2 passou a "measured on the same held-out locations, which
+hold presences from both sources", o parágrafo do fluxo e a figura
+da secção 1.2 deixaram de chamar "test reference" aos polígonos de
+especialistas, e a secção 2.2.2 do Background diz que as duas fontes
+são dados de referência (Revisão abaixo).
+
+**Revisão (2026-11-18).** A frase "os dados de especialistas
+continuam a ser a referência de teste" estava errada quando foi
+escrita e sai. O teste da RQ1 junta sempre as duas fontes (ponto 4 da
+[curva completa](#curva-de-redução-de-esforço-completa-0100-com-fundo-e-bloco-de-teste-fixos)
+e ponto 1 da [curva presence-only](#curva-presence-only)), e os
+polígonos de especialistas entram no treino de 0% a 100%. Só a RQ3
+testa apenas em píxeis de especialistas, e a RQ2 testa no conjunto
+filtrado de ciência cidadã. O que se mantém: "substituir" é a
+diferença de desempenho entre treinar com ciência cidadã e treinar com
+especialistas. Regra para a redação: as duas fontes são dados de
+referência; nenhuma tem um papel fixo de treino ou de teste, e cada
+pergunta diz o seu conjunto de teste. Erro apanhado por mim ao ler a
+secção 2.2.2 do Background. Corrigido em
+[`docs/research_questions.md`](../docs/research_questions.md#main-question-and-objectives)
+(contexto comum, "What replace means here") e nas secções 1.2 e
+2.2.2 da tese.
 
 ## Decisões: dados de referência
 

@@ -77,7 +77,11 @@ confirm with the supervisor; the area fraction, 10%, is my choice:
 
 **What "replace" means here:** the difference in performance between
 models trained on citizen-science observations and models trained
-with expert reference data. Expert data remain the test reference.
+with expert reference data. Both sources are reference data, used
+for training and for testing: in RQ1 the expert polygons enter the
+training set in increasing fractions and every test set holds both
+sources; the test set of each other question is stated in its own
+design.
 
 **Hypotheses** are stated under each question as a null (H₀) and an
 alternative (H₁), each marked as written before or after its result
