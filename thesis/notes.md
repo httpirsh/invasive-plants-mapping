@@ -2423,7 +2423,19 @@ de método, o critério, os resultados (0,410 contra 0,334, 0,258 e
 0,188), o MaxEnt corrido e perdido, a ressalva de que a extensão do
 lema de Elkan & Noto ao caso-controlo é raciocínio meu, e o Random
 Forest como metodologia abandonada (razão do ponto 1) ficam para o
-Proposed Work.
+Proposed Work. Reescrita da 2.5.1 (2026-11-18, mais tarde): explica
+como funcionam o one-class SVM (fronteira que envolve as presenças) e
+o Isolation Forest (píxel isolado em poucas divisões recebe score
+baixo); distingue fundo (classe desconhecida) de pseudo-ausência
+(tratada como ausência verdadeira, saída lida como probabilidade),
+com os 42% de Rapinel & Hubert-Moy (2021); e dá as duas regras
+práticas da mesma revisão: fundo sobre toda a área, incluindo a
+vizinhança das presenças (senão a exatidão é sobrestimada), e
+tamanho na casa dos milhares, 10 000 o mais comum. **Sem fonte no
+manuscrito:** a descrição dos dois métodos one-class (nem Schölkopf
+et al. nem Liu et al. estão lidos ou na bibliografia) e a frase
+"MaxEnt é o modelo mais usado em modelação de distribuição de
+espécies" (nenhuma fonte lida o afirma). Por citar ou reformular.
 
 ### Curva da RQ1 no desenho presence-only: leave-one-block-out com as duas fontes, sensitivity a 10% de área {#curva-presence-only}
 
@@ -2858,7 +2870,12 @@ robustez.
 **Na tese:** ⏳ Ainda não escrita (Metodologia/Resultados). Desde
 2026-11-17 o fundo entra só como amostra da paisagem, nunca como
 ausência (ponto 5 de [RQ1 passa a presence-only](#rq1-presence-only));
-o conjunto de pontos é o mesmo.
+o conjunto de pontos é o mesmo. A secção 2.5.1 do Background
+(2026-11-18) já enuncia a regra de Rapinel & Hubert-Moy (2021): fundo
+sobre toda a área, **incluindo a vizinhança das presenças**, senão a
+exatidão é sobrestimada. O tampão de 50 m deste fundo afasta-se dessa
+regra; a Metodologia tem de o declarar como limitação, com a
+ressalva de Phillips et al. (2009) acima.
 
 ### Fundo uniforme reconstruído a partir das 2 465 presenças {#fundo-uniforme-reconstruido-2465}
 
