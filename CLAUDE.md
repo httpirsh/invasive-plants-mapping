@@ -226,6 +226,17 @@ the wording of a message to the supervisor). Keep drafts in the chat
 only, and write to these files only once I say it's closed/final, or
 once a real reply from the supervisor arrives.
 
+Recording is not only for decisions: after each content change (in the
+manuscript or the design docs) and each step forward in an experiment,
+update `thesis/notes.md` in the same session when relevant, once it is
+closed (previous paragraph). Relevant
+means a result or argument that will be used in the thesis or the
+defense, or a change to what an existing entry says or to its **Na
+tese** status. A result is written as it came out, with the run or
+file it comes from. Not relevant: wording fixes, structure changes
+(repository or document layout), and reruns that change nothing. If
+unsure whether it is relevant, ask me.
+
 - Write in Portuguese, in my voice, following the existing entries:
   heading and who decided (mine / supervisor / to confirm),
   **O que decidi**, **Porquê**, **Fundamentação** (literature, only
