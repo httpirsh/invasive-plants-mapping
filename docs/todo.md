@@ -29,8 +29,9 @@ com o classificador presence-only a 2026-11-17). Numeração das perguntas:
   ([thesis/notes.md](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)).
 - [ ] Descarregar à mão o artigo publicado de Dimson et al. (2023)
   ([thesis/notes.md](../thesis/notes.md#lista-de-literatura-releitura-integral-e-limpeza)).
-- [ ] Corrigir a entrada `zhu2026` no manuscrito: o autor é Stewart et
-  al. ([thesis/notes.md](../thesis/notes.md#lista-de-literatura-releitura-integral-e-limpeza)).
+- [x] Corrigir a entrada `zhu2026` no manuscrito: o autor é Stewart et
+  al. (chave `stewart2026`; a linha da transferência cita Yang et al.
+  2026, 2026-11-18) ([thesis/notes.md](../thesis/notes.md#lista-de-literatura-releitura-integral-e-limpeza)).
 - [ ] Levar ao orientador as propostas em fila (máscara de
   segmentação, redesenho da pergunta da concentração espacial,
   formulação das perguntas) e a reformulação em quatro perguntas

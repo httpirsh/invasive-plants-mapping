@@ -115,10 +115,9 @@ diagrama do pipeline está na secção 1.2, a seguir às quatro perguntas
 cada pergunta na etapa em que atua. A motivação da secção 1.1 cita
 desde 2026-11-18 o IFN6 (inventário decenal, 8,4 mil ha de
 povoamentos de acácia em 2015) e o relatório EFFIS 2024 (fogos
-recorrentes), ambos em `docs/literature.md`. A Introdução ainda cita `zhu2026` para a linha
-das outras regiões; a entrada da bibliografia já tem o autor certo
-(Stewart et al., corrigido a 2026-11-17), mas a fonte certa para essa
-linha é Yang et al. (2026). Por corrigir no manuscrito. Duas outras
+recorrentes), ambos em `docs/literature.md`. Desde 2026-11-18 a Introdução cita Yang et al. (2026) para a perda
+de exatidão noutra região (no fim da secção 1.1 e na linha da tabela),
+e a chave `zhu2026` passou a `stewart2026`, citada só no Background. Duas outras
 linhas da tabela já não correspondem ao desenho (fundo e citação de
 Ball et al.); ver a
 [revisão de consistência](#revisao-consistencia-2026-11-13).
@@ -170,6 +169,27 @@ Abandoned Methodologies".*
   representação. Segue Ball et al. (2026), Yang et al. (2026) e Brown
   et al. (2025). Ver
   [Foundation Model Use](../docs/research_questions.md#foundation-model-use-adopted).
+
+  **Revisão (2026-11-18):** a razão "o repositório restringe o
+  checkpoint" está errada. Verifiquei hoje: o README de
+  `ucam-eo/tessera` diz que os pesos e os embeddings estão em CC0 (o
+  código em MIT), e no Hugging Face (`geotessera/*`) os checkpoints
+  v1.0, v1.1 e v2 estão públicos, sem acesso condicionado, com licença
+  `cc0-1.0`, incluindo os checkpoints completos que o README indica
+  para quem quer afinar o modelo; foram lá publicados em maio e julho
+  de 2026, antes da verificação de 2026-11-11. A decisão de usar
+  embeddings congelados mantém-se, mas deixa de poder dizer que não
+  era possível afinar a TESSERA: assenta no resultado do próprio
+  artigo (afinar o codificador não trouxe ganho, Feng et al., 2026),
+  que é a única razão com fonte, e em duas razões minhas sem fonte
+  (com rótulos poucos e ruidosos, afinar arrisca ajustar o ruído; o
+  mesmo classificador em cada representação isola o efeito da
+  representação). Para a defesa: "os pesos são abertos; não afinei
+  porque o artigo do modelo não encontrou ganho com isso e porque
+  queria isolar o efeito da representação". O AlphaEarth continua a
+  existir só como embeddings. **Na tese:** ✅ secção 2.3.1 do
+  Background corrigida no mesmo dia; a secção 1.2 da Introdução
+  nomeia o desvio à proposta e remete para ela.
 - **RQ3: assumir que o observador dominante é um enviesamento** (a
   confirmar com o orientador). Questionei a premissa, medi (ele é
   fiável e concentrado numa zona, não necessariamente um problema) e
@@ -379,9 +399,10 @@ Aplicado no passo 10 de
 ficam 5 242 observações; saem 2 621 de outras espécies e 35
 identificadas só até ao género ou subgénero.
 
-**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia). A
-introdução já nomeia a *A. dealbata* como alvo, sem justificar o
-âmbito; a secção 2.1.1 do Background (2026-11-18) descreve a espécie
+**Na tese:** ✅ Parcial. Desde 2026-11-18 a secção 1.2 da Introdução
+justifica o âmbito numa frase (os polígonos de especialistas só cobrem
+a *A. dealbata*), ao lado do desvio do fine-tuning; o resto da
+fundamentação fica para o Proposed Work; a secção 2.1.1 do Background (2026-11-18) descreve a espécie
 (floração de inverno, regeneração após fogo), não a escolha do âmbito.
 
 ### RQ3 aprovada
@@ -439,8 +460,8 @@ Até o orientador responder, o desenho aprovado é este. Desde
 
 **Na tese:** ✅ Parcial. A estatística do observador dominante está em
 [`thesis/document/text/1-introduction.tex`](document/text/1-introduction.tex)
-(secção 1.1, que diz 88% das presenças limpas; o valor é 90%, por
-atualizar). O enunciado aprovado foi substituído na secção 1.2
+(tabela de problemas da secção 1.2; 88% corrigido para 90% a
+2026-11-18). O enunciado aprovado foi substituído na secção 1.2
 (2026-11-17) pela RQ3 atual, a confirmar com o orientador; a
 fundamentação completa fica para o Proposed Work.
 
@@ -740,7 +761,10 @@ regras e testes iniciais em
 
 **Na tese:** ✅ Parcial. O enunciado da RQ2 (máscara e filtros) está
 na secção 1.2 da Introdução desde 2026-11-17, a confirmar com o
-orientador; o desenho fica para o Proposed Work.
+orientador; o desenho fica para o Proposed Work. O conceito de
+estender a etiqueta de um ponto ao superpixel que o contém (Rivier et
+al. 2024) está no fim da secção 2.4.2 do Background desde 2026-11-19;
+o *region growing* não tem fonte lida e ficou marcado com `\todo`.
 
 ### Reformulação em quatro perguntas, centrada na substituição dos dados de especialistas {#reformulacao-quatro-perguntas}
 
@@ -1357,6 +1381,38 @@ secção 2.2.2 do Background. Corrigido em
 (contexto comum, "What replace means here") e nas secções 1.2 e
 2.2.2 da tese.
 
+**Revisão (2026-11-18, decisão minha, final: não vai ao orientador).**
+A pergunta principal deixa "replace" e passa a: *To what extent can
+citizen-science observations, turned into reference data and
+represented by Earth Observation foundation-model embeddings, reduce
+the amount of expert reference data needed to train a model that maps
+Acacia dealbata in the Coimbra district?* O objetivo geral muda da
+mesma forma. "Reduzir" lê-se na curva da RQ1: desempenho só com
+ciência cidadã e com frações crescentes dos polígonos de especialistas,
+contra o modelo só de especialistas, no mesmo teste com as duas
+fontes; "quantidade" é a fração de polígonos no treino.
+
+- **Porquê:** (1) é a formulação do objetivo principal da proposta
+  ("to reduce the dependency on costly and time-consuming reference
+  data", `docs/thesis-proposal.md`); (2) a curva mede um grau, e
+  "replace" sugeria um sim ou não, tanto que a Introdução precisava de
+  avisar que não era; (3) a Revisão de 2026-11-14 já tinha recuado
+  porque "replace" prometia mais do que o desenho mostra; "reduce"
+  resolve isso na origem; (4) o resumo já usava "reduce the
+  dependency", e a pergunta e o resumo deixam de divergir.
+  "Dependency" sozinho ficava vago; "the amount … needed" torna a
+  pergunta mensurável pela curva.
+- **O que não muda:** as RQ1 a RQ4, o desenho, as hipóteses e os
+  números. O título da RQ1 ("Citizen science as a substitute for
+  expert data") fica, porque a RQ1 compara mesmo o extremo só de
+  ciência cidadã com os modelos com dados de especialistas.
+- **Fundamentação:** a proposta de tese; nenhuma literatura.
+- **Onde:** [`docs/research_questions.md`](../docs/research_questions.md#main-question-and-objectives)
+  (pergunta, objetivo geral, "What reduce means here"); `README.md`;
+  `docs/literature.md` (Gap, Contribution).
+- **Na tese:** ✅ Introdução, secção 1.2 (pergunta e parágrafo da
+  leitura), 2026-11-18; o resumo (EN e PT) já estava alinhado.
+
 ## Decisões: dados de referência
 
 ### Usar os dados de especialistas, com limpeza
@@ -1398,7 +1454,10 @@ segmento de 75 m² recebe a classe dominante desse hectare.
 ficheiro e colunas em
 [`data/README.md`](../data/README.md#expert-reference-polygons-cleaned-derived).
 
-**Na tese:** ⏳ Ainda não escrita (capítulo de Metodologia).
+**Na tese:** ✅ Parcial. A secção 4.5.3 do Proposed Work
+(`4-proposed-work.tex`, 2026-11-18) descreve os polígonos e diz que os
+5 013 marcados como "não *A. dealbata*" não são usados; a razão fica
+para a secção 4.2.2 (pipeline), ainda por escrever.
 
 ### Só observações *research*, nos dois lados
 
@@ -1657,7 +1716,7 @@ descreve agrupamento de locais, não de observadores.
 [RQ3](../docs/research_questions.md#rq3--transferability-away-from-the-sampled-area).
 
 **Na tese:** ✅ Parcial. A estatística do Observer A já está na
-Introdução (que diz 88%; o valor é 90%, por atualizar); a decisão fica
+Introdução (tabela de problemas, 90% desde 2026-11-18); a decisão fica
 para a Metodologia.
 
 ### Máscara de segmentação: testar várias abordagens
@@ -2408,7 +2467,12 @@ grep; nada a corrigir lá por agora).
 **Na tese:** ✅ Parcial. Os conceitos (one-class contra presença-fundo,
 fundo como amostra não rotulada e não como ausência, avaliação a área
 prevista igual segundo Phillips et al. 2006 e Peterson et al. 2008)
-estão na secção 2.5.1 do Background (2026-11-18). A 2.5.1 diz
+estão na secção 2.5.1 do Background (2026-11-18). Desde 2026-11-19 a
+2.5.1 diz também que o classificador é a regressão logística (definida
+com James et al. 2021, sem o `C=10`, que fica para o Proposed Work),
+dá nome às métricas (sensitivity a área prevista fixa; ROC-AUC contra
+o fundo, Phillips et al. 2006; índice de Boyce contínuo, Hirzel et al.
+2006) e tem uma figura esquemática das duas famílias. A 2.5.1 diz
 também (mesmo dia) que o MaxEnt e o PU-learning explícito caem na
 família presença-fundo (Phillips et al. 2006; lema 1 de Elkan & Noto
 2008), que os one-class puros perderam em todas as comparações lidas
@@ -2431,11 +2495,14 @@ baixo); distingue fundo (classe desconhecida) de pseudo-ausência
 com os 42% de Rapinel & Hubert-Moy (2021); e dá as duas regras
 práticas da mesma revisão: fundo sobre toda a área, incluindo a
 vizinhança das presenças (senão a exatidão é sobrestimada), e
-tamanho na casa dos milhares, 10 000 o mais comum. **Sem fonte no
-manuscrito:** a descrição dos dois métodos one-class (nem Schölkopf
-et al. nem Liu et al. estão lidos ou na bibliografia) e a frase
-"MaxEnt é o modelo mais usado em modelação de distribuição de
-espécies" (nenhuma fonte lida o afirma). Por citar ou reformular.
+tamanho na casa dos milhares, 10 000 o mais comum. A descrição dos
+dois métodos one-class cita desde 2026-11-19 Schölkopf et al. (2001)
+e Liu et al. (2008), lidos no resumo e na introdução; o one-class SVM
+passou a ser descrito como uma região pequena que contém a maior parte
+das presenças, como no artigo, e não como uma fronteira o mais
+apertada possível. A frase "MaxEnt é o modelo mais usado" foi
+reformulada a 2026-11-18 para "a widely used model", que não pede
+fonte nova.
 
 ### Curva da RQ1 no desenho presence-only: leave-one-block-out com as duas fontes, sensitivity a 10% de área {#curva-presence-only}
 
@@ -2567,6 +2634,10 @@ Sensitivity agrupada a 10% de área (acaso 0,10):
 (lê e desenha).
 
 **Na tese:** ⏳ Ainda não escrita (Metodologia e Resultados da RQ1).
+As métricas (sensitivity a área fixa, ROC-AUC e Boyce) e a validação
+por blocos com tampão estão definidas como conceitos no Background
+(2.5.1 e 2.5.2) desde 2026-11-19; o desenho e os valores ficam para o
+Proposed Work.
 
 ### Curva de redução de esforço completa: 0%–100%, com fundo e bloco de teste fixos
 
@@ -2867,7 +2938,9 @@ robustez.
 
 **Onde:** [`forest_only_background_check.ipynb`](../notebooks/07_foundation_models/forest_only_background_check.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (Metodologia/Resultados). Desde
+**Na tese:** ✅ Parcial: o fundo está descrito como dado na secção
+4.5.4 do Proposed Work (2026-11-18); o desenho e a limitação abaixo
+ainda não. Desde
 2026-11-17 o fundo entra só como amostra da paisagem, nunca como
 ausência (ponto 5 de [RQ1 passa a presence-only](#rq1-presence-only));
 o conjunto de pontos é o mesmo. A secção 2.5.1 do Background
@@ -2914,7 +2987,10 @@ proveniência.
 **Onde:** curva completa com o fundo novo feita pela secção 8 de
 [`effort_reduction_curve.ipynb`](../notebooks/07_foundation_models/effort_reduction_curve.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (Metodologia). O "efeito nos
+**Na tese:** ✅ Parcial. A secção 4.5.4 do Proposed Work (2026-11-18)
+descreve o fundo como dado: 2 000 pontos uniformes, semente 42, tampão
+de 50 m. Como entra no treino e na avaliação fica para o desenho
+(secção 4.3). O "efeito nos
 resultados" acima é em Random Forest e já não conta como resultado
 ([RQ1 passa a presence-only](#rq1-presence-only)); a proveniência do
 fundo mantém-se.
@@ -3544,8 +3620,10 @@ Sentinel-2 como sensor do baseline está fundamentado em Mouta et al.
 
 **Onde:** [`sentinel2_download.ipynb`](../notebooks/04_satellite/sentinel2_download.ipynb).
 
-**Na tese:** ⏳ Ainda não escrita (detalhe técnico; Metodologia ou
-apêndice, se for preciso).
+**Na tese:** ✅ Parcial. A secção 4.5.5 do Proposed Work (2026-11-18)
+diz que a via foi testada numa faixa de 1,75 × 8,89 km (61 cenas L2A
+de 2023, AWS Earth Search, reamostradas para a grelha da TESSERA) e
+que a extração na área de estudo fica para o segundo semestre.
 
 ### Sentinel-2 na RQ1: avançar já, por extração em pontos, não raster completo
 

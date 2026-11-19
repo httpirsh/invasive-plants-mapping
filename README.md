@@ -7,8 +7,8 @@ University of Coimbra
 
 To what extent can citizen-science observations, turned into reference
 data and represented by Earth Observation foundation-model embeddings,
-replace expert reference data as training data for mapping *Acacia
-dealbata* in the Coimbra district?
+reduce the amount of expert reference data needed to train a model
+that maps *Acacia dealbata* in the Coimbra district?
 
 See [`docs/research_questions.md`](docs/research_questions.md) for the
 secondary questions and design, and [`docs/literature.md`](docs/literature.md)

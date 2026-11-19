@@ -47,25 +47,87 @@ docs/research\_questions.md.}
 \section{Dataset Description and Preparation}
 \label{sec:proposed-work-data}
 
+This section describes the study area and each dataset as it was
+obtained during the first semester: the iNaturalist observations, the
+expert polygons, the TESSERA embeddings, and the state of the
+Sentinel-2 and land-cover data. The steps that turn the observations
+and polygons into labelled pixels are those of the reference-data
+pipeline (Section~\ref{sec:proposed-work-pipeline}).
+
 \subsection{Study area}
 \label{sec:proposed-work-data-area}
-\todo[inline]{}
+
+The study area is the Coimbra district, in central Portugal. It is the
+area of the iNaturalist place used to query the observations (place
+8422, ``Coimbra, PT''), which resolves to the district and not to the
+municipality. Sentinel-2 tile 29TNE, on which most expert polygons
+were drawn, covers the district. All data are handled on the
+10~m grid of the TESSERA embeddings, in UTM zone 29N (EPSG:32629). The
+sample of the landscape used by the classifier and the metric is
+drawn within a rectangle of 100 by 66~km over the district.
+\todo{Study-area map (district, presences, expert polygons) and a
+short land-cover description; neither is made yet.}
 
 \subsection{iNaturalist}
 \label{sec:proposed-work-data-inaturalist}
-\todo[inline]{}
+
+The citizen-science observations were downloaded from the iNaturalist
+API on 22 September 2026, for genus \emph{Acacia} and all its
+descendants within place 8422, with no filter on date or quality grade.
+The download holds 7\,943 observations from 1992 to 2026, each with
+its date, coordinates, positional accuracy, quality grade, observer
+and licence; the licence is set per observation by its author.
+Filtering is left to the pipeline, which keeps 2\,465
+\emph{A.~dealbata} presences, one per 10~m pixel, observed between
+2021 and 2025 (Section~\ref{sec:proposed-work-pipeline-cs}).
 
 \subsection{Expert reference data}
 \label{sec:proposed-work-data-expert}
-\todo[inline]{}
+
+The expert reference data are polygons of \emph{A.~dealbata} stands,
+provided by the supervisor as project data. They were made from field
+visits and from visual interpretation of OrtoSat 2023 orthoimagery at
+30~cm, and refer to 2023. They come in two files: 7\,057 polygons on
+Sentinel-2 tile 29TNE and 437 elsewhere in continental Portugal. Each
+polygon has a single attribute, whether \emph{A.~dealbata} is present
+(1) or not (0). Of the 2\,470 presence polygons, 1\,849 lie in the
+Coimbra district. The 5\,013 polygons marked as not \emph{A.~dealbata}
+are not used (Section~\ref{sec:proposed-work-pipeline-expert}).
 
 \subsection{TESSERA embeddings}
 \label{sec:proposed-work-data-tessera}
-\todo[inline]{}
+
+The embeddings are those of TESSERA version 1.1 for 2023, read with the
+\texttt{geotessera} library (version 0.11.0) at the centre of each
+pixel of interest, without downloading whole tiles. Each pixel has 128
+values. Two sets were read. The first holds the reference pixels,
+about 29\,000 points: the pixels of the citizen-science observations
+and of the expert polygons, and points of an earlier design that are
+not used; 2\,464 of the 2\,465
+presences have a valid embedding. The second is the sample of the
+landscape: 2\,000 points drawn uniformly at random within the
+rectangle of the study area (seed 42), excluding a 50~m buffer around
+every presence of either source, all with a valid embedding. How this
+sample enters training and evaluation is part of the experimental
+design (Section~\ref{sec:proposed-work-design}).
 
 \subsection{Sentinel-2 and COS}
 \label{sec:proposed-work-data-sentinel2}
-\todo[inline]{Current state only.}
+
+The Sentinel-2 features are needed only for RQ4 and are not yet
+extracted. The access route was tested on a strip of 1.75 by 8.89~km:
+the 61 Level-2A scenes of 2023 with less than 20\% cloud cover were
+read from the AWS Earth Search catalogue and resampled onto the
+TESSERA grid, so that both representations describe the same pixels.
+Extraction over the study area is planned for the second semester
+(Section~\ref{sec:proposed-work-plan-second}).
+
+The land-cover map COS 2023 (Carta de Uso e Ocupação do Solo) was
+obtained from the Direção-Geral do Território. It is not used to
+label pixels: its minimum mapping unit of one hectare does not resolve
+scattered presences (Section~\ref{sec:background-iap-mapping}). It
+records the land-cover class of each expert polygon, for describing the
+reference data.
 
 \section{Preliminary Experiment}
 \label{sec:proposed-work-preliminary}

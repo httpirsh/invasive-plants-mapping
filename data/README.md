@@ -65,7 +65,9 @@ obtained.
   (iNaturalist, expert polygons and COS negatives in Coimbra district),
   ~29 000 pixels.
 - **Temporal coverage:** 2023.
-- **License:** MIT.
+- **License:** CC0 for the embeddings and the model weights; the
+  TESSERA and `geotessera` code is MIT (README of `ucam-eo/tessera`,
+  branch `master`, checked 2026-11-19).
 - **File:** `processed/embeddings/tessera_v1.1_2023_rq1_pilot/`, one
   `block_<x>_<y>.npz` per 10 km UTM 29N block (`px`, `py` = pixel
   centre in EPSG:32629; `emb` = 128 dequantized values, NaN where no
@@ -104,7 +106,7 @@ obtained.
   2021–2025). Random seed 42; the points are reproduced exactly from
   the seed and that presence file.
 - **Temporal coverage:** 2023.
-- **License:** MIT.
+- **License:** same as the pilot embeddings above.
 - **File:** `processed/embeddings/tessera_v1.1_2023_rq1_background/background_points.npz`
   (`x`, `y` = point coordinates in EPSG:32629; `lon`, `lat` = WGS84;
   `emb` = 128 dequantized values; all 2 000 valid, no NaN rows).
@@ -141,7 +143,7 @@ obtained.
   forest 917, pine forest 725, shrubland 188, other forest 170) and
   outside the same 50 m exclusion buffer. Random seed 0.
 - **Temporal coverage:** 2023.
-- **License:** MIT (embeddings).
+- **License:** same as the pilot embeddings above.
 - **File:** `processed/embeddings/tessera_v1.1_2023_rq1_background/background_points_forest_only.npz`
   (same fields as the uniform pool, plus `cos_group` = land-cover
   group of each point; all 2 000 valid, no NaN rows).

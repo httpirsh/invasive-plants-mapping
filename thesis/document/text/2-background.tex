@@ -12,25 +12,25 @@ only and validating a model over space.
 \section{Invasive Alien Plants}
 \label{sec:background-iap}
 
-Invasive alien plants are species introduced outside their native
-range that establish and spread without further human
-intervention.\todo{Source for the definition; none in the reading list
-yet.} Portugal regulates them through Decree-Law No.~92/2019, which
-lists the species considered invasive in the national territory;
-several \emph{Acacia} species are on that list, and the national
-forest inventory follows the same list when it records invasive
-species in its field plots \cite{icnf2019}.
+Portuguese law, which this work follows, defines an invasive species
+as an alien species, one introduced outside its natural range, whose
+introduction into the wild or spread in a territory threatens or has
+an adverse impact on biological diversity and the ecosystem services
+associated with it \cite{dl92-2019}. The same decree-law lists the
+species considered invasive in the national territory, and the genus
+\emph{Acacia} is on that list as a whole \cite{dl92-2019}; the
+national forest inventory follows the same list when it records
+invasive species in its field plots \cite{icnf2019}.
 
 \subsection{\emph{Acacia dealbata} in Portugal}
 \label{sec:background-iap-acacia}
 
 \emph{Acacia dealbata} Link, the silver wattle, is a tree native to
-south-eastern Australia.\todo{Source for the introduction history and
-current extent in Portugal; none in the reading list.} It forms dense
-stands that exclude native vegetation and also occurs scattered
-inside stands of other species, where the forest inventory finds it
-far more often than as stands of its own, as the figures given in
-the motivation (Section~\ref{sec:introduction-motivation}) show.
+south-eastern Australia, introduced to Europe in the nineteenth century
+\cite{dessi2021}. It forms stands of its own and also occurs
+scattered inside stands of other species, where the forest inventory
+finds it far more often than as stands of its own
+(Section~\ref{sec:introduction-motivation}).
 
 Two traits of the species matter for this work. The first is its
 flowering period. \emph{A.~dealbata} flowers in late winter, when most
@@ -51,21 +51,21 @@ cleared one.
 \subsection{Why mapping matters}
 \label{sec:background-iap-mapping}
 
-Control of an invasive plant starts from knowing where it is, and the
-cost of control grows with the area it has already occupied. The
+Control of an invasive plant starts from knowing where it is.
+Eradication has succeeded mostly against small and slow-spreading
+populations, and it is generally more cost-effective than the long-term
+control left once a species is widespread \cite{ipbes2023}. The
 information available in Portugal at species level is coarse in time
-and space. The forest inventory, described in the motivation
-(Section~\ref{sec:introduction-motivation}), is a decennial sample
-that locates no stand. Land-cover maps
+and space. The forest inventory is a decennial sample that locates no
+stand (Section~\ref{sec:introduction-motivation}). Land-cover maps
 such as the Carta de Uso e Ocupação do Solo (COS) have an
 \emph{Acacia} forest class, but with a minimum mapping unit of one
 hectare they do not resolve scattered presences, and they mix land use
 with land cover, which makes them a weak reference for 10~m
 classification \cite{fonte2020}. Recurrent large fires, concentrated
-in the centre of the country, as the fire statistics in the
-motivation (Section~\ref{sec:introduction-motivation}) show, keep
-opening new ground
-for a species that regenerates after burning. A method that produces a
+in the centre of the country, keep opening new ground for a species
+that regenerates after burning
+(Section~\ref{sec:introduction-motivation}). A method that produces a
 species map cheaply, and can repeat it every year, is what the
 MAP.INVADER project, of which this dissertation is part, aims at.
 
@@ -88,12 +88,19 @@ Sentinel-2 is the optical mission of the European Copernicus
 programme. Two identical satellites carry a multispectral instrument
 with thirteen bands from the visible to the short-wave infrared, at
 10, 20 or 60~m depending on the band, and together revisit the same
-location every five days at the equator and more often at higher
-latitudes.\todo{Cite the ESA Sentinel-2 user guide or mission paper.}
-The data are free and open. The Level-2A product gives surface
-reflectance after atmospheric correction, together with a scene
-classification layer that flags clouds, cloud shadows and snow, which
-is the usual basis for masking unusable pixels \cite{ball2026}.
+location every five days at the equator \cite{esa-s2mission}. Access
+to the data is free, full and open \cite{ec-sentinel-legal}. The
+Level-2A product gives surface reflectance after atmospheric
+correction, together with a scene classification layer that flags
+clouds, cloud shadows and snow \cite{esa-s2processing}, which is the
+usual basis for masking unusable pixels \cite{ball2026}.
+
+Sentinel-1, the radar mission of the same programme, carries a C-band
+synthetic aperture radar, which emits its own signal and so acquires
+images regardless of cloud cover or illumination; over land it records
+the VV and VH polarisations \cite{esa-s1mission}. It is not used
+directly in this work, but it is one of the two inputs of TESSERA
+(Section~\ref{sec:background-fm-tessera}).
 
 A single Sentinel-2 image is a grid of pixels, each holding one
 reflectance value per band for one date. Because clouds hide the
@@ -118,8 +125,15 @@ wall-to-wall. The pixels whose class is known are the reference data.
 They serve two roles that must be kept apart: training the model, and
 evaluating the map it produces on pixels the model has not seen.
 
-Reference data can come from any source whose labels one is willing to trust. The conventional source is specialists, in two ways: field visits confirm the species at a location and give a point or a small plot, and visual interpretation of very-high-resolution imagery delimits whole stands as polygons, which is how the expert data used in this work were made, over 30~cm orthoimagery of 2023. Both are reliable, both are slow, and both are produced for one area and one year. Citizen-science observations are a second source, far cheaper and continuous but made of single points of uneven quality, as the section on citizen-science data
-(Section~\ref{sec:background-cs}) describes; turning them into reference data usable at pixel level is one object of this dissertation. The scarcity of reliable reference data, not of imagery, is the limiting factor of supervised species mapping. In this work both sources are used as reference data, for training and for testing; what is asked is how far the cheap source can stand in for the expensive one.
+Reference data can come from any source whose labels one is willing to trust. The conventional source is specialists, in two ways: field visits confirm the species at a location and give a point or a small plot, and visual interpretation of very-high-resolution imagery delimits whole stands as polygons. Both are reliable, both are slow,
+and both are produced for one area and one year.
+
+Citizen-science observations are a second source, far cheaper and
+continuous but made of single points of uneven quality
+(Section~\ref{sec:background-cs}); turning them into reference data
+usable at pixel level is one object of this dissertation. In this work both sources are
+used as reference data, for training and for testing, and what is
+asked is how much of the expensive source the cheap one can save.
 
 \section{Earth Observation Foundation Models}
 \label{sec:background-fm}
@@ -145,16 +159,16 @@ fixed-length vector per pixel, or per small patch, that summarises
 what the model learned about that location from the full time series
 of observations. Several such products are published as data rather
 than as models, so that a user downloads the embeddings of an area and
-a year and never runs the foundation model \cite{zhu2026}. AlphaEarth,
+a year and never runs the foundation model \cite{stewart2026}. AlphaEarth,
 for example, provides 64-dimensional annual embeddings at 10~m for
 2017 to 2024, computed on 1.28~km tiles with spatial self-attention,
 so that a pixel's embedding also depends on its surroundings; only the
 embeddings are released, not the model \cite{brown2025}. Downstream
-use is then a light classifier on the embeddings. The two reasons to
-prefer a frozen embedding to fine-tuning in this work are practical
-and empirical: the models are either not released or restricted, and
-the TESSERA paper itself found no benefit from fine-tuning its encoder
-over using it frozen \cite{feng2025}.
+use is then a light classifier on the embeddings. AlphaEarth can only
+be used this way, since its model is not released; TESSERA releases
+its weights\footnote{\url{https://huggingface.co/geotessera}, accessed
+18 November 2026.}, but its own evaluation found no benefit from fine-tuning
+the encoder over using it frozen \cite{feng2025}.
 
 \subsection{TESSERA}
 \label{sec:background-fm-tessera}
@@ -165,12 +179,15 @@ multispectral time series and Sentinel-1 radar time series, built from
 a random sample of valid dates, and produces a 128-dimensional
 embedding for that year \cite{feng2025}. The embeddings cover 2017 to
 2024 and are distributed through the GeoTessera library, so that the
-embeddings of an area can be read without running the model. Two
+embeddings of an area can be read without running the model.
+Figure~\ref{fig:background-embedding} shows how such a model is used
+in this work.
+Two
 properties follow from the pixel-wise design. First, the embedding of
 a pixel does not depend on the pixels around it, unlike AlphaEarth;
 the model's pretraining shuffles pixels globally to break spatial
 correlation, and the landscape context is not encoded
-\cite{feng2025,zhu2026}. Second, the embedding is annual: it
+\cite{feng2025,stewart2026}. Second, the embedding is annual: it
 summarises the whole year's time series, and a disturbance inside the
 year, such as a fire, changes it \cite{silva2026}. The model was
 evaluated on tree species, crops, biomass and canopy height with light
@@ -179,6 +196,40 @@ this work it beat a seasonal Sentinel-1 and Sentinel-2 baseline on 18
 tree species in Trentino, reaching near-optimal weighted F1 with about
 5\% of the training parcels \cite{ball2026}. No evaluation of TESSERA
 on a species-occurrence or citizen-science task was found.
+
+\begin{figure}[htb]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  node distance=4mm and 7mm,
+  stage/.style={draw, rounded corners=2pt, align=center, minimum height=10mm,
+    text width=24mm, font=\footnotesize, inner sep=2pt},
+  note/.style={align=center, font=\scriptsize, text width=24mm},
+  flow/.style={-{Latex[length=2mm]}, thick}
+]
+\node[stage] (s2) {Sentinel-2 time series\\of one pixel, one year};
+\node[stage, below=of s2] (s1) {Sentinel-1 time series\\of the same pixel};
+\path (s2.east) -- (s1.east) coordinate[midway] (mid);
+\node[stage, right=10mm of mid] (enc) {Pretrained\\encoder};
+\node[stage, right=of enc] (emb) {Embedding:\\128 values};
+\node[stage, right=of emb] (clf) {Light\\classifier};
+\node[stage, right=of clf] (out) {Score\\per pixel};
+\draw[flow] (s2.east) -- (enc.west);
+\draw[flow] (s1.east) -- (enc.west);
+\draw[flow] (enc) -- (emb);
+\draw[flow] (emb) -- (clf);
+\draw[flow] (clf) -- (out);
+\node[note, below=1mm of enc] {trained once, without labels, by the producers};
+\node[note, below=1mm of emb] {read from the published product};
+\node[note, below=1mm of clf] {the only part trained on reference data};
+\end{tikzpicture}}
+\caption{Use of a pixel-wise Earth Observation foundation model such as
+TESSERA. The encoder, pretrained once without labels, turns the yearly
+Sentinel-1 and Sentinel-2 time series of a pixel into an embedding;
+downstream, only a light classifier is trained, on the embeddings. Own
+illustration, after the design described by \citet{feng2025}.}
+\label{fig:background-embedding}
+\end{figure}
 
 \section{Citizen Science Data}
 \label{sec:background-cs}
@@ -202,10 +253,10 @@ the observer places the organism, which the observer may leave empty.
 Other users can propose identifications. An observation reaches
 \emph{research grade} when it has a date, a location and media, the
 organism is wild, and the community agrees on the identification at
-species level.\todo{Cite the
-iNaturalist help page for the research-grade criteria.} Observations
-whose coordinates the observer or the platform obscures have their
-position randomised within a larger cell and cannot be used at pixel
+species level \cite{inat-researchgrade}. Observations whose
+coordinates are obscured, by the observer or automatically for
+sensitive species, are shown at a random point within a cell of about
+0.2 by 0.2 degrees \cite{inat-geoprivacy}, and cannot be used at pixel
 level. Studies that use iNaturalist as training data keep only
 research-grade observations and filter on positional accuracy, with
 thresholds that depend on the resolution of the imagery: 10~m for
@@ -237,15 +288,22 @@ resolution that distance is often a different pixel.
 
 These properties do not make the data unusable; they define what has
 to be done before using them. The first, the lack of confirmed
-absences, shapes the learning problem, treated in the section on
-learning and evaluating from presences only
-(Section~\ref{sec:background-po-background}); the
-second, the opportunistic sampling, shapes the validation, treated in
-the section on spatial autocorrelation and block cross-validation
+absences, shapes the learning problem
+(Section~\ref{sec:background-po-background}); the second, the
+opportunistic sampling, shapes the validation
 (Section~\ref{sec:background-po-spatial}); and the third, the uneven
 quality of each record, shapes the preparation pipeline that turns
 points into labelled pixels, described in the Proposed Work
 (Chapter~\ref{sec:proposed-work}).
+
+A point label can also be extended to more than one pixel. In image
+segmentation from sparse point labels, each point's label is
+propagated to the superpixel that contains it, a group of adjacent
+pixels with similar values \cite{rivier2024}. Region growing works
+the other way round: it starts from seeds, which can be single pixels,
+and grows a region from each into the image around it
+\cite{adams1994}. Whether either helps for an invasive species at
+10~m, where the point itself may be misplaced, is what RQ2 tests.
 
 \section{Presence-Only Learning and Spatial Validation}
 \label{sec:background-po}
@@ -273,20 +331,61 @@ seen. There are two ways to train without the second class.
 \emph{One-class methods} use the presences alone. They learn what a
 presence pixel looks like and score every other pixel by how much it
 resembles one. The one-class support vector machine does this by
-fitting a boundary that encloses the presences in feature space as
-tightly as possible, and scores a pixel by its distance to that
-boundary. The isolation forest takes the opposite view: it builds
-random trees that split the data, and a pixel that gets isolated in
-few splits is unlike the presences and gets a low score.
+estimating a small region of feature space that holds most of the
+presences, with a function that is positive inside it and negative
+outside, and scores a pixel by that function
+\cite{scholkopf2001}. The isolation forest takes the opposite view:
+instead of describing the presences, it builds random trees that split
+the data, and a pixel that gets isolated in few splits is unlike the
+presences and gets a low score \cite{liu2008}.
 
 \emph{Presence-background methods} create a second class by sampling
 the landscape. A set of pixels is drawn at random over the whole study
 area, called the \emph{background}, and a standard classifier is
-trained to separate the presences from it. The background is not a set
+trained to separate the presences from it. The classifier used in this
+work is logistic regression, which models the log-odds of the class as
+a linear function of the features, here the 128 embedding values, and
+gives each pixel a score between 0 and 1 \cite{james2021}. The background is not a set
 of absences: a background pixel may well hold the species, since
 nobody checked. The classifier's score therefore says how much a pixel
 looks like the presences compared with the landscape in general, and
 not how probable it is that the species is there \cite{phillips2006}.
+Figure~\ref{fig:background-po-methods} contrasts the two families.
+
+\begin{figure}[htb]
+\centering
+\begin{tikzpicture}[
+  pres/.style={circle, fill=black, inner sep=1.3pt},
+  bg/.style={circle, draw, inner sep=1.3pt},
+  lab/.style={font=\scriptsize, align=center}
+]
+\draw (0,0) rectangle (5,4);
+\node[font=\footnotesize, above] at (2.5,4) {One-class};
+\foreach \x/\y in {0.5/2.9, 0.8/3.3, 1.1/2.9, 0.7/2.5, 1.3/3.4, 1.0/3.6, 1.5/3.1, 0.4/2.3, 1.1/2.75, 1.6/3.6} \node[pres] at (\x,\y) {};
+\draw[dashed, thick] (1.0,3.0) ellipse (0.85 and 0.8);
+\node[lab] at (3.4,1.2) {region that holds\\most presences};
+\begin{scope}[xshift=6cm]
+\draw (0,0) rectangle (5,4);
+\node[font=\footnotesize, above] at (2.5,4) {Presence--background};
+\foreach \x/\y in {0.5/2.9, 0.8/3.3, 1.1/2.9, 0.7/2.5, 1.3/3.4, 1.0/3.6, 1.5/3.1, 0.4/2.3, 1.1/2.75, 1.6/3.6} \node[pres] at (\x,\y) {};
+\foreach \x/\y in {0.3/3.7, 2.0/3.8, 0.5/0.5, 1.4/1.1, 2.5/0.6, 3.4/1.5, 4.5/0.8, 4.2/2.6, 3.4/3.2, 4.6/3.6, 2.8/2.0, 3.8/0.4, 0.6/1.4, 2.2/2.5, 1.8/0.3, 4.0/3.9, 3.0/2.9} \node[bg] at (\x,\y) {};
+\draw[thick] (0,1.6) -- (3.0,4.0);
+\node[lab, rotate=38.7] at (2.15,2.95) {decision threshold};
+\end{scope}
+\node[pres] at (3.6,-0.5) {};
+\node[lab, anchor=west] at (3.75,-0.5) {presence};
+\node[bg] at (6.0,-0.5) {};
+\node[lab, anchor=west] at (6.15,-0.5) {background};
+\end{tikzpicture}
+\caption{The two families of presence-only methods, on synthetic points
+in a two-dimensional feature space. Left: a one-class method describes
+the presences alone, here as a region that holds most of them. Right: a
+presence-background method separates the presences from a random
+background, which may itself hold unrecorded presences, such as the two
+background points on the presence side of the threshold. Own
+illustration.}
+\label{fig:background-po-methods}
+\end{figure}
 
 This reading of the score holds for any classifier fitted with
 background pixels: for MaxEnt, which was built on it, and equally for a
@@ -308,7 +407,7 @@ different places and its accuracy is overestimated. And its size is
 usually in the thousands, with 10\,000 points the most common choice.
 
 Two other names appear in the literature, and both are
-presence-background methods in disguise. \emph{MaxEnt} is the most
+presence-background methods under another name. \emph{MaxEnt} is a widely
 used model in species distribution modelling: it is fitted against
 thousands of random background pixels and its output is read as a
 relative index, so it differs from the methods above only in the form
@@ -322,9 +421,9 @@ model \cite{elkan2008}. The real divide is therefore between one-class
 methods, which use only the presences, and everything else, which also
 uses the unlabelled landscape.
 
-On that divide the evidence read for this work points one way. In
-every remote-sensing comparison found, the methods that use the
-landscape beat the one-class ones: a network trained on presences and
+On that divide, the remote-sensing comparisons found all point the
+same way, with the methods that use the landscape ahead of the
+one-class ones: a network trained on presences and
 background against the one-class support vector machine, on aerial and
 satellite scenes \cite{deng2018}; MaxEnt against the same machine
 \cite{li2010}; a positive-unlabelled method against the biased and the
@@ -358,10 +457,19 @@ model places the held-out presences above the landscape at large. One
 form fixes the fraction of the study area the model is allowed to
 predict as presence and measures the fraction of test presences that
 fall inside it, so that two models are compared at equal predicted
-area \cite{phillips2006,peterson2008}. The background then serves only
+area; this is the \emph{sensitivity at a fixed predicted area}
+\cite{phillips2006,peterson2008}. The background then serves only
 to measure that area: against a uniform random background, one minus
 the specificity is almost identical to the proportion of the area
-predicted present \cite{phillips2006}. An unrecorded presence at a
+predicted present \cite{phillips2006}. Plotted against the fraction of
+area, the sensitivity at every threshold gives a ROC curve; its area,
+the ROC-AUC, summarises all fractions at once, with 0.5 for a random
+model and a maximum below 1, because part of the background may hold
+the species \cite{phillips2006}. The continuous Boyce index compares,
+along the range of scores, the share of test presences with the share
+of the study area, and is the rank correlation between their ratio and
+the score: positive when presences concentrate in high scores, near
+zero for a random model \cite{hirzel2006}. An unrecorded presence at a
 background point is never counted as an error, in training or in
 evaluation. This is what makes ``the background is not absence'' true
 in practice and not only in the reading of the model.
@@ -386,16 +494,46 @@ leave residual proximity across the block borders, so the papers that
 compare designs recommend blocks combined with an exclusion buffer
 around the test set, with the buffer set to the range of spatial
 autocorrelation measured in the data, where underestimating the range
-is the unsafe direction \cite{lerest2014,mahoney2023}. For
+is the unsafe direction \cite{lerest2014,mahoney2023}.
+Figure~\ref{fig:background-block-cv} shows one fold of this design.
+For
 embedding-based models the design changes the conclusion: in a
 comparison of TESSERA and AlphaEarth against Sentinel features for
 old-growth forest, the advantage of the embeddings narrowed from 0.08
 to 0.04 PR-AUC once a 10~km buffer separated training from test folds
 \cite{ratsakatika2026}. The \emph{Acacia} mapping studies in Iberia
-cited in the section on \emph{A.~dealbata} in Portugal
 (Section~\ref{sec:background-iap-acacia}) all used random
 splits \cite{martins2016,mouta2021,domingo2023}, so their accuracies
 are not comparable with a spatially validated result.
+
+\begin{figure}[htb]
+\centering
+\begin{tikzpicture}[scale=1.1,
+  train/.style={circle, fill=black, inner sep=1.1pt},
+  excl/.style={circle, fill=gray!60, inner sep=1.1pt},
+  lab/.style={font=\scriptsize, align=left, anchor=west}
+]
+\fill[gray!15] (1.5,0.5) rectangle (3.5,2.5);
+\fill[gray!40] (2,1) rectangle (3,2);
+\draw[step=1, gray] (0,0) grid (5,4);
+\draw[dashed] (1.5,0.5) rectangle (3.5,2.5);
+\foreach \x/\y in {3.21/0.42, 0.42/2.03, 0.33/1.75, 0.48/0.49, 2.15/3.21, 0.73/0.98, 3.1/3.66, 4.74/0.32, 4.18/1.22, 0.83/0.59, 1.6/3.17, 1.0/2.3, 2.72/0.38, 0.43/0.91, 3.88/2.74, 1.3/2.28, 2.62/3.39, 3.58/1.22, 4.76/0.59, 2.12/2.95, 0.86/1.96, 0.33/2.62, 3.74/2.27, 4.26/1.31, 4.1/3.65, 2.38/2.61, 0.44/2.75, 3.19/3.82, 4.01/1.2, 1.96/2.62, 0.26/1.86, 0.94/0.58, 0.43/2.99, 0.76/1.07, 1.99/3.37, 0.53/1.81, 2.73/3.42} \node[train] at (\x,\y) {};
+\foreach \x/\y in {1.67/0.71, 3.15/1.53, 3.35/1.73, 1.63/2.32, 3.42/2.35} \node[excl] at (\x,\y) {};
+\foreach \x/\y in {2.67/1.5, 2.86/1.62, 2.28/1.26, 2.88/1.84} \node[font=\footnotesize] at (\x,\y) {$\times$};
+\node[train] at (5.5,3.5) {};
+\node[lab] at (5.65,3.5) {training};
+\node[font=\footnotesize] at (5.5,3.0) {$\times$};
+\node[lab] at (5.65,3.0) {test (held-out block)};
+\node[excl] at (5.5,2.5) {};
+\node[lab] at (5.65,2.5) {left out (buffer)};
+\end{tikzpicture}
+\caption{One fold of block cross-validation with an exclusion buffer.
+The study area is divided into blocks; one block is held out as the
+test set, reference pixels within a buffer around it are left out, and
+the model is trained on the rest. Each block is held out in turn. Own
+illustration.}
+\label{fig:background-block-cv}
+\end{figure}
 
 \section{Overall Analysis}
 \label{sec:background-overall}
@@ -412,9 +550,8 @@ reference data, by giving each pixel an embedding usable with a light
 classifier and no fine-tuning. Citizen science offers reference data
 at a scale and continuity that specialists cannot, but as presences
 only, concentrated where observers go, with uneven positional quality.
-Combining the two raises the two methodological questions of the
-section on presence-only learning and spatial validation
-(Section~\ref{sec:background-po}), which the Proposed Work
+Combining the two raises the two methodological questions of
+Section~\ref{sec:background-po}, which the Proposed Work
 (Chapter~\ref{sec:proposed-work}) turns into the design: how to learn
 and evaluate from presences without treating the rest of the landscape
 as absence, and how to validate over space so that the result says

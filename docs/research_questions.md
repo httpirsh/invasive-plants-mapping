@@ -28,20 +28,22 @@ this document:
 
 ## Main Question and Objectives
 
-*Wording and numbering mine, to confirm with the supervisor
-([`thesis/notes.md`](../thesis/notes.md#renumeracao-perguntas-2026-11-13);
-main question:
-[`thesis/notes.md`](../thesis/notes.md#pergunta-principal-dados-de-treino)).*
+*Wording and numbering mine; numbering to confirm with the supervisor
+([`thesis/notes.md`](../thesis/notes.md#renumeracao-perguntas-2026-11-13)).
+Main question and general objective: mine, final
+([`thesis/notes.md`](../thesis/notes.md#pergunta-principal-dados-de-treino)).*
 
 **Main question:** To what extent can citizen-science observations,
 turned into reference data and represented by Earth Observation
-foundation-model embeddings, replace expert reference data as training
-data for mapping *Acacia dealbata* in the Coimbra district?
+foundation-model embeddings, reduce the amount of expert reference
+data needed to train a model that maps *Acacia dealbata* in the
+Coimbra district?
 
 **General objective:** to assess to what extent citizen-science
 observations, turned into reference data and represented by
-foundation-model embeddings, can replace expert reference data as
-training data for mapping *A. dealbata* in the Coimbra district.
+foundation-model embeddings, can reduce the amount of expert
+reference data needed to train a model that maps *A. dealbata* in the
+Coimbra district.
 
 **Specific objectives:**
 
@@ -75,9 +77,11 @@ ROC-AUC and the continuous Boyce index as secondary metrics (to
 confirm with the supervisor; the area fraction, 10%, is my choice:
 [`thesis/notes.md`](../thesis/notes.md#rq1-presence-only)).
 
-**What "replace" means here:** the difference in performance between
-models trained on citizen-science observations and models trained
-with expert reference data. Both sources are reference data, used
+**What "reduce" means here:** read from the RQ1 curve, the
+performance of models trained on citizen-science observations alone
+and with increasing fractions of the expert polygons added, against a
+model trained on expert data alone. "Amount" is the fraction of the
+expert polygons in the training set. Both sources are reference data, used
 for training and for testing: in RQ1 the expert polygons enter the
 training set in increasing fractions and every test set holds both
 sources; the test set of each other question is stated in its own
@@ -586,8 +590,8 @@ models" and must be stated as such.
 Reasons:
 
 - AlphaEarth is released only as embeddings; it cannot be fine-tuned.
-- TESSERA code is open and the paper describes the weights as open,
-  but the repository restricts the checkpoint (checked 2026-11-11).
+- TESSERA weights are public (CC0, Hugging Face `geotessera`), so
+  fine-tuning is possible; it is not done for the reasons below.
 - Fine-tuning the TESSERA encoder gave no benefit over frozen
   embeddings in its own paper (Feng et al., 2026).
 - With few, noisy labels, fine-tuning risks fitting the noise.

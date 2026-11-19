@@ -7,7 +7,8 @@ must be revisited after a broader search (protocol in
 
 Every entry was re-read on 2026-11-11 from the full text where it
 could be obtained. Seven entries were added on 2026-11-14, three on
-2026-11-17 and three on 2026-11-18 (marked in their status), read from
+2026-11-17, three on 2026-11-18 and ten on 2026-11-19 (marked in
+their status), read from
 the PDF or web page converted to text; on 2026-11-17 two entries also
 went from abstract only to read in full. Each paper has a status:
 
@@ -68,10 +69,12 @@ neighbour heads; no species-occurrence or citizen-science task.
   shuffling to break spatial autocorrelation (§3.3, A.9). The
   embeddings do not encode the landscape around a pixel.
 - **Coverage stated in the paper:** 2017–2024 (A.4).
-- **Weights:** the paper says "open-source model weights"; the
-  repository README (checked 2026-11-11) says the checkpoint is
-  restricted to Cambridge members. Code licence (MIT) is from the
-  repository, not the paper.
+- **Weights:** the paper says "open-source model weights". The
+  repository README and the Hugging Face organisation `geotessera`
+  (checked 2026-11-18) publish the v1.0, v1.1 and v2 checkpoints
+  without gating, under CC0, including full checkpoints for
+  fine-tuning. Code licence (MIT) is from the repository, not the
+  paper.
 - Embeddings are built from a random sample of 40 valid dates per
   year; accuracy drops where valid Sentinel-2 observations are few.
 
@@ -827,6 +830,52 @@ remote-sensing comparisons use random pixel draws on very high
 resolution imagery, none a spatial split. None of these studies
 matches this setup, but the thesis's own tests agreed with them.
 
+**Schölkopf, Platt, Shawe-Taylor, Smola & Williamson (2001).**
+Estimating the Support of a High-Dimensional Distribution. *Neural
+Computation*, 13(7), 1443–1471.
+DOI: [10.1162/089976601750264965](https://doi.org/10.1162/089976601750264965)
+— *Abstract only (added 2026-11-19)*
+
+The one-class support vector machine. It estimates a region of input
+space such that a new point drawn from the same distribution falls
+outside it with a probability fixed in advance; the learned function
+is positive inside the region and negative outside, a kernel expansion
+on a small subset of the training points.
+
+**What it supports:** the description of the one-class SVM in the
+Background (2.5.1): a small region holding most of the presences,
+scored by that function. **What it does not:** no remote-sensing or
+species use.
+
+**Liu, Ting & Zhou (2008).** Isolation Forest. *2008 Eighth IEEE
+International Conference on Data Mining*, pp. 413–422.
+DOI: [10.1109/ICDM.2008.17](https://doi.org/10.1109/ICDM.2008.17)
+— *Abstract only (added 2026-11-19; the introduction, §1, was also
+read)*
+
+Isolates anomalies instead of describing normal points: random trees
+split the data, and anomalies, "few and different", are isolated
+closer to the root, so a short path means an anomaly. Works when the
+training set holds no anomalies.
+
+**What it supports:** the description of the isolation forest in the
+Background (2.5.1). **What it does not:** no remote-sensing or species
+use; the scoring formula (§2 onwards) was not read.
+
+**James, Witten, Hastie & Tibshirani (2021).** *An Introduction to
+Statistical Learning: with Applications in R*, 2nd ed. Springer, New
+York. DOI: [10.1007/978-1-0716-1418-1](https://doi.org/10.1007/978-1-0716-1418-1)
+— *Read (§4.3 only, added 2026-11-19; free PDF from statlearning.com)*
+
+Logistic regression models the probability of a class with the
+logistic function, so the output lies between 0 and 1; its log-odds
+(logit) is linear in the features; fitted by maximum likelihood.
+
+**What it supports:** the definition of the classifier in the
+Background (2.5.1). **What it does not:** nothing on presence-only
+data; reading the score as a probability does not hold with a
+background sample (Phillips et al. 2006, above).
+
 ### Evaluating presence-only models without confirmed absences
 
 **Hirzel, Le Lay, Helfer, Randin & Guisan (2006).** Evaluating the
@@ -1117,6 +1166,61 @@ the first author on 2026-11-18)*
 Field study of *A. dealbata* seed banks at sites in central Portugal.
 Known only through Dessì et al. (2021) above; not cited until read.
 
+**Lorenzo, González & Reigosa (2010).** The genus *Acacia* as invader:
+the characteristic case of *Acacia dealbata* Link in Europe. *Annals of
+Forest Science*, 67(1), 101.
+DOI: [10.1051/forest/2009082](https://doi.org/10.1051/forest/2009082)
+— *Abstract only (added 2026-11-19; open access, but the PDF could not
+be downloaded)*
+
+Review of *A. dealbata* as an invader in Europe. Its spread is
+assisted by soil disturbance and severe fires; traits favouring
+invasion include tolerance of changing soils, use of disturbance,
+phenotypic plasticity, vegetative reproduction, fire tolerance and
+allelopathic potential. "Effects on the biodiversity of native flora
+are little understood."
+
+**What it supports:** the link between the species and disturbance and
+fire. **What it does not:** that the species excludes native
+vegetation; the abstract says this is little studied, so the thesis no
+longer claims it (Introduction and Background 2.1.1 changed on
+2026-11-19).
+
+### Invasive alien species: assessment and law
+
+**IPBES (2023).** Summary for Policymakers of the Thematic Assessment
+Report on Invasive Alien Species and their Control. IPBES/10/12/Add.1,
+Bonn. [PDF](https://ipbes.net/resource-file/105136)
+— *Read (key messages and section C, added 2026-11-19)*
+
+Global assessment. Invasive alien species contributed to 60% of
+recorded global extinctions and were the only driver in 16%; their
+economic costs have quadrupled every decade since 1970 (KM-B2).
+Prevention and preparedness are the most cost-effective options
+(KM-C2). Eradication has succeeded "especially for small and
+slow-spreading populations", large-scale eradication is often
+infeasible, and eradication is generally more cost-effective than
+long-term and permanent control (KM-C3).
+
+**What it supports:** the first sentence of the Introduction and the
+cost argument in Background 2.1.2 (act while the invasion is small).
+**What it does not:** nothing specific to *Acacia* or to Portugal.
+
+**Decreto-Lei n.º 92/2019, de 10 de julho.** *Diário da República*,
+1.ª série, n.º 130.
+[Text](https://diariodarepublica.pt/dr/detalhe/decreto-lei/92-2019-123025739)
+— *Read (article 3 definitions and annex II, added 2026-11-19)*
+
+Portugal's regime for alien and invasive species, implementing
+Regulation (EU) 1143/2014. Article 3 j) defines an invasive species as
+an alien species whose introduction or spread threatens or has an
+adverse impact on biodiversity and the associated ecosystem services.
+Annex II, the national list of invasive species, lists "*Acacia*
+spp.", the whole genus.
+
+**What it supports:** the definition of invasive species in the
+Background (2.1) and the legal status of *A. dealbata*.
+
 ### Forest statistics and fire in Portugal
 
 **ICNF (2019).** 6.º Inventário Florestal Nacional, IFN6: relatório
@@ -1289,9 +1393,64 @@ A precedent for propagating point labels by similarity to the
 labelled points on frozen foundation-model features. Not remote
 sensing, multi-class, and without positional error in the points.
 
+**Adams & Bischof (1994).** Seeded Region Growing. *IEEE Transactions
+on Pattern Analysis and Machine Intelligence*, 16(6), 641–647.
+DOI: [10.1109/34.295913](https://doi.org/10.1109/34.295913)
+— *Abstract only (added 2026-11-19)*
+
+Image segmentation from seeds, single pixels or regions, which control
+the formation of the regions; the seeds can be chosen by hand or
+automatically.
+
+**What it supports:** the general idea of region growing from a seed
+pixel, named in Background 2.4.2. **What it does not:** any threshold,
+connectivity or radius for RQ2, nor remote sensing.
+
 **No paper read propagates with a similarity threshold, a
 connectivity rule or a maximum radius, or from presence-only
 points**, the elements of the RQ2 region-growing rule.
+
+### Official documentation
+
+Web pages cited for facts about a mission or a platform, not papers.
+
+**European Space Agency, SentiWiki: S2 Mission, S2 Processing and S1
+Mission.** [S2 Mission](https://sentiwiki.copernicus.eu/web/s2-mission),
+[S2 Processing](https://sentiwiki.copernicus.eu/web/s2-processing),
+[S1 Mission](https://sentiwiki.copernicus.eu/web/s1-mission)
+— *Read (web pages, added 2026-11-19)*
+
+- **Sentinel-2:** two identical satellites; the MSI samples 13 bands,
+  four at 10 m, six at 20 m and three at 60 m; revisit of 5 days at
+  the equator. No revisit figure for mid-latitudes. Level-2A is
+  atmospherically corrected surface reflectance with a scene
+  classification map flagging clouds, cloud shadows and snow.
+- **Sentinel-1:** C-band synthetic aperture radar, images regardless
+  of weather or illumination; VV+VH is the main land mode; IW mode at
+  5 × 20 m; 6-day exact repeat with two satellites.
+
+**European Commission. Legal notice on the use of Copernicus Sentinel
+Data and Service Information.**
+[PDF](https://sentinels.copernicus.eu/documents/247904/690755/Sentinel_Data_Legal_Notice)
+— *Read (added 2026-11-19)*
+
+Users have "free, full and open access" to Copernicus Sentinel data,
+under EU law.
+
+**iNaturalist Help: Research Grade and geoprivacy.**
+[Research Grade](https://help.inaturalist.org/en/support/solutions/articles/151000169936),
+[Geoprivacy](https://help.inaturalist.org/en/support/solutions/articles/151000169938),
+[Sensitive species](https://help.inaturalist.org/en/support/solutions/articles/151000233080)
+— *Read (web pages, added 2026-11-19)*
+
+- **Research Grade:** the observation must have an accurate date and
+  location, photos or sounds, and a wild organism, and the community
+  must agree on a species-level identification (more than two thirds
+  of identifiers).
+- **Obscured coordinates:** only the observer sets the geoprivacy of
+  their observations; the platform obscures threatened taxa
+  automatically. Obscured coordinates are replaced by a random point
+  in a cell of about 0.2 × 0.2 degrees.
 
 ## Data Sources Found in the Literature Search
 
@@ -1343,7 +1502,7 @@ None of these, on its own, is this thesis's novelty.
 ## Gap
 
 Each ingredient has prior work; their intersection — **citizen
-science as a substitute for expert reference data in training, for
+science reducing the expert reference data needed for training, for
 an invasive plant, with EO foundation-model embeddings** — appears
 underexplored:
 
@@ -1404,11 +1563,11 @@ Four specific questions not answered by any of the above:
 
 ## Contribution
 
-**Citizen science as a substitute for expert reference data in
+**Citizen science to reduce the expert reference data needed for
 invasive plant mapping with EO foundation models.** Not "apply TESSERA
 to invasive plants", but a controlled study of how far
-citizen-science observations, turned into reference data, can replace
-expert reference data as training data: with increasing amounts of
+citizen-science observations, turned into reference data, can reduce
+the amount of expert reference data needed to train the model: with increasing amounts of
 expert data, with
 point labels extended to patches, away from the sampled area, and
 against a conventional satellite baseline. Wording mine, to confirm

@@ -2,12 +2,12 @@
 \label{sec:introduction}
 
 Invasive alien plants alter ecosystems, reduce native biodiversity and
-are costly to control once they have spread over large areas.
-\emph{Acacia dealbata} (silver wattle), native to south-eastern
-Australia, is one such species in Portugal, where several \emph{Acacia}
-species are classified as invasive under national law (Decree-Law
-No.~92/2019). It forms dense stands that outcompete native vegetation,
-and knowing where it currently grows is a prerequisite for any control
+are costly to control once they have spread over large areas
+\cite{ipbes2023}. \emph{Acacia dealbata} (silver wattle), native to
+south-eastern Australia \cite{dessi2021}, is one such species in
+Portugal, where the whole genus \emph{Acacia} is listed as invasive
+under national law \cite{dl92-2019}. It forms stands of its own and
+spreads inside stands of other species \cite{icnf2019}, and knowing where it currently grows is a prerequisite for any control
 effort. Producing an up-to-date map over a large area is nonetheless
 difficult: the species must be told apart from visually similar trees
 and shrubs in a satellite image, the land it occupies changes from
@@ -26,6 +26,31 @@ first experiment.
 \section{Context and Motivation}
 \label{sec:introduction-motivation}
 
+Knowing where the species grows is precisely what the official
+sources do not provide. Portugal's national forest inventory, the
+reference source for forest composition, is produced once a decade
+from photo-points and field plots; its latest edition has 2015 as
+reference year and was published in 2019 \cite{icnf2019}. It recorded
+8.4 thousand hectares of stands dominated by acacias, three times the
+1995 figure, but as a sample it locates none of them, and it counts
+the species only where it dominates, although it also occurred in
+14\% of the maritime-pine area and 19\% of the eucalyptus area. For a
+species that spreads inside other stands and re-establishes after
+fire, a decennial sample is not a map.
+
+Keeping a map current matters more for a species that benefits from
+disturbance. In burnt stands in the Coimbra district, fire promoted
+\emph{A.~dealbata} seed germination and no treatment prevented
+regeneration within three years \cite{riveiro2025}, so a burnt area
+where the species was present is a likely site of reinvasion rather
+than a cleared one. Large fires are recurrent: in 2024 Portugal was
+the most affected country in the European Union, with 147 thousand
+hectares burnt, almost all of them in one week of September and most
+of them in the centre of the country \cite{sanmiguel2025}. A map of
+current stands that is cheap to produce and to repeat is what makes it
+possible to anticipate where control will be needed, instead of
+recording the invasion after it has spread.
+
 Satellites make it possible to observe vegetation repeatedly and at
 scale. The Sentinel-2 mission, for example, revisits the same location
 every few days and records several spectral bands beyond what the
@@ -37,92 +62,59 @@ flowering period \cite{domingo2023,martins2016}.
 
 Classifying pixels requires reference data: locations where the
 species is known to be present (and, ideally, known to be absent),
-used to train and evaluate the classifier. Collecting this data in the
-field is slow and expensive.
+used to train and evaluate the classifier. Reference data of this kind
+are usually produced by specialists: field visits to confirm the
+species, or careful interpretation of very-high-resolution images by
+someone who knows what to look for. The result is reliable and
+delimits stands rather than single points, but it is slow and
+expensive to collect, it is produced once, for one area and one year,
+and every new area or new year costs the same expert time again. This
+is what keeps species-level maps rare and quickly outdated. Citizen
+science offers the opposite trade-off: on platforms such as
+iNaturalist, members of the public record species observations with a
+photograph, a date and a location of limited precision, identified by
+other users rather than by an expert \cite{gillespie2024}. These
+records are opportunistic rather than designed, but they are collected
+continuously and over the whole country at no cost to the mapping
+effort. If these observations could do part of the work that expert
+data does today, maps could be produced for more areas and updated
+more often than expert surveys allow.
 
-Reference data of this kind are usually produced by specialists:
-field visits to confirm the species, or careful interpretation of
-very-high-resolution images by someone who knows what to look for.
-The result is reliable and delimits stands rather than single points,
-but it is produced once, for one area and one year, and every new area
-or new year costs the same expert time again. This is what keeps
-species-level maps rare and quickly outdated. Citizen science offers
-the opposite trade-off: observations made by non-specialists, with a
-photograph and a location of limited precision, identified by other
-users rather than by an expert, but collected continuously and over
-the whole country at no cost to the mapping effort. If these
-observations could do part of the work that expert data does today,
-maps could be produced for more areas and updated more often than
-expert surveys allow.
+What makes this plausible now is the arrival of \emph{Earth
+Observation foundation models}: models pre-trained on large volumes of
+satellite imagery that turn each pixel into a fixed-length vector, or
+\emph{embedding}, capturing structure learned across many places and
+times, rather than a hand-engineered spectral feature. TESSERA
+\cite{feng2025} and AlphaEarth \cite{brown2025} are two recent
+examples. For a reader familiar with machine learning but not Earth
+Observation, the closest analogy is a pre-trained language or vision
+model: instead of engineering features by hand, a light classifier is
+trained on top of embeddings produced by a model that has already
+learned general-purpose structure from far more data than any single
+study could label.
 
-The gap this leaves is visible in the official statistics. Portugal's
-national forest inventory, the reference source for forest
-composition, is produced once a decade from photo-points and field
-plots; its latest edition has 2015 as reference year and was published
-in 2019 \cite{icnf2019}. It recorded 8.4 thousand hectares of stands
-dominated by acacias, three times the 1995 figure, but as a sample it
-locates none of them, and it counts the species only where it
-dominates, although it also occurred in 14\% of the maritime-pine
-area and 19\% of the eucalyptus area. For a species that spreads
-inside other stands and re-establishes after fire, a decennial sample
-is not a map.
-
-Two developments offer a way to work within that cost. The
-first is \emph{Earth Observation foundation models}: models
-pre-trained on large volumes of satellite imagery that turn each pixel
-into a fixed-length vector, or \emph{embedding}, capturing structure
-learned across many places and times, rather than a hand-engineered
-spectral feature. TESSERA \cite{feng2025} and AlphaEarth
-\cite{brown2025} are two recent examples. For a reader familiar with
-machine learning but not Earth Observation, the closest analogy is a
-pre-trained language or vision model: instead of engineering features
-by hand, a light classifier is trained on top of embeddings produced
-by a model that has already learned general-purpose structure from far
-more data than any single study could label. The second is
-\emph{citizen science}: platforms such as iNaturalist let members of
-the public record species observations with a photograph, a date and a
-location \cite{gillespie2024}. These records are far cheaper to obtain
-than a field survey, but they are opportunistic rather than
-systematic: a citizen-science dataset is a set of points where someone
-happened to look and recognise the species, not a designed survey, and
-it almost never records a confirmed absence.
-
-Combining citizen science with Earth Observation foundation models is
-attractive because the two weaknesses are complementary in principle:
-citizen science is cheap but biased and incomplete, while foundation
-models are expensive to produce but, once available, are reused for
-free across tasks. Whether that combination actually works for a
+The two developments fit each other. Citizen science supplies labels
+cheaply, but few of them and of uneven quality; foundation-model
+embeddings let a light classifier learn from few labels, because the
+general structure of the imagery has already been learned without
+them \cite{ball2026}. Whether that combination actually works for a
 specific invasive species in a specific region is an open empirical
 question, not something that follows automatically from either
 technology on its own.
 
-Keeping such maps current matters more for a species that benefits
-from disturbance. In burnt stands in the Coimbra district, fire
-promoted \emph{A.~dealbata} seed germination and no treatment
-prevented regeneration within three years \cite{riveiro2025}, so a
-burnt area where the species was present is a likely site of
-reinvasion rather than a cleared one.
-Large fires are recurrent: in 2024 Portugal was the most affected
-country in the European Union, with 147 thousand hectares burnt,
-almost all of them in one week of September and most of them in the
-centre of the country \cite{sanmiguel2025}. A map of current stands
-that is cheap to produce and to repeat is what makes it possible to
-anticipate where control will be needed, instead of recording the
-invasion after it has spread.
-
 Using citizen-science observations as reference data raises problems
-of its own, all of them visible in the Coimbra-district iNaturalist
-data explored for this work. Observations cluster along roads and
-trails rather than where the species grows \cite{dimson2023}, and a
-single observer made most of them, so the data cover few of the
-conditions in which \emph{A.~dealbata} occurs. They record presences
-only, never a confirmed absence \cite{phillips2009}. Their positions
-are imprecise relative to a 10-metre pixel, and many were made in
-years other than the imagery \cite{ball2026}. They are few. And
-because nearby observations resemble each other, a model evaluated on
-points next to its training points looks better than it is
-\cite{karasiak2022}, a problem that grows when the model is applied
-away from where the observations were made \cite{zhu2026}.
+of its own. Observations cluster along roads and trails rather than
+where the species grows \cite{dimson2023}; in the Coimbra district, a
+single observer made 90\% of the 2\,465 presences kept for this work,
+so the data may cover few of the conditions in which
+\emph{A.~dealbata} occurs. They record presences only, never a
+confirmed absence \cite{phillips2009}. Their positions are imprecise
+relative to a 10-metre pixel, and many were made in years other than
+the imagery \cite{ball2026}. And because nearby observations resemble
+each other, a model evaluated on points next to its training points
+looks better than it is \cite{karasiak2022}, while classifiers trained
+on foundation-model embeddings lose accuracy when applied to a region
+other than the one they were trained in \cite{yang2026}.
 
 \section{Research Questions and Goals}
 \label{sec:introduction-rqs}
@@ -138,37 +130,52 @@ question of this dissertation is:
 \begin{quote}
 To what extent can citizen-science observations, turned into
 reference data and represented by Earth Observation foundation-model
-embeddings, replace expert reference data as training data for
-mapping \emph{Acacia dealbata} in the Coimbra district?
+embeddings, reduce the amount of expert reference data needed to
+train a model that maps \emph{Acacia dealbata} in the Coimbra
+district?
 \end{quote}
 
-``Replace'' is read as a difference in performance between models
-trained on citizen-science observations and models trained with
-expert reference data, measured on the same held-out locations,
-which hold presences from both sources; it is a question of degree,
-not a yes/no answer. Four
-secondary questions operationalise it, in order of priority. Each
-uses only what the questions before it define, and the one that
+The reduction is read from a curve: the performance of a model trained
+on citizen-science observations alone and with increasing fractions of
+the expert polygons added, compared with a model trained on expert
+data alone, all measured on the same held-out locations, which hold
+presences from both sources. The answer is a degree, not a yes/no.
+Answering this question is the general objective of this
+dissertation. Four secondary questions operationalise it, in order of
+priority, each followed by the specific objective that answers it.
+Each uses only what the questions before it define, and the one that
 depends on Sentinel-2 imagery comes last.
 
 \begin{itemize}
   \item \textbf{RQ1 -- Citizen science as a substitute for expert
   data.} To what extent does a model trained only on citizen-science
   observations reach the performance of models trained with expert
-  reference data?
+  reference data?\\
+  \emph{Objective:} measure the performance gained by adding 10\% to
+  100\% of the expert polygons to a citizen-science base, compare it
+  with an expert-only model, and report the performance of the
+  citizen-science-only model on expert reference data.
   \item \textbf{RQ2 -- From point observations to reference data.} To
   what extent do the grade and accuracy filters applied to
   citizen-science observations, and the extension of each label from
   the observed pixel to the vegetation patch around it, change the
-  performance of \emph{A.~dealbata} mapping?
+  performance of \emph{A.~dealbata} mapping?\\
+  \emph{Objective:} build and document the process that turns
+  citizen-science point observations into reference data, and measure
+  how its grade and accuracy filters, and the extension of each label
+  to the surrounding vegetation patch, change performance.
   \item \textbf{RQ3 -- Transferability away from the sampled area.}
   To what extent does the performance of the citizen-science-trained
   model drop from locations near the sampled area to locations far
-  from it?
+  from it?\\
+  \emph{Objective:} measure the difference in performance between
+  locations near and far from the sampled area.
   \item \textbf{RQ4 -- Foundation models against conventional
   features.} To what extent do TESSERA embeddings improve
   \emph{A.~dealbata} mapping over Sentinel-2 features when trained on
-  cleaned citizen-science data, with all observations and with few?
+  cleaned citizen-science data, with all observations and with few?\\
+  \emph{Objective:} compare TESSERA-based and Sentinel-2-based models,
+  with all observations and with few.
 \end{itemize}
 
 Figure~\ref{fig:introduction-pipeline} places each question at the
@@ -223,30 +230,17 @@ Sentinel-2 features.}
 \label{fig:introduction-pipeline}
 \end{figure}
 
-Answering this question is the general objective of this
-dissertation. It is broken down into the following specific goals:
-
-\begin{itemize}
-  \item \textbf{Effort-reduction curve:} Measure the performance
-  gained by adding 10\% to 100\% of the expert polygons to a
-  citizen-science base, compare it with an expert-only model, and
-  report the performance of the citizen-science-only model on expert
-  reference data (RQ1).
-  \item \textbf{Reference-data pipeline:} Build and document the
-  process that turns citizen-science point observations into
-  reference data, and measure how its grade and accuracy filters, and
-  the extension of each label to the surrounding vegetation patch,
-  change performance (RQ2).
-  \item \textbf{Spatial transferability:} Measure the difference in
-  performance between locations near and far from the sampled area
-  (RQ3).
-  \item \textbf{Representation comparison:} Compare TESSERA-based and
-  Sentinel-2-based models, with all observations and with few (RQ4).
-\end{itemize}
+Two choices narrow the thesis proposal, which named a limited number
+of species and the fine-tuning of foundation models. The work maps a
+single species, \emph{A.~dealbata}, because the expert polygons cover
+only that species, so the comparison with expert data is possible only
+for it. And it uses the foundation model frozen, as a source of
+embeddings, because the TESSERA evaluation found no benefit from
+fine-tuning its encoder (Section~\ref{sec:background-fm-embeddings}).
 
 RQ1 alone constitutes a complete result and is the core deliverable
-of this work, answering the main objective of the MAP.INVADER project
-proposal this dissertation is part of; a preliminary version of its
+of this work, answering the main objective of the thesis proposal,
+developed within the MAP.INVADER project; a preliminary version of its
 curve is reported in the preliminary experiment of the Proposed Work
 (Section~\ref{sec:proposed-work-preliminary}). The
 full design of each question, including hypotheses, validation and
@@ -270,8 +264,8 @@ addressed.
 Observations cluster near roads and trails \cite{dimson2023} &
 Sampling / dataset bias & RQ3 \\
 \hline
-A single observer made most observations (83\% overall, 88\% of the
-cleaned presences used in this thesis) & Low training-data diversity &
+A single observer made most observations (83\% overall, 90\% of the
+cleaned presences used in this dissertation) & Low training-data diversity &
 RQ3; observer balancing (Proposed Work, Chapter~\ref{sec:proposed-work}) \\
 \hline
 Citizen science records only presences, never confirmed absences
@@ -291,13 +285,13 @@ Nearby observations inflate accuracy estimates \cite{karasiak2022} &
 Data leakage / spatial autocorrelation & Spatial validation
 (Proposed Work, Chapter~\ref{sec:proposed-work}) \\
 \hline
-Weaker transfer of embeddings to new regions \cite{zhu2026} &
+Weaker transfer of embeddings to new regions \cite{yang2026} &
 Distribution shift & RQ3 \\
 \hline
 \end{tabularx}
 \caption{Practical problems in using citizen-science data with Earth
 Observation foundation models, and where each is addressed in this
-thesis.}
+dissertation.}
 \label{tab:introduction-problems}
 \end{table}
 
