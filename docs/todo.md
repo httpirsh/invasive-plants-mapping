@@ -21,9 +21,13 @@ com o classificador presence-only a 2026-11-17). Numeração das perguntas:
   perguntas e dizia que o fundo vinha de observações de outras
   espécies; corrigida e movida para o fim da secção 1.2 a 2026-11-18
   ([thesis/notes.md](../thesis/notes.md#revisao-consistencia-2026-11-13)).
-- [ ] Máscara de segmentação: apresentar as duas regras,
-  fundamentadas na literatura, com a comparação planeada na RQ2
-  ([thesis/notes.md](../thesis/notes.md#rq2-proposta-mascara)).
+- [ ] Máscara de segmentação: apresentar no Proposed Work as duas
+  regras e a comparação planeada na RQ2. A ideia de cada regra tem
+  fonte (Rivier et al. 2024; Adams & Bischof 1994); os valores da
+  configuração (limiar, conectividade, raio, tamanho dos superpixels)
+  entram como escolha minha, sem valor na literatura, como o tampão de
+  50 m ([thesis/notes.md](../thesis/notes.md#rq2-proposta-mascara);
+  [desenho](research_questions.md#rq2--from-point-observations-to-reference-data)).
 - [ ] Reportar no relatório a análise de sensibilidade da curva da RQ1
   à zona-tampão (300 m e 1 km), ao lado da curva sem tampão
   ([thesis/notes.md](../thesis/notes.md#validação-espacial-no-lado-dos-especialistas-zona-tampão-além-dos-blocos-de-10-km)).
@@ -50,6 +54,30 @@ com o classificador presence-only a 2026-11-17). Numeração das perguntas:
   TESSERA à volta das observações e correr o desenho que o orientador
   confirmar, com a configuração já fixada
   ([thesis/notes.md](../thesis/notes.md#renumeracao-perguntas-2026-11-13)).
+- [ ] RQ2, literatura, antes de correr a máscara: procurar fundamento
+  para a configuração do *region growing* (limiar de semelhança,
+  conectividade de 4, raio de 5 píxeis): ler Adams & Bischof (1994)
+  completo (só li o resumo) e o texto completo de Zhang et al. (2021),
+  e procurar *region growing* em deteção remota a 10 m
+  ([literatura](literature.md#weak-supervision-from-point-labels)).
+- [ ] RQ2, literatura: ler o artigo original do SLIC (Achanta et al.
+  2012, ainda não lido) e procurar fundamento para o tamanho médio de
+  25 píxeis e a compacidade 0,1 dos superpixels.
+- [ ] RQ2, literatura: alargar a pesquisa de precedentes de propagação
+  de pontos só de presença, de ciência cidadã, sobre embeddings de
+  satélite congelados, para confirmar ou não que é um contributo
+  ([desenho](research_questions.md#rq2--from-point-observations-to-reference-data)).
+- [ ] RQ2, decidir: manter a configuração fixa da máscara ou propor um
+  teste de sensibilidade barato (por exemplo, três valores do limiar),
+  com o critério escrito antes de correr e só com aprovação minha.
+- [ ] RQ2, decidir: como verificar se a máscara se espalha para
+  vegetação que não é *A. dealbata* (risco do desenho), por exemplo
+  com os polígonos de especialistas, antes de ler o resultado.
+- [ ] RQ2, decidir: na condição sem filtros, o fundo foi tirado com a
+  exclusão de 50 m só à volta das presenças filtradas; decidir se se
+  refaz a exclusão para as presenças acrescentadas ou se fica como
+  risco declarado
+  ([desenho](research_questions.md#rq2--from-point-observations-to-reference-data)).
 - [ ] RQ2 (filtros de grau e de precisão): correr as duas condições,
   com e sem os dois filtros, com todas as observações e só com os
   embeddings já guardados
